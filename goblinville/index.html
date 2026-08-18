@@ -921,7 +921,8 @@ const S={
   sel:null, ghost:{tx:0,ty:0,ok:false,show:false}, pick:null, inspect:null,
   toasts:[], banner:null, chronicle:[], omen:0,
   mode:'village', started:false, tut:0, shake:0, flash:0, tapCombo:0,
-  school:'none', scholar:null
+  school:'none', scholar:null,
+  ogre:{fed:0, lastDay:0, bound:false, used:false, pending:false}
 };
 const BT={
   hall:   {name:'Great Hall', w:3,h:3, cost:{}, hp:900, desc:'The heart of Goblinville', max:1},
@@ -1157,6 +1158,12 @@ function updateWorld(dt){
       if(S.day>=S.scholar.back) scholarReturn();
       else if(rnd(1)<0.5) chron(['A letter came down from Vellumspire: everyone here apologizes for everything, constantly, at great length.',
         'Second letter: the stairs go up forever, and every landing sells maps of the stairs.'] [S.day-S.scholar.day0-1] || 'Another letter from the tower: they made your goblin read a whole book. They are fine. They think.');
+    }
+    if(S.ogre.pending){ S.ogre.pending=false;
+      chron(['The bowl left at the foot of the Steps came back empty. Licked clean. Politely.',
+        'Second bowl gone. Someone had stacked the empties. Neatly. Enormously.',
+        'Third bowl gone. The road to the Steps was swept in the night, and the children now dare each other to sleep facing the mountain.'][Math.min(S.ogre.fed,3)-1]);
+      if(S.ogre.fed>=3&&!S.ogre.bound){ S.ogre.bound=true; banner2('THE MOUNTAIN REMEMBERS','the drums are gone, but the mountain keeps the beat'); A.cheer(); }
     }
     if(S.war.treaty){
       if(S.res.gold>=4){ addRes('gold',-4); toast2('The Cold Peace takes its tithe: -4 gold'); }
@@ -1611,7 +1618,7 @@ function drawWarMap(){
         ctx.fillStyle='#5fa83c'; ctx.beginPath(); ctx.moveTo(fx,fy-18); ctx.lineTo(fx+13,fy-14); ctx.lineTo(fx,fy-9); ctx.closePath(); ctx.fill(); }
       if(cd>0) txt3('regrouping '+Math.ceil(cd)+'d',p[0],p[1]+R.r*0.52+29,10.5,'#ff9d8a','center',700,'rgba(20,12,20,0.9)');
       else if(won) txt3('banner taken \u00d7'+won,p[0],p[1]+R.r*0.52+29,10.5,'#9fe08a','center',700,'rgba(20,12,20,0.9)');
-    } else if(!R.home && sel) txt3(R.locked==='treaty'&&S.war.banners.length>=2 ? (S.war.treaty?'the Cold Peace holds':'terms are on the table') : (R.locked==='school'&&hasShrine() ? (S.school==='done'?'a scholar came home':(S.school==='away'?'they are studying':'the tower takes students')) : 'not yet reachable'),p[0],p[1]+R.r*0.52+29,10.5,R.locked==='treaty'&&S.war.banners.length>=2?'#bcd2e0':'rgba(230,200,180,0.6)','center',600,'rgba(20,12,20,0.9)');
+    } else if(!R.home && sel) txt3(R.locked==='treaty'&&S.war.banners.length>=2 ? (S.war.treaty?'the Cold Peace holds':'terms are on the table') : (R.locked==='school'&&hasShrine() ? (S.school==='done'?'a scholar came home':(S.school==='away'?'they are studying':'the tower takes students')) : (R.locked==='friends' ? (S.ogre.used?'the debt is paid':(S.ogre.bound?'the mountain remembers':(S.ogre.fed>0?'bowls left \u00d7'+S.ogre.fed:'the Steps are quiet'))) : 'not yet reachable')),p[0],p[1]+R.r*0.52+29,10.5,R.locked==='treaty'&&S.war.banners.length>=2?'#bcd2e0':'rgba(230,200,180,0.6)','center',600,'rgba(20,12,20,0.9)');
   }
   ctx.fillStyle='rgba(14,9,16,0.72)'; ctx.fillRect(0,0,W,132);
   txt3('ORRIM',W/2,58,32,'#ffd08a','center',900,'#2a1208');
@@ -1642,7 +1649,14 @@ function drawWarMap(){
       txt3('his dead march beside you - 4 gold tithe at dawn',20,H-70,11.5,'#a8c8dc','left',600);
     }
     else if(R.locked==='treaty' && S.war.treaty) txt3('The Cold King keeps his word. The north road is open to you.',20,H-70,11.5,'#bcd2e0','left',700);
-    else txt3({treaty:'Ossimund will offer a treaty when you are worth talking to. Two banners make you worth talking to.',school:'Send a goblin to study once you have a shrine.',friends:'They only want company. Later.',contract:'They will offer a contract, not a fight.'}[R.locked],20,H-70,11.5,'#a89484','left',600);
+    else if(R.locked==='friends' && S.day<2) txt3('The Steps keep their silence. Come back after a few dawns.',20,H-70,11.5,'#a89484','left',600);
+    else if(R.locked==='friends' && !S.ogre.bound && S.ogre.fed<3){
+      txt3('The ogres are gone. The bowls they carved remain.',20,H-86,12,'#e8c9a0','left',800);
+      txt3('leave one full: 10 food, 5 gold - the mountain eats daily',20,H-70,11.5,'#d8b088','left',600);
+    }
+    else if(R.locked==='friends' && S.ogre.bound && !S.ogre.used) txt3('The mountain remembers you. Once, it will answer.',20,H-70,11.5,'#e8c9a0','left',600);
+    else if(R.locked==='friends' && S.ogre.used) txt3('The debt is paid. The children sleep facing the mountain.',20,H-70,11.5,'#d8b088','left',600);
+    else txt3({treaty:'Ossimund will offer a treaty when you are worth talking to. Two banners make you worth talking to.',school:'Send a goblin to study once you have a shrine.',friends:'The Steps keep their silence. Come back after a few dawns.',contract:'They will offer a contract, not a fight.'}[R.locked],20,H-70,11.5,'#a89484','left',600);
   }
   const B=backR(); ctx.fillStyle='rgba(60,50,60,0.95)'; rrp(B.x,B.y,B.w,B.h,14); ctx.fill();
   txt3('\u2039 VILLAGE',B.x+B.w/2,B.y+28,14,'#ffe3c8','center',900);
@@ -1655,6 +1669,13 @@ function drawWarMap(){
     const S2=sendR();
     ctx.fillStyle='rgba(90,140,170,0.95)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
     txt3('ACCEPT THE COLD PEACE', S2.x+S2.w/2, S2.y+27, 12.5, '#eaf6ff','center',800);
+  }
+  if(R&&R.locked==='friends'&&S.day>=2&&!S.ogre.bound&&S.ogre.fed<3){
+    const S2=sendR();
+    const today=(S.ogre.lastDay||0)>=S.day;
+    const ok=!today&&S.res.food>=10&&S.res.gold>=5;
+    ctx.fillStyle=ok?'rgba(160,110,60,0.95)':'rgba(80,66,52,0.9)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
+    txt3(today?'the mountain eats once a day':(ok?'LEAVE AN OFFERING':'need 10 food, 5 gold'),S2.x+S2.w/2,S2.y+27,12.5,ok?'#fff0dc':'#c8b4a0','center',800);
   }
   if(R&&R.rival){
     const rv=RIVALS.find(x=>x.id===R.rival), S2=sendR();
@@ -1797,6 +1818,11 @@ function updateBattle(dt){
       if(g.die<=0){ const i=S.gobs.indexOf(g); if(i>=0) S.gobs.splice(i,1);
         puffW(g.x,(g.z||0)+0.3,g.y,7,'#c9d4a0'); }
       continue; }
+    if(g.rout){ g.y-=2.6*dt; g.moving=true; g.sw=false; g.animT=(g.animT||0)+dt*2.2; g.face=Math.PI;
+      g.z=groundH(g.x,g.y)-0.02;
+      if(g.y<0.5){ const i2=S.gobs.indexOf(g); if(i2>=0) S.gobs.splice(i2,1);
+        puffW(g.x,(g.z||0)+0.4,0.6,6,'#caa27a'); }
+      continue; }
     if(g.hp<=0) continue;
     const t=nearestFoe(g);
     if(!t){ g.moving=false; g.sw=false; g.animT=(g.animT||0)+dt*0.6; continue; }
@@ -1828,6 +1854,15 @@ function updateBattle(dt){
     }
   }
   if(!S.war.result){
+    const usA=S.gobs.filter(g=>g.side==='us'&&g.hp>0), foeA=S.gobs.filter(g=>g.side==='foe'&&g.hp>0);
+    if(S.ogre.bound&&!S.ogre.used&&usA.length>0&&usA.length<=2&&foeA.length>=usA.length*3){
+      S.ogre.used=true; S.shake=14; A.land();
+      banner2('DRUMS UNDER THE MOUNTAIN','the neighbors are walking you home');
+      chron('Done for on the '+S.war.foe.name+' field - then the ground kept a beat, low and huge, and every foe remembered urgent business elsewhere. Nobody in Goblinville says "ogre" now. They say "the neighbors".');
+      for(const f of foeA){ f.rout=true; f.sw=false; }
+      for(const b2 of S.buildings.slice()){ if(b2.key==='tower'){ const cx2=b2.tx+0.5, cz2=b2.ty+0.5;
+        puffW(cx2, groundH(cx2,cz2)+0.5, cz2, 9, '#b08858'); S.buildings.splice(S.buildings.indexOf(b2),1); } }
+    }
     const us=S.gobs.some(g=>g.side==='us'&&g.hp>0),
           foes=S.gobs.some(g=>g.side==='foe'&&g.hp>0)||S.buildings.some(b=>b.key==='hall');
     if(!us) endBattle(false); else if(!foes) endBattle(true);
@@ -1902,6 +1937,7 @@ function warTap(x,y){
     const selR=REGIONS.find(R=>R.id===mapSel);
     if(selR&&selR.locked==='treaty'&&S.war.banners.length>=2&&!S.war.treaty&&inR(x,y,sendR())){ acceptTreaty(); return true; }
     if(selR&&selR.locked==='school'&&hasShrine()&&S.school==='none'&&inR(x,y,sendR())){ sendScholar(); return true; }
+    if(selR&&selR.locked==='friends'&&S.day>=2&&!S.ogre.bound&&S.ogre.fed<3&&inR(x,y,sendR())){ offerSteps(); return true; }
     const r=(selR&&selR.rival)?RIVALS.find(x2=>x2.id===selR.rival):null;
     if(r && inR(x,y,sendR())){
       if(S.war.troops>=r.cost && !(S.war.cd[r.id]>0)){ startBattle(r); }
@@ -2073,6 +2109,14 @@ function sendScholar(){
   S.school='away'; S.scholar={name:g.name||'Grub', fem:!!g.fem, day0:S.day, back:S.day+3};
   banner2('OFF TO VELLUMSPIRE','they packed a sandwich and a knife');
   chron(S.scholar.name+' went up the mountain to learn. The village pretended not to watch them go.');
+}
+function offerSteps(){
+  if(S.day<2||S.ogre.fed>=3||S.ogre.bound) return;
+  if((S.ogre.lastDay||0)>=S.day){ A.deny(); return; }
+  if(S.res.food<10||S.res.gold<5){ A.deny(); toast2('Need 10 food, 5 gold'); return; }
+  addRes('food',-10); addRes('gold',-5);
+  S.ogre.fed++; S.ogre.lastDay=S.day; S.ogre.pending=true;
+  toast2('A full bowl set at the foot of the Steps'); A.pop(2);
 }
 function scholarReturn(){
   S.school='done';
