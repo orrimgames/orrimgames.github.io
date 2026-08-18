@@ -920,7 +920,8 @@ const S={
   pop:0, popCap:0, age:0, day:0, dayT:0.28,
   sel:null, ghost:{tx:0,ty:0,ok:false,show:false}, pick:null, inspect:null,
   toasts:[], banner:null, chronicle:[], omen:0,
-  mode:'village', started:false, tut:0, shake:0, flash:0, tapCombo:0
+  mode:'village', started:false, tut:0, shake:0, flash:0, tapCombo:0,
+  school:'none', scholar:null
 };
 const BT={
   hall:   {name:'Great Hall', w:3,h:3, cost:{}, hp:900, desc:'The heart of Goblinville', max:1},
@@ -1152,6 +1153,11 @@ function updateWorld(dt){
       }
       if(rnd(1)<0.35) chron('Tribute came up from the kneeling heresies. The conquered world is good eating.');
     }
+    if(S.school==='away'&&S.scholar){
+      if(S.day>=S.scholar.back) scholarReturn();
+      else if(rnd(1)<0.5) chron(['A letter came down from Vellumspire: everyone here apologizes for everything, constantly, at great length.',
+        'Second letter: the stairs go up forever, and every landing sells maps of the stairs.'] [S.day-S.scholar.day0-1] || 'Another letter from the tower: they made your goblin read a whole book. They are fine. They think.');
+    }
     if(S.war.treaty){
       if(S.res.gold>=4){ addRes('gold',-4); toast2('The Cold Peace takes its tithe: -4 gold'); }
       else { S.war.treaty=false;
@@ -1159,7 +1165,8 @@ function updateWorld(dt){
         chron('Four gold. The treaty ended over four gold. The legion turned around without a word and walked back into the ice.');
       }
     }
-    updateWar(dt); for(const k in S.war.cd) if(S.war.cd[k]>0) S.war.cd[k]--; }
+    for(const k in S.war.cd) if(S.war.cd[k]>0) S.war.cd[k]--; }
+  updateWar(dt);
   for(const b of S.buildings){ if(b.pop<1){ b.t+=dt; b.pop=Math.min(1,b.t*1.7); if(b.pop>=1) recount(); } }
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
@@ -1481,7 +1488,7 @@ function updateWar(dt){
     }
   }
   const sh=S.buildings.filter(b=>b.key==='shrine'&&b.pop>=1).length;
-  if(sh>0) S.faith=Math.min(99, S.faith+dt*0.10*sh);
+  if(sh>0) S.faith=Math.min(99, S.faith+dt*0.10*sh*(S.gobs.some(g=>g.scholar)?2:1));
 }
 const REGIONS=[
   {id:'mud',    name:'The Mudmouth',   kind:'mud',   x:0.50,y:0.62, r:74, c:'#5fa83c', c2:'#3f7d28', home:true,
@@ -1604,7 +1611,7 @@ function drawWarMap(){
         ctx.fillStyle='#5fa83c'; ctx.beginPath(); ctx.moveTo(fx,fy-18); ctx.lineTo(fx+13,fy-14); ctx.lineTo(fx,fy-9); ctx.closePath(); ctx.fill(); }
       if(cd>0) txt3('regrouping '+Math.ceil(cd)+'d',p[0],p[1]+R.r*0.52+29,10.5,'#ff9d8a','center',700,'rgba(20,12,20,0.9)');
       else if(won) txt3('banner taken \u00d7'+won,p[0],p[1]+R.r*0.52+29,10.5,'#9fe08a','center',700,'rgba(20,12,20,0.9)');
-    } else if(!R.home && sel) txt3(R.locked==='treaty'&&S.war.banners.length>=2 ? (S.war.treaty?'the Cold Peace holds':'terms are on the table') : 'not yet reachable',p[0],p[1]+R.r*0.52+29,10.5,R.locked==='treaty'&&S.war.banners.length>=2?'#bcd2e0':'rgba(230,200,180,0.6)','center',600,'rgba(20,12,20,0.9)');
+    } else if(!R.home && sel) txt3(R.locked==='treaty'&&S.war.banners.length>=2 ? (S.war.treaty?'the Cold Peace holds':'terms are on the table') : (R.locked==='school'&&hasShrine() ? (S.school==='done'?'a scholar came home':(S.school==='away'?'they are studying':'the tower takes students')) : 'not yet reachable'),p[0],p[1]+R.r*0.52+29,10.5,R.locked==='treaty'&&S.war.banners.length>=2?'#bcd2e0':'rgba(230,200,180,0.6)','center',600,'rgba(20,12,20,0.9)');
   }
   ctx.fillStyle='rgba(14,9,16,0.72)'; ctx.fillRect(0,0,W,132);
   txt3('ORRIM',W/2,58,32,'#ffd08a','center',900,'#2a1208');
@@ -1624,6 +1631,12 @@ function drawWarMap(){
     const rv=R.rival?RIVALS.find(x=>x.id===R.rival):null;
     if(rv) txt3('needs '+rv.cost+' warriors   loot '+Object.keys(rv.loot).map(k=>rv.loot[k]+' '+k).join(', '),20,H-70,12,'#e0b98a','left',700);
     else if(R.home) txt3('your village',20,H-70,12,'#bdf08a','left',700);
+    else if(R.locked==='school' && hasShrine() && S.school==='none'){
+      txt3('VELLUMSPIRE answers. Their terms:',20,H-86,12,'#d8ccf0','left',800);
+      txt3('send one goblin to study - back in 3 days, twice as bright',20,H-70,11.5,'#c0b4e4','left',600);
+    }
+    else if(R.locked==='school' && S.school==='away'&&S.scholar) txt3(S.scholar.name+' is in the tower. Day '+(S.day-S.scholar.day0)+' of 3.',20,H-70,11.5,'#c0b4e4','left',700);
+    else if(R.locked==='school' && S.school==='done') txt3('One of yours studied there. The tower respects the Mudmouth now.',20,H-70,11.5,'#c0b4e4','left',700);
     else if(R.locked==='treaty' && S.war.banners.length>=2 && !S.war.treaty){
       txt3('OSSIMUND THE UNRETURNED answers. His terms:',20,H-86,12,'#c8e0f0','left',800);
       txt3('his dead march beside you - 4 gold tithe at dawn',20,H-70,11.5,'#a8c8dc','left',600);
@@ -1633,6 +1646,11 @@ function drawWarMap(){
   }
   const B=backR(); ctx.fillStyle='rgba(60,50,60,0.95)'; rrp(B.x,B.y,B.w,B.h,14); ctx.fill();
   txt3('\u2039 VILLAGE',B.x+B.w/2,B.y+28,14,'#ffe3c8','center',900);
+  if(R&&R.locked==='school'&&hasShrine()&&S.school==='none'){
+    const S2=sendR();
+    ctx.fillStyle='rgba(120,96,180,0.95)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
+    txt3('SEND A SCHOLAR', S2.x+S2.w/2, S2.y+27, 13, '#f2ecff','center',800);
+  }
   if(R&&R.locked==='treaty'&&S.war.banners.length>=2&&!S.war.treaty){
     const S2=sendR();
     ctx.fillStyle='rgba(90,140,170,0.95)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
@@ -1883,6 +1901,7 @@ function warTap(x,y){
     if(inR(x,y,backR())){ S.mode='village'; mapSel=null; A.blip(); return true; }
     const selR=REGIONS.find(R=>R.id===mapSel);
     if(selR&&selR.locked==='treaty'&&S.war.banners.length>=2&&!S.war.treaty&&inR(x,y,sendR())){ acceptTreaty(); return true; }
+    if(selR&&selR.locked==='school'&&hasShrine()&&S.school==='none'&&inR(x,y,sendR())){ sendScholar(); return true; }
     const r=(selR&&selR.rival)?RIVALS.find(x2=>x2.id===selR.rival):null;
     if(r && inR(x,y,sendR())){
       if(S.war.troops>=r.cost && !(S.war.cd[r.id]>0)){ startBattle(r); }
@@ -2045,6 +2064,26 @@ function drawFPUI(){
   if(FP.hurt>0){ ctx.fillStyle='rgba(190,30,30,'+(FP.hurt*0.5)+')'; ctx.fillRect(0,0,W,H); }
 }
 
+function hasShrine(){ return S.buildings.some(b=>b.key==='shrine'&&b.pop>=1); }
+function sendScholar(){
+  const g=S.gobs.find(g=>!g.soldier&&!g.scholar&&g.hp>0);
+  if(!g){ A.deny(); toast2('No free goblins to send'); return; }
+  puffW(g.x,(g.z||0)+0.3,g.y,10,'#b9a6e8'); A.pop(2);
+  S.gobs.splice(S.gobs.indexOf(g),1); recount();
+  S.school='away'; S.scholar={name:g.name||'Grub', fem:!!g.fem, day0:S.day, back:S.day+3};
+  banner2('OFF TO VELLUMSPIRE','they packed a sandwich and a knife');
+  chron(S.scholar.name+' went up the mountain to learn. The village pretended not to watch them go.');
+}
+function scholarReturn(){
+  S.school='done';
+  const h=hallPos(), g=spawnGob(h[0]+rnd(1.5,-1.5), h[1]+2+rnd(1,-1), true);
+  g.scholar=true; g.job='scholar'; g.name=(S.scholar.name||'Grub')+' the Scholar'; g.fem=S.scholar.fem;
+  g.tint=[0.85,0.72,1.3];
+  S.faith=Math.min(99,S.faith+5);
+  banner2('THE SCHOLAR RETURNS','the shrine burns twice as bright now');
+  chron(g.name+' came down from Vellumspire with soft hands and hard words. The shrine has not burned this bright in living memory.');
+  A.cheer();
+}
 function acceptTreaty(){
   S.war.treaty=true; mapSel=null;
   banner2('THE COLD PEACE','his word is iron, and iron remembers');
