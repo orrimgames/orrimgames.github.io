@@ -182,8 +182,11 @@ attribute vec2 aPos; varying vec2 vUv;
 void main(){ vUv=aPos*0.5+0.5; gl_Position=vec4(aPos,0.0,1.0); }`;
 const F_SKY=`
 precision highp float; varying vec2 vUv;
-uniform vec3 uTop,uMid,uBot; uniform float uSunY,uSunX,uNight,uT;
+uniform vec3 uTop,uMid,uBot; uniform float uSunY,uSunX,uNight,uT,uRain;
 float shash(vec2 p){ return fract(sin(dot(p,vec2(41.31,289.17)))*43758.5453); }
+float vn(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+  float a=shash(i),b=shash(i+vec2(1.0,0.0)),c2=shash(i+vec2(0.0,1.0)),d2=shash(i+vec2(1.0,1.0));
+  return mix(mix(a,b,f.x),mix(c2,d2,f.x),f.y); }
 void main(){
   vec3 c = vUv.y>0.5 ? mix(uMid,uTop,(vUv.y-0.5)*2.0) : mix(uBot,uMid,vUv.y*2.0);
   float d=distance(vec2(vUv.x*1.0,vUv.y),vec2(uSunX,uSunY));
@@ -193,6 +196,21 @@ void main(){
   float h=shash(g);
   if(h>0.985&&vUv.y>0.35){ float tw=0.55+0.45*sin(uT*2.2+h*90.0);
     c+=vec3(0.9,0.95,1.0)*uNight*tw*0.85*smoothstep(0.985,1.0,h); }
+  // v35: drifting clouds - two hash-noise layers sliding with time; rain thickens and greys them
+  {
+    vec2 p1=vec2(vUv.x*4.2+uT*0.010, vUv.y*7.5+uT*0.0015);
+    vec2 p2=vec2(vUv.x*8.6-uT*0.017+31.7, vUv.y*13.0+13.0);
+    float n=vn(p1)*0.64+vn(p2)*0.36;
+    float cov=mix(0.60,0.415,uRain);
+    float m=smoothstep(cov,cov+0.23,n);
+    m*=smoothstep(0.33,0.45,vUv.y)*(1.0-smoothstep(0.90,1.0,vUv.y));
+    float sd=distance(vec2(vUv.x,vUv.y),vec2(uSunX,uSunY));
+    vec3 cc=mix(uMid,vec3(1.30,1.27,1.22),0.62);
+    cc+=vec3(1.0,0.85,0.60)*exp(-sd*sd*9.0)*0.30*(1.0-uNight);   // sun-kissed edges
+    cc*=1.0-0.62*uNight;
+    cc=mix(cc,cc*vec3(0.62,0.66,0.78)+vec3(0.02,0.03,0.05),uRain*0.85);
+    c=mix(c,cc,m*0.88);
+  }
   gl_FragColor=vec4(c,1.0);
 }`;
 let PROG=null, DPROG=null, SPROG=null, SKYQ=null;
@@ -1109,12 +1127,49 @@ function tickAmbience(dt){
                     g:-0.01, life:rnd(1.8,1.1), c:'#d8f07a', r:rnd(2.4,1.4), star:1});
     }
   }
+  // v35: bird flocks drift across by day, shelter in the rain
+  if(!BIRDS.length && f>0.42 && wet<0.2){
+    S._birdT=(S._birdT===undefined?14:S._birdT)-0.22;
+    if(S._birdT<=0){ S._birdT=rnd(80,30); spawnFlock(); }
+  }
 }
 // v30: light rainy spells
 function tickWeather(dt){
   if(S.t>S.wx.until) S.wx.want=0;
   S.wx.rain+=(S.wx.want-S.wx.rain)*Math.min(1,dt*0.5);
   if(S.wx.rain<0.01) S.wx.rain=0;
+}
+// v35: bird flocks (screen-space silhouettes, village mode daytime, no rain)
+let BIRDS=[];
+function spawnFlock(){
+  const n=3+Math.floor(rnd(6)), dir=rnd(1)<0.5?1:-1, y=H*rnd(0.30,0.08), sp=rnd(80,40)*dir;
+  const base=rnd(16,6);
+  for(let i2=0;i2<n;i2++){
+    BIRDS.push({ x: dir>0 ? -20-i2*rnd(38,14) : W+20+i2*rnd(38,14),
+                 y: y-i2*rnd(10,3)+rnd(4,-4), vy: rnd(6,-6), sp: Math.abs(sp)*dir,
+                 ph: rnd(TAU), sc: rnd(1.5,0.9)*(base/12) });
+  }
+}
+function drawBirds(){
+  const dl=dayLight(), wet=S.wx?S.wx.rain:0;
+  const dt=Math.min(G.dt||0.016,0.05);
+  for(let i2=BIRDS.length-1;i2>=0;i2--){
+    const bd=BIRDS[i2];
+    bd.x+=bd.sp*dt; bd.y+=Math.sin(G.t*1.7+bd.ph*3.0)*8*dt+bd.vy*dt;
+    if(bd.x<-60||bd.x>W+60) BIRDS.splice(i2,1);
+  }
+  if(!BIRDS.length) return;
+  const a=clamp(dl*1.4,0,1)*0.85;
+  ctx.strokeStyle='rgba(40,30,40,'+a.toFixed(3)+')';
+  ctx.lineWidth=1.6; ctx.lineCap='round';
+  for(const bd of BIRDS){
+    const s=7*bd.sc, flap=Math.sin(G.t*9+bd.ph)*4.2*bd.sc;
+    ctx.beginPath();
+    ctx.moveTo(bd.x-s, bd.y-flap);
+    ctx.quadraticCurveTo(bd.x-s*0.35, bd.y-s*0.28+flap*0.4, bd.x, bd.y);
+    ctx.quadraticCurveTo(bd.x+s*0.35, bd.y-s*0.28+flap*0.4, bd.x+s, bd.y-flap);
+    ctx.stroke();
+  }
 }
 function drawWeather(){
   const r=S.wx?S.wx.rain:0; if(r<0.02) return;
@@ -2638,6 +2693,7 @@ function drawSky(){
   gl.uniform1f(SPROG.u.uSunX,0.10+0.80*p); gl.uniform1f(SPROG.u.uSunY,0.28+0.45*Math.sin(p*Math.PI));
   gl.uniform1f(SPROG.u.uNight,night);
   if(SPROG.u.uT) gl.uniform1f(SPROG.u.uT,G.t);
+  if(SPROG.u.uRain) gl.uniform1f(SPROG.u.uRain,S.wx?S.wx.rain:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4); G.dc++; G.tri+=2;
   gl.enable(gl.DEPTH_TEST);
 }
@@ -3052,6 +3108,7 @@ function drawUI(){
   drawPennants();
   drawVets();
   drawWeather();
+  drawBirds();
   drawNightGlow();
   drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawQuestRing(); drawToasts2(); drawBanner2(); drawCeremony();
   const fv=Math.round(G.fps);
