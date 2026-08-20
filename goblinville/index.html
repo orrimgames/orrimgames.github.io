@@ -1886,7 +1886,12 @@ function endBattle(win){
   S.war.cd[r.id]=win?3:2;
   if(FP.on&&FP.battle){ FP.on=false; FP.battle=false; FP.mv=FP.lk=null; CAM.mode='iso'; CAM.pitch=0.78; CAM.dist=15; CAM.zoom=1; }
   S.war.result={win, lost, survivors, gained, name:r.name};
-  if(win) A.cheer(); else A.deny();
+  if(win){ A.cheer();
+    S._conf=[]; for(let i=0;i<46;i++) S._conf.push({x:rnd(W), y0:rnd(-H*0.6), sp:rnd(210,90), ph:rnd(TAU), s:rnd(7,3.5),
+      c:pick(['#ffd166','#ff8a4d','#bdf08a','#f2e3c8','#ff5c40'])});
+    for(const g of S.gobs){ if(g.side==='us'&&g.hp>0){ sparkW(g.x,(g.z||0)+1.3,g.y,8,'#ffd166');
+      if(rnd(1)<0.6) floatW(g.x,(g.z||0)+1.5,g.y,pick(['raa!','WAAAGH!','hmph!','hehe!']),'#ffe9b0'); } }
+  } else { A.deny(); toast2('they carry their own home'); chron('The fallen were carried down the long road. The village lit every lamp for them.'); }
 }
 function leaveBattle(){
   const st=S.stash; if(!st) return;
@@ -1914,7 +1919,8 @@ function nearestFoe(g){
 function hurtFoe(t,dmg){
   t.hp-=dmg;
   if(t.hp>0) return;
-  if(t.side){ t.die=1.7; t.anim='death'; t.animT=0; t.moving=false; t.sw=false; A.land(); }
+  if(t.side){ t.die=1.7; t.anim='death'; t.animT=0; t.moving=false; t.sw=false; A.land();
+    floatW(t.x, (t.z||0)+1.3, t.y, 'down!', t.side==='foe'?'#d8c8f0':'#b8d8a8'); }
   else { const cx=t.tx+t.w/2, cz=t.ty+t.h/2;
     S.buildings.splice(S.buildings.indexOf(t),1);
     puffW(cx, groundH(cx,cz)+0.8, cz, 16, '#c8a070'); floatW(cx, groundH(cx,cz)+1.6, cz, 'smashed!', '#ffd0a0');
@@ -1950,8 +1956,11 @@ function updateBattle(dt){
       g.cool-=dt;
       if(g.cool<=0){ g.cool=0.75; g.sw=true;
         if(t.side==='chief'){ FP.hp-=g.atk*(0.8+rnd(0.5)); FP.hurt=0.45; S.shake=Math.max(S.shake,6); A.land(); if(FP.hp<=0) fpDowned(); }
-        else hurtFoe(t, g.atk*(g.side==='us'?rally:1)*(0.8+rnd(0.5))*(t.side?1:2.6)*(t.side||S.gobs.some(o=>o.side==='foe'&&o.hp>0)?1:1.6));
-        puffW(tx, groundH(tx,ty)+0.5, ty, 3, '#ffd9a0'); A.chop(); }
+        else { const dmg2=Math.round(g.atk*(g.side==='us'?rally:1)*(0.8+rnd(0.5))*(t.side?1:2.6)*(t.side||S.gobs.some(o=>o.side==='foe'&&o.hp>0)?1:1.6));
+          hurtFoe(t,dmg2);
+          if(t.side) floatW(tx, groundH(tx,ty)+1.25, ty, '-'+dmg2, g.side==='us'?'#ffd166':'#ff8a77');
+          else floatW(tx, groundH(tx,ty)+1.4, ty, '-'+dmg2, '#ffd166'); }
+        sparkW(tx, groundH(tx,ty)+0.55, ty, 3, '#ffe9b0'); puffW(tx, groundH(tx,ty)+0.5, ty, 3, '#ffd9a0'); A.chop(); }
     }
   }
   for(const b of S.buildings){ if(b.key!=='tower') continue;
@@ -1960,7 +1969,8 @@ function updateBattle(dt){
       let best=null,bd=BT.tower.range;
       for(const g of S.gobs){ if(g.side!=='us'||g.hp<=0) continue;
         const d=Math.hypot(b.tx+0.5-g.x,b.ty+0.5-g.y); if(d<bd){bd=d;best=g;} }
-      if(best){ hurtFoe(best,9); puffW(best.x,(best.z||0)+1.0,best.y,4,'#ffe08a'); }
+      if(best){ hurtFoe(best,9); puffW(best.x,(best.z||0)+1.0,best.y,4,'#ffe08a');
+        floatW(best.x, (best.z||0)+1.35, best.y, '-9', '#ffd166'); sparkW(best.x,(best.z||0)+1.0,best.y,3,'#fff0c0'); }
     }
   }
   if(!S.war.result){
@@ -2000,6 +2010,11 @@ function drawBattleUI(){
   if(S.war.result){
     const r=S.war.result;
     ctx.fillStyle='rgba(10,6,10,0.82)'; ctx.fillRect(0,0,W,H);
+    if(r.win&&S._conf){ for(const c of S._conf){
+      const yy=(c.y0+G.t*c.sp)%(H+60)-30, xx=c.x+Math.sin(G.t*1.7+c.ph)*14;
+      ctx.save(); ctx.translate(xx,yy); ctx.rotate(G.t*2.2+c.ph);
+      ctx.globalAlpha=0.85; ctx.fillStyle=c.c; ctx.fillRect(-c.s/2,-c.s/2,c.s,c.s*0.6); ctx.restore(); }
+      ctx.globalAlpha=1; }
     ctx.fillStyle='rgba(38,26,34,0.98)'; rrp(24,H/2-170,W-48,332,20); ctx.fill();
     ctx.strokeStyle=r.win?'#ffcf7a':'#a35a5a'; ctx.lineWidth=3; ctx.stroke();
     txt3(r.win?'VICTORY':'DRIVEN OFF', W/2, H/2-118, 30, r.win?'#ffe6a8':'#ffb3a3','center',900,'#200e0e');
