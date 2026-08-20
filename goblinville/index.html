@@ -1210,6 +1210,12 @@ function updateGob(g,dt){
       break; }
     case 'idle': {
       g.st-=dt;
+      if(g.st<=0 && S.mode==='village' && g.job==='idler' && rnd(1)<0.16 && dayLight()>0.45){
+        let pal=null,bd=6.5;
+        for(const o of S.gobs){ if(o===g||o.job!=='idler'||o.state==='chat'||o.state==='toChat'||o.carry) continue;
+          const d=Math.hypot(o.x-g.x,o.y-g.y); if(d<bd){bd=d;pal=o;} }
+        if(pal){ g.pal=pal; pal.pal=g; g.state='toChat'; pal.state='toChat'; break; }
+      }
       if(g.job==='farmer'){
         const f=S._farms||S.buildings;
         if(f.length){ g.target=pick(f); g.state='toFarm'; break; }
@@ -1226,6 +1232,21 @@ function updateGob(g,dt){
       }
       break;
     }
+    case 'toChat': { const p=g.pal;
+      if(!p||p.hp<=0||p.carry||p.state==='sleep'||p.state==='toBed'){ g.pal=null; g.state='idle'; g.st=rnd(2,1); break; }
+      const mx=(g.x+p.x)/2, my=(g.y+p.y)/2;
+      const ox=(g.x<p.x?-0.42:0.42), oy=(g.y<p.y?-0.42:0.42);
+      step(mx+ox,my+oy,()=>{ g.state='chat'; g.st=rnd(6,4); g.face=Math.atan2(p.x-g.x,p.y-g.y); g.next=0; });
+      break; }
+    case 'chat': { const p=g.pal;
+      if(!p||p.hp<=0||p.carry||p.state==='sleep'){ g.pal=null; g.state='idle'; g.st=rnd(2,1); break; }
+      g.st-=dt; g.face=Math.atan2(p.x-g.x,p.y-g.y); g.ph+=dt*2;
+      g.next-=dt;
+      if(g.next<=0){ g.next=rnd(1.1,0.5);
+        g.emote=pick(['!','~','*']); g.emoteT=0.9; g.squash=0.35;
+        if(rnd(1)<0.5) A.say(rint(0,9)); }
+      if(g.st<=0){ if(g.pal){ g.pal.chatIn=(g.pal.chatIn||0); if(g.pal.state==='chat'){ g.pal.state='idle'; g.pal.st=rnd(1.5,0.5); g.pal.pal=null; } } g.pal=null; g.state='idle'; g.st=rnd(2,0.8); }
+      break; }
     case 'wander': { g.st-=dt; step(g.tx,g.ty,()=>{g.state='idle';g.st=rnd(2,.5);}); if(g.st<=0){g.state='idle';g.st=rnd(1.5,.3);} break; }
     case 'toFarm': { const b=g.target; if(!b||S.buildings.indexOf(b)<0){g.state='idle';break;}
       step(b.tx+rnd(b.w-0.2,0.2), b.ty+rnd(b.h-0.2,0.2), ()=>{ g.state='farm'; g.st=0; }); break; }
