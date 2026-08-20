@@ -2499,11 +2499,11 @@ const VP=M4.id(), VIEW=M4.id(), PROJ=M4.id(), LVP=M4.id(), LPROJ=M4.id(), LVIEW=
 const SUN0=[0.42,0.78,0.34];
 let SUN=SUN0.slice();
 function sunElev(){ return Math.sin((S.dayT-0.25)*Math.PI*2); }
-function dayLight(){ return clamp(0.16+0.92*Math.max(0,sunElev()),0.14,1); }
+function dayLight(){ return clamp(0.16+0.92*Math.max(0,sunElev()),0.26,1); }
 function updateSun(){
   const a=(S.dayT-0.25)*Math.PI;               // 0 at dawn, PI at dusk
   const e=sunElev();
-  SUN=[0.48*Math.cos(a), Math.max(e,0.16), 0.34];
+  SUN=[0.48*Math.cos(a), Math.max(e,0.20), 0.34];
 }
 function camEye(){
   if(CAM.mode==='fp') return [CAM.fx, groundH(CAM.fx,CAM.fy)+0.52+Math.sin(FP.bob)*0.035, CAM.fy];
@@ -2539,11 +2539,12 @@ function setLight(){
 function setEnv(prog){
   gl.uniform3fv(prog.u.uSun,SUN);
   const f=dayLight(), warm=clamp(sunElev()*3+1,0,1);   // warm=1 in sunlight, 0 deep night
+  const moon=1-warm;                    // v36: moonlit-night lift so the village stays readable after dark
   const rf=1-0.30*(S.wx?S.wx.rain:0);   // v30: rain dims and cools the world
-  gl.uniform3fv(prog.u.uSunCol,[(lerp(0.45,1.0,warm)*f+0.04)*rf, (lerp(0.55,0.94,warm)*f+0.04)*rf, (lerp(0.95,0.80,warm)*f+0.04)*Math.min(1,rf+0.06)]);
-  gl.uniform3fv(prog.u.uSkyCol,[(lerp(0.10,0.55,warm)*f+0.03)*rf, (lerp(0.14,0.70,warm)*f+0.03)*rf, (lerp(0.30,0.88,warm)*f+0.04)*rf]);
-  gl.uniform3fv(prog.u.uGndCol,[(0.24*f+0.02)*rf,(0.26*f+0.02)*rf,(0.20*f+0.02)*rf]);
-  gl.uniform3fv(prog.u.uFogCol,[lerp(0.06,0.78,warm)*rf,lerp(0.08,0.87,warm)*rf,lerp(0.16,0.94,warm)*rf]);
+  gl.uniform3fv(prog.u.uSunCol,[(lerp(0.45,1.0,warm)*f+0.04+moon*0.045)*rf, (lerp(0.55,0.94,warm)*f+0.04+moon*0.055)*rf, (lerp(0.95,0.80,warm)*f+0.04+moon*0.085)*Math.min(1,rf+0.06)]);
+  gl.uniform3fv(prog.u.uSkyCol,[(lerp(0.10,0.55,warm)*f+0.03+moon*0.030)*rf, (lerp(0.14,0.70,warm)*f+0.03+moon*0.045)*rf, (lerp(0.30,0.88,warm)*f+0.04+moon*0.075)*rf]);
+  gl.uniform3fv(prog.u.uGndCol,[(0.24*f+0.02+moon*0.020)*rf,(0.26*f+0.02+moon*0.026)*rf,(0.20*f+0.02+moon*0.045)*rf]);
+  gl.uniform3fv(prog.u.uFogCol,[lerp(0.11,0.78,warm)*rf,lerp(0.14,0.87,warm)*rf,lerp(0.26,0.94,warm)*rf]);
   gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:0.017);
   if(prog.u.uTint) gl.uniform3f(prog.u.uTint,1,1,1);
   const e=camEye(); gl.uniform3fv(prog.u.uEye,e);
@@ -2671,14 +2672,14 @@ function drawSky(){
   // v25: living sky - palette keyed to the day cycle
   const t=S.dayT;
   const K=[
-    [0.00, [0.05,0.06,0.16], [0.10,0.12,0.24], [0.14,0.16,0.26], 1.0],
+    [0.00, [0.08,0.10,0.23], [0.14,0.17,0.31], [0.20,0.23,0.35], 1.0],
     [0.22, [0.38,0.30,0.55], [0.62,0.42,0.52], [0.90,0.58,0.44], 0.6],
     [0.30, [0.30,0.56,0.86], [0.62,0.80,0.95], [0.88,0.93,0.90], 0.0],
     [0.62, [0.33,0.58,0.85], [0.66,0.80,0.94], [0.92,0.90,0.82], 0.0],
     [0.72, [0.40,0.38,0.70], [0.78,0.50,0.52], [0.98,0.66,0.40], 0.2],
     [0.78, [0.16,0.16,0.36], [0.42,0.26,0.46], [0.72,0.38,0.40], 0.7],
-    [0.84, [0.05,0.06,0.16], [0.10,0.12,0.24], [0.14,0.16,0.26], 1.0],
-    [1.00, [0.05,0.06,0.16], [0.10,0.12,0.24], [0.14,0.16,0.26], 1.0]
+    [0.84, [0.08,0.10,0.23], [0.14,0.17,0.31], [0.20,0.23,0.35], 1.0],
+    [1.00, [0.08,0.10,0.23], [0.14,0.17,0.31], [0.20,0.23,0.35], 1.0]
   ];
   let ka=K[0], kb=K[K.length-1];
   for(let i2=0;i2<K.length-1;i2++){ if(t>=K[i2][0]&&t<=K[i2+1][0]){ ka=K[i2]; kb=K[i2+1]; break; } }
@@ -2835,7 +2836,7 @@ function init(){
   initGL();
   SKIN=program(V_SKIN,F_MAIN,['aPos','aNor','aCol','aAo','aBone']);
   try{
-    QA=qdecode(QGOBLIN_M); QM=qup(QA);
+    QA=qdecode((QP.get('rig2')&&window.RIGV&&RIGV.goblinM2)?RIGV.goblinM2:QGOBLIN_M); QM=qup(QA);
     QA2=qdecode(QGOBLIN_F); QM2=qup(QA2);
     QPROG=program(V_SKIN2, F_MAIN, ['aPos','aNor','aCol','aAo','aJ']);
     QSCALE=0.52/QA.height; QSCALE2=0.52/QA2.height; QOK=true;
