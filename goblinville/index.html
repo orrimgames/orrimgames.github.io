@@ -1617,6 +1617,17 @@ function syncLaundry(){
     PROPS.push({laundry:1, ax,az,bx,bz, seed:a.seed});
   }
 }
+function drawVets(){
+  if(!S.started||S.mode!=='village') return;
+  for(const g of S.gobs){ if(!g.vet||g.hp<=0||g.die>0) continue;
+    const p=projPt(g.x,(g.z||0)+0.78*(g.size||1),g.y); if(!p) continue;
+    if(p[0]<-20||p[0]>W+20||p[1]<40||p[1]>H) continue;
+    const w=5.5*(g.size||1)*clamp(14/CAM.dist,0.7,1.4);
+    ctx.save(); ctx.translate(p[0],p[1]); ctx.rotate(Math.sin(G.t*2.4+g.ph)*0.06);
+    ctx.fillStyle='#c23232'; ctx.fillRect(-w,-1.4,w*2,2.8);
+    ctx.fillStyle='#f2e8d8'; ctx.fillRect(-1.3,-1.4,2.6,2.8);
+    ctx.restore(); }
+}
 function drawLaundry(){
   if(!S.started) return;
   for(const L of PROPS){ if(!L.laundry) continue;
@@ -1988,7 +1999,7 @@ function endBattle(win){
   S.war.cd[r.id]=win?3:2;
   if(FP.on&&FP.battle){ FP.on=false; FP.battle=false; FP.mv=FP.lk=null; CAM.mode='iso'; CAM.pitch=0.78; CAM.dist=15; CAM.zoom=1; }
   S.war.result={win, lost, survivors, gained, name:r.name};
-  if(win){ A.cheer();
+  if(win){ A.cheer(); S._vetN=Math.max(1,Math.min(survivors,6));
     S._conf=[]; for(let i=0;i<46;i++) S._conf.push({x:rnd(W), y0:rnd(-H*0.6), sp:rnd(210,90), ph:rnd(TAU), s:rnd(7,3.5),
       c:pick(['#ffd166','#ff8a4d','#bdf08a','#f2e3c8','#ff5c40'])});
     for(const g of S.gobs){ if(g.side==='us'&&g.hp>0){ sparkW(g.x,(g.z||0)+1.3,g.y,8,'#ffd166');
@@ -2004,6 +2015,12 @@ function leaveBattle(){
   Object.assign(CAM,st.cam);
   CAMP_ON=false; S.stash=null; S.mode='village'; S.war.result=null; FP.on=false; FP.battle=false; CAM.mode='iso';
   clampCam3(); rebuildWorld(); shadowDirty=true;
+  if(S._vetN){ let n=S._vetN; S._vetN=0;
+    const pool=S.gobs.slice();
+    while(n>0&&pool.length){ const g=pool.splice(rint(0,pool.length-1),1)[0]; n--;
+      if(!g.vet){ g.vet=1; g.tint=[1.10,0.96,0.96]; } }
+    toast2('the survivors paint their victory marks');
+    chron('They came home painted. The littlest goblins touched the marks and whispered.'); }
   if(S.victory&&!S.ceremonyDone){ S.victPhase=0; S.victT=0; S._vB0=S._vB1=S._vB2=0; S._vf=0; }
   saveGame();   // v21: raid results must persist the moment we are home, not 6s later
 }
@@ -2923,6 +2940,7 @@ function drawInspect2(){
   txt3(g.name,x,y-h+15,fitSize2(g.name,w-20,15,900),'#ffe9a3','center',900,false);
   txt3(jobName2(g.job)+' • '+moodWord2(g.mood),x,y-h+32,12,'#fff','center',700,false);
   txt3(g.trait.k+' - '+g.trait.d,x,y-h+47,11,'#bff0a8','center',700,false);
+  if(g.vet) txt3('\u2694 battle-marked',x+w/2-14,y-h+15,10,'#ff9a8a','center',800,false);
   ctx.globalAlpha=1;
 }
 function jobName2(j){ return {farmer:'Farmer',woodcutter:'Woodcutter',miner:'Stonecutter',digger:'Gold digger',idler:'Layabout',soldier:'Warrior'}[j]||j; }
@@ -2982,6 +3000,7 @@ function drawUI(){
   ctx.drawImage(uic2,0,0,W,H);
   drawParts(); drawFloats2();
   drawLaundry();
+  drawVets();
   drawWeather();
   drawNightGlow();
   drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawQuestRing(); drawToasts2(); drawBanner2(); drawCeremony();
@@ -3018,7 +3037,7 @@ function packSave(){
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0,
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
-    gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0})),
+    gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0})),
     chron:S.chronicle.slice(-60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
     d:d, r:r};
@@ -3051,7 +3070,8 @@ function restoreSave(sv){
   for(const go of sv.gobs){ const g=spawnGob(go.x,go.y,true); if(!g) continue;
     for(const k in go) if(k!=='x'&&k!=='y') g[k]=go[k];
     g.fem=!!g.fem; g.soldier=!!g.soldier;
-    g.state='idle'; g.st=rnd(1.5,0.2); g.target=null; g.carry=null; g.amt=0; g.emote=null; g.emoteT=0; g.ph=rnd(TAU); }
+    g.state='idle'; g.st=rnd(1.5,0.2); g.target=null; g.carry=null; g.amt=0; g.emote=null; g.emoteT=0; g.ph=rnd(TAU);
+    if(g.vet) g.tint=[1.10,0.96,0.96]; }
   Object.assign(S.res,sv.res); Object.assign(S.cap,sv.cap||{});
   S.faith=sv.faith||0; S.day=sv.day||0; S.dayT=(sv.dayT==null?0.28:sv.dayT); S.omen=sv.omen||0;
   S.school=sv.school||'none'; S.scholar=sv.scholar||null;
