@@ -1095,13 +1095,13 @@ function tickAmbience(dt){
     if(b.key!=='hut'||b.pop<1) continue;
     if(rnd(1)>0.55) continue;
     const wx=b.tx+b.w*0.68, wz=b.ty+b.h*0.34, gy=(b.gy||groundH(wx,wz));
-    const tint=b.seed%3;
-    S.parts.push({x:wx, y:gy+1.1, z:wz, vx:rnd(0.14,0.02), vy:rnd(0.5,0.3), vz:rnd(0.14,0.02),
+    const tint=b.seed%3, wnd=(S.wx?S.wx.rain:0)*0.55;
+    S.parts.push({x:wx, y:gy+1.1, z:wz, vx:rnd(0.14,0.02)-wnd, vy:rnd(0.5,0.3), vz:rnd(0.14,0.02),
                   g:-0.06, life:rnd(1.6,1.0),
                   c:tint<1?'rgba(196,186,178,0.85)':(tint<2?'rgba(176,168,190,0.85)':'rgba(208,190,168,0.85)'), r:rnd(5,3)});
   }
-  const f=dayLight();
-  if(f<0.5 && S.gobs.length){
+  const f=dayLight(), wet=S.wx?S.wx.rain:0;
+  if(f<0.5 && wet<0.25 && S.gobs.length){
     if(rnd(1)<0.8){
       const a=rnd(TAU), d=rnd(9,2), wx=SITE.x+Math.cos(a)*d, wz=SITE.y+Math.sin(a)*d;
       const gy=groundH(wx,wz);
@@ -1118,6 +1118,21 @@ function tickWeather(dt){
 }
 function drawWeather(){
   const r=S.wx?S.wx.rain:0; if(r<0.02) return;
+  // puddle glints on open ground near the village heart
+  const pn=6;
+  for(let i=0;i<pn;i++){
+    const px=SITE.x+hash2(i*7.7,S.day*3.1)*14-7, py=SITE.y+hash2(i*13.1,S.day*1.7)*12-6;
+    const p=projPt(px,groundH(px,py)+0.02,py); if(!p) continue;
+    if(p[0]<-30||p[0]>W+30||p[1]<60||p[1]>H-40) continue;
+    const w=(10+hash2(i,S.day)*14)*(0.4+0.6*r), tw=Math.sin(G.t*2.1+i)*0.12+1;
+    ctx.globalAlpha=0.30*r;
+    ctx.fillStyle='#aec6dd';
+    ellp(p[0],p[1],w,w*0.30*tw); ctx.fill();
+    ctx.globalAlpha=0.5*r;
+    ctx.fillStyle='#e8f2ff';
+    ellp(p[0]-w*0.25,p[1]-w*0.06,w*0.22,w*0.05); ctx.fill();
+    ctx.globalAlpha=1;
+  }
   const n=Math.floor(24+r*80), t=G.t;
   ctx.strokeStyle='rgba(178,198,232,'+(0.34*r+0.10)+')'; ctx.lineWidth=1.2;
   ctx.beginPath();
@@ -1152,12 +1167,15 @@ function updateGob(g,dt){
   if(g.squash>0) g.squash=Math.max(0,g.squash-dt*3.2);
   g.moving=false; g.work=0;
   const spd=g.speed*(1+(g.mood-0.5)*0.2)*(1+0.15*(S.wx?S.wx.rain:0));
+  if((S.wx?S.wx.rain:0)>0.3){ g.splT=(g.splT||0)-dt; }
   function step(txp,typ,arrive){
     const dx=txp-g.x, dy=typ-g.y, d=Math.hypot(dx,dy);
     if(d<0.14){ arrive(); return; }
     g.moving=true; g.face=Math.atan2(dx,dy);
     const k=spd*dt/d;
     const nx=g.x+dx*k, ny=g.y+dy*k;
+    if((S.wx?S.wx.rain:0)>0.3&&g.splT<=0&&S.parts.length<250){ g.splT=0.34+rnd(0.2);
+      S.parts.push({x:nx, y:groundH(nx,ny)+0.05, z:ny, vx:rnd(0.5,-0.5), vy:rnd(1.3,0.7), vz:rnd(0.5,-0.5), g:4.0, life:rnd(.34,.2), c:'rgba(190,206,228,0.9)', r:rnd(2.6,1.4)}); }
     const cx=Math.round(nx), cy=Math.round(ny);
     if(cx>=0&&cy>=0&&cx<MAP&&cy<MAP&&tiles[cy][cx].t===2){ g.x+= -dy*k*0.9; g.y+= dx*k*0.9; }
     else { g.x=nx; g.y=ny; }
