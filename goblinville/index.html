@@ -1124,7 +1124,33 @@ function updateGob(g,dt){
     else { g.x=nx; g.y=ny; }
     g.x=clamp(g.x,0.5,MAP-0.5); g.y=clamp(g.y,0.5,MAP-0.5);
   }
+  // v27: bedtime - civilians turn in when it gets properly dark
+  if(S.mode==='village'){
+    const dk=dayLight();
+    if(dk<0.30 && g.state!=='sleep' && g.state!=='toBed' && !g.carry){
+      g.state='toBed'; g.bed=g.bed||null; }
+    else if(dk>0.52 && (g.state==='sleep'||g.state==='toBed')){
+      g.state='idle'; g.st=rnd(1.2,0.3); g.emote='!'; g.emoteT=1.1; g.squash=0.5;
+      if(rnd(1)<0.35) A.say(rint(4,8));
+    }
+  }
   switch(g.state){
+    case 'toBed': {
+      if(!g.bed){ let best=null,bd=1e9;
+        for(const b of S.buildings){ if((b.key!=='hut'&&b.key!=='hall')||b.pop<1) continue;
+          const d=Math.hypot(b.tx+b.w/2-g.x,b.ty+b.h/2-g.y); if(d<bd){bd=d;best=b;} }
+        g.bed=best; if(!best){ g.state='idle'; g.st=rnd(2,1); break; }
+        g.tx=g.bed.tx+rnd(g.bed.w-0.3,0.3); g.ty=g.bed.ty+g.bed.h+rnd(0.9,0.25);
+      }
+      const b=g.bed;
+      if(!b||S.buildings.indexOf(b)<0){ g.bed=null; g.state='idle'; g.st=rnd(2,1); break; }
+      step(g.tx,g.ty,()=>{ g.state='sleep'; g.st=0; g.zT=rnd(2.6,0.6); });
+      break; }
+    case 'sleep': {
+      g.zT-=dt;
+      if(g.zT<=0){ g.zT=rnd(3.4,2.2);
+        if(rnd(1)<0.85) S.floats.push({x:g.x, y:g.z+1.05, z:g.y, txt:'z', c:'#a9c4ec', life:1.5, big:0}); }
+      break; }
     case 'idle': {
       g.st-=dt;
       if(g.job==='farmer'){
@@ -1186,7 +1212,7 @@ function updateGob(g,dt){
       });
       break; }
   }
-  g.anim = g.moving? (g.carry?'carry':'walk') : (g.work? ((g.state==='chop'||g.state==='mine'||g.state==='dig')?'chop':'idle') : 'idle');
+  g.anim = g.state==='sleep' ? 'sleep' : (g.moving? (g.carry?'carry':'walk') : (g.work? ((g.state==='chop'||g.state==='mine'||g.state==='dig')?'chop':'idle') : 'idle'));
   if(g.animT==null) g.animT=rnd(20);
   g.animT+=dt*(g.anim==='walk'||g.anim==='carry'?1.05: g.anim==='chop'?1.2: 0.75);
   g.z=groundH(g.x,g.y);
