@@ -1,4 +1,4 @@
-<!doctype html><html><head><script src="rig-goblin2.js"></script><meta charset="utf-8">
+<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>GOBLINVILLE</title>
@@ -1070,6 +1070,11 @@ function recount(){
     if(b.key==='mine') slots.digger+=2;
   }
   slots.farmer+=1; slots.woodcutter+=1;
+  // v39: slots only exist for work that can actually be done (trees/rocks available)
+  let trees=0, rocks=0;
+  for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){ const d=tiles[y][x]; if(d.deco==='tree') trees++; else if(d.t===3||d.deco==='rock') rocks++; }
+  if(!trees) slots.woodcutter=0;
+  if(!rocks) slots.miner=0;
   const used={farmer:0,woodcutter:0,miner:0,digger:0};
   for(const g of S.gobs){ if(g.job!=='idler'&&used[g.job]<slots[g.job]) used[g.job]++; else g.job='idler'; }
   for(const g of S.gobs){
@@ -1275,9 +1280,10 @@ function updateGob(g,dt){
         const f=S._farms||S.buildings;
         if(f.length){ g.target=pick(f); g.state='toFarm'; break; }
       }
-      if(g.job==='woodcutter'){ const t=findTile(c=>c.deco==='tree',Math.round(g.x),Math.round(g.y)); if(t){ g.target=t; g.state='toTree'; break; } }
-      if(g.job==='miner'){ const t=findTile((c)=>c.t===3||c.deco==='rock',Math.round(g.x),Math.round(g.y)); if(t){ g.target=t; g.state='toRock'; break; } }
-      if(g.job==='digger'){ const m=S._mines||[]; if(m.length){ g.target=pick(m); g.state='toMine'; break; } }
+      if(g.job==='woodcutter'){ const t=findTile(c=>c.deco==='tree',Math.round(g.x),Math.round(g.y)); if(t){ g.target=t; g.state='toTree'; break; } g.job='idler'; g._seek=1; }
+      if(g.job==='miner'){ const t=findTile((c)=>c.t===3||c.deco==='rock',Math.round(g.x),Math.round(g.y)); if(t){ g.target=t; g.state='toRock'; break; } g.job='idler'; g._seek=1; }
+      if(g.job==='digger'){ const m=S._mines||[]; if(m.length){ g.target=pick(m); g.state='toMine'; break; } g.job='idler'; g._seek=1; }
+      if(g._seek){ g._seek=0; recount(); g.st=rnd(0.8,0.2); break; }   // v39: colonists seek work - unworkable jobs re-slot instead of standing idle
       if(g.st<=0){
         g.state='wander'; g.st=rnd(3,1.2);
         if(rnd(1)<0.22){ const w=PROPS.find(p=>p.well);
@@ -1305,7 +1311,7 @@ function updateGob(g,dt){
     case 'wander': { g.st-=dt; step(g.tx,g.ty,()=>{g.state='idle';g.st=rnd(2,.5);}); if(g.st<=0){g.state='idle';g.st=rnd(1.5,.3);} break; }
     case 'toFarm': { const b=g.target; if(!b||S.buildings.indexOf(b)<0){g.state='idle';break;}
       step(b.tx+rnd(b.w-0.2,0.2), b.ty+rnd(b.h-0.2,0.2), ()=>{ g.state='farm'; g.st=0; }); break; }
-    case 'farm': { const b=g.target; if(!b||S.buildings.indexOf(b)<0){g.state='idle';break;}
+    case 'farm': { const b=g.target; if(!b||!b.crops||S.buildings.indexOf(b)<0){g.state='idle';break;}
       g.work=1; g.st+=dt;
       for(let i=0;i<b.crops.length;i++) b.crops[i]=Math.min(1,b.crops[i]+dt*0.055);
       const ripe=b.crops.findIndex(c=>c>=1);
@@ -1354,7 +1360,7 @@ function updateGob(g,dt){
 }
 
 function updateWorld(dt){
-  checkQuest(); tickHints(dt);
+  checkQuest(); checkGoals(); tickHints(dt);
   tickAmbience(dt); tickWeather(dt);
   S.dayT=(S.dayT+dt/200)%1;
   if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
@@ -2836,7 +2842,7 @@ function init(){
   initGL();
   SKIN=program(V_SKIN,F_MAIN,['aPos','aNor','aCol','aAo','aBone']);
   try{
-    QA=qdecode((!QP.get('rig1')&&window.RIGV&&RIGV.goblinM2)?RIGV.goblinM2:QGOBLIN_M); QM=qup(QA);
+    QA=qdecode((QP.get('rig2')&&window.RIGV&&RIGV.goblinM2)?RIGV.goblinM2:QGOBLIN_M); QM=qup(QA);
     QA2=qdecode(QGOBLIN_F); QM2=qup(QA2);
     QPROG=program(V_SKIN2, F_MAIN, ['aPos','aNor','aCol','aAo','aJ']);
     QSCALE=0.52/QA.height; QSCALE2=0.52/QA2.height; QOK=true;
@@ -3111,7 +3117,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawQuestRing(); drawToasts2(); drawBanner2(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawToasts2(); drawBanner2(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -3220,6 +3226,37 @@ const QUESTS=[
  {t:'Tap a goblin - they have names. They will learn yours.', short:'you met them', check:function(){return !!S.metGob;}},
  {t:'Open WORLD - the fire is going out, and others know it', short:'the world is seen', check:function(){return !!S.sawMap;}},
 ];
+// v39: THE BROOD WANTS - post-tutorial goal rail: visible progress, stakes, and always a next move
+const GOALS=[
+ {t:'Grow the brood to 8 goblins', short:'a bigger brood', check:function(){return S.gobs.length>=8;}, prog:function(){return '  '+Math.min(8,S.gobs.length)+'/8';}},
+ {t:'Raise a QUARRY - stone builds the future', short:'a quarry stands', check:function(){return S.buildings.some(b=>b.key==='quarry');}},
+ {t:'Raise a GOLD MINE - shine for the hall', short:'a gold mine stands', check:function(){return S.buildings.some(b=>b.key==='mine');}},
+ {t:'Stock 300 food before the lean days', short:'full larders', check:function(){return S.res.food>=300;}, prog:function(){return '  '+Math.min(300,Math.floor(S.res.food))+'/300';}},
+ {t:'Take the Ratkin Warrens - silence a heresy', short:'first banner claimed', check:function(){return S.war.banners.indexOf('ratkin')>=0;}},
+ {t:'Silence every heresy - the sky remembers', short:'all heresies broken', check:function(){return S.war.banners.length>=3;}, prog:function(){return '  '+Math.min(3,S.war.banners.length)+'/3';}},
+];
+function goalIdx(){ if(S._goal===undefined){ S._goal=0; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++; } return S._goal<GOALS.length?S._goal:-1; }
+function checkGoals(){
+  if(!S.started||S.tut<QUESTS.length) return;
+  const i=goalIdx(); if(i<0) return;
+  if(GOALS[i].check()){ const done=GOALS[i]; S._goal=i+1; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++;
+    A.pop(2); A.say(6); toast2('brood satisfied: '+done.short);
+    if(S._goal>=GOALS.length){ banner2('THE BROOD WANTS NOTHING','Goblinville endures'); chron('The brood wanted, worked, and wanted no more - Goblinville endures.'); } }
+}
+function drawGoal(){
+  if(!S.started||S.tut<QUESTS.length||S.mode!=='village'||FP.on) return;
+  const i=goalIdx(); if(i<0) return;
+  const g=GOALS[i], r=questR();
+  ctx.fillStyle='rgba(24,18,30,0.62)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
+  ctx.strokeStyle='rgba(150,200,255,0.4)'; ctx.lineWidth=1.2; ctx.stroke();
+  ctx.fillStyle='#a8d8ff'; ellp(r.x+15,r.y+r.h/2,4,4); ctx.fill();
+  const label='THE BROOD WANTS  ';
+  const lw=ctx.measureText? 0:0;
+  const full=g.t+(g.prog?g.prog():'');
+  txt3(label,r.x+26,r.y+r.h/2+1,10.5,'#8fb8e8','left',800,false);
+  const off=label.length*6.4;
+  txt3(full,r.x+26+off,r.y+r.h/2+1,fitSize2(full,r.w-72-off,12,700),'#ffe6ad','left',700,false);
+}
 function questR(){ return {x:8,y:72,w:W-16,h:24}; }
 function questXR(){ const r=questR(); return {x:r.x+r.w-28,y:r.y-3,w:28,h:r.h+6}; }
 function checkQuest(){
