@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8">
+<!doctype html><html><head><script src="rig-goblin2.js"></script><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>GOBLINVILLE</title>
@@ -243,7 +243,7 @@ function initShadow(){
   if(GL2){ gl.drawBuffers?gl.drawBuffers([gl.NONE]):0; }
   const ok=gl.checkFramebufferStatus(gl.FRAMEBUFFER)===gl.FRAMEBUFFER_COMPLETE;
   gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-  SHADOW.on=ok;
+  SHADOW.on=ok&&!!QP.get('shad');   // v38: shadows off by default (Daniel: terrain read as blotches); ?shad=1 opts back in
 }
 /* ============================== mesh builder ============================ */
 function MB(){ return {pos:[],nor:[],col:[],ao:[],bone:[],idx:[],n:0}; }
@@ -2836,7 +2836,7 @@ function init(){
   initGL();
   SKIN=program(V_SKIN,F_MAIN,['aPos','aNor','aCol','aAo','aBone']);
   try{
-    QA=qdecode((QP.get('rig2')&&window.RIGV&&RIGV.goblinM2)?RIGV.goblinM2:QGOBLIN_M); QM=qup(QA);
+    QA=qdecode((!QP.get('rig1')&&window.RIGV&&RIGV.goblinM2)?RIGV.goblinM2:QGOBLIN_M); QM=qup(QA);
     QA2=qdecode(QGOBLIN_F); QM2=qup(QA2);
     QPROG=program(V_SKIN2, F_MAIN, ['aPos','aNor','aCol','aAo','aJ']);
     QSCALE=0.52/QA.height; QSCALE2=0.52/QA2.height; QOK=true;
