@@ -1110,6 +1110,26 @@ function tickAmbience(dt){
     }
   }
 }
+// v30: light rainy spells
+function tickWeather(dt){
+  if(S.t>S.wx.until) S.wx.want=0;
+  S.wx.rain+=(S.wx.want-S.wx.rain)*Math.min(1,dt*0.5);
+  if(S.wx.rain<0.01) S.wx.rain=0;
+}
+function drawWeather(){
+  const r=S.wx?S.wx.rain:0; if(r<0.02) return;
+  const n=Math.floor(24+r*80), t=G.t;
+  ctx.strokeStyle='rgba(178,198,232,'+(0.34*r+0.10)+')'; ctx.lineWidth=1.2;
+  ctx.beginPath();
+  for(let i=0;i<n;i++){
+    const h1=hash2(i*13.7,Math.floor(t*3.2+i*0.7)*7.3);
+    const x=(hash2(i*3.1,1.7)*W+ (t*22*hash2(i,9.3))%W)%W;
+    const y=(hash2(i*5.3,4.2)*(H+160) + t*(340+120*hash2(i*7.7,2.2))*3.2)%(H+160)-80;
+    ctx.moveTo(x,y); ctx.lineTo(x-4,y+11+r*4);
+    if(h1<0.05){ const sx=x-4, sy=y+11+r*4; ctx.moveTo(sx-2.5,sy); ctx.lineTo(sx+2.5,sy); }  // splash tick
+  }
+  ctx.stroke();
+}
 /* ------------------------------ resource nodes ------------------------- */
 function findTile(pred, fromX, fromY){
   let best=null,bd=1e9;
@@ -1131,7 +1151,7 @@ function updateGob(g,dt){
   if(g.emoteT>0){ g.emoteT-=dt; if(g.emoteT<=0) g.emote=null; }
   if(g.squash>0) g.squash=Math.max(0,g.squash-dt*3.2);
   g.moving=false; g.work=0;
-  const spd=g.speed*(1+(g.mood-0.5)*0.2);
+  const spd=g.speed*(1+(g.mood-0.5)*0.2)*(1+0.15*(S.wx?S.wx.rain:0));
   function step(txp,typ,arrive){
     const dx=txp-g.x, dy=typ-g.y, d=Math.hypot(dx,dy);
     if(d<0.14){ arrive(); return; }
@@ -1241,10 +1261,14 @@ function updateGob(g,dt){
 
 function updateWorld(dt){
   checkQuest(); tickHints(dt);
-  tickAmbience(dt);
+  tickAmbience(dt); tickWeather(dt);
   S.dayT=(S.dayT+dt/200)%1;
   if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
+    // v30: weather - a rainy spell can roll in at dawn
+    if(rnd(1)<0.30){ S.wx.want=1; S.wx.until=S.t+rnd(95,45);
+      toast2('rain rolls over the Mudmouth');
+      if(rnd(1)<0.5) chron('Rain day. The mud enjoyed it more than the goblins did.'); }
     if(S.victory){ addRes('food',15); addRes('gold',5); if(rnd(1)<0.35) chron('The Ember kept the fire another night. Small mercies, enormous ones, count the same.'); }
     if(S.war.banners.length){
       for(const bid of S.war.banners){
@@ -1637,6 +1661,7 @@ const RIVALS=[
    heresy:'THE BONE CHOIR HERESY: "The Ember made us and it will unmake us. We sharpen the spear that ends it."'}
 ];
 S.war={troops:0, train:0, sel:null, won:{}, cd:{}, banners:[], rally:0, result:null, treaty:false};
+S.wx={rain:0, want:0, until:0};
 function warBuildings(){ return S.buildings.filter(b=>b.key==='barracks'&&b.pop>=1).length; }
 function updateWar(dt){
   const nb=warBuildings();
@@ -2375,10 +2400,11 @@ function setLight(){
 function setEnv(prog){
   gl.uniform3fv(prog.u.uSun,SUN);
   const f=dayLight(), warm=clamp(sunElev()*3+1,0,1);   // warm=1 in sunlight, 0 deep night
-  gl.uniform3fv(prog.u.uSunCol,[lerp(0.45,1.0,warm)*f+0.04, lerp(0.55,0.94,warm)*f+0.04, lerp(0.95,0.80,warm)*f+0.04]);
-  gl.uniform3fv(prog.u.uSkyCol,[lerp(0.10,0.55,warm)*f+0.03, lerp(0.14,0.70,warm)*f+0.03, lerp(0.30,0.88,warm)*f+0.04]);
-  gl.uniform3fv(prog.u.uGndCol,[0.24*f+0.02,0.26*f+0.02,0.20*f+0.02]);
-  gl.uniform3fv(prog.u.uFogCol,[lerp(0.06,0.78,warm),lerp(0.08,0.87,warm),lerp(0.16,0.94,warm)]);
+  const rf=1-0.30*(S.wx?S.wx.rain:0);   // v30: rain dims and cools the world
+  gl.uniform3fv(prog.u.uSunCol,[(lerp(0.45,1.0,warm)*f+0.04)*rf, (lerp(0.55,0.94,warm)*f+0.04)*rf, (lerp(0.95,0.80,warm)*f+0.04)*Math.min(1,rf+0.06)]);
+  gl.uniform3fv(prog.u.uSkyCol,[(lerp(0.10,0.55,warm)*f+0.03)*rf, (lerp(0.14,0.70,warm)*f+0.03)*rf, (lerp(0.30,0.88,warm)*f+0.04)*rf]);
+  gl.uniform3fv(prog.u.uGndCol,[(0.24*f+0.02)*rf,(0.26*f+0.02)*rf,(0.20*f+0.02)*rf]);
+  gl.uniform3fv(prog.u.uFogCol,[lerp(0.06,0.78,warm)*rf,lerp(0.08,0.87,warm)*rf,lerp(0.16,0.94,warm)*rf]);
   gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:0.017);
   if(prog.u.uTint) gl.uniform3f(prog.u.uTint,1,1,1);
   const e=camEye(); gl.uniform3fv(prog.u.uEye,e);
@@ -2938,6 +2964,7 @@ function drawUI(){
   ctx.drawImage(uic2,0,0,W,H);
   drawParts(); drawFloats2();
   drawLaundry();
+  drawWeather();
   drawNightGlow();
   drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawQuestRing(); drawToasts2(); drawBanner2(); drawCeremony();
   const fv=Math.round(G.fps);
