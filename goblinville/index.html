@@ -1617,6 +1617,34 @@ function syncLaundry(){
     PROPS.push({laundry:1, ax,az,bx,bz, seed:a.seed});
   }
 }
+function drawPennants(){
+  if(!S.started||S.mode!=='village') return;
+  const h=hallB(); if(!h||h.pop<1) return;
+  const bn=S.war.banners; if(!bn||!bn.length) return;
+  const x0=h.tx, x1=h.tx+h.w, ty=h.ty+0.35;
+  const p0=projPt(x0,(h.gy||0)+2.35,ty), p1=projPt(x1,(h.gy||0)+2.35,ty);
+  if(!p0||!p1) return;
+  if((p0[0]<-60&&p1[0]<-60)||(p0[0]>W+60&&p1[0]>W+60)) return;
+  const zs=clamp(14/CAM.dist,0.6,1.5);
+  // sagging eave rope
+  const mx=(p0[0]+p1[0])/2, my=(p0[1]+p1[1])/2+7*zs;
+  ctx.strokeStyle='rgba(120,94,64,0.9)'; ctx.lineWidth=1.5*zs;
+  ctx.beginPath(); ctx.moveTo(p0[0],p0[1]); ctx.quadraticCurveTo(mx,my,p1[0],p1[1]); ctx.stroke();
+  const n=bn.length;
+  for(let i=0;i<n;i++){
+    const t=(i+1)/(n+1), u=1-t;
+    const cx=u*u*p0[0]+2*u*t*mx+t*t*p1[0], cy=u*u*p0[1]+2*u*t*my+t*t*p1[1];
+    const rv=RIVALS.find(q=>q.id===bn[i]); if(!rv) continue;
+    const sway=Math.sin(G.t*2.3+i*1.7)*0.18*(1+(S.wx?S.wx.rain*1.6:0));
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(sway);
+    const w=8*zs, hh=13*zs;
+    ctx.fillStyle=rv.pal.flag;
+    ctx.beginPath(); ctx.moveTo(-w,0); ctx.lineTo(w,0); ctx.lineTo(w*0.7,hh*0.55); ctx.lineTo(0,hh); ctx.lineTo(-w*0.7,hh*0.55); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=rv.pal.r2;
+    ctx.fillRect(-w*0.55,hh*0.12,w*1.1,hh*0.18);
+    ctx.restore();
+  }
+}
 function drawVets(){
   if(!S.started||S.mode!=='village') return;
   for(const g of S.gobs){ if(!g.vet||g.hp<=0||g.die>0) continue;
@@ -3000,6 +3028,7 @@ function drawUI(){
   ctx.drawImage(uic2,0,0,W,H);
   drawParts(); drawFloats2();
   drawLaundry();
+  drawPennants();
   drawVets();
   drawWeather();
   drawNightGlow();
