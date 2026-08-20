@@ -182,12 +182,17 @@ attribute vec2 aPos; varying vec2 vUv;
 void main(){ vUv=aPos*0.5+0.5; gl_Position=vec4(aPos,0.0,1.0); }`;
 const F_SKY=`
 precision highp float; varying vec2 vUv;
-uniform vec3 uTop,uMid,uBot; uniform float uSunY,uSunX,uNight;
+uniform vec3 uTop,uMid,uBot; uniform float uSunY,uSunX,uNight,uT;
+float shash(vec2 p){ return fract(sin(dot(p,vec2(41.31,289.17)))*43758.5453); }
 void main(){
   vec3 c = vUv.y>0.5 ? mix(uMid,uTop,(vUv.y-0.5)*2.0) : mix(uBot,uMid,vUv.y*2.0);
   float d=distance(vec2(vUv.x*1.0,vUv.y),vec2(uSunX,uSunY));
   c+=vec3(1.0,0.88,0.62)*exp(-d*d*420.0)*(1.0-uNight)*0.75;
   c+=vec3(0.85,0.9,1.0)*exp(-d*d*700.0)*uNight*0.8;
+  vec2 g=floor(vUv*vec2(220.0,120.0));
+  float h=shash(g);
+  if(h>0.985&&vUv.y>0.35){ float tw=0.55+0.45*sin(uT*2.2+h*90.0);
+    c+=vec3(0.9,0.95,1.0)*uNight*tw*0.85*smoothstep(0.985,1.0,h); }
   gl_FragColor=vec4(c,1.0);
 }`;
 let PROG=null, DPROG=null, SPROG=null, SKYQ=null;
@@ -2203,7 +2208,15 @@ function acceptTreaty(){
 const CAM={mode:'iso', tx:13, ty:13, dist:21, yaw:0.9, pitch:0.80, zoom:1, gzh:0.3,
            fx:13, fy:13, fa:0, fp:0};
 const VP=M4.id(), VIEW=M4.id(), PROJ=M4.id(), LVP=M4.id(), LPROJ=M4.id(), LVIEW=M4.id(), MODEL=M4.id(), NOR=new Float32Array(9);
-let SUN=[0.42,0.78,0.34];
+const SUN0=[0.42,0.78,0.34];
+let SUN=SUN0.slice();
+function sunElev(){ return Math.sin((S.dayT-0.25)*Math.PI*2); }
+function dayLight(){ return clamp(0.16+0.92*Math.max(0,sunElev()),0.14,1); }
+function updateSun(){
+  const a=(S.dayT-0.25)*Math.PI;               // 0 at dawn, PI at dusk
+  const e=sunElev();
+  SUN=[0.48*Math.cos(a), Math.max(e,0.16), 0.34];
+}
 function camEye(){
   if(CAM.mode==='fp') return [CAM.fx, groundH(CAM.fx,CAM.fy)+0.52+Math.sin(FP.bob)*0.035, CAM.fy];
   const d=CAM.dist/CAM.zoom;
@@ -2232,15 +2245,16 @@ function setLight(){
   const cx=CAM.mode==='fp'?CAM.fx:CAM.tx, cz=CAM.mode==='fp'?CAM.fy:CAM.ty;
   const r=CAM.mode==='fp'?9:11;
   M4.ortho(LPROJ,-r,r,-r,r,-18,26);
-  M4.look(LVIEW, cx+SUN[0]*14, SUN[1]*14, cz+SUN[2]*14, cx,0,cz, 0,1,0);
+  M4.look(LVIEW, cx+SUN0[0]*14, SUN0[1]*14, cz+SUN0[2]*14, cx,0,cz, 0,1,0);
   M4.mul(LVP, LPROJ, LVIEW);
 }
 function setEnv(prog){
   gl.uniform3fv(prog.u.uSun,SUN);
-  gl.uniform3fv(prog.u.uSunCol,[1.0,0.94,0.80]);
-  gl.uniform3fv(prog.u.uSkyCol,[0.55,0.70,0.88]);
-  gl.uniform3fv(prog.u.uGndCol,[0.24,0.26,0.20]);
-  gl.uniform3fv(prog.u.uFogCol,[0.78,0.87,0.94]);
+  const f=dayLight(), warm=clamp(sunElev()*3+1,0,1);   // warm=1 in sunlight, 0 deep night
+  gl.uniform3fv(prog.u.uSunCol,[lerp(0.45,1.0,warm)*f+0.04, lerp(0.55,0.94,warm)*f+0.04, lerp(0.95,0.80,warm)*f+0.04]);
+  gl.uniform3fv(prog.u.uSkyCol,[lerp(0.10,0.55,warm)*f+0.03, lerp(0.14,0.70,warm)*f+0.03, lerp(0.30,0.88,warm)*f+0.04]);
+  gl.uniform3fv(prog.u.uGndCol,[0.24*f+0.02,0.26*f+0.02,0.20*f+0.02]);
+  gl.uniform3fv(prog.u.uFogCol,[lerp(0.06,0.78,warm),lerp(0.08,0.87,warm),lerp(0.16,0.94,warm)]);
   gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:0.017);
   if(prog.u.uTint) gl.uniform3f(prog.u.uTint,1,1,1);
   const e=camEye(); gl.uniform3fv(prog.u.uEye,e);
@@ -2365,10 +2379,31 @@ function drawSky(){
   gl.bindBuffer(gl.ARRAY_BUFFER,SKYQ);
   gl.enableVertexAttribArray(SPROG.a.aPos);
   gl.vertexAttribPointer(SPROG.a.aPos,2,gl.FLOAT,false,0,0);
-  gl.uniform3fv(SPROG.u.uTop,[0.30,0.56,0.86]);
-  gl.uniform3fv(SPROG.u.uMid,[0.62,0.80,0.95]);
-  gl.uniform3fv(SPROG.u.uBot,[0.88,0.93,0.90]);
-  gl.uniform1f(SPROG.u.uSunX,0.30); gl.uniform1f(SPROG.u.uSunY,0.74); gl.uniform1f(SPROG.u.uNight,0);
+  // v25: living sky - palette keyed to the day cycle
+  const t=S.dayT;
+  const K=[
+    [0.00, [0.05,0.06,0.16], [0.10,0.12,0.24], [0.14,0.16,0.26], 1.0],
+    [0.22, [0.38,0.30,0.55], [0.62,0.42,0.52], [0.90,0.58,0.44], 0.6],
+    [0.30, [0.30,0.56,0.86], [0.62,0.80,0.95], [0.88,0.93,0.90], 0.0],
+    [0.62, [0.33,0.58,0.85], [0.66,0.80,0.94], [0.92,0.90,0.82], 0.0],
+    [0.72, [0.40,0.38,0.70], [0.78,0.50,0.52], [0.98,0.66,0.40], 0.2],
+    [0.78, [0.16,0.16,0.36], [0.42,0.26,0.46], [0.72,0.38,0.40], 0.7],
+    [0.84, [0.05,0.06,0.16], [0.10,0.12,0.24], [0.14,0.16,0.26], 1.0],
+    [1.00, [0.05,0.06,0.16], [0.10,0.12,0.24], [0.14,0.16,0.26], 1.0]
+  ];
+  let ka=K[0], kb=K[K.length-1];
+  for(let i2=0;i2<K.length-1;i2++){ if(t>=K[i2][0]&&t<=K[i2+1][0]){ ka=K[i2]; kb=K[i2+1]; break; } }
+  const u=kb[0]>ka[0] ? (t-ka[0])/(kb[0]-ka[0]) : 0;
+  const LX=(a,b)=>a.map((v,i3)=>lerp(v,b[i3],u));
+  const top=LX(ka[1],kb[1]), mid=LX(ka[2],kb[2]), bot=LX(ka[3],kb[3]);
+  const night=lerp(ka[4],kb[4],u);
+  gl.uniform3fv(SPROG.u.uTop,top);
+  gl.uniform3fv(SPROG.u.uMid,mid);
+  gl.uniform3fv(SPROG.u.uBot,bot);
+  const p=clamp((t-0.25)/0.5,0,1);
+  gl.uniform1f(SPROG.u.uSunX,0.10+0.80*p); gl.uniform1f(SPROG.u.uSunY,0.28+0.45*Math.sin(p*Math.PI));
+  gl.uniform1f(SPROG.u.uNight,night);
+  if(SPROG.u.uT) gl.uniform1f(SPROG.u.uT,G.t);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4); G.dc++; G.tri+=2;
   gl.enable(gl.DEPTH_TEST);
 }
@@ -2412,6 +2447,7 @@ function frame(ts){
   lastT=now; G.t+=G.dt; G.frame++;
   G.fpsAcc+=G.rdt; G.fpsN++; G.worst=(Math.max(G.worst||0,G.dt*1000));
   if(G.fpsAcc>0.5){ G.fps=G.fpsN/G.fpsAcc; G.fpsAcc=0; G.fpsN=0; G.worstShown=G.worst; G.worst=0; if(!QNOLADD) adaptQuality(); }
+  updateSun();
   if(CAM.mode==='iso'){ const g=groundH(CAM.tx,CAM.ty); CAM.gzh+=(g-CAM.gzh)*Math.min(1,G.dt*6); }
   if(S.introZoom>0){ S.introZoom=Math.max(0,S.introZoom-G.dt*0.5); CAM.zoom=lerp(1,0.8,S.introZoom); }
   if(S._holdT!=null){ if(!S.started&&saveExists&&touches.size===1&&G.t-S._holdT>1.5){ S._holdT=null; _wiping=true; clearSave(); location.reload(); } else if(touches.size!==1) S._holdT=null; }
@@ -3007,7 +3043,9 @@ function handleTap3(x,y){
       const unmet=QUESTS.findIndex(q=>{ try{ return !q.check(); }catch(e){ return false; } });
       if(unmet>=0){ S.tut=unmet; toast2('the elder returns - he was not finished'); A.say(8); }
     }
-    if(S.tut<QUESTS.length){ toast2('tap the land - shrooms, trees, rocks'); S.tapCombo=S.tapCombo||0; A.say(9); } saveGame(); return; }
+    if(S.tut<QUESTS.length){ toast2('tap the land - shrooms, trees, rocks'); S.tapCombo=S.tapCombo||0; A.say(9);
+      for(const p of PROPS) if(p.fire){ sparkW(p.x,p.gy+0.6,p.y,26,'#ffd34d'); sparkW(p.x,p.gy+0.9,p.y,14,'#ff9a4d'); break; } }
+    saveGame(); return; }
   if(x>W-100 && y<60){ G.diag=((G.diag||0)+1)%3; return; }
   if(S.tut<QUESTS.length && inR(x,y,questXR())){ S.tut=QUESTS.length; S.elderHush=1; A.grumble(); toast2('the elder stops talking'); saveGame(); return; }
   if(S.tut<QUESTS.length && inR(x,y,questR())){ A.say(); return; }
