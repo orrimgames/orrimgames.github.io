@@ -535,8 +535,9 @@ function genTiles(){
 }
 const GRASS1='#5fb63c', GRASS2='#4e9c32', DIRT='#9d7a44', ROCK='#7b848e', SAND='#c9b277';
 function SAMP(ix,iy){ return HGT(ix,iy); }   // h1 overrides this with FLATS-aware leveling
+let WATERM=null;
 function buildWorldMesh(){
-  const m=MB(), T=M4.id();
+  const m=MB(), wm=MB(), T=M4.id();
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
     const hs=[SAMP(x,y),SAMP(x+1,y),SAMP(x+1,y+1),SAMP(x,y+1)].map(v=>Math.max(v,WATER-0.34));
@@ -573,10 +574,16 @@ function buildWorldMesh(){
         mbPush(m,v2,n2b,[0,2,1,0,3,2],shade(hex(c.t===3?ROCK:DIRT),0.82),0.75,0,null);
       }
     }
-    if(c.t===2){ // water surface sits above the carved bed
-      const wv=[x,WATER,y, x+1,WATER,y, x+1,WATER,y+1, x,WATER,y+1], wn=[];
-      for(let i=0;i<4;i++) wn.push(0,1,0);
-      mbPush(m,wv,wn,[0,2,1,0,3,2],shade(hex('#3f9fd0'),0.94+c.v*0.14),1,0,null);
+    if(c.t===2){ // v24: water gets its own animated mesh; ao channel carries corner foam
+      const fm=(cx,cy)=>{ for(let dy=-1;dy<=0;dy++)for(let dx=-1;dx<=0;dx++){
+        const nx=cx+dx, ny=cy+dy;
+        if(nx<0||ny<0||nx>=MAP||ny>=MAP) return 1;
+        if(tiles[ny][nx].t!==2) return 1; } return 0; };
+      const wv=[x,WATER,y, x+1,WATER,y, x+1,WATER,y+1, x,WATER,y+1];
+      const fc=[fm(x,y),fm(x+1,y),fm(x+1,y+1),fm(x,y+1)];
+      const base=wm.n;
+      for(let i=0;i<4;i++){ wm.pos.push(wv[i*3],wv[i*3+1],wv[i*3+2]); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(fc[i]); wm.bone.push(0); }
+      wm.idx.push(base,base+2,base+1, base,base+3,base+2); wm.n+=4;
     }
   }
   // baked decoration
@@ -609,6 +616,7 @@ function buildWorldMesh(){
       }
     }
   }
+  WATERM=upload(wm);
   return upload(m);
 }
 /* ---------------------------- buildings --------------------------------- */
@@ -1157,7 +1165,7 @@ function updateGob(g,dt){
 }
 
 function updateWorld(dt){
-  checkQuest();
+  checkQuest(); tickHints(dt);
   S.dayT=(S.dayT+dt/200)%1;
   if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
@@ -1457,6 +1465,7 @@ function rebuildWorld(){
   if(!KP.tree_default) kdecode();
   if(WORLD){ for(const k of ['pos','nor','col','ao','bone']) if(WORLD[k]) gl.deleteBuffer(WORLD[k].b);
     if(WORLD.idxb) gl.deleteBuffer(WORLD.idxb); }
+  if(WATERM){ for(const k of ['pos','nor','col','ao','bone']) if(WATERM[k]) gl.deleteBuffer(WATERM[k].b); if(WATERM.idxb) gl.deleteBuffer(WATERM.idxb); WATERM=null; }
   WORLD=buildWorldMesh();
   shadowDirty=true;
 }
@@ -2302,11 +2311,53 @@ function scenePass(prog, skinProg){
   gl.uniformMatrix4fv(prog.u.uLightVP,false,LVP);
   if(prog.u.uSun) setEnv(prog);
   drawWorldStatics(prog);
+  drawWater();
   gl.useProgram(skinProg.p);
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
   if(skinProg.u.uSun) setEnv(skinProg);
   drawGobs(skinProg);
+}
+const V_WATER=`
+attribute vec3 aPos; attribute float aAo;
+uniform mat4 uVP; uniform float uT;
+varying vec3 vW; varying float vF;
+void main(){
+  vec3 p=aPos;
+  p.y += (sin(uT*1.7+aPos.x*2.3+aPos.z*1.9)+sin(uT*2.3-aPos.x*1.7+aPos.z*2.9))*0.009;
+  vW=aPos; vF=aAo;
+  gl_Position=uVP*vec4(p,1.0);
+}`;
+const F_WATER=`
+precision mediump float;
+varying vec3 vW; varying float vF;
+uniform highp float uT; uniform highp vec3 uSun;
+void main(){
+  float day=clamp(uSun.y*1.35+0.28,0.14,1.0);
+  float r1=sin(vW.x*3.4+uT*1.7+sin(vW.z*2.2-uT*1.3)*1.4);
+  float r2=sin(vW.z*4.6-uT*2.2+sin(vW.x*2.9+uT*0.9)*1.2);
+  float band=0.5+0.5*r1*r2;
+  vec3 col=mix(vec3(0.04,0.26,0.40),vec3(0.10,0.50,0.68),band);
+  col=mix(col,vec3(0.45,0.82,0.90),pow(band,2.2)*0.45);
+  float sp=pow(band,8.0);
+  col+=sp*vec3(0.80,0.95,1.0)*(0.25+0.55*day);
+  float sp2=pow(0.5+0.5*sin(vW.x*12.3+vW.z*10.7+uT*3.6)*sin(vW.x*8.7-vW.z*13.9-uT*2.8),9.0);
+  col+=sp2*vec3(0.9,1.0,1.0)*(0.15+0.55*day);
+  float foam=vF*(0.60+0.40*sin(uT*2.4+vW.x*5.3+vW.z*4.1));
+  col=mix(col,vec3(0.92,0.97,0.98),clamp(foam,0.0,1.0)*0.8);
+  col*=day;
+  gl_FragColor=vec4(col,0.92);
+}`;
+let WPROG2=null;
+function drawWater(){
+  if(!WATERM||!WATERM.count||!WPROG2) return;
+  gl.useProgram(WPROG2.p);
+  gl.uniformMatrix4fv(WPROG2.u.uVP,false,VP);
+  gl.uniform1f(WPROG2.u.uT,G.t);
+  if(WPROG2.u.uSun) gl.uniform3fv(WPROG2.u.uSun,SUN);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  drawMesh(WPROG2,WATERM);
+  gl.disable(gl.BLEND);
 }
 function drawSky(){
   gl.useProgram(SPROG.p);
@@ -2464,6 +2515,7 @@ function init(){
     QSCALE=0.52/QA.height; QSCALE2=0.52/QA2.height; QOK=true;
   }catch(e){ console.warn('quaternius disabled:', e); QOK=false; }
   SKIND=program(V_SKIN_DEPTH,F_DEPTH,['aPos','aBone']);
+  WPROG2=program(V_WATER,F_WATER,['aPos','aAo']);
   genTiles();
   findSite();
   CAM.tx=SITE.x; CAM.ty=SITE.y; CAM.gzh=groundH(SITE.x,SITE.y);
@@ -2605,7 +2657,8 @@ function drawBuildMenu(){
 function drawGhostHint(){
   if(!S.sel) return;
   const T=BT[S.sel];
-  txt3(S.ghost.show?(S.ghost.ok?('tap again to build '+T.name):'blocked'):'tap where to build the '+T.name, W/2, H-BARH-34, 15, '#fff','center',800);
+  const fr=S.tut<QUESTS.length;
+  txt3(S.ghost.show?(S.ghost.ok?(fr?'same spot again - tap to build':'tap again to build '+T.name):(fr?'blocked - wiggle to a clear patch':'blocked')):(fr?'tap the land to aim the '+T.name:'tap where to build the '+T.name), W/2, H-BARH-34, 15, '#fff','center',800);
   const c=cancelR();
   ctx.fillStyle='rgba(190,60,60,0.92)'; rrp(c.x,c.y,c.w,c.h,14); ctx.fill();
   txt3('CANCEL',c.x+c.w/2,c.y+c.h/2,12,'#fff','center',800);
@@ -2733,7 +2786,7 @@ function packSave(){
   return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, day:S.day, dayT:S.dayT,
     omen:S.omen, school:S.school, scholar:S.scholar, ogre:S.ogre, vanto:S.vanto,
     war:{troops:S.war.troops, won:S.war.won, cd:S.war.cd, banners:S.war.banners, treaty:S.war.treaty},
-    tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0,
+    tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0,
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
     gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0})),
@@ -2774,7 +2827,7 @@ function restoreSave(sv){
   if(sv.vanto) Object.assign(S.vanto,sv.vanto);
   if(sv.war){ S.war.troops=sv.war.troops||0; S.war.won=sv.war.won||{}; S.war.cd=sv.war.cd||{};
     S.war.banners=sv.war.banners||[]; S.war.treaty=!!sv.war.treaty; }
-  S.tut=sv.tut||0; S.metGob=sv.metGob||0; S.sawMap=sv.sawMap||0; S.tapCombo=sv.tapCombo||0; S.dawnSeen=sv.dawnSeen||0; S.elderHush=sv.elderHush||0;
+  S.tut=sv.tut||0; S.metGob=sv.metGob||0; S.sawMap=sv.sawMap||0; S.tapCombo=sv.tapCombo||0; S.dawnSeen=sv.dawnSeen||0; S.elderHush=sv.elderHush||0; S.hints=sv.hints||{};
   S.victory=sv.victory||0; S.ceremonyDone=sv.ceremonyDone||0; S.victPhase=-1; S.victT=0;
   if(S.victory&&!S.ceremonyDone){ S.victPhase=0; S.victT=0; S._vB0=S._vB1=S._vB2=0; S._vf=0; }
   S.chronicle=sv.chron||[];
@@ -2782,6 +2835,21 @@ function restoreSave(sv){
   CAM.gzh=groundH(CAM.tx,CAM.ty);
   recount(); S.pop=S.gobs.length;
   rebuildWorld(); shadowDirty=true;
+}
+
+/* ===================== next-step hints (v24) ========================== */
+const HINTS=[
+ {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
+ {k:'train', m:'the Barracks trains warriors on its own - keep the farms fed', when:()=> S.buildings.some(b=>b.key==='barracks') && S.war.troops<1},
+ {k:'raid', m:'open WORLD - the Ratkin Warrens are ripe for burning', when:()=> S.war.troops>=3 && S.war.banners.length<1},
+ {k:'heresy', m:'four heresies kneel or burn - the fire is counting on you', when:()=> S.war.banners.length>=1 && S.war.banners.length<4 && !S.victory},
+];
+function tickHints(dt){
+  if(!S.started||S.tut<QUESTS.length||S.mode!=='village'||FP.on) return;
+  S.hints=S.hints||{};
+  S._hintT=(S._hintT==null?6:S._hintT)-dt;
+  if(S._hintT>0) return; S._hintT=9;
+  for(const h of HINTS){ if(!S.hints[h.k]){ try{ if(h.when()){ S.hints[h.k]=1; toast2(h.m); A.say(5); } }catch(e){} break; } }
 }
 
 /* ========================= first five minutes (v20) ==================== */
