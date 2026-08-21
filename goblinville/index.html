@@ -537,6 +537,9 @@ function poseGoblin(g,t){
 /* ============================== world =================================== */
 let SKIN=null, SKIND=null, GOB=null, CLUB=null, WORLD=null, PROPS=[];
 const MAP=60;  // v43: one continuous land
+const PLANET_R=2500; // v50: real sphere under the camp; flatness is emergent from scale
+function DROP(x,y){ const dx=x-SITE.x, dz=y-SITE.y, r2=dx*dx+dz*dz;
+  return PLANET_R - Math.sqrt(Math.max(PLANET_R*PLANET_R - r2, 0.01)); }
 const tiles=[];
 const WATER=0.0;
 let CAMP_ON=false;
@@ -626,7 +629,7 @@ function HGT(x,y){
   for(const L of LANDS){ const d=Math.hypot(x-L.x,y-L.y); if(d<L.r){ const w=clamp((L.r-d)/3,0,1); h=h*(1-w)+L.seatH*w; } }   // seats (and the god) rise above even the shore
   return h;
 }
-function groundH(x,y){ return Math.max(HGT(x,y), WATER+0.015); }
+function groundH(x,y){ return Math.max(HGT(x,y), WATER+0.015) - DROP(x,y); }
 function tileAt(x,y){ const c=tiles[Math.max(0,Math.min(MAP-1,y|0))]; return c?c[Math.max(0,Math.min(MAP-1,x|0))]:null; }
 function genTiles(){
   for(let y=0;y<MAP;y++){ tiles[y]=[];
@@ -655,7 +658,7 @@ function buildWorldMesh(){
   const m=MB(), wm=MB(), T=M4.id();
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
-    const hs=[SAMP(x,y),SAMP(x+1,y),SAMP(x+1,y+1),SAMP(x,y+1)].map(v=>Math.max(v,WATER-0.34));
+    const hs=[SAMP(x,y)-DROP(x,y),SAMP(x+1,y)-DROP(x+1,y),SAMP(x+1,y+1)-DROP(x+1,y+1),SAMP(x,y+1)-DROP(x,y+1)].map(v=>Math.max(v,WATER-0.35));
     let base;
     if(c.t===2) base=hex(SAND);
     else if(c.t===1) base=hex(DIRT);
@@ -676,7 +679,7 @@ function buildWorldMesh(){
     const drop=[[1,0],[-1,0],[0,1],[0,-1]];
     for(const d of drop){
       const nx=x+d[0], ny=y+d[1];
-      const hh=Math.min(...hs), nh=(nx<0||ny<0||nx>=MAP||ny>=MAP)?hh-0.6:Math.max(tiles[ny][nx].h,WATER-0.34);
+      const hh=Math.min(...hs), nh=(nx<0||ny<0||nx>=MAP||ny>=MAP)?hh-0.6:Math.max(tiles[ny][nx].h-DROP(nx,ny),WATER-0.35);
       if(nh<hh-0.10){
         let e;
         if(d[0]===1) e=[[x+1,hs[1],y],[x+1,hs[2],y+1]];
@@ -695,7 +698,7 @@ function buildWorldMesh(){
         const nx=cx+dx, ny=cy+dy;
         if(nx<0||ny<0||nx>=MAP||ny>=MAP) return 1;
         if(tiles[ny][nx].t!==2) return 1; } return 0; };
-      const wv=[x,WATER,y, x+1,WATER,y, x+1,WATER,y+1, x,WATER,y+1];
+      const wv=[x,WATER-DROP(x,y),y, x+1,WATER-DROP(x+1,y),y, x+1,WATER-DROP(x+1,y+1),y+1, x,WATER-DROP(x,y+1),y+1];
       const fc=[fm(x,y),fm(x+1,y),fm(x+1,y+1),fm(x,y+1)];
       const base=wm.n;
       for(let i=0;i<4;i++){ wm.pos.push(wv[i*3],wv[i*3+1],wv[i*3+2]); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(fc[i]); wm.bone.push(0); }
@@ -733,7 +736,76 @@ function buildWorldMesh(){
     }
   }
   WATERM=upload(wm);
+  buildPlanet();
   return upload(m);
+}
+/* v50: the rest of the planet - a real sphere of ocean closing at the antipode, plus the air around it */
+let PLANETM=null, PLANETL=null, ATMOM=null, ATMOP=null;
+const V_ATMO=`attribute vec3 aPos; attribute vec3 aNor;
+ uniform mat4 uVP; varying vec3 vN; varying vec3 vW;
+ void main(){ vW=aPos; vN=aNor; gl_Position=uVP*vec4(aPos,1.0); }`;
+const F_ATMO=`precision mediump float; varying vec3 vN; varying vec3 vW; uniform vec3 uSun; uniform vec3 uEye;
+ void main(){
+  vec3 N=normalize(vN); vec3 V=normalize(uEye-vW);
+  float f=pow(1.0-max(0.0,dot(N,V)),5.0);
+  float day=clamp(uSun.y*1.35+0.28,0.10,1.0);
+  vec3 c=mix(vec3(0.30,0.55,0.95),vec3(0.60,0.80,1.0),0.5+0.5*N.y)*(0.25+0.75*day);
+  gl_FragColor=vec4(c,f*0.55);
+ }`;
+function buildPlanet(){
+  const CX=SITE.x, CY=WATER-PLANET_R, CZ=SITE.y;
+  const phi0=46.5/PLANET_R;
+  const NL=40, NLO=96; const wm=MB();
+  for(let j=0;j<=NL;j++){ const phi=phi0+(Math.PI-phi0)*j/NL;
+    const wy=CY+PLANET_R*Math.cos(phi), rr=PLANET_R*Math.sin(phi);
+    for(let i=0;i<=NLO;i++){ const th=i/NLO*TAU;
+      wm.pos.push(CX+rr*Math.cos(th), wy, CZ+rr*Math.sin(th)); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(1); wm.bone.push(0); } }
+  for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
+    wm.idx.push(a,b,a+1, a+1,b,b+1); wm.n+=4; }
+  PLANETM=upload(wm);
+  // far continents: real geometry on the ball, noise-raised above the water sphere
+  const lm=MB();
+  const LNL=36, LNLO=96; const lbase=lm.n;
+  for(let j=0;j<=LNL;j++){ const phi=phi0*1.15+(Math.PI-2*phi0*1.15)*j/LNL;
+    for(let i=0;i<=LNLO;i++){ const th=i/LNLO*TAU;
+      const L=fbm(Math.cos(th)*2.1+Math.sin(phi*2.6)*1.7+9.3, Math.sin(th)*1.9+phi*2.2-4.1);
+      const land=L>0.58;
+      const lift=land?(L-0.58)*2.6+0.35:0;
+      const RR=PLANET_R+lift;
+      const wy=(WATER-PLANET_R)+RR*Math.cos(phi), rr=RR*Math.sin(phi);
+      const x2=rr*Math.cos(th), z2=rr*Math.sin(th);
+      lm.pos.push(SITE.x+x2, wy, SITE.y+z2);
+      const nr=(PLANET_R/lift>60?1:1);
+      lm.nor.push(x2/RR, RR*Math.cos(phi)/RR, z2/RR);
+      let cr,cg,cb;
+      if(!land){ cr=0; cg=0; cb=0; }        // never drawn (skipped below)
+      else {
+        const snow=Math.abs(Math.cos(phi))>0.82;
+        const rock=L>0.70;
+        const v=fbm(th*3.1+1.1, phi*4.3+7.7);
+        if(snow){ cr=0.85; cg=0.87; cb=0.92; }
+        else if(rock){ cr=0.45+0.08*v; cg=0.43+0.07*v; cb=0.47+0.06*v; }
+        else { cr=0.28+0.10*v; cg=0.52+0.14*v; cb=0.20+0.06*v; }
+      }
+      lm.col.push(cr,cg,cb); lm.ao.push(1); lm.bone.push(0);
+    }
+  }
+  const NLO2W=LNLO;
+  for(let j=0;j<LNL;j++) for(let i=0;i<NLO2W;i++){
+    const a=j*(LNLO+1)+i, b=a+LNLO+1;
+    if(lm.col[a*3+1]===0&&lm.col[b*3+1]===0&&lm.col[(a+1)*3+1]===0&&lm.col[(b+1)*3+1]===0) continue;  // skip pure-ocean quads cheaply
+    lm.idx.push(a,b,a+1, a+1,b,b+1); lm.n+=4; }
+  PLANETL=upload(lm);
+  const RA=PLANET_R*1.03, NL2=28, NLO2=64; const am=MB();
+  for(let j=0;j<=NL2;j++){ const phi=Math.PI*j/NL2;
+    const wy=(WATER-PLANET_R)+RA*Math.cos(phi), rr=RA*Math.sin(phi);
+    for(let i=0;i<=NLO2;i++){ const th=i/NLO2*TAU;
+      const x2=rr*Math.cos(th), z2=rr*Math.sin(th);
+      am.pos.push(SITE.x+x2, wy, SITE.y+z2); am.nor.push(x2/RA, RA*Math.cos(phi)/RA, z2/RA); am.col.push(1,1,1); am.ao.push(1); am.bone.push(0); } }
+  for(let j=0;j<NL2;j++) for(let i=0;i<NLO2;i++){ const a=j*(NLO2+1)+i, b=a+NLO2+1;
+    am.idx.push(a,b,a+1, a+1,b,b+1); am.n+=4; }
+  ATMOM=upload(am);
+  ATMOP=program(V_ATMO,F_ATMO,['aPos','aNor']);
 }
 /* ---------------------------- buildings --------------------------------- */
 function buildHall(){
@@ -979,7 +1051,7 @@ function groundH(x,y){   // building-aware override of the terrain-only version
   const x0=Math.floor(x), y0=Math.floor(y);
   const fx=clamp(x-x0,0,1), fy=clamp(y-y0,0,1);
   const h00=SAMP(x0,y0),h10=SAMP(x0+1,y0),h01=SAMP(x0,y0+1),h11=SAMP(x0+1,y0+1);
-  return Math.max(lerp(lerp(h00,h10,fx),lerp(h01,h11,fx),fy), WATER+0.015);
+  return Math.max(lerp(lerp(h00,h10,fx),lerp(h01,h11,fx),fy), WATER+0.015) - DROP(x,y);
 }
 function flattenArea(tx,ty,w,h){
   let hv=-9;
@@ -1454,7 +1526,7 @@ function updateGob(g,dt){
 
 function updateWorld(dt){
   checkQuest(); checkGoals(); tickHints(dt); tickShare(dt); S._achT=(S._achT==null?2:S._achT)-dt; if(S._achT<=0){ S._achT=1.8; checkBadges(); }
-  tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt);   // v43
+  tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt);   // v43
   S.dayT=(S.dayT+dt/200)%1;
   if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
@@ -2612,7 +2684,7 @@ function camEye(){
 }
 function clampCam3(){
   CAM.tx=clamp(CAM.tx,-2,MAP+2); CAM.ty=clamp(CAM.ty,-2,MAP+2);
-  CAM.zoom=clamp(CAM.zoom,0.55,1.9);
+  CAM.zoom=clamp(CAM.zoom,0.0018,1.9);
 }
 function setCamera(){
   const asp=glc.width/glc.height;
@@ -2622,7 +2694,8 @@ function setCamera(){
     const cx=CAM.fx+Math.sin(CAM.fa)*Math.cos(CAM.fp), cy=ey+Math.sin(CAM.fp), cz=CAM.fy+Math.cos(CAM.fa)*Math.cos(CAM.fp);
     M4.look(VIEW, CAM.fx,ey,CAM.fy, cx,cy,cz, 0,1,0);
   } else {
-    M4.persp(PROJ, 0.62, asp, 0.4, 48);
+    const orb=!!S.orbit;
+    M4.persp(PROJ, 0.62, asp, orb?30:0.4, orb?30000:48);
     const e=camEye();
     const d=CAM.dist/CAM.zoom, lah=0.30*Math.cos(CAM.pitch)*d;
     M4.look(VIEW, e[0],e[1],e[2], CAM.tx-Math.sin(CAM.yaw)*lah, CAM.gzh, CAM.ty-Math.cos(CAM.yaw)*lah, 0,1,0);
@@ -2662,6 +2735,7 @@ function drawWorldStatics(prog, noCrops){
   drawStatic(prog, WORLD, MODEL);
   for(const p of PROPS){ if(!p.mesh) continue; M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
   if(S.wilds) for(const w of S.wilds){ if(w.hide||w.den) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v43 giants & wolves
+  if(S.peoples) for(const w of S.peoples){ if(w.hide) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v48: the peoples keep their seats
   drawBuildings(prog, noCrops);
   drawGhost3(prog);
 }
@@ -2717,11 +2791,12 @@ function scenePass(prog, skinProg){
   if(prog.u.uSun) setEnv(prog);
   drawWorldStatics(prog);
   drawWater();
+  if(prog===PROG&&S.orbit&&PLANETL){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }
   gl.useProgram(skinProg.p);
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
   if(skinProg.u.uSun) setEnv(skinProg);
-  drawGobs(skinProg);
+  if(!S.orbit) drawGobs(skinProg);
 }
 const V_WATER=`
 attribute vec3 aPos; attribute float aAo;
@@ -2754,6 +2829,16 @@ void main(){
   gl_FragColor=vec4(col,0.92);
 }`;
 let WPROG2=null;
+function drawAtmo(){
+  if(!ATMOM||!ATMOP) return;
+  gl.useProgram(ATMOP.p);
+  gl.uniformMatrix4fv(ATMOP.u.uVP,false,VP);
+  const e=camEye(); if(ATMOP.u.uEye) gl.uniform3f(ATMOP.u.uEye,e[0],e[1],e[2]);
+  if(ATMOP.u.uSun) gl.uniform3fv(ATMOP.u.uSun,SUN);
+  gl.depthMask(false); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE); gl.disable(gl.CULL_FACE);
+  drawMesh(ATMOP,ATMOM);
+  gl.enable(gl.CULL_FACE); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(true);
+}
 function drawWater(){
   if(!WATERM||!WATERM.count||!WPROG2) return;
   gl.useProgram(WPROG2.p);
@@ -2762,6 +2847,7 @@ function drawWater(){
   if(WPROG2.u.uSun) gl.uniform3fv(WPROG2.u.uSun,SUN);
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   drawMesh(WPROG2,WATERM);
+  if(S.orbit&&PLANETM){ drawMesh(WPROG2,PLANETM); }
   gl.disable(gl.BLEND);
 }
 function drawSky(){
@@ -2802,7 +2888,7 @@ function drawSky(){
 function render(){
   G.dc=0; G.tri=0;
   setCamera(); setLight();
-  if(SHADOW.on){
+  if(SHADOW.on&&!S.orbit){
     let growing=false;
     for(const b of S.buildings) if(b.pop<1){ growing=true; break; }
     if(shadowDirty||growing){
@@ -2819,10 +2905,10 @@ function render(){
       if(!growing) shadowDirty=false;
     }
   }
-  if(S.mode==='globe'){ drawGlobe(); return; }
   gl.clear(gl.DEPTH_BUFFER_BIT);
   drawSky();
   scenePass(PROG, SKIN);
+  if(S.orbit) drawAtmo();
 }
 let QLEVEL=0, QLOW=0;
 function adaptQuality(){
@@ -2842,6 +2928,11 @@ function frame(ts){
   if(G.fpsAcc>0.5){ G.fps=G.fpsN/G.fpsAcc; G.fpsAcc=0; G.fpsN=0; G.worstShown=G.worst; G.worst=0; if(!QNOLADD) adaptQuality(); }
   updateSun();
   if(CAM.mode==='iso'){ const g=groundH(CAM.tx,CAM.ty); CAM.gzh+=(g-CAM.gzh)*Math.min(1,G.dt*6); }
+  const dz=CAM.dist/CAM.zoom;
+  const wasOrb=!!S.orbit;
+  S.orbit=(S.mode==='village'&&!FP.on&&dz>1500)?1:((S.mode==='village'&&!FP.on&&dz<1100)?0:S.orbit||0);
+  if(S.orbit&&!wasOrb){ S.sel=null; S.banner=null; banner2('O R R I M','the whole ball - ours'); A.pop(3); }
+  if(!S.orbit&&wasOrb) A.blip();
   if(S.introZoom>0){ S.introZoom=Math.max(0,S.introZoom-G.dt*0.5); CAM.zoom=lerp(1,0.8,S.introZoom); }
   if(S._holdT!=null){ if(!S.started&&saveExists&&touches.size===1&&G.t-S._holdT>1.5){ S._holdT=null; _wiping=true; clearSave(); location.reload(); } else if(touches.size!==1) S._holdT=null; }
   driveCeremony(G.dt);
@@ -2927,6 +3018,98 @@ void main(){
 const QMOD=M4.id();
 let QOK=false, QA=null, QM=null, QPROG=null, QSCALE=0.165, QA2=null, QM2=null, QSCALE2=0.163;
 
+/* ================= v48: THE PEOPLES OF ORRIM =================
+   Every land keeps its own walkers: pilgrims, courtiers, sky-readers,
+   diggers, tenders, smiths, wardens, buyers, listeners - and the embers
+   that pray in the scar. They never leave their country. Bedlam keeps
+   only the praying dead; the god requires no crowd. */
+function buildFolk(o){
+  const m=MB(),T=M4.id();
+  const skin=hex(o.skin), cloth=hex(o.cloth), cl2=hex(o.cloth2||o.cloth), trim=hex(o.trim||o.cloth);
+  const w=o.w||1, h=o.h||1, hd=o.hd||1;
+  M4.trs(T,-0.09*w,0.10*h,0,0,0,0,1,1,1); box(m,0.10*w,0.24*h,0.10*w,o.robed?cloth:cl2,T,0,0.6);
+  M4.trs(T, 0.09*w,0.10*h,0,0,0,0,1,1,1); box(m,0.10*w,0.24*h,0.10*w,o.robed?cloth:cl2,T,0,0.6);
+  M4.trs(T,0,0.34*h,0,0,0,0,1,1,1); box(m,0.34*w,0.30*h,0.20*w,cloth,T,0,0.7);
+  if(o.robed){ M4.trs(T,0,0.19*h,0,0,0,0,1,1,1); box(m,0.42*w,0.26*h,0.27*w,cloth,T,0,0.7); }
+  else { M4.trs(T,0,0.50*h,0,0,0,0,1,1,1); box(m,0.38*w,0.08*h,0.22*w,trim,T,0,0.7); }
+  if(o.belly){ M4.trs(T,0,0.31*h,0.11*w,0,0,0,1,1,1); ball(m,0.18*w,6,cl2,T,0,0.75); }
+  M4.trs(T,-0.24*w,0.36*h,0,0,0,0.28,1,1,1); box(m,0.08,0.22*h,0.08,cloth,T,0,0.6);
+  M4.trs(T, 0.24*w,0.36*h,0,0,0,-0.28,1,1,1); box(m,0.08,0.22*h,0.08,cloth,T,0,0.6);
+  M4.trs(T,0,0.57*h,0,0,0,0,1,1,1); ball(m,0.13*hd,7,skin,T,0,0.85);
+  if(o.hood){ M4.trs(T,0,0.62*h,-0.015,0.18,0,0,1,1,1); pyramid(m,0.26*hd,0.24,0.28*hd,cloth,T,0); }
+  if(o.cap){ M4.trs(T,0,0.71*h,0,0,0.4,0,1,1,1); ball(m,0.17*hd,7,trim,T,0,0.6);
+             M4.trs(T,0,0.665*h,0,0,0,0,1,1,1); box(m,0.26*hd,0.05,0.26*hd,trim,T,0,0.7); }
+  if(o.ears===1){ for(const sx of[-0.12,0.12]){ M4.trs(T,sx*hd,0.63*h,0,0,0,0,1,1,1); ball(m,0.075,6,cloth,T,0,0.8);
+                  M4.trs(T,sx*hd*1.06,0.63*h,0.02,0,0,0,1,1,1); ball(m,0.045,6,hex('#241a12'),T,0,0.8); } }
+  if(o.ears===2){ for(const sx of[-0.15,0.15]){ M4.trs(T,sx*hd,0.60*h,0,0.15,0,sx>0?-0.5:0.5,1,1,1); pyramid(m,0.06,0.14,0.06,skin,T,0); } }
+  if(o.beard){ M4.trs(T,0,0.485*h,0.075*hd,0.25,0,0,1,1,1); box(m,0.16*hd,0.14,0.06,trim,T,0,0.7); }
+  if(o.helm){ M4.trs(T,0,0.655*h,0,0,0,0,1,1,1); tube(m,0.145*hd,0.145*hd,0.05,8,trim,T,0,true,true); }
+  if(o.tusk){ for(const sx of[-0.07,0.07]){ M4.trs(T,sx*hd,0.51*h,0.09*hd,0,0.5,0,1,1,1); pyramid(m,0.05,0.12,0.05,hex('#e8e2d2'),T,0); } }
+  if(o.staff){ M4.trs(T,0.30*w,0.42*h,0.02,0,0,-0.1,1,1,1); tube(m,0.02,0.02,0.9,5,hex('#6b4a2c'),T,0,true,true);
+               M4.trs(T,0.33*w,0.91*h,0.02,0,0,0,1,1,1); ball(m,0.06,6,hex(o.glow||'#7fe0ff'),T,0,1); }
+  if(o.eye){ for(const sx of[-0.045,0.045]){ M4.trs(T,sx*hd,0.585*h,0.10*hd,0,0,0,1,1,1); box(m,0.05,0.05,0.05,hex(o.eye),T,0,1); } }
+  return upload(m);
+}
+const FOLK={
+  bone:   {n:4, skin:'#d9d4c6', cloth:'#8f8a7c', cloth2:'#6e6a5e', robed:1, h:1.18, w:0.72, eye:'#9fd4ff', spd:0.45, night:2},
+  crimson:{n:3, skin:'#e8d0c8', cloth:'#2b2030', cloth2:'#1c141f', trim:'#8e1e2e', robed:1, hood:1, spd:0.35, night:2},
+  spire:  {n:3, skin:'#cfd8ec', cloth:'#4a5a88', cloth2:'#5a6fa8', robed:1, hood:1, staff:1, glow:'#7fe0ff', h:1.2, spd:0.4},
+  warrens:{n:5, skin:'#8a6f52', cloth:'#8a6f52', cloth2:'#87714f', ears:1, h:0.6, w:0.85, belly:1, spd:1.6},
+  hollow: {n:4, skin:'#e2d7c2', cloth:'#cfc4ae', trim:'#c3402e', cap:1, h:0.72, w:1.3, belly:1, spd:0.4},
+  ridge:  {n:4, skin:'#d8a878', cloth:'#5d574d', cloth2:'#4c463e', trim:'#c8884d', beard:1, helm:1, h:0.74, w:1.35, belly:1, spd:0.85},
+  orcs:   {n:5, skin:'#7f5a3a', cloth:'#4a2f1d', cloth2:'#8a4a30', tusk:1, h:1.22, w:1.3, belly:1, spd:1.4},
+  men:    {n:5, skin:'#e8c8a0', cloth:'#4a5a78', cloth2:'#9aa0a8', h:1.0, spd:0.9},
+  elves:  {n:3, skin:'#ead9c6', cloth:'#7fd8a8', cloth2:'#9fb8aa', ears:2, robed:1, h:1.2, w:0.78, spd:0.72, night:2},
+  bedlam: {n:2, skin:'#e05c1f', cloth:'#1d1310', cloth2:'#140c0a', robed:1, hd:0.85, eye:'#ff9e4d', h:0.9, w:0.85, spd:0.28, night:2},
+};
+const LANDID={}; for(const L of LANDS) LANDID[L.id]=L;
+function seedPeoples(){
+  S.peoples=[];
+  for(const L of LANDS){ const F=FOLK[L.id]; if(!F) continue;
+    const mesh=buildFolk(F);
+    for(let i=0;i<F.n;i++){
+      let a0=rnd(TAU), r0=rnd(L.r*0.7,2.4), x=L.x+Math.sin(a0)*r0, y=L.y+Math.cos(a0)*r0;
+      for(let k=0;k<12&&(tiles[Math.floor(clamp(y,0,MAP-1))]&&tiles[Math.floor(clamp(y,0,MAP-1))][Math.floor(clamp(x,0,MAP-1))].t===2);k++){
+        a0=rnd(TAU); r0=rnd(L.r*0.6,2.4); x=L.x+Math.sin(a0)*r0; y=L.y+Math.cos(a0)*r0; }
+      S.peoples.push({L:L.id, mesh, x, y, a:0, tx:x, ty:y, repick:0, bob:0, ph:rnd(TAU), gy:0, spd:F.spd*rnd(1.2,0.8), F});
+    }
+  }
+}
+function folkTick(dt){
+  if(!S.peoples) return;
+  const nf=nightNow()?1:0;
+  for(const w of S.peoples){
+    const L=LANDID[w.L], F=w.F;
+    const d=Math.hypot(w.tx-w.x,w.ty-w.y);
+    if(d<0.35){ if((w.repick-=dt)<=0){ w.repick=rnd(5,2);
+        for(let k=0;k<8;k++){ const a=rnd(TAU), rr=rnd(L.r*0.75,2.2);
+          const nx2=L.x+Math.sin(a)*rr, ny2=L.y+Math.cos(a)*rr;
+          if(ny2>=1&&ny2<MAP-1&&nx2>=1&&nx2<MAP-1&&tiles[Math.floor(ny2)][Math.floor(nx2)].t!==2){ w.tx=nx2; w.ty=ny2; break; } } } }
+    else { const a=Math.atan2(w.tx-w.x,w.ty-w.y);
+      const nm=F.night?(nf?(F.night-1)*2.2:0.35):1;
+      const sp=w.spd*nm;
+      w.x+=Math.sin(a)*sp*dt; w.y+=Math.cos(a)*sp*dt; w.a=a;
+      w.bob=Math.abs(Math.sin(G.t*(3+w.spd*3)+w.ph))*0.04*(nm>1?0.5:1); }
+    w.gy=groundH(w.x,w.y);
+  }
+}
+
+
+
+/* v49 prep: THE PEOPLES SPEAK - on entering a known land's precinct, that race addresses the brood once */
+const VOICES={
+  bone:   ['THE CHOIR', '"Living," the Choir said, tasting a strange old word, and did not stop singing.'],
+  crimson:['THE COURT', '"Warm," the Court observed of the goblins, the way one appraises furniture.'],
+  spire:  ['THE SKY-READERS', '"You have not been counted," the sky-readers called down. It was a courtesy. It was also a warning.'],
+  warrens:['THE RATKIN', 'The ratkin were underfoot instantly, selling directions nobody had asked for. Prices decent.'],
+  hollow: ['THE SPOREFOLK', '"Walk soft," the sporefolk said pleasantly. "The roots remember."'],
+  ridge:  ['THE IRONBEARDS', 'The ironbeards did not look up from the anvil. "Say what needs forging or go home."'],
+  orcs:   ['THE ORC HOLD', '"Greenskins," the orcs grunted, which - from an orc - is half a compliment.'],
+  men:    ['THE CITY', '"Enter freely, pay taxes," said the gate guard, and managed to mean both warmly.'],
+  elves:  ['THE GROVE', 'The elves said nothing. The saying had been done earlier, better, by the trees.'],
+  bedlam: ['THE SCAR', 'Nothing in Bedlam spoke. The ground hummed a low note the goblins felt in their teeth.'],
+};
+
 function init(){
   if(window.__gobBoot){ console.warn('double boot blocked'); return; }
   window.__gobBoot=1;
@@ -2957,7 +3140,7 @@ function init(){
   const QRAID=QP.get('raid');
   if(QRAID){ const rv=RIVALS.find(x=>x.id===QRAID); if(rv){ if(S.war.troops<rv.cost) S.war.troops=rv.cost+3; startBattle(rv); } }
   if(QNOUI) uic.style.display='none';
-  seedLandmarks(); seedWilds();
+  seedLandmarks(); seedWilds(); seedPeoples();
   window.__ready=true;
   requestAnimationFrame(frame);
 }
@@ -3195,7 +3378,7 @@ function drawUI(){
   ctx.clearRect(0,0,W,H);
   if(!S.started){ drawTitle(); drawParts(); return; }
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
-  if(S.mode==='globe'){ drawGlobeUI(); drawToasts2(); return; }
+  if(S.orbit){ drawOrbitUI(); drawToasts2(); drawBanner2(); return; }
   if(FP.on && !(FP.battle&&S.war.result)){
     drawParts(); drawFloats2(); drawFPUI(); drawToasts2(); drawBanner2();
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
@@ -3533,6 +3716,7 @@ function wildTick(dt){
     w.gy=groundH(w.x,w.y);
   }
 }
+
 /* ---------------- discovery: the elder names the lands ------------- */
 function tickLands(dt){
   if(!S.started||S.mode!=='village') return;
@@ -3541,6 +3725,8 @@ function tickLands(dt){
   const cx=FP.on?FP.x:CAM.tx, cy=FP.on?FP.y:CAM.ty;
   for(const L of LANDS){ if(!S.seen[L.id]&&Math.hypot(cx-L.x,cy-L.y)<L.r+1.2){ S.seen[L.id]=1;
       banner2(L.name,L.tag); chron(L.chron); A.say(8); saveGame(); break; } }
+  for(const L of LANDS){ if(VOICES[L.id]&&S.seen[L.id]&&!S.seen['v_'+L.id]&&Math.hypot(cx-L.x,cy-L.y)<L.r*0.5){ S.seen['v_'+L.id]=1;
+      banner2(VOICES[L.id][0],VOICES[L.id][1]); chron(VOICES[L.id][1]); A.say(11); saveGame(); break; } }
   if(!S.seen.wolves&&nightNow()&&S.wilds){ for(const w of S.wilds){ if(w.wolf&&!w.den&&Math.hypot(cx-w.x,cy-w.y)<8){
       S.seen.wolves=1; banner2('SHAPES IN THE TREELINE','the night has its own people');
       chron('Something with bright eyes paced the treeline. The elder made the mud-sign. Werewolves, he said, the way he says weather.'); A.say(9); howlFar(); saveGame(); break; } } }
@@ -3554,103 +3740,12 @@ function tickLands(dt){
 }
 function howlFar(){ A.tone(520,1.5,{type:'sawtooth',vol:0.16,slide:170}); A.tone(780,1.0,{type:'sine',vol:0.09,slide:380,delay:0.14}); }
 
-/* ================= v47: THE GLOBE - pinch out beyond the world ================= */
-const V_GLOBE=`attribute vec3 aPos; attribute vec2 aUv; uniform mat4 uVP; uniform mat4 uModel;
- varying vec2 vUv; varying vec3 vN;
- void main(){ vec4 w=uModel*vec4(aPos,1.0); vUv=aUv; vN=(uModel*vec4(aPos,0.0)).xyz; gl_Position=uVP*w; }`;
-const F_GLOBE=`precision highp float; varying vec2 vUv; varying vec3 vN;
- uniform sampler2D uTex; uniform float uT;
- void main(){
-   vec2 tuv=vec2((vUv.x-0.30)/0.40, (vUv.y-0.26)/0.48);
-   vec3 sea=mix(vec3(0.045,0.15,0.29), vec3(0.08,0.26,0.42), 0.5+0.5*sin(vUv.y*7.0+0.8*sin(vUv.x*9.0)));
-   vec3 c=sea;
-   if(tuv.x>=0.0&&tuv.x<1.0&&tuv.y>=0.0&&tuv.y<1.0){ c=texture2D(uTex,tuv).rgb; }
-   float b1=smoothstep(0.062,0.05,distance(vUv,vec2(0.115,0.40)));
-   float b2=smoothstep(0.075,0.058,distance(vUv,vec2(0.845,0.72)));
-   float b3=smoothstep(0.05,0.038,distance(vUv,vec2(0.78,0.18)));
-   c=mix(c,vec3(0.10,0.13,0.10),max(b1,max(b2,b3))*0.85);   // uncharted lands, whispering across the sea
-   vec3 N=normalize(vN);
-   float l=0.45+0.58*max(0.0,dot(N,normalize(vec3(0.55,0.45,0.62))));
-   float fres=pow(1.0-abs(N.z),3.2);
-   c=c*l+vec3(0.42,0.72,1.0)*fres*0.75;
-   gl_FragColor=vec4(c,1.0);
- }`;
-let GLO=null;
-function buildGlobe(){
-  if(GLO) return;
-  const prog=program(V_GLOBE,F_GLOBE,['aPos','aUv']);
-  const NL=14,NLO=26; const pos=[],uv=[],idx=[];
-  for(let j=0;j<=NL;j++){ const phi=j/NL*Math.PI;
-    for(let i=0;i<=NLO;i++){ const th=i/NLO*TAU;
-      pos.push(Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th));
-      uv.push(i/NLO, j/NL); } }
-  for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
-    idx.push(a,b,a+1, a+1,b,b+1); }
-  const pb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,pb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(pos),gl.STATIC_DRAW);
-  const ub=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,ub); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(uv),gl.STATIC_DRAW);
-  const ib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(idx),gl.STATIC_DRAW);
-  const size=1024;
-  const fb=gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER,fb);
-  const tex=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,tex);
-  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,size,size,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
-  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-  const rb=gl.createRenderbuffer(); gl.bindRenderbuffer(gl.RENDERBUFFER,rb);
-  gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16,size,size);
-  gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,tex,0);
-  gl.framebufferRenderbuffer(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.RENDERBUFFER,rb);
-  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-  GLO={prog, pb, ub, ib, n:idx.length, rt:{fb,tex,rb,size}};
-}
-function renderGlobeTex(){
-  const stx=CAM.tx, sty=CAM.ty;
-  gl.bindFramebuffer(gl.FRAMEBUFFER,GLO.rt.fb);
-  gl.viewport(0,0,GLO.rt.size,GLO.rt.size);
-  gl.clearColor(0.055,0.17,0.32,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-  M4.persp(PROJ, 0.62, 1.0, 1, 400);
-  M4.look(VIEW, MAP/2, 95, MAP/2+0.5, MAP/2, 0, MAP/2, 0,0,-1);
-  M4.mul(VP,PROJ,VIEW);
-  CAM.tx=MAP/2; CAM.ty=MAP/2; setLight();
-  scenePass(PROG, SKIN);
-  CAM.tx=stx; CAM.ty=sty; setCamera(); setLight();
-  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-  gl.viewport(0,0,glc.width,glc.height);
-}
-function enterGlobe(){
-  if(!GLO) buildGlobe();
-  renderGlobeTex();
-  FP.on=false; FP.battle=false;
-  S.mode='globe'; A.pop(3);
-  banner2('O R R I M', 'the ember star');
-}
-function leaveGlobe(){ S.mode='village'; A.blip(); }
-function drawGlobe(){
-  gl.clearColor(0.012,0.016,0.04,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-  M4.persp(PROJ, 0.75, glc.width/glc.height, 0.1, 50);
-  M4.look(VIEW, 0, 0.85, -3.7, 0, 0.05, 0, 0,1,0); M4.mul(VP,PROJ,VIEW);
-  gl.disable(gl.CULL_FACE);
-  gl.useProgram(GLO.prog.p);
-  gl.uniformMatrix4fv(GLO.prog.u.uVP,false,VP);
-  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,GLO.rt.tex); gl.uniform1i(GLO.prog.u.uTex,0);
-  gl.uniform1f(GLO.prog.u.uT,G.t);
-  M4.trs(MODEL, 0, 0.05, 0, 0.32, G.t*0.05, 0, 1.55,1.55,1.55);
-  gl.uniformMatrix4fv(GLO.prog.u.uModel,false,MODEL);
-  gl.bindBuffer(gl.ARRAY_BUFFER,GLO.pb);
-  gl.enableVertexAttribArray(GLO.prog.a.aPos); gl.vertexAttribPointer(GLO.prog.a.aPos,3,gl.FLOAT,false,0,0);
-  gl.bindBuffer(gl.ARRAY_BUFFER,GLO.ub);
-  gl.enableVertexAttribArray(GLO.prog.a.aUv); gl.vertexAttribPointer(GLO.prog.a.aUv,2,gl.FLOAT,false,0,0);
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,GLO.ib);
-  gl.drawElements(gl.TRIANGLES,GLO.n,gl.UNSIGNED_SHORT,0);
-  gl.enable(gl.CULL_FACE);
-}
-function drawGlobeUI(){
-  // starfield over deep space
+function drawOrbitUI(){
   for(let i=0;i<150;i++){ const sx=(hash2(i*7.7,i*3.3)*1.0)%1*W, sy=(hash2(i*3.3,i*9.1)*1.0)%1*H;
     const tw=0.5+0.5*Math.sin(G.t*1.8+i*2.4);
     ctx.fillStyle='rgba(235,240,255,'+(0.25+0.55*tw*hash2(i,i)+0)+')';
     ctx.fillRect(sx,sy,hash2(i,4)>0.93?2.4:1.4,hash2(i,4)>0.93?2.4:1.4); }
   txt3('pinch open to fall back to the mud', W/2, H-26, 12, 'rgba(255,240,225,0.65)','center',700);
-  drawBanner2();
 }
 /* ===================== next-step hints (v24) ========================== */
 const HINTS=[
@@ -3946,7 +4041,7 @@ function moveStep(e){
     if(tapStart) tapStart.moved=Math.max(tapStart.moved,Math.hypot(v[0].x-tapStart.x,v[0].y-tapStart.y));
     if(barDrag){ barScroll=clamp(barDrag.s0-(v[0].x-barDrag.x0),0,barScrollMax); }
     else if(S.sel && v[0].y<H-BARH){ updateGhost3(v[0].x,v[0].y); if(tapStart&&tapStart.moved>10) ghostArmed=false; }
-    else if(panGrab){
+    else if(panGrab&&!S.orbit){
       const now=rayGround(v[0].x,v[0].y);
       if(now){ CAM.tx+=panGrab[0]-now[0]; CAM.ty+=panGrab[1]-now[1]; clampCam3(); }
     }
@@ -3954,9 +4049,7 @@ function moveStep(e){
     const d=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y);
     if(pinchLast>0){ const pr=d/pinchLast;
       if(S.mode==='globe'){ if(pr>1.14) leaveGlobe(); }
-      else { const nz=clamp(CAM.zoom*pr,0.55,1.9);
-        if(nz<=0.55&&pr<0.90&&S.mode==='village'&&!FP.on&&S.started) enterGlobe();
-        else CAM.zoom=nz; } }
+      else { CAM.zoom=clamp(CAM.zoom*pr,0.0018,1.9); } }
     pinchLast=d;
     const rot=Math.atan2(v[0].y-v[1].y,v[0].x-v[1].x);
     CAM.yaw=CAM.yaw-(rot-rotLast)*0.85;
