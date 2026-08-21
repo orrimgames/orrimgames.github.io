@@ -748,13 +748,13 @@ let PLANETM=null, PLANETL=null, ATMOM=null, ATMOP=null;
 const V_ATMO=`attribute vec3 aPos; attribute vec3 aNor;
  uniform mat4 uVP; varying vec3 vN; varying vec3 vW;
  void main(){ vW=aPos; vN=aNor; gl_Position=uVP*vec4(aPos,1.0); }`;
-const F_ATMO=`precision mediump float; varying vec3 vN; varying vec3 vW; uniform vec3 uSun; uniform vec3 uEye;
+const F_ATMO=`precision mediump float; varying vec3 vN; varying vec3 vW; uniform vec3 uSun; uniform vec3 uEye; uniform float uA;
  void main(){
   vec3 N=normalize(vN); vec3 V=normalize(uEye-vW);
   float f=pow(1.0-max(0.0,dot(N,V)),5.0);
   float day=clamp(uSun.y*1.35+0.28,0.10,1.0);
   vec3 c=mix(vec3(0.30,0.55,0.95),vec3(0.60,0.80,1.0),0.5+0.5*N.y)*(0.25+0.75*day);
-  gl_FragColor=vec4(c,f*0.55);
+  gl_FragColor=vec4(c,f*0.55*uA);
  }`;
 function buildPlanet(){
   const CX=SITE.x, CY=WATER-PLANET_R-0.12, CZ=SITE.y;   // ocean shell rides just under the mapped water: no coplanar fight
@@ -774,8 +774,9 @@ function buildPlanet(){
   for(let j=0;j<=LNL;j++){ const phi=phi0*1.15+(Math.PI-2*phi0*1.15)*j/LNL;
     for(let i=0;i<=LNLO;i++){ const th=i/LNLO*TAU;
       const L=fbm(Math.cos(th)*2.1+Math.sin(phi*2.6)*1.7+9.3, Math.sin(th)*1.9+phi*2.2-4.1);
-      const land=L>0.58;
-      const lift=land?(L-0.58)*2.6+0.45:0;
+      const q0=PLANET_R*Math.sin(phi), ls=clamp((q0-46)/16,0,1);   // v52: far lands sink beneath the camp cap
+      const land=L>0.58&&ls>=0.02;
+      const lift=land?((L-0.58)*2.6+0.45)*ls:0;
       const RR=PLANET_R+lift;
       const wy=(WATER-PLANET_R)+RR*Math.cos(phi), rr=RR*Math.sin(phi);
       const x2=rr*Math.cos(th), z2=rr*Math.sin(th);
@@ -1117,10 +1118,10 @@ function screenRay(sx,sy){
 function rayGround(sx,sy){ // march fixed stride, then interpolate the exact crossing
   const r=screenRay(sx,sy);
   if(r.d[1]>=-0.0005) return null;
-  const st=0.05;
+  const rmax=Math.max(160,(CAM.dist/CAM.zoom)*1.3), st=Math.max(0.05,rmax/320);   // v52: intersections reach the far limb
   let px=r.o[0],py=r.o[1],pz=r.o[2];
   let pd=py-groundH(px,pz);
-  for(let t=st;t<160;t+=st){
+  for(let t=st;t<rmax;t+=st){
     const x=r.o[0]+r.d[0]*t, y=r.o[1]+r.d[1]*t, z=r.o[2]+r.d[2]*t;
     const dh=y-groundH(x,z);
     if(dh<=0){
@@ -2688,8 +2689,10 @@ function camEye(){
   const d=CAM.dist/CAM.zoom;
   return [CAM.tx + Math.sin(CAM.yaw)*Math.cos(CAM.pitch)*d, Math.sin(CAM.pitch)*d, CAM.ty + Math.cos(CAM.yaw)*Math.cos(CAM.pitch)*d];
 }
+const QMAX=560;   // v52: drag can carry the target ~12° across the ball - the world keeps turning
 function clampCam3(){
-  CAM.tx=clamp(CAM.tx,-2,MAP+2); CAM.ty=clamp(CAM.ty,-2,MAP+2);
+  const qx=CAM.tx-SITE.x, qy=CAM.ty-SITE.y, q=Math.hypot(qx,qy);
+  if(q>QMAX){ CAM.tx=SITE.x+qx/q*QMAX; CAM.ty=SITE.y+qy/q*QMAX; }
   CAM.zoom=clamp(CAM.zoom,0.0018,1.9);
 }
 function setCamera(){
@@ -2700,12 +2703,11 @@ function setCamera(){
     const cx=CAM.fx+Math.sin(CAM.fa)*Math.cos(CAM.fp), cy=ey+Math.sin(CAM.fp), cz=CAM.fy+Math.cos(CAM.fa)*Math.cos(CAM.fp);
     M4.look(VIEW, CAM.fx,ey,CAM.fy, cx,cy,cz, 0,1,0);
   } else {
-    const orb=!!S.orbit;
     const dz2=CAM.dist/CAM.zoom;
-    const far=orb?30000:clamp(dz2*4+220, 480, 26000), near=orb?30:clamp(far/2200, 0.35, 24);
+    const far=clamp(dz2*4+220, 480, 32000), near=clamp(far/2200, 0.35, 24);   // v52: one continuous view volume, boots to ball
     M4.persp(PROJ, 0.62, asp, near, far);
     const e=camEye();
-    const d=CAM.dist/CAM.zoom, lah=0.30*Math.cos(CAM.pitch)*d;
+    const d=CAM.dist/CAM.zoom, lah=0.30*Math.cos(CAM.pitch)*Math.min(d,26.7);   // v52: look-ahead fades as the ball grows
     M4.look(VIEW, e[0],e[1],e[2], CAM.tx-Math.sin(CAM.yaw)*lah, CAM.gzh, CAM.ty-Math.cos(CAM.yaw)*lah, 0,1,0);
   }
   M4.mul(VP, PROJ, VIEW);
@@ -2726,7 +2728,7 @@ function setEnv(prog){
   gl.uniform3fv(prog.u.uSkyCol,[(lerp(0.10,0.55,warm)*f+0.03+moon*0.030)*rf, (lerp(0.14,0.70,warm)*f+0.03+moon*0.045)*rf, (lerp(0.30,0.88,warm)*f+0.04+moon*0.075)*rf]);
   gl.uniform3fv(prog.u.uGndCol,[(0.24*f+0.02+moon*0.020)*rf,(0.26*f+0.02+moon*0.026)*rf,(0.20*f+0.02+moon*0.045)*rf]);
   gl.uniform3fv(prog.u.uFogCol,[lerp(0.11,0.78,warm)*rf,lerp(0.14,0.87,warm)*rf,lerp(0.26,0.94,warm)*rf]);
-  gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:0.017);
+  gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:Math.min(0.017, 1.35/Math.max(CAM.dist/CAM.zoom,1)));   // v52: fog thins with altitude, never switches
   if(prog.u.uTint) gl.uniform3f(prog.u.uTint,1,1,1);
   const e=camEye(); gl.uniform3fv(prog.u.uEye,e);
   gl.uniform1f(prog.u.uShadowOn, SHADOW.on?1:0);
@@ -2799,12 +2801,12 @@ function scenePass(prog, skinProg){
   if(prog.u.uSun) setEnv(prog);
   drawWorldStatics(prog);
   drawWater();
-  if(prog===PROG&&PLANETL&&(S.orbit||CAM.dist/CAM.zoom>700)){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }
+  if(prog===PROG&&PLANETL){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }   // v52: same mesh at every altitude
   gl.useProgram(skinProg.p);
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
   if(skinProg.u.uSun) setEnv(skinProg);
-  if(!S.orbit) drawGobs(skinProg);
+  if(CAM.dist/CAM.zoom<1400) drawGobs(skinProg);   // v52: sub-pixel cull, not a mode
 }
 const V_WATER=`
 attribute vec3 aPos; attribute float aAo;
@@ -2844,10 +2846,13 @@ void main(){
 let WPROG2=null, PSEP=null, SKYCOL=null;
 function drawAtmo(){
   if(!ATMOM||!ATMOP) return;
+  const aOrb=clamp((CAM.dist/CAM.zoom-300)/1400,0,1);   // v52: air grows as you rise - no switch
+  if(aOrb<=0.01) return;
   gl.useProgram(ATMOP.p);
   gl.uniformMatrix4fv(ATMOP.u.uVP,false,VP);
   const e=camEye(); if(ATMOP.u.uEye) gl.uniform3f(ATMOP.u.uEye,e[0],e[1],e[2]);
   if(ATMOP.u.uSun) gl.uniform3fv(ATMOP.u.uSun,SUN);
+  if(ATMOP.u.uA) gl.uniform1f(ATMOP.u.uA,aOrb);
   gl.depthMask(false); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE); gl.disable(gl.CULL_FACE);
   drawMesh(ATMOP,ATMOM);
   gl.enable(gl.CULL_FACE); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(true);
@@ -2935,7 +2940,7 @@ function drawSky(){
 function render(){
   G.dc=0; G.tri=0;
   setCamera(); setLight();
-  if(SHADOW.on&&!S.orbit){
+  if(SHADOW.on&&CAM.dist/CAM.zoom<900){   // v52: altitude cull, invisible at range
     let growing=false;
     for(const b of S.buildings) if(b.pop<1){ growing=true; break; }
     if(shadowDirty||growing){
@@ -2955,7 +2960,7 @@ function render(){
   gl.clear(gl.DEPTH_BUFFER_BIT);
   drawSky();
   scenePass(PROG, SKIN);
-  if(S.orbit) drawAtmo();
+  drawAtmo();   // v52: always offered; fades itself with altitude
 }
 let QLEVEL=0, QLOW=0;
 function adaptQuality(){
@@ -2975,11 +2980,7 @@ function frame(ts){
   if(G.fpsAcc>0.5){ G.fps=G.fpsN/G.fpsAcc; G.fpsAcc=0; G.fpsN=0; G.worstShown=G.worst; G.worst=0; if(!QNOLADD) adaptQuality(); }
   updateSun();
   if(CAM.mode==='iso'){ const g=groundH(CAM.tx,CAM.ty); CAM.gzh+=(g-CAM.gzh)*Math.min(1,G.dt*6); }
-  const dz=CAM.dist/CAM.zoom;
-  const wasOrb=!!S.orbit;
-  S.orbit=(S.mode==='village'&&!FP.on&&dz>1500)?1:((S.mode==='village'&&!FP.on&&dz<1100)?0:S.orbit||0);
-  if(S.orbit&&!wasOrb){ S.sel=null; S.banner=null; banner2('O R R I M','the whole ball - ours'); A.pop(3); }
-  if(!S.orbit&&wasOrb) A.blip();
+  const dz=CAM.dist/CAM.zoom;   // v52: altitude alone decides framing - there is no orbit state
   if(S.introZoom>0){ S.introZoom=Math.max(0,S.introZoom-G.dt*0.5); CAM.zoom=lerp(1,0.8,S.introZoom); }
   if(S._holdT!=null){ if(!S.started&&saveExists&&touches.size===1&&G.t-S._holdT>1.5){ S._holdT=null; _wiping=true; clearSave(); location.reload(); } else if(touches.size!==1) S._holdT=null; }
   driveCeremony(G.dt);
@@ -3425,7 +3426,7 @@ function drawUI(){
   ctx.clearRect(0,0,W,H);
   if(!S.started){ drawTitle(); drawParts(); return; }
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
-  if(S.orbit){ drawOrbitUI(); drawToasts2(); drawBanner2(); return; }
+
   if(FP.on && !(FP.battle&&S.war.result)){
     drawParts(); drawFloats2(); drawFPUI(); drawToasts2(); drawBanner2();
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
@@ -3787,13 +3788,6 @@ function tickLands(dt){
 }
 function howlFar(){ A.tone(520,1.5,{type:'sawtooth',vol:0.16,slide:170}); A.tone(780,1.0,{type:'sine',vol:0.09,slide:380,delay:0.14}); }
 
-function drawOrbitUI(){
-  for(let i=0;i<150;i++){ const sx=(hash2(i*7.7,i*3.3)*1.0)%1*W, sy=(hash2(i*3.3,i*9.1)*1.0)%1*H;
-    const tw=0.5+0.5*Math.sin(G.t*1.8+i*2.4);
-    ctx.fillStyle='rgba(235,240,255,'+(0.25+0.55*tw*hash2(i,i)+0)+')';
-    ctx.fillRect(sx,sy,hash2(i,4)>0.93?2.4:1.4,hash2(i,4)>0.93?2.4:1.4); }
-  txt3('pinch open to fall back to the mud', W/2, H-26, 12, 'rgba(255,240,225,0.65)','center',700);
-}
 /* ===================== next-step hints (v24) ========================== */
 const HINTS=[
  {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
@@ -4088,15 +4082,14 @@ function moveStep(e){
     if(tapStart) tapStart.moved=Math.max(tapStart.moved,Math.hypot(v[0].x-tapStart.x,v[0].y-tapStart.y));
     if(barDrag){ barScroll=clamp(barDrag.s0-(v[0].x-barDrag.x0),0,barScrollMax); }
     else if(S.sel && v[0].y<H-BARH){ updateGhost3(v[0].x,v[0].y); if(tapStart&&tapStart.moved>10) ghostArmed=false; }
-    else if(panGrab&&!S.orbit){
+    else if(panGrab){   // v52: drag slides the ball at any altitude
       const now=rayGround(v[0].x,v[0].y);
       if(now){ CAM.tx+=panGrab[0]-now[0]; CAM.ty+=panGrab[1]-now[1]; clampCam3(); }
     }
   } else if(v.length>=2){
     const d=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y);
     if(pinchLast>0){ const pr=d/pinchLast;
-      if(S.mode==='globe'){ if(pr>1.14) leaveGlobe(); }
-      else { CAM.zoom=clamp(CAM.zoom*pr,0.0018,1.9); } }
+      CAM.zoom=clamp(CAM.zoom*pr,0.0018,1.9); }   // v52: pinch-out IS the orbit - no trigger
     pinchLast=d;
     const rot=Math.atan2(v[0].y-v[1].y,v[0].x-v[1].x);
     CAM.yaw=CAM.yaw-(rot-rotLast)*0.85;
