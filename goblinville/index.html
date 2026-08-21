@@ -40,6 +40,147 @@ function vnoise(x,y){
   return lerp(lerp(a,b,u), lerp(c,d,u), v);
 }
 function fbm(x,y){ let s=0,a=0.5,f=1; for(let i=0;i<4;i++){ s+=vnoise(x*f,y*f)*a; f*=2; a*=0.5; } return s; }
+/* ============ v59 GLOBE KERNEL - one source, shared by preview + game ============
+   World born ON the sphere. One 3D noise field sampled by direction.
+   Height below 0 IS the ocean. No square, no rim, no boundary conditions. */
+const R_WORLD=200;             // Daniel's call: option A - the world IS the ball
+const SEA=0.0;
+function hash3(x,y,z){ const s=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453; return s-Math.floor(s); }
+function vnoise3(x,y,z){
+  const xi=Math.floor(x), yi=Math.floor(y), zi=Math.floor(z);
+  const xf=x-xi, yf=y-yi, zf=z-zi;
+  const sm=t=>t*t*(3-2*t), u=sm(xf), v=sm(yf), w=sm(zf);
+  let r=0;
+  for(const [dx,dy,dz,wt] of [[0,0,0,(1-u)*(1-v)*(1-w)],[1,0,0,u*(1-v)*(1-w)],[0,1,0,(1-u)*v*(1-w)],[1,1,0,u*v*(1-w)],
+                              [0,0,1,(1-u)*(1-v)*w],[1,0,1,u*(1-v)*w],[0,1,1,(1-u)*v*w],[1,1,1,u*v*w]])
+    r+=hash3(xi+dx,yi+dy,zi+dz)*wt;
+  return r;
+}
+function fbm3(x,y,z,oct){ let s=0,a=0.5,f=1,n=0; for(let i=0;i<(oct||4);i++){ s+=vnoise3(x*f,y*f,z*f)*a; n+=a; f*=2; a*=0.5; } return s/n; }
+
+/* cube-sphere: 6 faces of quads; dir = normalize(cube point). face: 0:+X 1:-X 2:+Y 3:-Y 4:+Z 5:-Z */
+function cubeDir(face,u,v,out){        // u,v in [-1,1]; writes unit dir into out[3]
+  let x,y,z;
+  switch(face){
+    case 0: x= 1; y=-v; z=-u; break;
+    case 1: x=-1; y=-v; z= u; break;
+    case 2: x= u; y= 1; z= v; break;
+    case 3: x= u; y=-1; z=-v; break;
+    case 4: x= u; y=-v; z= 1; break;
+    default:x=-u; y=-v; z=-1;
+  }
+  const l=Math.hypot(x,y,z); out[0]=x/l; out[1]=y/l; out[2]=z/l; return out;
+}
+
+/* --- the world field: everything hangs off the direction --- */
+const RIDGE_A1=[0.9,0.31,0.30], RIDGE_A2=[-0.2,0.97,0.14];   // two great-circle ranges (the White Rock wraps)
+(function(){ const n=a=>{const l=Math.hypot(...a);a[0]/=l;a[1]/=l;a[2]/=l;}; n(RIDGE_A1); n(RIDGE_A2); })();
+const SITE_DIR=[0,1,0];   // v59: basin at the planet's top, under the map cap (function(){const l=Math.hypot(...SITE_DIR);SITE_DIR[0]/=l;SITE_DIR[1]/=l;SITE_DIR[2]/=l;})();
+
+function worldField(p){        // p = unit dir; returns {h, snow, rock, land}
+  const wob=fbm3(p[0]*3.1+7.7, p[1]*3.1+2.2, p[2]*3.1-5.5, 3);
+  const c=fbm3(p[0]*1.6+ wob*0.9 +3.1, p[1]*1.6+ wob*0.9 -1.7, p[2]*1.6+ wob*0.9+9.4, 4);
+  let h=(c-0.50)*3.4;                      // continents vs seas; ~40% land coverage tuned at build
+  // great-circle ridges: distance to the ridge plane = |dot(p, axis)|
+  for(const ax of [RIDGE_A1,RIDGE_A2]){
+    const ad=Math.abs(p[0]*ax[0]+p[1]*ax[1]+p[2]*ax[2]);
+    const rd=Math.asin(Math.min(ad,1))*R_WORLD;             // units along the ground
+    const rw=3.4+ (fbm3(p[0]*9+4, p[1]*9-3, p[2]*9+8,3)-0.5)*1.6;
+    if(rd<rw&&h>SEA-0.4){ const k=1-rd/rw; h+=k*k*(1.30+wob*0.9); }
+  }
+  // the village basin: calm heart at SITE_DIR
+  const sd=Math.acos(Math.max(-1,Math.min(1,p[0]*SITE_DIR[0]+p[1]*SITE_DIR[1]+p[2]*SITE_DIR[2])))*R_WORLD;
+  if(sd<10){ const k=Math.min((10-sd)/4,1); h=h*(1-k)+0.26*k; }
+  h=Math.max(h, SEA-0.9);
+  const rock=h>0.62||c>0.70, snow=h>0.72;
+  return {h, rock, snow, land:h>SEA, c};
+}
+/* per-vertex color, lifted from biomeBase's palette logic */
+function globeColor(f,p){
+  const v=fbm3(p[0]*7.1+1.1, p[1]*7.1-3.3, p[2]*7.1+5.9, 3);
+  let r,g,b;
+  if(f.snow){ r=0.85;g=0.87;b=0.92; }
+  else if(f.rock){ r=0.45+0.08*v; g=0.43+0.07*v; b=0.47+0.06*v; }
+  else if(f.h<SEA+0.06){ r=0.79;g=0.70;b=0.47; }                       // beach sand
+  else { r=0.28+0.10*v; g=0.52+0.14*v; b=0.20+0.06*v; }                // grass
+  if(!f.rock&&!f.snow&&f.h>SEA+0.06&&fbm3(p[0]*4.9+91.7,p[1]*4.9-13.3,p[2]*4.9+7.1,3)>0.60){ // deep forest shadow
+    r=r*0.58+0.30*0.42; g=g*0.58+0.47*0.42; b=b*0.58+0.26*0.42; }
+  return [r,g,b];
+}
+/* build the world mesh: land quads (above-sea corners) + one water sphere shell handled outside */
+function buildGlobeMesh(MB, upload, N){
+  N=N||64;
+  const lm=MB(), wm=MB(), d=[0,0,0], n2=[0,0,0];
+  for(let face=0;face<6;face++){
+    const li=lm.pos.length/3|0;
+    for(let j=0;j<=N;j++) for(let i=0;i<=N;i++){
+      const u=i/N*2-1, v=j/N*2-1;
+      cubeDir(face,u,v,d);
+      const f=worldField(d);
+      const rr=R_WORLD+f.h;
+      lm.pos.push(d[0]*rr, d[1]*rr, d[2]*rr);
+      lm.nor.push(d[0],d[1],d[2]);                                        // sphere normal; shading stays simple
+      const c=globeColor(f,d);
+      lm.col.push(c[0],c[1],c[2]); lm.ao.push(1); lm.bone.push(0);
+      lm._f=(lm._f||[]); lm._f.push(f.land?1:0);
+    }
+    for(let j=0;j<N;j++) for(let i=0;i<N;i++){
+      const a=li+j*(N+1)+i, b=a+N+1;
+      const fl=lm._f;
+      if(!(fl[a]||fl[b]||fl[a+1]||fl[b+1])) continue;                     // underwater quads: the sea shell covers them
+      lm.idx.push(a,b,a+1, a+1,b,b+1); lm.n+=4;
+    }
+    delete lm._f;
+    // water shell: sphere at SEA level, coarser
+    const NW=32, wi=wm.pos.length/3|0;
+    for(let j=0;j<=NW;j++) for(let i=0;i<=NW;i++){
+      cubeDir(face,i/NW*2-1,j/NW*2-1,d);
+      const f=worldField(d);                                 // depth under this point = how deep the floor is
+      wm.pos.push(d[0]*(R_WORLD+SEA-0.05), d[1]*(R_WORLD+SEA-0.05), d[2]*(R_WORLD+SEA-0.05));
+      wm.nor.push(d[0],d[1],d[2]); wm.col.push(1,1,1);
+      wm.ao.push(Math.min(Math.max((SEA-f.h)/0.9,0),1));     // ao channel = water depth 0(shore)..1(deep)
+      wm.bone.push(0);
+    }
+    for(let j=0;j<NW;j++) for(let i=0;i<NW;i++){ const a=wi+j*(NW+1)+i, b=a+NW+1;
+      wm.idx.push(a,b,a+1, a+1,b,b+1); wm.n+=4; }
+  }
+  return {land:upload(lm), water:upload(wm)};
+}
+
+
+/* v59 frame: azimuthal equidistant anchored at SITE on the sphere.
+   Gameplay keeps planar (x,y) around SITE; EVERY placement projects to a direction on R_WORLD. */
+const _tlen=v=>Math.hypot(v[0],v[1],v[2])||1;
+const TBE=(()=>{  // tangent basis at SITE_DIR: TBE1 = map +y dir, TBE2 = map +x dir
+  const s=SITE_DIR;
+  let e2=[1,0,0]; const d=e2[0]*s[0]+e2[1]*s[1]+e2[2]*s[2];
+  e2=[e2[0]-d*s[0], e2[1]-d*s[1], e2[2]-d*s[2]]; const l=_tlen(e2); e2=[e2[0]/l,e2[1]/l,e2[2]/l];
+  const e1=[s[1]*e2[2]-s[2]*e2[1], s[2]*e2[0]-s[0]*e2[2], s[0]*e2[1]-s[1]*e2[0]];
+  return {e1,e2};
+})();
+function dirOf(x,y,out){
+  out=out||[0,0,0];
+  const dx=x-SITE.x, dy=y-SITE.y;
+  const r=Math.hypot(dx,dy), ang=Math.min(r/R_WORLD, Math.PI);
+  const cb=r>1e-9?dx/r:0, sb=r>1e-9?dy/r:0;      // bearing components (b measured: x by TBE2, y by TBE1)
+  const ca=Math.cos(ang), sa=Math.sin(ang);
+  for(let i=0;i<3;i++) out[i]=SITE_DIR[i]*ca + (TBE.e1[i]*sb + TBE.e2[i]*cb)*sa;
+  const l=_tlen(out); out[0]/=l; out[1]/=l; out[2]/=l; return out;
+}
+function invOf(d){  // inverse: direction -> planar (x,y); unstable only at the exact antipode
+  let dot=Math.max(-1,Math.min(1,d[0]*SITE_DIR[0]+d[1]*SITE_DIR[1]+d[2]*SITE_DIR[2]));
+  const ang=Math.acos(dot), r=ang*R_WORLD;
+  if(ang<1e-6) return [SITE.x,SITE.y];
+  const sb=(d[0]*TBE.e1[0]+d[1]*TBE.e1[1]+d[2]*TBE.e1[2])/Math.max(Math.sin(ang),1e-9);
+  const cb=(d[0]*TBE.e2[0]+d[1]*TBE.e2[1]+d[2]*TBE.e2[2])/Math.max(Math.sin(ang),1e-9);
+  return [SITE.x+cb*r, SITE.y+sb*r];
+}
+const _dirCache=new Map();  // worldField at tile-quarter resolution - the sim asks 100x/frame
+function dirField(x,y){
+  const k=((x*4)|0)+'_'+((y*4)|0);
+  let f=_dirCache.get(k); if(!f){ f=worldField(dirOf(x,y)); if(_dirCache.size>20000) _dirCache.clear(); _dirCache.set(k,f); }
+  return f;
+}
 /* --- mat4 (column major, like GL) --- */
 const M4={
   id(){ return new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]); },
@@ -537,7 +678,7 @@ function poseGoblin(g,t){
 /* ============================== world =================================== */
 let SKIN=null, SKIND=null, GOB=null, CLUB=null, WORLD=null, PROPS=[];
 const MAP=60;  // v43: one continuous land
-const PLANET_R=2500; // v50: real sphere under the camp; flatness is emergent from scale
+const PLANET_R=200;  // v59: option A - the map cap and the far lands ride the SAME small ball
 function DROP(x,y){ const dx=x-SITE.x, dz=y-SITE.y, r2=dx*dx+dz*dz;
   return PLANET_R - Math.sqrt(Math.max(PLANET_R*PLANET_R - r2, 0.01)); }
 const tiles=[];
@@ -635,7 +776,7 @@ function HGT(x,y){
   for(const L of LANDS){ const d=Math.hypot(x-L.x,y-L.y); if(d<L.r){ const w=clamp((L.r-d)/3,0,1); h=h*(1-w)+L.seatH*w; } }   // seats (and the god) rise above even the shore
   return h;
 }
-function groundH(x,y){ return Math.max(HGT(x,y), WATER+0.015) - DROP(x,y); }
+function groundH(x,y){ return Math.max(HGT(x,y), WATER+0.015) - DROP(x,y); }   // v59: same cap projection, now on R_WORLD
 function tileAt(x,y){ const c=tiles[Math.max(0,Math.min(MAP-1,y|0))]; return c?c[Math.max(0,Math.min(MAP-1,x|0))]:null; }
 function genTiles(){
   for(let y=0;y<MAP;y++){ tiles[y]=[];
@@ -767,7 +908,10 @@ function buildPlanet(){
   for(let j=0;j<=NL;j++){ const phi=phi0+(Math.PI-phi0)*j/NL;
     const wy=CY+PLANET_R*Math.cos(phi)-UNDER, rr=PLANET_R*Math.sin(phi);
     for(let i=0;i<=NLO;i++){ const th=i/NLO*TAU;
-      wm.pos.push(CX+rr*Math.cos(th), wy, CZ+rr*Math.sin(th)); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(1); wm.bone.push(0); } }
+      const d3s=[Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th)];
+      const dc=clamp(-worldField(d3s).h/0.9, 0, 1);
+      const q0s=PLANET_R*Math.sin(phi);
+      wm.pos.push(CX+rr*Math.cos(th), wy, CZ+rr*Math.sin(th)); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(lerp(Math.max(dc,0.18), dc, clamp((q0s-54)/10,0,1))); wm.bone.push(0); } }
   for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
     wm.idx.push(a,b,a+1, a+1,b,b+1); wm.n+=4; }
   PLANETM=upload(wm);
@@ -776,26 +920,19 @@ function buildPlanet(){
   const LNL=36, LNLO=96; const lbase=lm.n;
   for(let j=0;j<=LNL;j++){ const phi=phi0*1.15+(Math.PI-2*phi0*1.15)*j/LNL;
     for(let i=0;i<=LNLO;i++){ const th=i/LNLO*TAU;
-      const L=fbm(Math.cos(th)*2.1+Math.sin(phi*2.6)*1.7+9.3, Math.sin(th)*1.9+phi*2.2-4.1);
+      const d3=[Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th)];
+      const fld=worldField(d3);
       const q0=PLANET_R*Math.sin(phi), ls=clamp((q0-46)/16,0,1);   // v52: far lands sink beneath the camp cap
-      const land=L>0.58&&ls>=0.02;
-      const lift=land?((L-0.58)*2.6+0.45)*ls:0;
+      const land=fld.h>0.0&&ls>=0.02;
+      const lift=land?(fld.h*1.35+0.18)*ls:0;
       const RR=PLANET_R+lift;
       const wy=(WATER-PLANET_R)+RR*Math.cos(phi), rr=RR*Math.sin(phi);
       const x2=rr*Math.cos(th), z2=rr*Math.sin(th);
       lm.pos.push(SITE.x+x2, wy, SITE.y+z2);
-      const nr=(PLANET_R/lift>60?1:1);
-      lm.nor.push(x2/RR, RR*Math.cos(phi)/RR, z2/RR);
+      lm.nor.push(Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th));   // v59: radial normals on the small ball
       let cr,cg,cb;
       if(!land){ cr=0; cg=0; cb=0; }        // never drawn (skipped below)
-      else {
-        const snow=Math.abs(Math.cos(phi))>0.82;
-        const rock=L>0.70;
-        const v=fbm(th*3.1+1.1, phi*4.3+7.7);
-        if(snow){ cr=0.85; cg=0.87; cb=0.92; }
-        else if(rock){ cr=0.45+0.08*v; cg=0.43+0.07*v; cb=0.47+0.06*v; }
-        else { cr=0.28+0.10*v; cg=0.52+0.14*v; cb=0.20+0.06*v; }
-      }
+      else { const gc=globeColor(fld,d3); cr=gc[0]; cg=gc[1]; cb=gc[2]; }   // v59: kernel signature (field, dir) -> [r,g,b]
       lm.col.push(cr,cg,cb); lm.ao.push(1); lm.bone.push(0);
     }
   }
@@ -815,7 +952,7 @@ function buildPlanet(){
     am.idx.push(a,b,a+1, a+1,b,b+1); am.n+=4; }
   ATMOM=upload(am);
   ATMOP=program(V_ATMO,F_ATMO,['aPos','aNor']);
-  PSEP=program(V_PSEA,F_PSEA,['aPos']);
+  PSEP=program(V_PSEA,F_PSEA,['aPos','aAo']);
 }
 /* ---------------------------- buildings --------------------------------- */
 function buildHall(){
@@ -2692,11 +2829,11 @@ function camEye(){
   const d=CAM.dist/CAM.zoom;
   return [CAM.tx + Math.sin(CAM.yaw)*Math.cos(CAM.pitch)*d, Math.sin(CAM.pitch)*d, CAM.ty + Math.cos(CAM.yaw)*Math.cos(CAM.pitch)*d];
 }
-const QMAX=560;   // v52: drag can carry the target ~12° across the ball - the world keeps turning
+const QMAX=46;    // v59: same 13 degrees of great arc on the small ball
 function clampCam3(){
   const qx=CAM.tx-SITE.x, qy=CAM.ty-SITE.y, q=Math.hypot(qx,qy);
   if(q>QMAX){ CAM.tx=SITE.x+qx/q*QMAX; CAM.ty=SITE.y+qy/q*QMAX; }
-  CAM.zoom=clamp(CAM.zoom,0.0018,1.9);
+  CAM.zoom=clamp(CAM.zoom,0.022,1.9);
 }
 function setCamera(){
   const asp=glc.width/glc.height;
@@ -2731,7 +2868,7 @@ function setEnv(prog){
   gl.uniform3fv(prog.u.uSkyCol,[(lerp(0.10,0.55,warm)*f+0.03+moon*0.030)*rf, (lerp(0.14,0.70,warm)*f+0.03+moon*0.045)*rf, (lerp(0.30,0.88,warm)*f+0.04+moon*0.075)*rf]);
   gl.uniform3fv(prog.u.uGndCol,[(0.24*f+0.02+moon*0.020)*rf,(0.26*f+0.02+moon*0.026)*rf,(0.20*f+0.02+moon*0.045)*rf]);
   gl.uniform3fv(prog.u.uFogCol,[lerp(0.11,0.78,warm)*rf,lerp(0.14,0.87,warm)*rf,lerp(0.26,0.94,warm)*rf]);
-  gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:Math.min(0.017, 1.35/Math.max(CAM.dist/CAM.zoom,1)));   // v52: fog thins with altitude, never switches
+  { const dzf=Math.max(CAM.dist/CAM.zoom,1); gl.uniform1f(prog.u.uFogDens, CAM.mode==='fp'?0.022:Math.min(0.017, 130.0/(dzf*dzf))); }   // v59: haze at the horizon, clear air at orbit - quadratic falloff
   if(prog.u.uTint) gl.uniform3f(prog.u.uTint,1,1,1);
   const e=camEye(); gl.uniform3fv(prog.u.uEye,e);
   gl.uniform1f(prog.u.uShadowOn, SHADOW.on?1:0);
@@ -2810,7 +2947,7 @@ function scenePass(prog, skinProg){
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
   if(skinProg.u.uSun) setEnv(skinProg);
-  if(CAM.dist/CAM.zoom<1400) drawGobs(skinProg);   // v52: sub-pixel cull, not a mode
+  if(CAM.dist/CAM.zoom<340) drawGobs(skinProg);   // v52: sub-pixel cull, not a mode
 }
 const V_WATER=`
 attribute vec3 aPos; attribute float aAo;
@@ -2850,7 +2987,7 @@ void main(){
 let WPROG2=null, PSEP=null, SKYCOL=null;
 function drawAtmo(){
   if(!ATMOM||!ATMOP) return;
-  const aOrb=clamp((CAM.dist/CAM.zoom-300)/1400,0,1);   // v52: air grows as you rise - no switch
+  const aOrb=clamp((CAM.dist/CAM.zoom-90)/330,0,1);   // v59: air grows as you rise - no switch
   if(aOrb<=0.01) return;
   gl.useProgram(ATMOP.p);
   gl.uniformMatrix4fv(ATMOP.u.uVP,false,VP);
@@ -2861,22 +2998,33 @@ function drawAtmo(){
   drawMesh(ATMOP,ATMOM);
   gl.enable(gl.CULL_FACE); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(true);
 }
-const V_PSEA=`attribute vec3 aPos; uniform mat4 uVP; varying vec3 vW;
- void main(){ vW=aPos; gl_Position=uVP*vec4(aPos,1.0); }`;
-const F_PSEA=`precision mediump float; varying vec3 vW;
- uniform vec3 uEye; uniform vec3 uSkyA; uniform vec3 uSkyB; uniform float uFogD; uniform vec3 uSun; uniform highp float uT; uniform float uEyeH;
+const V_PSEA=`attribute vec3 aPos; attribute float aAo; uniform mat4 uVP; varying vec3 vW; varying float vDep;
+ void main(){ vW=aPos; vDep=aAo; gl_Position=uVP*vec4(aPos,1.0); }`;
+const F_PSEA=`precision mediump float; varying vec3 vW; varying float vDep;
+ uniform vec3 uEye; uniform vec3 uSkyA; uniform vec3 uSkyB; uniform float uFogD; uniform vec3 uSun; uniform highp float uT; uniform float uEyeH; uniform vec3 uPC;
  void main(){
   float day=clamp(uSun.y*1.35+0.28,0.14,1.0);
   float b1=0.5+0.5*sin(vW.x*0.09+sin(vW.z*0.074+uT*0.10)*1.4+uT*0.13);
   float b2=0.5+0.5*sin(vW.z*0.10-uT*0.09+sin(vW.x*0.062+1.7)*1.2);
   float bb=0.5+(b1*b2-0.5)*0.55;                       // v58: grazing sea reads as water, not blobs
-  vec3 col=mix(vec3(0.045,0.25,0.39),vec3(0.09,0.47,0.64),bb);
-  col=mix(col,vec3(0.35,0.70,0.80),pow(max(b1*b2,0.0),3.0)*0.25);
+  // LAYER3 shallow->deep from the baked depth channel, banding riding on top
+  vec3 col=mix(vec3(0.14,0.56,0.66), vec3(0.016,0.135,0.29), clamp(vDep,0.0,1.0));
+  col=mix(col, mix(vec3(0.045,0.25,0.39),vec3(0.09,0.47,0.64),bb), 0.45);
+  // LAYER4 breathing foam where the sea meets land
+  float foam=smoothstep(0.16,0.02,vDep)*(0.55+0.45*sin(uT*2.1+vW.x*0.9+vW.z*0.7));
+  col=mix(col, vec3(0.90,0.96,0.97), clamp(foam,0.0,1.0)*0.5);
+  // LAYER2 sun glint on a band-perturbed radial normal (Daniel's 'more real' water)
+  vec3 V=normalize(uEye-vW);
+  vec3 SD=normalize(uSun);
+  vec3 N=normalize(normalize(vW-uPC)+0.09*vec3(b1-0.5,(b2-0.5)*0.6,b2-0.5));
+  float sunFace=smoothstep(-0.10,0.30,dot(N,SD));
+  float sp=pow(max(dot(N,normalize(V+SD)),0.0),140.0);
+  col+=sp*sunFace*vec3(0.90,0.95,1.0)*0.85*(0.15+0.85*day);
   col*=day;
   float d=distance(vW,uEye);
   float f=1.0-exp(-pow(d/uFogD,1.7));
   float eh=max(uEyeH-(0.0),1.5);
-  float hMax=sqrt(2.0*2500.0*eh+eh*eh);                 // v58: horizon of the sea sphere from this eye
+  float hMax=sqrt(2.0*200.0*eh+eh*eh);                  // v59: horizon of the small ball's sea from this eye
   f=max(f,smoothstep(hMax*0.45,hMax*0.85,d));           // the sea melts into the sky before its rim - no edge
   vec3 sky=mix(uSkyA,uSkyB,clamp(d/(uFogD*2.2),0.0,1.0));
   gl_FragColor=vec4(mix(col,sky,f),0.97);
@@ -2905,7 +3053,8 @@ function drawWater(){
     if(PSEP.u.uSkyA) gl.uniform3fv(PSEP.u.uSkyA,SKYCOL.mid);
     if(PSEP.u.uSkyB) gl.uniform3fv(PSEP.u.uSkyB,SKYCOL.bot);
     const dz=CAM.dist/CAM.zoom;
-    if(PSEP.u.uFogD) gl.uniform1f(PSEP.u.uFogD, clamp(dz*1.5, 500, 24000));
+    if(PSEP.u.uFogD) gl.uniform1f(PSEP.u.uFogD, clamp(dz*dz*0.006, 500, 24000));   // v59: orbit air is clear, the rim-melt owns the limb
+    if(PSEP.u.uPC) gl.uniform3f(PSEP.u.uPC, SITE.x, WATER-PLANET_R-0.12, SITE.y);
     drawMesh(PSEP,PLANETM);
   }
   gl.disable(gl.BLEND);
@@ -2934,6 +3083,10 @@ function drawSky(){
   const LX=(a,b)=>a.map((v,i3)=>lerp(v,b[i3],u));
   const top=LX(ka[1],kb[1]), mid=LX(ka[2],kb[2]), bot=LX(ka[3],kb[3]);
   const night=lerp(ka[4],kb[4],u);
+  // v59/G3: the sky thins toward night as you rise. SKYSPACE=0 kills this in one line.
+  const SKYSPACE=0.75, sa=clamp((CAM.dist/CAM.zoom-110)/420,0,1)*SKYSPACE*(1-night);
+  const NT=[0.05,0.08,0.18], NM=[0.10,0.13,0.26], NB=[0.14,0.17,0.30];
+  if(sa>0){ for(let i2=0;i2<3;i2++){ top[i2]=lerp(top[i2],NT[i2],sa); mid[i2]=lerp(mid[i2],NM[i2],sa); bot[i2]=lerp(bot[i2],NB[i2],sa); } }
   gl.uniform3fv(SPROG.u.uTop,top);
   gl.uniform3fv(SPROG.u.uMid,mid);
   gl.uniform3fv(SPROG.u.uBot,bot);
@@ -2949,7 +3102,7 @@ function drawSky(){
 function render(){
   G.dc=0; G.tri=0;
   setCamera(); setLight();
-  if(SHADOW.on&&CAM.dist/CAM.zoom<900){   // v52: altitude cull, invisible at range
+  if(SHADOW.on&&CAM.dist/CAM.zoom<260){   // v52: altitude cull, invisible at range
     let growing=false;
     for(const b of S.buildings) if(b.pop<1){ growing=true; break; }
     if(shadowDirty||growing){
@@ -3121,6 +3274,22 @@ const FOLK={
 };
 const LANDID={}; for(const L of LANDS) LANDID[L.id]=L;
 /* v53: the peoples keep their rites - per-race standing motion, drawn as body tilt */
+/* v59/G3 RACE_PERSON: who these people ARE, keyed like RACE_ACT/FOLK.
+   growth = brood-speed multiplier, deals = will run/sign post and pacts, hate = who despises them.
+   Mechanics and voices read this table; Daniel's one-liners fill rows as they land. */
+const RACE_PERSON={
+  bone:   {growth:1.0, deals:true,  hate:null,  flavor:null},
+  crimson:{growth:1.0, deals:true,  hate:null,  flavor:null},
+  spire:  {growth:1.0, deals:true,  hate:null,  flavor:null},
+  warrens:{growth:1.0, deals:true,  hate:null,  flavor:null},
+  ridge:  {growth:1.0, deals:true,  hate:null,  flavor:null},
+  orcs:   {growth:1.8, deals:false, hate:'all', flavor:'Orcs multiply fast, but will not make deals with anyone - and everyone hates them.'},   // Daniel, verbatim-shaped
+  men:    {growth:1.0, deals:true,  hate:null,  flavor:null},
+  elves:  {growth:1.0, deals:true,  hate:null,  flavor:null},
+  hollow: {growth:1.0, deals:true,  hate:null,  flavor:null},
+  bedlam: {growth:1.0, deals:true,  hate:null,  flavor:null},
+  crag:   {growth:1.0, deals:true,  hate:null,  flavor:null},
+};
 const RACE_ACT={
   bone:   w=>Math.sin(G.t*1.7+w.ph)*0.18,                                  // the choir sways with its song
   crimson:w=>0.32+Math.sin(G.t*0.9+w.ph)*0.30,                             // the court bows, slowly, always
@@ -3407,6 +3576,7 @@ function drawInspect2(){
 function jobName2(j){ return {farmer:'Farmer',woodcutter:'Woodcutter',miner:'Stonecutter',digger:'Gold digger',idler:'Layabout',soldier:'Warrior'}[j]||j; }
 function moodWord2(m){ return m>0.8?'delighted':m>0.6?'happy':m>0.4?'fine':'grumbly'; }
 function drawFloats2(){
+  if(CAM.mode!=='fp' && CAM.dist/CAM.zoom>300) return;   // v59/G3: 1-2px toasts at orbit read as artifacts
   for(const f of S.floats){
     const p=projPt(f.x,f.y,f.z); if(!p) continue;
     const a=clamp(f.life*1.6,0,1);
@@ -3873,7 +4043,7 @@ function courierTick(dt){
   const c=S.courier;
   if(!c){
     S._courT=(S._courT==null?rnd(26,14):S._courT)-dt; if(S._courT>0) return;
-    const seen=LANDS.filter(L=>S.seen&&S.seen[L.id]&&L.id!=='vulkarrax'&&L.id!=='crag');   // a god runs no errands; the crag keeps no post
+    const seen=LANDS.filter(L=>S.seen&&S.seen[L.id]&&L.id!=='vulkarrax'&&L.id!=='crag'&&(RACE_PERSON[L.id]?RACE_PERSON[L.id].deals!==false:true));   // a god runs no errands; the crag keeps no post; deal-breakers get no post (RACE_PERSON)
     if(seen.length<2){ S._courT=12; return; }
     const A2=seen[(Math.random()*seen.length)|0]; let B=A2;
     for(let k=0;k<12&&B===A2;k++) B=seen[(Math.random()*seen.length)|0];
@@ -3883,12 +4053,20 @@ function courierTick(dt){
     if(Math.hypot(cx-A2.x,cy-A2.y)<A2.r+8) toast2('a courier rises: '+A2.name.toLowerCase()+' - '+B.name.toLowerCase());
     return;
   }
-  const seg=(from,to)=>{
+  const seg=(from,to)=>{   // v59/G3: the post flies great circles - correct from a farm plot to the far hemisphere
     const u=clamp(c.t,0,1), s=sCurve(u);
-    c.x=lerp(from.x,to.x,s); c.z=lerp(from.y,to.y,s);
+    const da=dirOf(from.x,from.y), db=dirOf(to.x,to.y);
+    const dot=clamp(da[0]*db[0]+da[1]*db[1]+da[2]*db[2],-1,1), an=Math.acos(dot);
+    let d;
+    if(an<1e-5) d=da;
+    else { const ka=Math.sin((1-s)*an)/Math.sin(an), kb=Math.sin(s*an)/Math.sin(an);
+      d=[da[0]*ka+db[0]*kb, da[1]*ka+db[1]*kb, da[2]*ka+db[2]*kb]; }
+    const p=invOf(d); c.x=p[0]; c.z=p[1];
+    // one step ahead along the arc gives the true bearing (heading stays local-planar for the sprite)
+    const s2=Math.min(s+0.02,1), p2=invOf(an<1e-5?da:[da[0]*Math.sin((1-s2)*an)/Math.sin(an)+db[0]*Math.sin(s2*an)/Math.sin(an), da[1]*Math.sin((1-s2)*an)/Math.sin(an)+db[1]*Math.sin(s2*an)/Math.sin(an), da[2]*Math.sin((1-s2)*an)/Math.sin(an)+db[2]*Math.sin(s2*an)/Math.sin(an)]);
+    c.a=Math.atan2(p2[0]-p[0],p2[1]-p[1]);
     const ya=groundH(from.x,from.y)+0.25, yb=groundH(to.x,to.y)+0.25;
-    c.y=lerp(ya,yb,s)+Math.sin(u*Math.PI)*2.6;
-    c.a=Math.atan2(to.x-from.x,to.y-from.y); };
+    c.y=lerp(ya,yb,s)+Math.sin(u*Math.PI)*2.6; };
   if(c.leg===0){ c.t+=dt/c.dur; seg(c.fa,c.fb);
     if(c.t>=1){ c.leg=1; c.t=0; } }
   else if(c.leg===1){ c.t+=dt/c.rest; c.y=groundH(c.fb.x,c.fb.y)+0.25;   // wings folded at the seat
@@ -4200,7 +4378,7 @@ function moveStep(e){
   } else if(v.length>=2){
     const d=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y);
     if(pinchLast>0){ const pr=d/pinchLast;
-      CAM.zoom=clamp(CAM.zoom*pr,0.0018,1.9); }   // v52: pinch-out IS the orbit - no trigger
+      CAM.zoom=clamp(CAM.zoom*pr,0.022,1.9); }   // v52: pinch-out IS the orbit - no trigger
     pinchLast=d;
     const rot=Math.atan2(v[0].y-v[1].y,v[0].x-v[1].x);
     CAM.yaw=CAM.yaw-(rot-rotLast)*0.85;
