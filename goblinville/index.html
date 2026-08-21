@@ -3493,15 +3493,9 @@ function handleTap3(x,y){
     const kind2=c.deco==='tree'?'wood':(c.deco==='shroom'?'food':'stone');
     const col2={wood:'#e0a35e',food:'#ffe9a8',stone:'#dbe4ee'}[kind2];
     const puf2={wood:'#7ec74a',food:'#ffc0d0',stone:'#d7dee6'}[kind2];
-    const now2=G.t;
-    S._swipeStreak=(now2-(S._lastSwipe||-99)<2.6)?(S._swipeStreak||0)+1:1;
-    S._lastSwipe=now2;
-    let v2=2;
-    if(rnd(1)<0.15){ v2=6; floatW(wc[0],wc[1]+1.05,wc[2],'LUCKY SWIPE!','#ffd34d'); puffW(wc[0],wc[1]+0.4,wc[2],12,'#ffd34d'); A.pop(2); }
+    const v2=2;
     addRes(kind2,v2);
     floatW(wc[0],wc[1]+0.7,wc[2],'+'+v2+' '+kind2,col2);
-    if(S._swipeStreak===5){ addRes(kind2,3); floatW(wc[0],wc[1]+1.35,wc[2],'STREAK +3','#ffd34d'); A.pop(2); }
-    else if(S._swipeStreak===10){ addRes(kind2,6); floatW(wc[0],wc[1]+1.35,wc[2],'SWIPE FRENZY +6','#ff9e4d'); A.cheer(); }
     if(kind2==='wood'){ A.chop(); puffW(wc[0],wc[1]+0.4,wc[2],7,puf2); }
     else if(kind2==='food'){ A.pick(); puffW(wc[0],wc[1]+0.3,wc[2],6,puf2); c.deco=null; c.regrow=rnd(26,14); rebuildWorld(); }
     else { A.dig(); puffW(wc[0],wc[1]+0.3,wc[2],6,puf2); }
