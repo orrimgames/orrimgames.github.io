@@ -797,6 +797,16 @@ function genTiles(){
     else if(c.t===0 && c.v>0.30 && c.v<0.44) c.deco='tuft';
     else if(c.t===1 && c.v>0.90) c.deco='reed';
   }
+  boneGarden();
+}
+/* v63: graves + dead orchards inside the Bone Kingdom clearing - fills only empty grass, idempotent */
+function boneGarden(){
+  const B=LANDID.bone; if(!B) return;
+  for(let y=1;y<MAP-1;y++) for(let x=1;x<MAP-1;x++){ const c=tiles[y]&&tiles[y][x];
+    if(!c||c.deco||c.t!==0) continue;
+    const d=Math.hypot(x-B.x,y-B.y); if(d>B.r*0.88||d<2.6) continue;
+    const v9=hash2(x*5.3+41.7,y*9.1-17.3);
+    if(v9<0.17) c.deco='grave'; else if(v9<0.25) c.deco='deadtree'; }
 }
 const GRASS1='#5fb63c', GRASS2='#4e9c32', DIRT='#9d7a44', ROCK='#7b848e', SAND='#c9b277';
 function SAMP(ix,iy){ return HGT(ix,iy); }   // h1 overrides this with FLATS-aware leveling
@@ -1002,6 +1012,16 @@ function buildIcoWorld(){
         M4.trs(T,tx,groundH(tx,tz)-0.01,tz,0.12*Math.cos(a),a,0.12*Math.sin(a),1,1,1);
         tube(m,0.014,0.004,0.34,5,hex('#b9a24a'),T,0,false,false);
       }
+    } else if(c.deco==='grave'){
+      const ghh=0.40+c.v*0.42;
+      M4.trs(T,px,py+ghh*0.5-0.02,pz,0.06+((c.v*13)%1)*0.14,c.v*6,0,1,1,1); box(m,0.30,ghh,0.08,hex(c.v>0.5?'#a8a6b0':'#8b8994'),T,0,0.8);
+      if(((c.v*11)%1)<0.30){ M4.trs(T,px+0.24,py+0.07,pz+0.12,0,c.v*6,0,1,1,1); ball(m,0.07,6,hex('#efe6cc'),T,0,0.9); }
+      if(((c.v*17)%1)<0.22){ M4.trs(T,px-0.2,py+0.045,pz-0.1,0,0,0,1,1,1); ball(m,0.04,5,hex('#9fd4ff'),T,0,1); }
+    } else if(c.deco==='deadtree'){
+      M4.trs(T,px,py+0.45,pz,0,c.v*6,0,1,1,1); tube(m,0.09,0.05,0.95,5,hex('#b8b2a2'),T,0,true,true);
+      for(const bAng of[0.7,2.5,4.4]){ const bA=bAng+c.v*6;
+        M4.trs(T,px+Math.cos(bA)*0.22,py+0.72,pz+Math.sin(bA)*0.22,Math.cos(bA),bA,Math.sin(bA)*0.8,1,1,1); tube(m,0.035,0.008,0.7,5,hex('#d9d4c6'),T,0,true,true); }
+      M4.trs(T,px,py+1.05,pz,0,c.v*6,0.25,1,1,1); tube(m,0.05,0.008,0.45,5,hex('#efe6cc'),T,0,true,true);
     }
   }
   const out=upload(m);
@@ -1089,6 +1109,16 @@ function buildWorldMesh(){
         M4.trs(T,tx,groundH(tx,tz)-0.01,tz,0.12*Math.cos(a),a,0.12*Math.sin(a),1,1,1);
         tube(m,0.014,0.004,0.34,5,hex('#b9a24a'),T,0,false,false);
       }
+    } else if(c.deco==='grave'){
+      const ghh=0.40+c.v*0.42;
+      M4.trs(T,px,py+ghh*0.5-0.02,pz,0.06+((c.v*13)%1)*0.14,c.v*6,0,1,1,1); box(m,0.30,ghh,0.08,hex(c.v>0.5?'#a8a6b0':'#8b8994'),T,0,0.8);
+      if(((c.v*11)%1)<0.30){ M4.trs(T,px+0.24,py+0.07,pz+0.12,0,c.v*6,0,1,1,1); ball(m,0.07,6,hex('#efe6cc'),T,0,0.9); }
+      if(((c.v*17)%1)<0.22){ M4.trs(T,px-0.2,py+0.045,pz-0.1,0,0,0,1,1,1); ball(m,0.04,5,hex('#9fd4ff'),T,0,1); }
+    } else if(c.deco==='deadtree'){
+      M4.trs(T,px,py+0.45,pz,0,c.v*6,0,1,1,1); tube(m,0.09,0.05,0.95,5,hex('#b8b2a2'),T,0,true,true);
+      for(const bAng of[0.7,2.5,4.4]){ const bA=bAng+c.v*6;
+        M4.trs(T,px+Math.cos(bA)*0.22,py+0.72,pz+Math.sin(bA)*0.22,Math.cos(bA),bA,Math.sin(bA)*0.8,1,1,1); tube(m,0.035,0.008,0.7,5,hex('#d9d4c6'),T,0,true,true); }
+      M4.trs(T,px,py+1.05,pz,0,c.v*6,0.25,1,1,1); tube(m,0.05,0.008,0.45,5,hex('#efe6cc'),T,0,true,true);
     }
   }
   WATERM=upload(wm);
@@ -3439,7 +3469,30 @@ let QOK=false, QA=null, QM=null, QPROG=null, QSCALE=0.165, QA2=null, QM2=null, Q
    diggers, tenders, smiths, wardens, buyers, listeners - and the embers
    that pray in the scar. They never leave their country. Bedlam keeps
    only the praying dead; the god requires no crowd. */
+/* v63: the Bone Kingdom's people, given their own skin - chunky painted-toy skeletons (Daniel canon) */
+function buildSkeleton(o){
+  const m=MB(),T=M4.id();
+  const nb=hex(o.skin||'#efe6cc'), jn=hex('#e0d3b4'), dk=hex('#2a2333'), glow=hex(o.eye||'#9fd4ff');
+  const w=o.w||0.9, h=o.h||1, hd=o.hd||1.3;
+  for(const sx of[-0.075,0.075]){ M4.trs(T,sx*w,0.115*h,0,0,0,0,1,1,1); tube(m,0.038,0.030,0.23,5,nb,T,0,true,true);
+    M4.trs(T,sx*w,0.205*h,0,0,0,0,1,1,1); ball(m,0.055,6,jn,T,0,0.9); }         // shin bones + knee knobs
+  M4.trs(T,0,0.315*h,0,0,0,0,1,1,1); box(m,0.30*w,0.06,0.20*w,nb,T,0,0.8);      // pelvis slab
+  M4.trs(T,0,0.355*h,0,0,0,0,1,1,1); box(m,0.10*w,0.08,0.10*w,jn,T,0,0.9);      // spine nub
+  M4.trs(T,0,0.475*h,0,0,0,0,1,1,1); box(m,0.24*w,0.25*h,0.15*w,dk,T,0,0.7);    // the hollow chest
+  for(let i=0;i<4;i++){ const ry=0.385*h+i*0.062*h, rw2=0.30*(1.0-0.06*Math.abs(i-1.5))*w;
+    M4.trs(T,0,ry,0,0,0,0,1,1,1); box(m,rw2*1.32,0.028,0.19*w,nb,T,0,0.9); }     // rib slats
+  M4.trs(T,0,0.60*h,0,0,0,0,1,1,1); box(m,0.44*w,0.045,0.13*w,nb,T,0,0.9);      // shoulder bar
+  for(const sx of[-0.21,0.21]){ M4.trs(T,sx*w,0.45*h,0,0,0,sx>0?0.16:-0.16,1,1,1); tube(m,0.032,0.026,0.20,5,nb,T,0,true,true);
+    M4.trs(T,sx*w,0.35*h,0,0,0,1,1,1); ball(m,0.05,6,jn,T,0,0.9); }              // arm bones + hand knobs
+  M4.trs(T,0,0.735*h,0,0,0,0,1,1,1); ball(m,0.155*hd,8,nb,T,0,0.9);              // the round solemn skull
+  M4.trs(T,0,0.64*h,0.045*hd,0,0,0,1,1,1); box(m,0.14*hd,0.045,0.12*hd,jn,T,0,0.85);  // jaw
+  for(const sx of[-0.052,0.052]){ M4.trs(T,sx*hd,0.73*h,0.115*hd,0,0,0,1,1,1); box(m,0.055,0.065,0.05,dk,T,0,0.95);
+    M4.trs(T,sx*hd,0.725*h,0.135*hd,0,0,0,1,1,1); box(m,0.018,0.018,0.018,glow,T,0,1); }  // sockets + choir-light eyes
+  M4.trs(T,0,0.675*h,0.115*hd,0.5,0,0,1,1,1); pyramid(m,0.03,0.05,0.03,dk,T,0); // nose notch
+  return upload(m);
+}
 function buildFolk(o){
+  if(o.skel) return buildSkeleton(o);
   const m=MB(),T=M4.id();
   const skin=hex(o.skin), cloth=hex(o.cloth), cl2=hex(o.cloth2||o.cloth), trim=hex(o.trim||o.cloth);
   const w=o.w||1, h=o.h||1, hd=o.hd||1;
@@ -3467,7 +3520,7 @@ function buildFolk(o){
   return upload(m);
 }
 const FOLK={
-  bone:   {n:4, skin:'#d9d4c6', cloth:'#8f8a7c', cloth2:'#6e6a5e', robed:1, h:1.18, w:0.72, eye:'#9fd4ff', spd:0.45, night:2},
+  bone:   {n:7, skel:1, skin:'#efe6cc', cloth:'#8f8a7c', cloth2:'#6e6a5e', h:1.18, w:0.62, hd:1.35, hood:0, eye:'#9fd4ff', spd:0.5, night:2},
   crimson:{n:3, skin:'#e8d0c8', cloth:'#2b2030', cloth2:'#1c141f', trim:'#8e1e2e', robed:1, hood:1, spd:0.35, night:2},
   spire:  {n:3, skin:'#cfd8ec', cloth:'#4a5a88', cloth2:'#5a6fa8', robed:1, hood:1, staff:1, glow:'#7fe0ff', h:1.2, spd:0.4},
   warrens:{n:5, skin:'#8a6f52', cloth:'#8a6f52', cloth2:'#87714f', ears:1, h:0.6, w:0.85, belly:1, spd:1.6},
@@ -3484,7 +3537,7 @@ const LANDID={}; for(const L of LANDS) LANDID[L.id]=L;
    growth = brood-speed multiplier, deals = will run/sign post and pacts, hate = who despises them.
    Mechanics and voices read this table; Daniel's one-liners fill rows as they land. */
 const RACE_PERSON={
-  bone:   {growth:1.0, deals:true,  hate:null,  flavor:null},
+  bone:   {growth:1.0, deals:true,  hate:null,  flavor:'They sway slow and trade square. They bury nothing that still sings, and they remember every name.'},
   crimson:{growth:1.0, deals:true,  hate:null,  flavor:null},
   spire:  {growth:1.0, deals:true,  hate:null,  flavor:null},
   warrens:{growth:1.0, deals:true,  hate:null,  flavor:null},
@@ -3869,7 +3922,7 @@ function clearSave(){ try{ localStorage.removeItem(SAVEKEY); saveExists=false; }
 function packSave(){
   const d=[], r={};
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){ const c=tiles[y][x];
-    d.push({tree:1,rock:2,shroom:3,tuft:4,reed:5,stump:6}[c.deco]||0);
+    d.push({tree:1,rock:2,shroom:3,tuft:4,reed:5,stump:6,grave:7,deadtree:8}[c.deco]||0);
     if(c.regrow!=null&&c.regrow>0) r[y*MAP+x]=Math.round(c.regrow); }
   return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, day:S.day, dayT:S.dayT,
     omen:S.omen, school:S.school, scholar:S.scholar, ogre:S.ogre, vanto:S.vanto,
@@ -3892,9 +3945,10 @@ function saveGame(){
 function restoreSave(sv){
   SITE.x=sv.site[0]; SITE.y=sv.site[1];
   clearSite(SITE.x,SITE.y,4.6);
-  const dc=[null,'tree','rock','shroom','tuft','reed','stump'];
+  const dc=[null,'tree','rock','shroom','tuft','reed','stump','grave','deadtree'];
   for(let i=0;i<MAP*MAP;i++){ const x=i%MAP, y=(i/MAP)|0, c=tiles[y][x];
     c.deco=dc[sv.d[i]]||null; const rr=sv.r[i]; c.regrow=(rr!=null&&rr>0)?rr:null; }
+  boneGarden();   // v63: old saves grow the bone garden too
   PROPS.length=0;
   for(const bb of sv.builds){ const T=BT[bb.key]; if(!T) continue;
     flattenArea(bb.tx,bb.ty,T.w,T.h);
@@ -3991,7 +4045,68 @@ function buildBoneSpire(){
   for(const sx of[-1.6,1.6]){ M4.trs(T,sx,0.85,0.35,0.55,sx>0?-0.5:0.5,0,1,1,1); tube(m,0.06,0.045,1.9,5,bone,T,0,true,true); }
   M4.trs(T,0,2.95,0,0,0,0,1,1,1); ball(m,0.15,8,glow,T,0,1);   // the Choir's one blue light
   M4.trs(T,0,0.06,0,0,0,0,3.4,0.12,2.6); box(m,1,1,1,dark,T,0,0.55);
+  for(const sx of[-1.2,-0.4,0.4,1.2]){ M4.trs(T,sx,0.22,1.22,0,0,0,1,1,1); pyramid(m,0.09,0.26,0.09,bone,T,0); }   // jawbone sill
+  for(const sx of[-1.1,1.1]){ M4.trs(T,sx,0.42,-0.55,0,0,0,1,1,1); ball(m,0.09,7,glow,T,0,1); }                  // low candle-lights
   return upload(m);
+}
+/* v63: THE BONE KINGDOM, built out - crypts, grave-rows, the Choir circle, the rib-gate, dead orchards */
+function buildCrypt(){
+  const m=MB(),T=M4.id(); const st=hex('#8b8994'), st2=hex('#6f6d78'), drk=hex('#23202c'), bn=hex('#efe6cc'), glow=hex('#9fd4ff');
+  M4.trs(T,0,0.40,0,0,0,0,1,1,1); box(m,1.5,0.80,1.1,st,T,0,0.55);                    // mound block
+  M4.trs(T,0,0.92,-0.08,0,0,0,1,1,1); ball(m,0.58,8,st2,T,0,0.75);                    // stone dome
+  M4.trs(T,0,0.31,0.57,0,0,0,1,1,1); box(m,0.44,0.62,0.05,drk,T,0,0.9);               // the dark door
+  M4.trs(T,0,0.66,0.58,0,0,0,1,1,1); box(m,0.52,0.12,0.09,st2,T,0,0.9);               // lintel
+  for(const sx of[-0.22,0.22]){ M4.trs(T,sx,0.74,0.58,0,0,0,1,1,1); ball(m,0.075,6,bn,T,0,0.9); }  // skull knobs
+  M4.trs(T,0,0.46,0.72,0,0,0,1,1,1); ball(m,0.06,6,glow,T,0,1);                       // vigil-light
+  M4.trs(T,0.62,0.12,0.35,0,0.5,0,1,1,1); box(m,0.34,0.09,0.22,bn,T,0,0.8);           // offering dish of bone
+  return upload(m);
+}
+function buildGraveField(){
+  const m=MB(),T=M4.id(); const st=hex('#8b8994'), st2=hex('#a8a6b0'), bn=hex('#efe6cc'), glow=hex('#9fd4ff');
+  for(let i=0;i<9;i++){ const col=i%3, row=(i/3)|0;
+    const qx=(col-1)*1.15+(hash2(i,7)-0.5)*0.5, qz=(row-1)*1.05+(hash2(i,13)-0.5)*0.4;
+    const hh=0.50+hash2(i,29)*0.45, lean=0.10+hash2(i,31)*0.14, spin=hash2(i,41)*TAU;
+    M4.trs(T,qx,hh*0.5-0.02,qz,lean,spin,0,1,1,1); box(m,0.32,hh,0.09,i%4===0?st2:st,T,0,0.75);   // tilted stones
+    if(i%3===1){ M4.trs(T,qx,hh+0.05,qz,0,spin,0,1,1,1); ball(m,0.085,6,bn,T,0,0.9); }            // mourner skulls
+    if(i%4===2){ M4.trs(T,qx+0.30,0.045,qz+0.20,0,spin,0,1,1,1); ball(m,0.045,5,glow,T,0,1); } }  // grave candles
+  return upload(m);
+}
+function buildChoirCircle(){
+  const m=MB(),T=M4.id(); const bn=hex('#efe6cc'), bn2=hex('#e0d3b4'), glow=hex('#9fd4ff');
+  for(let i=0;i<7;i++){ const a=i/7*TAU, rr=4.3; const sx=Math.cos(a)*rr, sz=Math.sin(a)*rr;
+    const hh=1.5+(i%2)*0.5+hash2(i,5)*0.3;
+    M4.trs(T,sx,hh*0.5-0.04,sz,0.09*Math.cos(a),a,0.09*Math.sin(a),1,1,1); box(m,0.30,hh,0.22,i%2?bn2:bn,T,0,0.6);
+    M4.trs(T,sx,hh+0.04,sz,0,a,0,1,1,1); ball(m,0.135,7,i%2?bn:bn2,T,0,0.9); }
+  return upload(m);
+}
+function buildRibGate(){
+  const m=MB(),T=M4.id(); const bn=hex('#efe6cc'), bn2=hex('#e0d3b4'), dk=hex('#2a2333'), glow=hex('#9fd4ff');
+  for(const s of[-1,1]){ M4.trs(T,s*0.8,1.0,0,0,0,-0.30*s,1,1,1); tube(m,0.11,0.055,2.2,6,bn,T,0,true,true);  // the great ribs
+    M4.trs(T,s*0.88,0.14,0,0,0,0,1,1,1); ball(m,0.17,7,bn2,T,0,0.9); }                                        // rooted knuckles
+  M4.trs(T,0,2.06,0,0,0,0,1,1,1); ball(m,0.30,8,bn,T,0,0.9);                                                  // the gatekeeper skull
+  M4.trs(T,0,1.85,0.10,0,0,0,1,1,1); box(m,0.20,0.13,0.15,bn2,T,0,0.9);
+  for(const sx of[-0.10,0.10]){ M4.trs(T,sx,2.08,0.235,0,0,0,1,1,1); box(m,0.07,0.09,0.05,dk,T,0,0.95);
+    M4.trs(T,sx,2.08,0.265,0,0,0,1,1,1); box(m,0.025,0.025,0.02,glow,T,0,1); }
+  M4.trs(T,0,1.78,0.05,0,0,0,1,1,1); box(m,0.26,0.04,0.06,dk,T,0,0.95);                                       // the still smile
+  return upload(m);
+}
+function buildDeadTree(){
+  const m=MB(),T=M4.id(); const bn=hex('#b8b2a2'), bn2=hex('#d9d4c6'), tip=hex('#efe6cc');
+  M4.trs(T,0,0.85,0,0,0,0,1,1,1); tube(m,0.15,0.08,1.7,6,bn,T,0,true,true);
+  for(let i=0;i<4;i++){ const a=i/4*TAU+0.4, hh=1.05+((i*0.53)%1)*0.65;
+    M4.trs(T,Math.cos(a)*0.3,hh,Math.sin(a)*0.3,1.0*Math.cos(a),a,1.0*Math.sin(a),1,1,1); tube(m,0.05,0.01,1.0,5,i%2?bn2:bn,T,0,true,true); }
+  M4.trs(T,0,1.95,0,0,0.3,0,1,1,1); tube(m,0.06,0.01,0.55,5,tip,T,0,true,true);
+  return upload(m);
+}
+function seedBoneYard(){
+  const B=(typeof LANDID!=='undefined')?LANDID.bone:null; if(!B) return;
+  const put=(me2,dx,dy,rr)=>{ const x=B.x+dx, y=B.y+dy;
+    PROPS.push({mesh:me2,x:x,y:y,r:rr||0,gy:groundH(x,y)-0.02,land:'bone'}); };
+  put(buildChoirCircle(),0,0);
+  put(buildCrypt(),-3.9,2.4,0.6);  put(buildCrypt(),-3.2,-3.7,2.1);  put(buildCrypt(),3.5,-3.0,-0.7);
+  put(buildGraveField(),2.7,2.2);
+  put(buildRibGate(),5.1,0.3,Math.PI/2);
+  put(buildDeadTree(),-5.6,-1.0); put(buildDeadTree(),-0.8,5.4); put(buildDeadTree(),4.6,4.2); put(buildDeadTree(),1.6,-5.5);
 }
 function buildVampCourt(){
   const m=MB(),T=M4.id(); const stone=hex('#2b2030'), stone2=hex('#1c141f'), crimson=hex('#8e1e2e'), glow=hex('#ff4d5e');
@@ -4109,8 +4224,15 @@ function buildElfGrove(){
 function seedLandmarks(){
   const B={bone:buildBoneSpire,crimson:buildVampCourt,spire:buildWizardSpire,crag:buildOgreCrag,warrens:buildWarrens,hollow:buildHollow,ridge:buildRidge,bedlam:buildBedlam,vulkarrax:buildDragonCoil,orcs:buildOrcHold,men:buildMenCity,elves:buildElfGrove};
   for(const L of LANDS) PROPS.push({mesh:B[L.id](), x:L.x, y:L.y, r:0, gy:groundH(L.x,L.y)-0.02, land:L.id});
+  seedBoneYard();
 }
 
+function buildWispMesh(){
+  const m=MB(),T=M4.id(); const glow=hex('#9fd4ff'), core=hex('#e8f4ff');
+  M4.trs(T,0,0,0,0,0,0,1,1,1); ball(m,0.12,7,glow,T,0,1);
+  M4.trs(T,0,0.10,0,0,0,0,1,1,1); ball(m,0.055,6,core,T,0,1);
+  return upload(m);
+}
 /* ---------------- wilds: giants on the white range, werewolves in the night forests ------------- */
 function buildGiantMesh(){
   const m=MB(),T=M4.id(); const hide=hex('#9ab4c8'), hide2=hex('#7e98ac'), frost=hex('#e8f2fa');
@@ -4145,10 +4267,16 @@ function seedWilds(){
     if(Math.hypot(x-SITE.x,y-SITE.y)<13) continue; if(landNear(x,y)) continue;
     placed++; S.wilds.push({wolf:1, mesh:W, x:x+0.5, y:y+0.5, a:rnd(TAU), spd:1.5, tx:x, ty:y, repick:0, bob:0, ph:rnd(TAU), den:false});
   }
+  /* v63: the Choir's wisps drift the bone garden */
+  { const BB=LANDID.bone; if(BB){ const WI=buildWispMesh();
+    for(let i=0;i<4;i++){ S.wilds.push({wisp:1, mesh:WI, cx:BB.x, cy:BB.y, rad:rnd(5.2,2.4), ph2:rnd(TAU), omg:rnd(0.30,0.12)*(rnd(1)<0.5?-1:1),
+      x:BB.x, y:BB.y, a:0, spd:0, tx:BB.x, ty:BB.y, repick:0, bob:1.2, ph:rnd(TAU)}); } } }
 }
 function wildTick(dt){
   if(!S.wilds) return;
   for(const w of S.wilds){
+    if(w.wisp){ w.ph2+=w.omg*dt; w.x=w.cx+Math.sin(w.ph2)*w.rad; w.y=w.cy+Math.cos(w.ph2)*w.rad;
+      w.bob=1.15+Math.sin(G.t*1.35+w.ph)*0.5; w.gy=groundH(w.x,w.y); continue; }   // v63 Choir wisps drift the bone garden
     if(w.wolf){ w.den=!nightNow(); if(w.den) { w.bob=0; continue; } }
     const d=Math.hypot(w.tx-w.x,w.ty-w.y);
     if(d<0.4){ if((w.repick-=dt)<=0){ w.repick=rnd(4,2);
@@ -4173,6 +4301,11 @@ function tickLands(dt){
       banner2(L.name,L.tag); chron(L.chron); A.say(8); saveGame(); break; } }
   for(const L of LANDS){ if(VOICES[L.id]&&S.seen[L.id]&&!S.seen['v_'+L.id]&&Math.hypot(cx-L.x,cy-L.y)<L.r*0.5){ S.seen['v_'+L.id]=1;
       banner2(VOICES[L.id][0],VOICES[L.id][1]); chron(VOICES[L.id][1]); A.say(11); saveGame(); break; } }
+  if(S.seen.bone&&S.seen.v_bone&&!S.seen.song_bone){ const BB=LANDID.bone;   // v63: the third visit earns the hymn
+    if(BB&&Math.hypot(cx-BB.x,cy-BB.y)<3.0){ S.seen.song_bone=1;
+      banner2('THE SONG BELOW','Under the grass, a hundred small jaws kept the tune the world forgot.');
+      chron('At the heart of the Bone Kingdom the ground hummed an old tune, and the goblins hummed it back without meaning to.');
+      A.say(11); saveGame(); } }
   if(!S.seen.wolves&&nightNow()&&S.wilds){ for(const w of S.wilds){ if(w.wolf&&!w.den&&Math.hypot(cx-w.x,cy-w.y)<8){
       S.seen.wolves=1; banner2('SHAPES IN THE TREELINE','the night has its own people');
       chron('Something with bright eyes paced the treeline. The elder made the mud-sign. Werewolves, he said, the way he says weather.'); A.say(9); howlFar(); saveGame(); break; } } }
