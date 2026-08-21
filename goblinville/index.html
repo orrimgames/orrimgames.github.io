@@ -740,7 +740,7 @@ function buildWorldMesh(){
   return upload(m);
 }
 /* v50: the rest of the planet - a real sphere of ocean closing at the antipode, plus the air around it */
-let PLANETM=null, PLANETL=null, ATMOM=null, ATMOP=null;
+let PLANETM=null, APRONM=null, PLANETL=null, ATMOM=null, ATMOP=null;
 const V_ATMO=`attribute vec3 aPos; attribute vec3 aNor;
  uniform mat4 uVP; varying vec3 vN; varying vec3 vW;
  void main(){ vW=aPos; vN=aNor; gl_Position=uVP*vec4(aPos,1.0); }`;
@@ -754,8 +754,8 @@ const F_ATMO=`precision mediump float; varying vec3 vN; varying vec3 vW; uniform
  }`;
 function buildPlanet(){
   const CX=SITE.x, CY=WATER-PLANET_R, CZ=SITE.y;
-  const phi0=41.0/PLANET_R;
-  const UNDER=0.10-0.0;   // planet ocean sits a whisker under the map's border water at the overlap
+  const phi0=43.5/PLANET_R;
+  const UNDER=0.04;
   const NL=40, NLO=96; const wm=MB();
   for(let j=0;j<=NL;j++){ const phi=phi0+(Math.PI-phi0)*j/NL;
     const wy=CY+PLANET_R*Math.cos(phi)-UNDER, rr=PLANET_R*Math.sin(phi);
@@ -764,6 +764,22 @@ function buildPlanet(){
   for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
     wm.idx.push(a,b,a+1, a+1,b,b+1); wm.n+=4; }
   PLANETM=upload(wm);
+  // apron: the square map border welded to the circular cap hole - the world never ends
+  {
+    const am=MB(); const NSEG=160; const HX=MAP/2, HY=MAP/2, HALF=30.0, RCAP=43.5+0.0001;
+    for(let i=0;i<=NSEG;i++){ const a=(i/NSEG)*TAU, ca=Math.cos(a), sa=Math.sin(a);
+      const rs=HALF/Math.max(Math.abs(ca),Math.abs(sa));
+      const ix=HX+ca*rs, iy=HY+sa*rs;
+      const ox=HX+ca*RCAP, oy=HY+sa*RCAP;
+      // two middle rows keep the blend soft where square meets circle
+      const pts=[[ix,iy,0],[HX+ca*((rs*2+RCAP)/3),HY+sa*((rs*2+RCAP)/3),1],[HX+ca*((rs+RCAP*2)/3),HY+sa*((rs+RCAP*2)/3),2],[ox,oy,3]];
+      for(const pt of pts){
+        am.pos.push(pt[0], WATER-DROP(pt[0],pt[1])+((pt[2]===0)?0.015:0), pt[1]);
+        am.nor.push(0,1,0); am.col.push(1,1,1); am.ao.push(1); am.bone.push(0); } }
+    for(let i=0;i<NSEG;i++){ const b0=i*4;
+      for(let k=0;k<3;k++){ am.idx.push(b0+k,b0+k+1,b0+4+k, b0+k+1,b0+4+k+1,b0+4+k); am.n+=4; } }
+    APRONM=upload(am);
+  }
   // far continents: real geometry on the ball, noise-raised above the water sphere
   const lm=MB();
   const LNL=36, LNLO=96; const lbase=lm.n;
@@ -807,6 +823,7 @@ function buildPlanet(){
     am.idx.push(a,b,a+1, a+1,b,b+1); am.n+=4; }
   ATMOM=upload(am);
   ATMOP=program(V_ATMO,F_ATMO,['aPos','aNor']);
+  PSEP=program(V_PSEA,F_PSEA,['aPos']);
 }
 /* ---------------------------- buildings --------------------------------- */
 function buildHall(){
@@ -2696,7 +2713,9 @@ function setCamera(){
     M4.look(VIEW, CAM.fx,ey,CAM.fy, cx,cy,cz, 0,1,0);
   } else {
     const orb=!!S.orbit;
-    M4.persp(PROJ, 0.62, asp, orb?30:0.4, orb?30000:48);
+    const dz2=CAM.dist/CAM.zoom;
+    const far=orb?30000:clamp(dz2*4+220, 480, 26000), near=orb?30:clamp(far/2200, 0.35, 24);
+    M4.persp(PROJ, 0.62, asp, near, far);
     const e=camEye();
     const d=CAM.dist/CAM.zoom, lah=0.30*Math.cos(CAM.pitch)*d;
     M4.look(VIEW, e[0],e[1],e[2], CAM.tx-Math.sin(CAM.yaw)*lah, CAM.gzh, CAM.ty-Math.cos(CAM.yaw)*lah, 0,1,0);
@@ -2829,7 +2848,7 @@ void main(){
   col*=day;
   gl_FragColor=vec4(col,0.92);
 }`;
-let WPROG2=null;
+let WPROG2=null, PSEP=null, SKYCOL=null;
 function drawAtmo(){
   if(!ATMOM||!ATMOP) return;
   gl.useProgram(ATMOP.p);
@@ -2840,6 +2859,22 @@ function drawAtmo(){
   drawMesh(ATMOP,ATMOM);
   gl.enable(gl.CULL_FACE); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(true);
 }
+const V_PSEA=`attribute vec3 aPos; uniform mat4 uVP; varying vec3 vW;
+ void main(){ vW=aPos; gl_Position=uVP*vec4(aPos,1.0); }`;
+const F_PSEA=`precision mediump float; varying vec3 vW;
+ uniform vec3 uEye; uniform vec3 uSkyA; uniform vec3 uSkyB; uniform float uFogD; uniform vec3 uSun; uniform highp float uT;
+ void main(){
+  float day=clamp(uSun.y*1.35+0.28,0.14,1.0);
+  float b1=0.5+0.5*sin(vW.x*0.045+sin(vW.z*0.037+uT*0.10)*1.4+uT*0.13);
+  float b2=0.5+0.5*sin(vW.z*0.050-uT*0.09+sin(vW.x*0.031+1.7)*1.2);
+  vec3 col=mix(vec3(0.05,0.20,0.33),vec3(0.09,0.34,0.50),b1*b2);
+  col=mix(col,vec3(0.20,0.45,0.60),pow(b1*b2,3.0)*0.5);
+  col*=day;
+  float d=distance(vW,uEye);
+  float f=1.0-exp(-pow(d/uFogD,1.7));
+  vec3 sky=mix(uSkyA,uSkyB,clamp(d/(uFogD*2.2),0.0,1.0));
+  gl_FragColor=vec4(mix(col,sky,f),0.97);
+ }`;
 function drawWater(){
   if(!WATERM||!WATERM.count||!WPROG2) return;
   gl.useProgram(WPROG2.p);
@@ -2848,7 +2883,19 @@ function drawWater(){
   if(WPROG2.u.uSun) gl.uniform3fv(WPROG2.u.uSun,SUN);
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   drawMesh(WPROG2,WATERM);
-  if(PLANETM){ drawMesh(WPROG2,PLANETM); }
+  if(PLANETM&&PSEP&&SKYCOL){
+    gl.useProgram(PSEP.p);
+    gl.uniformMatrix4fv(PSEP.u.uVP,false,VP);
+    const e=camEye(); if(PSEP.u.uEye) gl.uniform3f(PSEP.u.uEye,e[0],e[1],e[2]);
+    if(PSEP.u.uSun) gl.uniform3fv(PSEP.u.uSun,SUN);
+    if(PSEP.u.uT) gl.uniform1f(PSEP.u.uT,G.t);
+    if(PSEP.u.uSkyA) gl.uniform3fv(PSEP.u.uSkyA,SKYCOL.mid);
+    if(PSEP.u.uSkyB) gl.uniform3fv(PSEP.u.uSkyB,SKYCOL.bot);
+    const dz=CAM.dist/CAM.zoom;
+    if(PSEP.u.uFogD) gl.uniform1f(PSEP.u.uFogD, clamp(dz*1.5, 500, 24000));
+    drawMesh(PSEP,PLANETM);
+    if(APRONM) drawMesh(PSEP,APRONM);
+  }
   gl.disable(gl.BLEND);
 }
 function drawSky(){
@@ -2878,6 +2925,7 @@ function drawSky(){
   gl.uniform3fv(SPROG.u.uTop,top);
   gl.uniform3fv(SPROG.u.uMid,mid);
   gl.uniform3fv(SPROG.u.uBot,bot);
+  SKYCOL={top,mid,bot};
   const p=clamp((t-0.25)/0.5,0,1);
   gl.uniform1f(SPROG.u.uSunX,0.10+0.80*p); gl.uniform1f(SPROG.u.uSunY,0.28+0.45*Math.sin(p*Math.PI));
   gl.uniform1f(SPROG.u.uNight,night);
