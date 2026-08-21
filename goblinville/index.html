@@ -801,6 +801,216 @@ function genTiles(){
 const GRASS1='#5fb63c', GRASS2='#4e9c32', DIRT='#9d7a44', ROCK='#7b848e', SAND='#c9b277';
 function SAMP(ix,iy){ return HGT(ix,iy); }   // h1 overrides this with FLATS-aware leveling
 let WATERM=null;
+
+/* ======================= v61: SPHERICAL SUBDIVISION WORLD =======================
+   Daniel's spec: geodesic substrate, no distortion, the world mapped on it.
+   Uniform-subdiv icosphere; per-face flat painterly colors matching the tile style.
+   Near the map the surface reads the authored heights (SAMP/FLATS bilinear), blended
+   into kernel worldField across a ring so there is NO authored-world boundary. */
+function icoBilerp(x,y){
+  const x0=Math.max(0,Math.min(MAP-2,Math.floor(x))), y0=Math.max(0,Math.min(MAP-2,Math.floor(y)));
+  const fx=x-x0, fy=y-y0;
+  return SAMP(x0,y0)*(1-fx)*(1-fy)+SAMP(x0+1,y0)*fx*(1-fy)+SAMP(x0,y0+1)*(1-fx)*fy+SAMP(x0+1,y0+1)*fx*fy;
+}
+function icoHeight(d){          // unit dir -> surface radius
+  const p=invOf(d);
+  const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
+  const sag=PLANET_R*(1-Math.cos(Math.min(r/PLANET_R,Math.PI)));
+  const x=clamp(p[0],0,MAP-0.001), y=clamp(p[1],0,MAP-0.001);
+  let hN=icoBilerp(x,y); if(hN<WATER-0.35) hN=WATER-0.35;
+  const hNear=hN-sag;
+  const w=clamp((r-38)/12,0,1);
+  if(w===0) return PLANET_R+hNear;
+  const fld=worldField(d);
+  const hFar=fld.h*1.35+0.18;
+  return PLANET_R+lerp(hNear,hFar,w);
+}
+function icoColor(d){           // unit dir -> [r,g,b] for this patch of world
+  const p=invOf(d);
+  const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
+  let col=[0,0,0], fld=null;
+  if(r>34){                                            // authored core never pays for worldField
+    fld=worldField(d);
+    col=fld.h<0.0? [0.016,0.11,0.23] : globeColor(fld,d);
+  }
+  if(r<52){
+    const x=clamp(p[0],0,MAP-0.001), y=clamp(p[1],0,MAP-0.001);
+    const h=icoBilerp(x,y);
+    const t=h<WATER-0.02?2: h<WATER+0.09?1: h>0.62?3:0;
+    let base=t===2?hex(SAND): t===1?hex(DIRT): t===3?hex(ROCK): hex(GRASS1);
+    const v=hash2(Math.floor(x)*3.1, Math.floor(y)*7.7);
+    base=biomeBase(x,y,{t,h,v},base);
+    const auth=shade(base, 0.94+fbm(x*0.42+11.3,y*0.42-4.1)*0.16+v*0.05+Math.max(0,h)*0.06);
+    const w=clamp((r-38)/12,0,1);
+    if(w===0) return auth;
+    col=[lerp(auth[0],col[0],w), lerp(auth[1],col[1],w), lerp(auth[2],col[2],w)];
+  }
+  return col;
+}
+function buildMapWater(){
+  const wm=MB();
+  for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
+    const c=tiles[y][x];
+    if(c.t!==2) continue;
+    const fm=(cx,cy)=>{ for(let dy=-1;dy<=0;dy++)for(let dx=-1;dx<=0;dx++){
+      const nx=cx+dx, ny=cy+dy;
+      if(nx<0||ny<0||nx>=MAP||ny>=MAP) return 0;
+      if(tiles[ny][nx].t!==2) return 1; } return 0; };
+    const wv=[x,WATER-DROP(x,y),y, x+1,WATER-DROP(x+1,y),y, x+1,WATER-DROP(x+1,y+1),y+1, x,WATER-DROP(x,y+1),y+1];
+    const fc=[fm(x,y),fm(x+1,y),fm(x+1,y+1),fm(x,y+1)];
+    const base=wm.n;
+    for(let i=0;i<4;i++){ wm.pos.push(wv[i*3],wv[i*3+1],wv[i*3+2]); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(fc[i]); wm.bone.push(0); }
+    wm.idx.push(base,base+2,base+1, base,base+3,base+2); wm.n+=4;
+  }
+  return upload(wm);
+}
+let ICO_V=null, ICO_FACES=null;   // one-time geodesic connectivity (adaptive-depth, crack-free)
+let ICO_DIRTY=true;               // terrain heights/colors changed -> near faces recompute
+const ICO_FC=new Map();           // far-face geometry cache (immutable)
+const ICO_NC=new Map();           // near-face geometry cache (reused while !ICO_DIRTY)
+function icoCls(d){
+  const p=invOf(d);
+  const r=Math.hypot(p[0]-SITE.x,p[1]-SITE.y);
+  return r<42?8: r<54?7: 6;       // authored heart maps at 0.65u facets, far ball at ~2.6u
+}
+function buildIcoWorld(){
+  const VID=v=> (Math.round(v[0]*1e4)+2e4)+'_'+(Math.round(v[1]*1e4)+2e4)+'_'+(Math.round(v[2]*1e4)+2e4);
+  if(!ICO_V){
+    const t=(1+Math.sqrt(5))/2;
+    let V=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]]
+      .map(v=>{ const l=Math.hypot(v[0],v[1],v[2]); return [v[0]/l,v[1]/l,v[2]/l]; });
+    let F=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[7,1,8],[10,7,6],
+           [5,9,4],[11,2,4],[1,9,8],[7,8,6],[10,6,2],[4,9,3],[3,2,6],[3,8,6],[3,2,4],[9,8,3]];
+    const edgeMid=new Map();       // every recorded midpoint, every level - the crack-free stitch source
+    function mid(a,b){
+      const k=a<b? a+'_'+b : b+'_'+a;
+      let m2=edgeMid.get(k);
+      if(m2===undefined){
+        const mx=V[a][0]+V[b][0], my=V[a][1]+V[b][1], mz=V[a][2]+V[b][2], l=Math.hypot(mx,my,mz);
+        V.push([mx/l,my/l,mz/l]); m2=V.length-1; edgeMid.set(k,m2);
+      }
+      return m2;
+    }
+    const EM=(a,b)=>{ return edgeMid.get(a<b? a+'_'+b : b+'_'+a); };
+    for(let lev=0;lev<6;lev++){
+      const F2=[];
+      for(const f of F){
+        const a=mid(f[0],f[1]), b=mid(f[1],f[2]), c=mid(f[2],f[0]);
+        F2.push([f[0],a,c],[f[1],b,a],[f[2],c,b],[a,b,c]);
+      }
+      F=F2;
+    }
+    const FACES=[];
+    function green(a,b,c){         // emit, repairing T-junctions against any split edges
+      const ab=EM(a,b), bc=EM(b,c), ca=EM(c,a);
+      const n=(ab!==undefined?1:0)+(bc!==undefined?1:0)+(ca!==undefined?1:0);
+      if(n===0){ FACES.push([a,b,c]); return; }
+      if(n===3){ FACES.push([a,ab,ca],[b,bc,ab],[c,ca,bc],[ab,bc,ca]); return; }
+      if(n===1){
+        if(ab!==undefined) FACES.push([a,ab,c],[ab,b,c]);
+        else if(bc!==undefined) FACES.push([b,bc,a],[bc,c,a]);
+        else FACES.push([c,ca,b],[ca,a,b]);
+        return;
+      }
+      if(ab===undefined){ FACES.push([c,ca,bc],[ca,a,b],[ca,b,bc]); return; }   // whole edge ab
+      if(bc===undefined){ FACES.push([a,ab,ca],[ab,b,c],[ab,c,ca]); return; }   // whole edge bc
+      FACES.push([b,bc,ab],[bc,c,a],[bc,a,ab]); return;                          // whole edge ca
+    }
+    const LEAF=[];
+    function subd(a,b,c,lev,tgt){
+      if(lev>=tgt){ LEAF.push([a,b,c]); return; }
+      const ab=mid(a,b), bc=mid(b,c), ca=mid(c,a);
+      subd(a,ab,ca,lev+1,tgt); subd(ab,b,bc,lev+1,tgt); subd(ca,bc,c,lev+1,tgt); subd(ab,bc,ca,lev+1,tgt);
+    }
+    for(const f of F){
+      const cd=[(V[f[0]][0]+V[f[1]][0]+V[f[2]][0])/3,(V[f[0]][1]+V[f[1]][1]+V[f[2]][1])/3,(V[f[0]][2]+V[f[1]][2]+V[f[2]][2])/3];
+      const tgt=icoCls(cd);
+      subd(f[0],f[1],f[2],6,tgt);
+    }
+    for(const f of LEAF){
+      const ab=EM(f[0],f[1]), bc=EM(f[1],f[2]), ca=EM(f[2],f[0]);
+      if(ab===undefined&&bc===undefined&&ca===undefined){ FACES.push(f); continue; }
+      green(f[0],f[1],f[2]);
+    }
+    // near flag per emitted face from its centroid
+    for(const f of FACES){
+      const cd=[(V[f[0]][0]+V[f[1]][0]+V[f[2]][0])/3,(V[f[0]][1]+V[f[1]][1]+V[f[2]][1])/3,(V[f[0]][2]+V[f[1]][2]+V[f[2]][2])/3];
+      const cl=Math.hypot(cd[0],cd[1],cd[2]); cd[0]/=cl;cd[1]/=cl;cd[2]/=cl;
+      const p=invOf(cd);
+      f.push(Math.hypot(p[0]-SITE.x,p[1]-SITE.y)<60?1:0, cd);
+    }
+    ICO_V=V; ICO_FACES=FACES;
+  }
+  const V=ICO_V, FACES=ICO_FACES;
+  const nearRad=new Map();
+  function rad(d,near){
+    let r;
+    if(near){ r=nearRad.get(VID(d)); if(r===undefined){ r=icoHeight(d); nearRad.set(VID(d),r); } return r; }
+    const k=VID(d); r=ICO_FC.get('v'+k);
+    if(r===undefined){ r=icoHeight(d); ICO_FC.set('v'+k,r); }
+    return r;
+  }
+  const m=MB();
+  for(let fi=0;fi<FACES.length;fi++){
+    const F=FACES[fi], near=F[3]===1, cd=F[4];
+    let rec=near?ICO_NC.get(fi):ICO_FC.get(fi);
+    if(rec===undefined||(near&&ICO_DIRTY)){
+      const d0=V[F[0]], d1=V[F[1]], d2=V[F[2]];
+      const r0=rad(d0,near), r1=rad(d1,near), r2=rad(d2,near);
+      let p0=[d0[0]*r0+SITE.x,d0[1]*r0+WATER-PLANET_R,d0[2]*r0+SITE.y];
+      let p1=[d1[0]*r1+SITE.x,d1[1]*r1+WATER-PLANET_R,d1[2]*r1+SITE.y];
+      let p2=[d2[0]*r2+SITE.x,d2[1]*r2+WATER-PLANET_R,d2[2]*r2+SITE.y];
+      let ux=p1[0]-p0[0], uy=p1[1]-p0[1], uz=p1[2]-p0[2], vx=p2[0]-p0[0], vy=p2[1]-p0[1], vz=p2[2]-p0[2];
+      let nx=uy*vz-uz*vy, ny=uz*vx-ux*vz, nz=ux*vy-uy*vx;
+      const nl=Math.hypot(nx,ny,nz)||1; nx/=nl; ny/=nl; nz/=nl;
+      if(nx*cd[0]+ny*cd[1]+nz*cd[2]<0){ const tmp=p1; p1=p2; p2=tmp; nx=-nx;ny=-ny;nz=-nz; }
+      rec={p:[p0[0],p0[1],p0[2],p1[0],p1[1],p1[2],p2[0],p2[1],p2[2]], n:[nx,ny,nz], c:icoColor(cd)};
+      (near?ICO_NC:ICO_FC).set(fi,rec);
+    }
+    const b=m.n;
+    m.pos.push(rec.p[0],rec.p[1],rec.p[2],rec.p[3],rec.p[4],rec.p[5],rec.p[6],rec.p[7],rec.p[8]);
+    m.nor.push(rec.n[0],rec.n[1],rec.n[2],rec.n[0],rec.n[1],rec.n[2],rec.n[0],rec.n[1],rec.n[2]);
+    m.col.push(rec.c[0],rec.c[1],rec.c[2],rec.c[0],rec.c[1],rec.c[2],rec.c[0],rec.c[1],rec.c[2]);
+    m.ao.push(1,1,1); m.bone.push(0,0,0);
+    m.idx.push(b,b+1,b+2); m.n+=3;
+  }
+  ICO_DIRTY=false;
+  // baked decoration: same pieces, same spots - surface height follows SAMP now
+  const T=M4.id();
+  for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
+    const c=tiles[y][x]; if(!c.deco) continue;
+    const px=x+0.35+c.v*0.3, pz=y+0.35+((c.v*7.1)%1)*0.3, py=groundH(px,pz)-0.02;
+    if(c.deco==='tree'){
+      const KTREE=[KP.tree_default,KP.tree_oak,KP.tree_fat,KP.tree_cone,KP.tree_pineTallB];
+      const PP=KTREE[Math.floor((c.v*0.999)*KTREE.length)], sc=0.85+c.v*0.55;
+      M4.trs(T,px,py,pz,0,c.v*6,0.03,sc,sc,sc); kpush(m,PP,T,0.9);
+    } else if(c.deco==='rock'){
+      const PP=c.v<0.5?KP.rock_smallB:KP.rock_tallA, sc=0.22+c.v*0.20;
+      M4.trs(T,px,py,pz,0.10,c.v*6,0.06,sc,sc,sc); kpush(m,PP,T,0.8);
+    } else if(c.deco==='stump'){
+      const sc=0.30+c.v*0.10;
+      M4.trs(T,px,py,pz,0,c.v*6,0,sc,sc,sc); kpush(m,KP.stump_round,T,0.85);
+    } else if(c.deco==='shroom'){
+      const PP=c.v<0.5?KP.mushroom_redGroup:KP.mushroom_tanGroup, sc=0.20+c.v*0.10;
+      M4.trs(T,px,py,pz,0,c.v*6,0,sc,sc,sc); kpush(m,PP,T,0.9);
+    } else if(c.deco==='tuft'){
+      for(let i=0;i<3;i++){
+        const a=c.v*9+i*2.1, tx=px+Math.cos(a)*0.22, tz=pz+Math.sin(a)*0.22, sc=0.28+((i*0.31+c.v)%1)*0.14;
+        M4.trs(T,tx,groundH(tx,tz)-0.01,tz,0,a,0,sc,sc,sc); kpush(m,KP.grass,T,0.95);
+      }
+    } else if(c.deco==='reed'){
+      for(let i=0;i<3;i++){
+        const a=c.v*7+i*2.1, tx=px+Math.cos(a)*0.2, tz=pz+Math.sin(a)*0.2;
+        M4.trs(T,tx,groundH(tx,tz)-0.01,tz,0.12*Math.cos(a),a,0.12*Math.sin(a),1,1,1);
+        tube(m,0.014,0.004,0.34,5,hex('#b9a24a'),T,0,false,false);
+      }
+    }
+  }
+  const out=upload(m);
+  buildPlanet();
+  return out;
+}
+
 function buildWorldMesh(){
   const m=MB(), wm=MB(), T=M4.id();
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
@@ -936,12 +1146,7 @@ function buildPlanet(){
       lm.col.push(cr,cg,cb); lm.ao.push(1); lm.bone.push(0);
     }
   }
-  const NLO2W=LNLO;
-  for(let j=0;j<LNL;j++) for(let i=0;i<NLO2W;i++){
-    const a=j*(LNLO+1)+i, b=a+LNLO+1;
-    if(lm.col[a*3+1]===0&&lm.col[b*3+1]===0&&lm.col[(a+1)*3+1]===0&&lm.col[(b+1)*3+1]===0) continue;  // skip pure-ocean quads cheaply
-    lm.idx.push(a,b,a+1, a+1,b,b+1); lm.n+=4; }
-  PLANETL=upload(lm);
+  PLANETL=null;   // v61: the icosphere IS the far lands - no second cap mesh
   const RA=PLANET_R*1.03, NL2=28, NLO2=64; const am=MB();
   for(let j=0;j<=NL2;j++){ const phi=Math.PI*j/NL2;
     const wy=(WATER-PLANET_R)+RA*Math.cos(phi), rr=RA*Math.sin(phi);
@@ -1200,7 +1405,7 @@ function groundH(x,y){   // building-aware override of the terrain-only version
   const h00=SAMP(x0,y0),h10=SAMP(x0+1,y0),h01=SAMP(x0,y0+1),h11=SAMP(x0+1,y0+1);
   return Math.max(lerp(lerp(h00,h10,fx),lerp(h01,h11,fx),fy), WATER+0.015) - DROP(x,y);
 }
-function flattenArea(tx,ty,w,h){
+function flattenArea(tx,ty,w,h){ ICO_DIRTY=true;
   let hv=-9;
   for(let y=ty;y<=ty+h;y++) for(let x=tx;x<=tx+w;x++) hv=Math.max(hv,SAMP(x,y));
   for(let y=ty;y<=ty+h;y++) for(let x=tx;x<=tx+w;x++) FLATS[x+','+y]=hv;
@@ -1978,7 +2183,7 @@ function rebuildWorld(){
   if(WORLD){ for(const k of ['pos','nor','col','ao','bone']) if(WORLD[k]) gl.deleteBuffer(WORLD[k].b);
     if(WORLD.idxb) gl.deleteBuffer(WORLD.idxb); }
   if(WATERM){ for(const k of ['pos','nor','col','ao','bone']) if(WATERM[k]) gl.deleteBuffer(WATERM[k].b); if(WATERM.idxb) gl.deleteBuffer(WATERM.idxb); WATERM=null; }
-  WORLD=buildWorldMesh();
+  WORLD=buildIcoWorld(); WATERM=buildMapWater();
   shadowDirty=true;
 }
 function drawBuildings(prog, noCrops){
@@ -4071,9 +4276,9 @@ function courierTick(dt){
     const ya=groundH(from.x,from.y)+0.25, yb=groundH(to.x,to.y)+0.25;
     c.y=lerp(ya,yb,s)+Math.sin(u*Math.PI)*2.6; };
   if(c.leg===0){ c.t+=dt/c.dur; seg(c.fa,c.fb);
-    if(c.t>=1){ c.leg=1; c.t=0; } }
+    if(c.t>=1){ c.leg=1; c.t=0; ICO_DIRTY=true; } }
   else if(c.leg===1){ c.t+=dt/c.rest; c.y=groundH(c.fb.x,c.fb.y)+0.25;   // wings folded at the seat
-    if(c.t>=1){ c.leg=2; c.t=0; c.dur=clamp(Math.hypot(c.fa.x-c.fb.x,c.fa.y-c.fb.y)/1.5,10,42); } }
+    if(c.t>=1){ c.leg=2; c.t=0; ICO_DIRTY=true; c.dur=clamp(Math.hypot(c.fa.x-c.fb.x,c.fa.y-c.fb.y)/1.5,10,42); } }
   else { c.t+=dt/c.dur; seg(c.fb,c.fa);
     if(c.t>=1){ S.courier=null; S._courT=rnd(38,22); } }
 }
