@@ -614,6 +614,8 @@ function biomeBase(x,y,c,base){
 }
 function nightNow(){ return S.dayT<0.24||S.dayT>0.76; }
 
+function COASTR(x,y){ const ca=Math.atan2(y-MAP/2,x-MAP/2);
+  return 29+4.5*fbm(Math.cos(ca)*3+50.3, Math.sin(ca)*3+50.3); }
 function HGT(x,y){
   if(CAMP_ON) return campHGT(x,y);
   const n=fbm(x*0.13+3.1,y*0.13-1.7);          // 0..1
@@ -624,8 +626,7 @@ function HGT(x,y){
   if(rd<3.4){ const w=1-rd/3.4; h+=w*w*(1.30+fbm(x*0.5+40.2,y*0.5-7.7)*0.9); }
   const dc=Math.hypot(x-MAP/2,y-MAP/2);       // v43: calm basin for the village, heart of Orrim
   if(dc<10){ const w=clamp((10-dc)/4,0,1); h=h*(1-w)+0.26*w; }
-  const ca=Math.atan2(y-MAP/2,x-MAP/2);
-  const coastR=29+4.5*fbm(Math.cos(ca)*3+50.3, Math.sin(ca)*3+50.3);   // v50e: the continent is a body, not a square
+  const coastR=COASTR(x,y);   // v50e: the continent is a body, not a square
   const df=dc-coastR;
   if(df>-6){ const k=df+6; h-=k*k*0.052; }   // the land falls away into the sea, following its own outline
   for(const L of LANDS){ const d=Math.hypot(x-L.x,y-L.y); if(d<L.r){ const w=clamp((L.r-d)/3,0,1); h=h*(1-w)+L.seatH*w; } }   // seats (and the god) rise above even the shore
@@ -639,7 +640,7 @@ function genTiles(){
       const h=(HGT(x,y)+HGT(x+1,y)+HGT(x,y+1)+HGT(x+1,y+1))/4;
       let t=0;                                  // 0 grass 1 dirt 2 water 3 rock
       if(h<WATER-0.02) t=2; else if(h<WATER+0.09) t=1; else if(h>0.62) t=3;   // v46: wider beaches
-      tiles[y][x]={t,h, v:hash2(x*3.1,y*7.7), deco:null, flat:false};
+      tiles[y][x]={t,h, v:hash2(x*3.1,y*7.7), deco:null, flat:false, deep:(h<WATER-0.28&&Math.hypot(x-MAP/2,y-MAP/2)>COASTR(x,y)+2)};
     }
   }
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
@@ -660,6 +661,7 @@ function buildWorldMesh(){
   const m=MB(), wm=MB(), T=M4.id();
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
+    if(c.deep) continue;                        // no mesh out there: the sphere carries the sea
     const hs=[SAMP(x,y)-DROP(x,y),SAMP(x+1,y)-DROP(x+1,y),SAMP(x+1,y+1)-DROP(x+1,y+1),SAMP(x,y+1)-DROP(x,y+1)].map(v=>Math.max(v,WATER-0.35));
     let base;
     if(c.t===2) base=hex(SAND);
@@ -742,7 +744,7 @@ function buildWorldMesh(){
   return upload(m);
 }
 /* v50: the rest of the planet - a real sphere of ocean closing at the antipode, plus the air around it */
-let PLANETM=null, APRONM=null, PLANETL=null, ATMOM=null, ATMOP=null;
+let PLANETM=null, PLANETL=null, ATMOM=null, ATMOP=null;
 const V_ATMO=`attribute vec3 aPos; attribute vec3 aNor;
  uniform mat4 uVP; varying vec3 vN; varying vec3 vW;
  void main(){ vW=aPos; vN=aNor; gl_Position=uVP*vec4(aPos,1.0); }`;
@@ -755,8 +757,8 @@ const F_ATMO=`precision mediump float; varying vec3 vN; varying vec3 vW; uniform
   gl_FragColor=vec4(c,f*0.55);
  }`;
 function buildPlanet(){
-  const CX=SITE.x, CY=WATER-PLANET_R, CZ=SITE.y;
-  const phi0=43.5/PLANET_R;
+  const CX=SITE.x, CY=WATER-PLANET_R-0.12, CZ=SITE.y;   // ocean shell rides just under the mapped water: no coplanar fight
+  const phi0=0.4/PLANET_R;
   const UNDER=0.04;
   const NL=40, NLO=96; const wm=MB();
   for(let j=0;j<=NL;j++){ const phi=phi0+(Math.PI-phi0)*j/NL;
@@ -766,22 +768,6 @@ function buildPlanet(){
   for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
     wm.idx.push(a,b,a+1, a+1,b,b+1); wm.n+=4; }
   PLANETM=upload(wm);
-  // apron: the square map border welded to the circular cap hole - the world never ends
-  {
-    const am=MB(); const NSEG=160; const HX=MAP/2, HY=MAP/2, HALF=30.0, RCAP=43.5+0.0001;
-    for(let i=0;i<=NSEG;i++){ const a=(i/NSEG)*TAU, ca=Math.cos(a), sa=Math.sin(a);
-      const rs=HALF/Math.max(Math.abs(ca),Math.abs(sa));
-      const ix=HX+ca*rs, iy=HY+sa*rs;
-      const ox=HX+ca*RCAP, oy=HY+sa*RCAP;
-      // two middle rows keep the blend soft where square meets circle
-      const pts=[[ix,iy,0],[HX+ca*((rs*2+RCAP)/3),HY+sa*((rs*2+RCAP)/3),1],[HX+ca*((rs+RCAP*2)/3),HY+sa*((rs+RCAP*2)/3),2],[ox,oy,3]];
-      for(const pt of pts){
-        am.pos.push(pt[0], WATER-DROP(pt[0],pt[1])+((pt[2]===0)?0.015:0), pt[1]);
-        am.nor.push(0,1,0); am.col.push(1,1,1); am.ao.push(1); am.bone.push(0); } }
-    for(let i=0;i<NSEG;i++){ const b0=i*4;
-      for(let k=0;k<3;k++){ am.idx.push(b0+k,b0+k+1,b0+4+k, b0+k+1,b0+4+k+1,b0+4+k); am.n+=4; } }
-    APRONM=upload(am);
-  }
   // far continents: real geometry on the ball, noise-raised above the water sphere
   const lm=MB();
   const LNL=36, LNLO=96; const lbase=lm.n;
@@ -789,7 +775,7 @@ function buildPlanet(){
     for(let i=0;i<=LNLO;i++){ const th=i/LNLO*TAU;
       const L=fbm(Math.cos(th)*2.1+Math.sin(phi*2.6)*1.7+9.3, Math.sin(th)*1.9+phi*2.2-4.1);
       const land=L>0.58;
-      const lift=land?(L-0.58)*2.6+0.35:0;
+      const lift=land?(L-0.58)*2.6+0.45:0;
       const RR=PLANET_R+lift;
       const wy=(WATER-PLANET_R)+RR*Math.cos(phi), rr=RR*Math.sin(phi);
       const x2=rr*Math.cos(th), z2=rr*Math.sin(th);
@@ -2907,7 +2893,6 @@ function drawWater(){
     const dz=CAM.dist/CAM.zoom;
     if(PSEP.u.uFogD) gl.uniform1f(PSEP.u.uFogD, clamp(dz*1.5, 500, 24000));
     drawMesh(PSEP,PLANETM);
-    if(APRONM) drawMesh(PSEP,APRONM);
   }
   gl.disable(gl.BLEND);
 }
