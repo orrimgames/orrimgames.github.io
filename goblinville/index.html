@@ -754,10 +754,11 @@ const F_ATMO=`precision mediump float; varying vec3 vN; varying vec3 vW; uniform
  }`;
 function buildPlanet(){
   const CX=SITE.x, CY=WATER-PLANET_R, CZ=SITE.y;
-  const phi0=46.5/PLANET_R;
+  const phi0=41.0/PLANET_R;
+  const UNDER=0.10-0.0;   // planet ocean sits a whisker under the map's border water at the overlap
   const NL=40, NLO=96; const wm=MB();
   for(let j=0;j<=NL;j++){ const phi=phi0+(Math.PI-phi0)*j/NL;
-    const wy=CY+PLANET_R*Math.cos(phi), rr=PLANET_R*Math.sin(phi);
+    const wy=CY+PLANET_R*Math.cos(phi)-UNDER, rr=PLANET_R*Math.sin(phi);
     for(let i=0;i<=NLO;i++){ const th=i/NLO*TAU;
       wm.pos.push(CX+rr*Math.cos(th), wy, CZ+rr*Math.sin(th)); wm.nor.push(0,1,0); wm.col.push(1,1,1); wm.ao.push(1); wm.bone.push(0); } }
   for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
@@ -2791,7 +2792,7 @@ function scenePass(prog, skinProg){
   if(prog.u.uSun) setEnv(prog);
   drawWorldStatics(prog);
   drawWater();
-  if(prog===PROG&&S.orbit&&PLANETL){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }
+  if(prog===PROG&&PLANETL){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }
   gl.useProgram(skinProg.p);
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
@@ -2847,7 +2848,7 @@ function drawWater(){
   if(WPROG2.u.uSun) gl.uniform3fv(WPROG2.u.uSun,SUN);
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   drawMesh(WPROG2,WATERM);
-  if(S.orbit&&PLANETM){ drawMesh(WPROG2,PLANETM); }
+  if(PLANETM){ drawMesh(WPROG2,PLANETM); }
   gl.disable(gl.BLEND);
 }
 function drawSky(){
