@@ -2819,6 +2819,7 @@ function render(){
       if(!growing) shadowDirty=false;
     }
   }
+  if(S.mode==='globe'){ drawGlobe(); return; }
   gl.clear(gl.DEPTH_BUFFER_BIT);
   drawSky();
   scenePass(PROG, SKIN);
@@ -3194,6 +3195,7 @@ function drawUI(){
   ctx.clearRect(0,0,W,H);
   if(!S.started){ drawTitle(); drawParts(); return; }
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
+  if(S.mode==='globe'){ drawGlobeUI(); drawToasts2(); return; }
   if(FP.on && !(FP.battle&&S.war.result)){
     drawParts(); drawFloats2(); drawFPUI(); drawToasts2(); drawBanner2();
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
@@ -3551,6 +3553,105 @@ function tickLands(dt){
           vx:rnd(0.1,-0.1), vy:L.down?(-0.05-rnd(0.08)):(0.05+rnd(0.08)), vz:rnd(0.1,-0.1), t:0, life:2.4, col:L.amb, size:0.05}); } } }
 }
 function howlFar(){ A.tone(520,1.5,{type:'sawtooth',vol:0.16,slide:170}); A.tone(780,1.0,{type:'sine',vol:0.09,slide:380,delay:0.14}); }
+
+/* ================= v47: THE GLOBE - pinch out beyond the world ================= */
+const V_GLOBE=`attribute vec3 aPos; attribute vec2 aUv; uniform mat4 uVP; uniform mat4 uModel;
+ varying vec2 vUv; varying vec3 vN;
+ void main(){ vec4 w=uModel*vec4(aPos,1.0); vUv=aUv; vN=(uModel*vec4(aPos,0.0)).xyz; gl_Position=uVP*w; }`;
+const F_GLOBE=`precision highp float; varying vec2 vUv; varying vec3 vN;
+ uniform sampler2D uTex; uniform float uT;
+ void main(){
+   vec2 tuv=vec2((vUv.x-0.30)/0.40, (vUv.y-0.26)/0.48);
+   vec3 sea=mix(vec3(0.045,0.15,0.29), vec3(0.08,0.26,0.42), 0.5+0.5*sin(vUv.y*7.0+0.8*sin(vUv.x*9.0)));
+   vec3 c=sea;
+   if(tuv.x>=0.0&&tuv.x<1.0&&tuv.y>=0.0&&tuv.y<1.0){ c=texture2D(uTex,tuv).rgb; }
+   float b1=smoothstep(0.062,0.05,distance(vUv,vec2(0.115,0.40)));
+   float b2=smoothstep(0.075,0.058,distance(vUv,vec2(0.845,0.72)));
+   float b3=smoothstep(0.05,0.038,distance(vUv,vec2(0.78,0.18)));
+   c=mix(c,vec3(0.10,0.13,0.10),max(b1,max(b2,b3))*0.85);   // uncharted lands, whispering across the sea
+   vec3 N=normalize(vN);
+   float l=0.45+0.58*max(0.0,dot(N,normalize(vec3(0.55,0.45,0.62))));
+   float fres=pow(1.0-abs(N.z),3.2);
+   c=c*l+vec3(0.42,0.72,1.0)*fres*0.75;
+   gl_FragColor=vec4(c,1.0);
+ }`;
+let GLO=null;
+function buildGlobe(){
+  if(GLO) return;
+  const prog=program(V_GLOBE,F_GLOBE,['aPos','aUv']);
+  const NL=14,NLO=26; const pos=[],uv=[],idx=[];
+  for(let j=0;j<=NL;j++){ const phi=j/NL*Math.PI;
+    for(let i=0;i<=NLO;i++){ const th=i/NLO*TAU;
+      pos.push(Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th));
+      uv.push(i/NLO, j/NL); } }
+  for(let j=0;j<NL;j++) for(let i=0;i<NLO;i++){ const a=j*(NLO+1)+i, b=a+NLO+1;
+    idx.push(a,b,a+1, a+1,b,b+1); }
+  const pb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,pb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(pos),gl.STATIC_DRAW);
+  const ub=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,ub); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(uv),gl.STATIC_DRAW);
+  const ib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(idx),gl.STATIC_DRAW);
+  const size=1024;
+  const fb=gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER,fb);
+  const tex=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,size,size,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  const rb=gl.createRenderbuffer(); gl.bindRenderbuffer(gl.RENDERBUFFER,rb);
+  gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16,size,size);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,tex,0);
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.RENDERBUFFER,rb);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+  GLO={prog, pb, ub, ib, n:idx.length, rt:{fb,tex,rb,size}};
+}
+function renderGlobeTex(){
+  const stx=CAM.tx, sty=CAM.ty;
+  gl.bindFramebuffer(gl.FRAMEBUFFER,GLO.rt.fb);
+  gl.viewport(0,0,GLO.rt.size,GLO.rt.size);
+  gl.clearColor(0.055,0.17,0.32,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  M4.persp(PROJ, 0.62, 1.0, 1, 400);
+  M4.look(VIEW, MAP/2, 95, MAP/2+0.5, MAP/2, 0, MAP/2, 0,0,-1);
+  M4.mul(VP,PROJ,VIEW);
+  CAM.tx=MAP/2; CAM.ty=MAP/2; setLight();
+  scenePass(PROG, SKIN);
+  CAM.tx=stx; CAM.ty=sty; setCamera(); setLight();
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+  gl.viewport(0,0,glc.width,glc.height);
+}
+function enterGlobe(){
+  if(!GLO) buildGlobe();
+  renderGlobeTex();
+  FP.on=false; FP.battle=false;
+  S.mode='globe'; A.pop(3);
+  banner2('O R R I M', 'the ember star');
+}
+function leaveGlobe(){ S.mode='village'; A.blip(); }
+function drawGlobe(){
+  gl.clearColor(0.012,0.016,0.04,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  M4.persp(PROJ, 0.75, glc.width/glc.height, 0.1, 50);
+  M4.look(VIEW, 0, 0.85, -3.7, 0, 0.05, 0, 0,1,0); M4.mul(VP,PROJ,VIEW);
+  gl.disable(gl.CULL_FACE);
+  gl.useProgram(GLO.prog.p);
+  gl.uniformMatrix4fv(GLO.prog.u.uVP,false,VP);
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,GLO.rt.tex); gl.uniform1i(GLO.prog.u.uTex,0);
+  gl.uniform1f(GLO.prog.u.uT,G.t);
+  M4.trs(MODEL, 0, 0.05, 0, 0.32, G.t*0.05, 0, 1.55,1.55,1.55);
+  gl.uniformMatrix4fv(GLO.prog.u.uModel,false,MODEL);
+  gl.bindBuffer(gl.ARRAY_BUFFER,GLO.pb);
+  gl.enableVertexAttribArray(GLO.prog.a.aPos); gl.vertexAttribPointer(GLO.prog.a.aPos,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,GLO.ub);
+  gl.enableVertexAttribArray(GLO.prog.a.aUv); gl.vertexAttribPointer(GLO.prog.a.aUv,2,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,GLO.ib);
+  gl.drawElements(gl.TRIANGLES,GLO.n,gl.UNSIGNED_SHORT,0);
+  gl.enable(gl.CULL_FACE);
+}
+function drawGlobeUI(){
+  // starfield over deep space
+  for(let i=0;i<150;i++){ const sx=(hash2(i*7.7,i*3.3)*1.0)%1*W, sy=(hash2(i*3.3,i*9.1)*1.0)%1*H;
+    const tw=0.5+0.5*Math.sin(G.t*1.8+i*2.4);
+    ctx.fillStyle='rgba(235,240,255,'+(0.25+0.55*tw*hash2(i,i)+0)+')';
+    ctx.fillRect(sx,sy,hash2(i,4)>0.93?2.4:1.4,hash2(i,4)>0.93?2.4:1.4); }
+  txt3('pinch open to fall back to the mud', W/2, H-26, 12, 'rgba(255,240,225,0.65)','center',700);
+  drawBanner2();
+}
 /* ===================== next-step hints (v24) ========================== */
 const HINTS=[
  {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
@@ -3851,7 +3952,11 @@ function moveStep(e){
     }
   } else if(v.length>=2){
     const d=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y);
-    if(pinchLast>0){ CAM.zoom=clamp(CAM.zoom*(d/pinchLast),0.55,1.9); }
+    if(pinchLast>0){ const pr=d/pinchLast;
+      if(S.mode==='globe'){ if(pr>1.14) leaveGlobe(); }
+      else { const nz=clamp(CAM.zoom*pr,0.55,1.9);
+        if(nz<=0.55&&pr<0.90&&S.mode==='village'&&!FP.on&&S.started) enterGlobe();
+        else CAM.zoom=nz; } }
     pinchLast=d;
     const rot=Math.atan2(v[0].y-v[1].y,v[0].x-v[1].x);
     CAM.yaw=CAM.yaw-(rot-rotLast)*0.85;
