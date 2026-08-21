@@ -1360,7 +1360,7 @@ function updateGob(g,dt){
 }
 
 function updateWorld(dt){
-  checkQuest(); checkGoals(); tickHints(dt);
+  checkQuest(); checkGoals(); tickHints(dt); tickShare(dt); S._achT=(S._achT==null?2:S._achT)-dt; if(S._achT<=0){ S._achT=1.8; checkBadges(); }
   tickAmbience(dt); tickWeather(dt);
   S.dayT=(S.dayT+dt/200)%1;
   if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
@@ -2095,7 +2095,7 @@ function endBattle(win){
   if(win){
     for(const k in r.loot){ const v=Math.round(r.loot[k]*(0.7+rnd(0.5))); addRes(k,v); gained[k]=v; }
     S.war.won[r.id]=(S.war.won[r.id]||0)+1;
-    if(S.war.won[r.id]===1){ S.war.banners.push(r.id); chron('The '+r.name+' fell. Their banner burns well.'); chron(r.heresy);
+    if(S.war.won[r.id]===1){ S.war.banners.push(r.id); chron('The '+r.name+' fell. Their banner burns well.'); chron(r.heresy); offerShare(S.war.banners.length+' banner(s) taken - show the world');
       if(S.war.banners.length===RIVALS.length){
         banner2('THE FOUR HERESIES KNEEL','the Ember War is won - VULKARRAX sees you now');
         chron('The last heresy knelt. From the Warrens to the Choir, every road now runs to the Mudmouth.');
@@ -2316,6 +2316,7 @@ function warTap(x,y){
     if(S.war.aim){ S.war.aim=false; const t=rayGround(x,y); if(t) dragonfireAtWorld(t[0],t[1]); return true; }
     return true;
   }
+  if(S._shareT>0&&inR(x,y,shareR())){ doShare(); return true; }
   if(inR(x,y,warBtnR())){ S.mode='war'; S.sawMap=1; A.blip(); return true; }
   if(inR(x,y,walkBtnR())){ fpEnter(); return true; }
   return false;
@@ -3117,7 +3118,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawToasts2(); drawBanner2(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawShare(); drawToasts2(); drawBanner2(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -3148,6 +3149,7 @@ function packSave(){
   return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, day:S.day, dayT:S.dayT,
     omen:S.omen, school:S.school, scholar:S.scholar, ogre:S.ogre, vanto:S.vanto,
     war:{troops:S.war.troops, won:S.war.won, cd:S.war.cd, banners:S.war.banners, treaty:S.war.treaty},
+    ach:S.ach||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0,
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
@@ -3193,6 +3195,7 @@ function restoreSave(sv){
   if(sv.vanto) Object.assign(S.vanto,sv.vanto);
   if(sv.war){ S.war.troops=sv.war.troops||0; S.war.won=sv.war.won||{}; S.war.cd=sv.war.cd||{};
     S.war.banners=sv.war.banners||[]; S.war.treaty=!!sv.war.treaty; }
+  S.ach=sv.ach||{};
   S.tut=sv.tut||0; S.metGob=sv.metGob||0; S.sawMap=sv.sawMap||0; S.tapCombo=sv.tapCombo||0; S.dawnSeen=sv.dawnSeen||0; S.elderHush=sv.elderHush||0; S.hints=sv.hints||{};
   S.victory=sv.victory||0; S.ceremonyDone=sv.ceremonyDone||0; S.victPhase=-1; S.victT=0;
   if(S.victory&&!S.ceremonyDone){ S.victPhase=0; S.victT=0; S._vB0=S._vB1=S._vB2=0; S._vf=0; }
@@ -3203,6 +3206,52 @@ function restoreSave(sv){
   rebuildWorld(); shadowDirty=true;
 }
 
+
+/* ============ v40: SHARE YOUR BROOD - shareable moments + badges ========= */
+const BADGES=[
+ {k:'firstfarm', t:'FIRST FARM', check:function(){return S.buildings.some(b=>b.key==='farm');}},
+ {k:'brood8', t:'BROOD OF EIGHT', check:function(){return S.gobs.length>=8;}},
+ {k:'banner1', t:'FIRST BANNER', check:function(){return S.war.banners.length>=1;}},
+ {k:'banner3', t:'BREAKER OF HERESIES', check:function(){return S.war.banners.length>=3;}},
+ {k:'day10', t:'TEN DAYS OF FIRE', check:function(){return S.day>=10;}},
+ {k:'larder300', t:'FULL LARDERS', check:function(){return S.res.food>=300;}},
+ {k:'victory', t:'THE SKY REMEMBERS', check:function(){return !!S.victory;}},
+];
+function badgeCount(){ let n=0; if(S.ach) for(const k in S.ach) if(S.ach[k]) n++; return n; }
+function checkBadges(){
+  if(!S.started) return;
+  S.ach=S.ach||{};
+  for(const bd of BADGES){ if(!S.ach[bd.k]){ try{ if(bd.check()){ S.ach[bd.k]=1;
+    toast2('badge earned: '+bd.t+'  ('+badgeCount()+'/'+BADGES.length+')'); A.say(6);
+    offerShare('badge '+badgeCount()+' of '+BADGES.length); saveGame(); } }catch(e){} } }
+}
+function offerShare(why){ S._shareT=10; S._shareWhy=why; }
+function shareR(){ return {x:W-118,y:352,w:104,h:42}; }
+function shareText(){
+  return 'GOBLINVILLE - my brood: '+S.gobs.length+' goblins, day '+S.day+', '+
+    S.war.banners.length+' banners taken, '+badgeCount()+'/'+BADGES.length+' badges. Grow your own brood:';
+}
+function doShare(){
+  const t=shareText(), url=location.href.split('?')[0];
+  S._shareT=0; S._shareWhy=null; A.blip();
+  if(navigator.share){ navigator.share({title:'Goblinville', text:t, url:url}).catch(function(){}); }
+  else if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t+' '+url).then(function(){toast2('copied - show the world');}).catch(function(){toast2(t);}); }
+  else toast2(t);
+}
+function tickShare(dt){ if(S._shareT>0){ S._shareT-=dt; if(S._shareT<=0){ S._shareT=0; S._shareWhy=null; } } }
+function drawShare(){
+  if(!(S._shareT>0)||!S.started||FP.on||S.mode!=='village') return;
+  const r=shareR(), p=1+Math.sin(G.t*5)*0.05;
+  ctx.save(); ctx.translate(r.x+r.w/2,r.y+r.h/2); ctx.scale(p,p);
+  ctx.fillStyle='rgba(46,34,8,0.9)'; rrp(-r.w/2,-r.h/2,r.w,r.h,12); ctx.fill();
+  ctx.strokeStyle='#ffd34d'; ctx.lineWidth=2; ctx.stroke();
+  txt3('SHARE BROOD',0,3,13,'#ffe6ad','center',900);
+  ctx.restore();
+  const a=clamp(S._shareT/10,0,1);
+  ctx.strokeStyle='rgba(255,211,77,0.6)'; ctx.lineWidth=2.5; ctx.beginPath();
+  ctx.arc(r.x+14,r.y+r.h/2,6,-Math.PI/2,-Math.PI/2+a*TAU); ctx.stroke();
+  if(S._shareWhy) txt3(S._shareWhy,r.x+r.w/2,r.y+r.h+16,9.5,'#d8c49a','center',800);
+}
 /* ===================== next-step hints (v24) ========================== */
 const HINTS=[
  {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
@@ -3240,7 +3289,7 @@ function checkGoals(){
   if(!S.started||S.tut<QUESTS.length) return;
   const i=goalIdx(); if(i<0) return;
   if(GOALS[i].check()){ const done=GOALS[i]; S._goal=i+1; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++;
-    A.pop(2); A.say(6); toast2('brood satisfied: '+done.short);
+    A.pop(2); A.say(6); toast2('brood satisfied: '+done.short); offerShare('the brood got: '+done.short);
     if(S._goal>=GOALS.length){ banner2('THE BROOD WANTS NOTHING','Goblinville endures'); chron('The brood wanted, worked, and wanted no more - Goblinville endures.'); } }
 }
 function drawGoal(){
