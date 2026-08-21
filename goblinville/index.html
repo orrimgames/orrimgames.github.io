@@ -815,10 +815,8 @@ function icoBilerp(x,y){
 function icoHeight(d){          // unit dir -> surface radius
   const p=invOf(d);
   const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
-  const sag=PLANET_R*(1-Math.cos(Math.min(r/PLANET_R,Math.PI)));
   const x=clamp(p[0],0,MAP-0.001), y=clamp(p[1],0,MAP-0.001);
-  let hN=icoBilerp(x,y); if(hN<WATER-0.35) hN=WATER-0.35;
-  const hNear=hN-sag;
+  let hNear=icoBilerp(x,y); if(hNear<WATER-0.35) hNear=WATER-0.35;   // v62: radius rides ABOVE the sphere - no second sag
   const w=clamp((r-38)/12,0,1);
   if(w===0) return PLANET_R+hNear;
   const fld=worldField(d);
