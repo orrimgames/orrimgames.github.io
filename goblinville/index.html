@@ -516,7 +516,7 @@ function poseGoblin(g,t){
 }
 /* ============================== world =================================== */
 let SKIN=null, SKIND=null, GOB=null, CLUB=null, WORLD=null, PROPS=[];
-const MAP=26;
+const MAP=60;  // v43: one continuous land
 const tiles=[];
 const WATER=0.0;
 let CAMP_ON=false;
@@ -526,14 +526,72 @@ function campHGT(x,y){
   if(rim<3) h+=(3-rim)*0.26;                      // raised bowl rim frames the camp
   return h;
 }
+const LANDS=[
+ {id:'bone', name:'THE BONE KINGDOM', x:8, y:30, r:6.5, seatH:0.30, amb:'#9fd4ff',
+  tint:[0.80,0.83,0.90],
+  tag:'the elder whispers: the Choir keeps its dead singing - keep walking',
+  chron:'The elder whispered of the west: the Bone Kingdom, where the Choir keeps its dead singing.'},
+ {id:'crimson', name:'THE CRIMSON COURT', x:30, y:7, r:6, seatH:0.34, amb:'#ff4d5e',
+  tint:[0.55,0.28,0.32],
+  tag:'the elder will not look north long: they remember the sun, and miss it',
+  chron:'North, the elder said, and looked away: the Crimson Court, which remembers the sun, and misses it.'},
+ {id:'spire', name:'SPIREHOLD', x:50, y:12, r:6, seatH:0.46, amb:'#7fe0ff',
+  tint:[0.45,0.55,0.78],
+  tag:'the elder taps the map: the sky-readers count our fires from there',
+  chron:'The sky-readers of Spirehold keep tall eyes on Orrim. The elder says they counted our fires the night the hall was raised.'},
+ {id:'warrens', name:'THE WARRENS', x:52, y:36, r:6, seatH:0.16, amb:'#d8c782',
+  tint:[0.62,0.55,0.42],
+  tag:'the elder spits: the ratkin dig where the river is soft',
+  chron:'Where the river runs soft the ratkin dig. The elder spat on the ground twice, which is a blessing, from him.'},
+ {id:'hollow', name:'THE HOLLOW', x:28, y:51, r:6.5, seatH:0.22, amb:'#d88fe8',
+  tint:[0.52,0.42,0.62],
+  tag:'the elder smiles sideways: the sporefolk speak kindly and mean nothing by it',
+  chron:'South past the water, the Hollow. The elder says the sporefolk speak kindly and mean nothing by it, which is not a comfort.'},
+ {id:'ridge', name:'IRONBEARD RIDGE', x:12, y:45, r:6, seatH:0.5, amb:'#c8b070',
+  tint:[0.62,0.60,0.55],
+  tag:'the elder nods once: the ironbeards keep their word longer than their temper',
+  chron:'On the southwest ridge the ironbeards strike stone morning to dusk. Their word outlasts their temper, which from the elder is praise.'},
+ {id:'crag', name:'IRONJAW CRAG', x:12, y:10, r:6, seatH:0.9, amb:'#e8f2fa',
+  tint:[0.85,0.87,0.92],
+  tag:'the elder lowers his staff: giants walk the white rock - count yourself small',
+  chron:'The elder lowered his staff toward the white rock: Ironjaw Crag, where the giants walk. The brood counts itself small there.'},
+ {id:'bedlam', name:'BEDLAM', x:52, y:52, r:5.5, seatH:0.28, amb:'#ff9e4d', down:true,
+  tint:[0.30,0.16,0.12],
+  tag:'the elder says the dragon bled here once - and the bleeding has not finished',
+  chron:'Bedlam, the corner where VULKARRAX bled in the first winter. The ribs in the ground are His. The embers there do not fall; they leave.'},
+ {id:'vulkarrax', name:'VULKARRAX, THE GREAT DRAGON', x:56, y:4, r:8, seatH:1.05, amb:'#ffb34d',
+  tint:[0.62,0.44,0.22],
+  tag:'the elder kneels. do not make him say the name twice',
+  chron:'At the east edge of the world the elder knelt in the mud, and the brood knew why the fire is kept: VULKARRAX, the Great Dragon, the god the sky leans toward.'},
+];
+function rangeDist(x,y){
+  const wob=(fbm(x*0.3+5.5,y*0.3+9.1)-0.5)*3;
+  return Math.min(Math.abs(x+y-28-wob)/Math.SQRT2, Math.abs(x+y-92-wob)/Math.SQRT2);
+}
+function landNear(x,y){ let best=null,bd=1e9; for(const L of LANDS){ const d=Math.hypot(L.x-x,L.y-y); if(d<bd){ bd=d; best=L; } } return bd<best.r+3.5?best:null; }
+function mixcA(a,b,w){ return [a[0]+(b[0]-a[0])*w, a[1]+(b[1]-a[1])*w, a[2]+(b[2]-a[2])*w]; }
+function biomeBase(x,y,c,base){
+  if(c.h>0.72){ base=mixcA(base,[0.91,0.93,0.96], clamp((c.h-0.72)/0.3,0,0.9)); }           // snow over the high stone
+  if(c.t===0 && fbm(x*0.05+91.7,y*0.05-13.3)>0.60) base=mixcA(base,[0.30,0.47,0.26],0.42);  // deep forest shadow
+  const L=landNear(x,y);
+  if(L){ const d=Math.hypot(L.x-x,L.y-y); if(d<L.r+2.5){ base=mixcA(base,L.tint, clamp((L.r+2.5-d)/3.5,0,1)*0.75); } }
+  return base;
+}
+function nightNow(){ return S.dayT<0.24||S.dayT>0.76; }
+
 function HGT(x,y){
   if(CAMP_ON) return campHGT(x,y);
   const n=fbm(x*0.13+3.1,y*0.13-1.7);          // 0..1
   let h=(n-0.42)*2.30;
   const river=Math.abs(y-(MAP*0.66+Math.sin(x*0.33)*2.6+Math.cos(x*0.17)*1.2));
   h-=Math.max(0,(1.5-river))*0.42;
+  const rd=rangeDist(x,y);                    // v43: the ridges that divide the peoples
+  if(rd<3.4){ const w=1-rd/3.4; h+=w*w*(1.30+fbm(x*0.5+40.2,y*0.5-7.7)*0.9); }
+  const dc=Math.hypot(x-MAP/2,y-MAP/2);       // v43: calm basin for the village, heart of Orrim
+  if(dc<10){ const w=clamp((10-dc)/4,0,1); h=h*(1-w)+0.26*w; }
+  for(const L of LANDS){ const d=Math.hypot(x-L.x,y-L.y); if(d<L.r){ const w=clamp((L.r-d)/3,0,1); h=h*(1-w)+L.seatH*w; } }
   const rim=Math.min(x,y,MAP-x,MAP-y);
-  if(rim<4) h+=(4-rim)*0.30;                    // hills at the edges frame the view
+  if(rim<5) h+=(5-rim)*0.5;                    // the world rises at its edges
   return h;
 }
 function groundH(x,y){ return Math.max(HGT(x,y), WATER+0.015); }
@@ -549,7 +607,9 @@ function genTiles(){
   }
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
-    if(c.t===0 && c.v>0.88) c.deco='tree';
+    const L=landNear(x,y); if(L&&Math.hypot(L.x-x,L.y-y)<L.r*0.78) continue;   // kingdom seats keep their clearings
+    const forest=fbm(x*0.05+91.7,y*0.05-13.3)>0.60;                          // v43: deep forest belts between the plains
+    if(c.t===0 && c.v>(forest?0.74:0.88)) c.deco='tree';
     else if(c.t===3 && c.v>0.55) c.deco='rock';
     else if(c.t===0 && c.v<0.045) c.deco='shroom';
     else if(c.t===0 && c.v>0.30 && c.v<0.44) c.deco='tuft';
@@ -569,6 +629,7 @@ function buildWorldMesh(){
     else if(c.t===1) base=hex(DIRT);
     else if(c.t===3) base=hex(ROCK);
     else base=hex(GRASS1);
+    base=biomeBase(x,y,c,base);                  // v43: snow, deep forest, kingdom ground
     const col=shade(base, 0.94+fbm(x*0.42+11.3,y*0.42-4.1)*0.16+c.v*0.05+Math.max(0,c.h)*0.06);
     const p=[[x,hs[0],y],[x+1,hs[1],y],[x+1,hs[2],y+1],[x,hs[3],y+1]];
     // face normal from the two triangles' average so slopes shade
@@ -763,7 +824,7 @@ function findSite(){
     const flat=-(mx-mn)*6, mid=-Math.abs(sum/n-0.25)*2;
     const water=Math.min(...[[6,0],[-6,0],[0,6],[0,-6]].map(d=>{
       const c=tiles[Math.max(0,Math.min(MAP-1,y+d[1]))][Math.max(0,Math.min(MAP-1,x+d[0]))]; return c.t===2?1:0; }))*0.0;
-    const sc=flat+mid+water;
+    const sc=flat+mid+water-Math.hypot(x+0.5-MAP/2,y+0.5-MAP/2)*0.06;   // v43: the heart prefers the heart
     if(sc>bs){ bs=sc; best={x:x+0.5,y:y+0.5}; }
   }
   if(best) SITE=best;
@@ -1361,7 +1422,7 @@ function updateGob(g,dt){
 
 function updateWorld(dt){
   checkQuest(); checkGoals(); tickHints(dt); tickShare(dt); S._achT=(S._achT==null?2:S._achT)-dt; if(S._achT<=0){ S._achT=1.8; checkBadges(); }
-  tickAmbience(dt); tickWeather(dt);
+  tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt);   // v43
   S.dayT=(S.dayT+dt/200)%1;
   if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
@@ -2568,6 +2629,7 @@ function drawWorldStatics(prog, noCrops){
   M4.trs(MODEL,0,0,0,0,0,0,1,1,1);
   drawStatic(prog, WORLD, MODEL);
   for(const p of PROPS){ if(!p.mesh) continue; M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
+  if(S.wilds) for(const w of S.wilds){ if(w.hide||w.den) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v43 giants & wolves
   drawBuildings(prog, noCrops);
   drawGhost3(prog);
 }
@@ -2862,6 +2924,7 @@ function init(){
   const QRAID=QP.get('raid');
   if(QRAID){ const rv=RIVALS.find(x=>x.id===QRAID); if(rv){ if(S.war.troops<rv.cost) S.war.troops=rv.cost+3; startBattle(rv); } }
   if(QNOUI) uic.style.display='none';
+  seedLandmarks(); seedWilds();
   window.__ready=true;
   requestAnimationFrame(frame);
 }
@@ -3149,7 +3212,7 @@ function packSave(){
   return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, day:S.day, dayT:S.dayT,
     omen:S.omen, school:S.school, scholar:S.scholar, ogre:S.ogre, vanto:S.vanto,
     war:{troops:S.war.troops, won:S.war.won, cd:S.war.cd, banners:S.war.banners, treaty:S.war.treaty},
-    ach:S.ach||{},
+    ach:S.ach||{}, seen:S.seen||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0,
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
@@ -3195,7 +3258,7 @@ function restoreSave(sv){
   if(sv.vanto) Object.assign(S.vanto,sv.vanto);
   if(sv.war){ S.war.troops=sv.war.troops||0; S.war.won=sv.war.won||{}; S.war.cd=sv.war.cd||{};
     S.war.banners=sv.war.banners||[]; S.war.treaty=!!sv.war.treaty; }
-  S.ach=sv.ach||{};
+  S.ach=sv.ach||{}; S.seen=sv.seen||{};
   S.tut=sv.tut||0; S.metGob=sv.metGob||0; S.sawMap=sv.sawMap||0; S.tapCombo=sv.tapCombo||0; S.dawnSeen=sv.dawnSeen||0; S.elderHush=sv.elderHush||0; S.hints=sv.hints||{};
   S.victory=sv.victory||0; S.ceremonyDone=sv.ceremonyDone||0; S.victPhase=-1; S.victT=0;
   if(S.victory&&!S.ceremonyDone){ S.victPhase=0; S.victT=0; S._vB0=S._vB1=S._vB2=0; S._vf=0; }
@@ -3252,6 +3315,177 @@ function drawShare(){
   ctx.arc(r.x+14,r.y+r.h/2,6,-Math.PI/2,-Math.PI/2+a*TAU); ctx.stroke();
   if(S._shareWhy) txt3(S._shareWhy,r.x+r.w/2,r.y+r.h+16,9.5,'#d8c49a','center',800);
 }
+
+/* ================= v43: THE LANDS OF ORRIM =================
+   One continuous country: kingdom seats, dividing ranges, snow,
+   deep forest, giants on the white rock, werewolves in the night. */
+
+/* ---------------- landmark meshes (baked props, zero per-frame cost) ------------- */
+function buildBoneSpire(){
+  const m=MB(),T=M4.id(); const bone=hex('#d9d4c6'), bone2=hex('#b8b2a2'), glow=hex('#9fd4ff'), dark=hex('#4a4a55');
+  for(let i=0;i<3;i++){ const off=(i-1)*0.9, hh=2.7-i*0.55, offz=Math.abs(off)*0.5;
+    M4.trs(T,off,0,offz,0,0,0,1,1,1); tube(m,0.30,0.17,hh,6,i===1?bone:bone2,T,0,true,true);
+    M4.trs(T,off,hh+0.12,offz,0,0,0,1,1,1); ball(m,0.24,8,bone2,T,0,0.9); }
+  for(const sx of[-1.6,1.6]){ M4.trs(T,sx,0.85,0.35,0.55,sx>0?-0.5:0.5,0,1,1,1); tube(m,0.06,0.045,1.9,5,bone,T,0,true,true); }
+  M4.trs(T,0,2.95,0,0,0,0,1,1,1); ball(m,0.15,8,glow,T,0,1);   // the Choir's one blue light
+  M4.trs(T,0,0.06,0,0,0,0,3.4,0.12,2.6); box(m,1,1,1,dark,T,0,0.55);
+  return upload(m);
+}
+function buildVampCourt(){
+  const m=MB(),T=M4.id(); const stone=hex('#2b2030'), stone2=hex('#1c141f'), crimson=hex('#8e1e2e'), glow=hex('#ff4d5e');
+  M4.trs(T,0,1.5,0,0,0,0,1,1,1); box(m,1.5,3.0,1.5,stone,T,0,0.6);
+  M4.trs(T,0,3.35,0,0,0,0.78,1,1,1); box(m,1.9,0.36,1.9,stone2,T,0,0.6);
+  M4.trs(T,0,4.1,0,0,0,0,1,1,1); pyramid(m,1.5,1.5,1.5,crimson,T,0);
+  for(const sx of[-1.25,1.25]){ M4.trs(T,sx,1.05,0.4,0,0,0,1,1,1); tube(m,0.24,0.12,2.1,5,stone,T,0,true,true);
+    M4.trs(T,sx,2.3,0.4,0,0,0,1,1,1); pyramid(m,0.44,0.85,0.44,crimson,T,0); }
+  for(const bx of[-0.85,0.85]){ M4.trs(T,bx,2.6,0.78,0,0,0,1,1,1); box(m,0.30,1.3,0.05,crimson,T,0,0.75); }
+  M4.trs(T,0,3.05,0.78,0,0,0,1,1,1); ball(m,0.13,7,glow,T,0,1);  // the Court's red eye
+  return upload(m);
+}
+function buildWizardSpire(){
+  const m=MB(),T=M4.id(); const pale=hex('#cfd8ec'), band=hex('#5a6fa8'), glow=hex('#7fe0ff');
+  M4.trs(T,0,0,0,0,0,0,1,1,1); tube(m,0.55,0.22,4.6,8,pale,T,0,true,true);
+  for(const hy of[1.15,2.3,3.45]){ M4.trs(T,0,hy,0,0,0,0,1,1,1); tube(m,0.45-(hy*0.06),0.42-(hy*0.06),0.12,8,band,T,0,true,true); }
+  for(let i=0;i<6;i++){ const a=i/6*TAU, rr=1.05;
+    M4.trs(T,Math.cos(a)*rr,0.55+((i*0.7)%1)*0.5,Math.sin(a)*rr,0.3,a,0.35,1,1,1); pyramid(m,0.24,0.62,0.24,glow,T,0); }
+  M4.trs(T,0,4.85,0,0,0,0,1,1,1); ball(m,0.22,8,glow,T,0,1);
+  return upload(m);
+}
+function buildOgreCrag(){
+  const m=MB(),T=M4.id(); const rock=hex('#8a714f'), rock2=hex('#6f5a3e'), tusk=hex('#d8cfc0');
+  M4.trs(T,-0.9,0.3,0.2,0.2,0.6,0.1,1.5,1.1,1.3); ball(m,0.75,7,rock,T,0,0.75);
+  M4.trs(T,0.85,0.35,-0.15,-0.15,1.2,0.06,1.3,1.2,1.2); ball(m,0.8,7,rock2,T,0,0.75);
+  M4.trs(T,0,0.25,1.0,0.1,0.3,0,1.1,0.9,1.0); ball(m,0.7,7,rock,T,0,0.75);
+  for(const sx of[-0.55,0.55]){ M4.trs(T,sx,0.85,0.35,0.2,sx>0?0.35:-0.35,0,1,1,1); pyramid(m,0.16,1.3,0.16,tusk,T,0); }
+  M4.trs(T,0,1.15,0.5,0,0,0,1,1,1); tube(m,0.42,0.42,0.5,7,rock2,T,0,true,true);   // the drum
+  M4.trs(T,0,1.42,0.5,0,0,0,1,1,1); ball(m,0.47,8,tusk,T,0,0.85);
+  return upload(m);
+}
+function buildWarrens(){
+  const m=MB(),T=M4.id(); const dirt=hex('#9d8662'), dirt2=hex('#87714f'), hole=hex('#241a12'), wood=hex('#6b4a2c');
+  for(let i=0;i<4;i++){ const a=i*1.7+0.5, rr=i?1.1:0;
+    M4.trs(T,Math.cos(a)*rr,0.12,Math.sin(a)*rr,(i*0.4)%0.3,0,0,1.1,0.55,1.0); ball(m,0.62,7,i%2?dirt:dirt2,T,0,0.7);
+    M4.trs(T,Math.cos(a)*rr+0.35,0.16,Math.sin(a)*rr,0,0,0,0.34,0.28,0.12); ball(m,0.30,6,hole,T,0,0.5); }
+  for(let i=0;i<5;i++){ M4.trs(T,-1.3+i*0.16,0.2,-1.1,0,0.2*i,0.06,1,1,1); box(m,0.05,0.5,0.05,wood,T,0,0.7); }
+  return upload(m);
+}
+function buildHollow(){
+  const m=MB(),T=M4.id(); const stem=hex('#e2d7c2'), cap=hex('#c3402e'), cap2=hex('#e0884f');
+  for(const spec of[[0,0,1.7],[0.9,0.55,1.15],[-0.85,0.7,0.95]]){ const ox=spec[0],oz=spec[1],sc=spec[2];
+    M4.trs(T,ox,0,oz,0,0,0,sc,sc,sc); tube(m,0.28,0.36,0.9,7,stem,T,0,true,true);
+    M4.trs(T,ox,0.86*sc+0.1,oz,0,0.4,0,sc*1.25,sc*0.62,sc*1.25); ball(m,0.5,8,sc>1.3?cap:cap2,T,0,0.85); }
+  const P0=KP.mushroom_redGroup;
+  for(let i=0;i<3;i++){ const a=i*2.1; M4.trs(T,Math.cos(a)*1.5,0,Math.sin(a)*1.5,0,a,0,1.5,1.5,1.5); kpush(m,P0,T,0.85); }
+  return upload(m);
+}
+function buildRidge(){
+  const m=MB(),T=M4.id(); const stone=hex('#7a7368'), stone2=hex('#5d574d'), roof=hex('#4c463e'), glow=hex('#e8b84d');
+  M4.trs(T,0,0.42,0,0,0,0,1,1,1); box(m,2.4,0.84,1.4,stone,T,0,0.65);
+  M4.trs(T,0,1.05,0,0,0,0.78,1,1,1); pyramid(m,1.5,0.66,1.0,roof,T,0);
+  M4.trs(T,-1.5,0.3,0.3,0,0.4,0,1,1,1); box(m,0.8,0.6,0.9,stone2,T,0,0.65);
+  M4.trs(T,1.45,0.55,-0.2,0,-0.3,0,1,1,1); tube(m,0.3,0.22,1.1,6,stone2,T,0,true,true);
+  M4.trs(T,0,0.9,0.71,0,0,0,1,1,1); ball(m,0.11,6,glow,T,0,1);   // forge-light in the door
+  for(const sx of[-0.5,0,0.5]){ M4.trs(T,sx,1.35,0,0,0,0,1,1,1); box(m,0.05,0.55,0.05,stone2,T,0,0.7); }
+  return upload(m);
+}
+function buildBedlam(){
+  const m=MB(),T=M4.id(); const char=hex('#1d1310'), char2=hex('#140c0a'), bone=hex('#8a7a63'), bone2=hex('#6b5c48'), ember=hex('#ff9e4d'), ember2=hex('#e05c1f');
+  M4.trs(T,0,0.14,0,0.06,0.8,0.04,3.6,0.3,3.0); ball(m,0.8,8,char2,T,0,0.55);                 // the scar swells
+  for(const rx of[-1.35,0,1.35]){                                                               // His ribs, half-buried
+    for(let k=0;k<4;k++){ const t2=k/3, yy=Math.sin(t2*Math.PI*0.85)*1.7, zz=Math.cos(t2*Math.PI*0.85)*1.1;
+      M4.trs(T,rx+zz*0.85,0.15+yy*0.5,zz*0.72, t2*1.35, 0, 0, 1,1,1); tube(m,0.13,0.10,0.9,5,k<2?bone:bone2,T,0,true,true); } }
+  for(const spec of[[0,0.62,0.14],[0.22,0.5,0.1],[-0.2,0.46,0.11],[0.05,0.78,0.09]]){            // the slow ember heart
+    M4.trs(T,spec[0],spec[1],0.15,0,0,0,1,1,1); ball(m,spec[2],7,spec[0]===0?ember:ember2,T,0,1); }
+  for(const sx of[-0.8,0.85]){ M4.trs(T,sx,0.5,-0.6,0,sx>0?-0.35:0.35,0,1,1,1); pyramid(m,0.2,1.0,0.2,char,T,0); }  // char fangs
+  return upload(m);
+}
+function buildDragonCoil(){
+  const m=MB(),T=M4.id(); const scale=hex('#6b3d1f'), scale2=hex('#4a2a14'), belly=hex('#c8a35c'), eye=hex('#ffb34d');
+  for(let i=0;i<5;i++){ const rr=2.6-i*0.45;
+    M4.trs(T,0,i*0.5,0,0,0,0,1,1,1); tube(m,rr,rr-0.42,0.55,10,i%2?scale:scale2,T,0,true,true); }
+  M4.trs(T,0,2.45,0,0,0,0,1,1,1); tube(m,0.55,0.40,1.1,8,belly,T,0,true,true);      // the neck rises out of the coils
+  M4.trs(T,0,3.6,0.15,0.12,0,0,1,1,1); box(m,0.95,0.75,1.15,scale,T,0,0.7);         // head
+  M4.trs(T,0,3.42,0.95,0.35,0,0,1,1,1); box(m,0.5,0.28,0.8,scale2,T,0,0.7);         // snout
+  for(const sz of[-0.34,0.34]){ M4.trs(T,sz,3.85,0.62,0,0,0,1,1,1); ball(m,0.12,6,eye,T,0,1); }   // eyes like two small suns
+  for(const sz of[-0.3,0.3]){ M4.trs(T,sz,4.15,-0.05,-0.3,0,sz>0?0.25:-0.25,1,1,1); pyramid(m,0.2,0.8,0.2,scale2,T,0); } // horns
+  for(const sx of[-1.9,1.9]){ M4.trs(T,sx,2.1,-0.6,0,sx>0?0.9:-0.9,sx>0?-0.35:0.35,1,1,1); pyramid(m,2.4,2.6,0.24,scale,T,0); } // folded wings, huge
+  return upload(m);
+}
+function seedLandmarks(){
+  const B={bone:buildBoneSpire,crimson:buildVampCourt,spire:buildWizardSpire,crag:buildOgreCrag,warrens:buildWarrens,hollow:buildHollow,ridge:buildRidge,bedlam:buildBedlam,vulkarrax:buildDragonCoil};
+  for(const L of LANDS) PROPS.push({mesh:B[L.id](), x:L.x, y:L.y, r:0, gy:groundH(L.x,L.y)-0.02, land:L.id});
+}
+
+/* ---------------- wilds: giants on the white range, werewolves in the night forests ------------- */
+function buildGiantMesh(){
+  const m=MB(),T=M4.id(); const hide=hex('#9ab4c8'), hide2=hex('#7e98ac'), frost=hex('#e8f2fa');
+  for(const sx of[-0.42,0.42]){ M4.trs(T,sx,0.55,0,0,0,0,1,1,1); box(m,0.5,1.1,0.5,hide2,T,0,0.6); }
+  M4.trs(T,0,1.75,0,0,0,0,1,1,1); box(m,1.5,1.35,0.85,hide,T,0,0.7);
+  for(const sx of[-1.0,1.0]){ M4.trs(T,sx,1.8,0,0,0,sx>0?-0.15:0.15,1,1,1); tube(m,0.26,0.20,1.5,6,hide,T,0,true,true); }
+  M4.trs(T,0,2.75,0,0,0,0,1,1,1); ball(m,0.5,8,hide,T,0,0.9);
+  for(let i=0;i<5;i++){ const a=i/5*TAU; M4.trs(T,Math.cos(a)*0.42,3.16,Math.sin(a)*0.42,0,-a,0.5,1,1,1); pyramid(m,0.14,0.4,0.14,frost,T,0); }
+  return upload(m);
+}
+function buildWolfMesh(){
+  const m=MB(),T=M4.id(); const fur=hex('#26262e'), fur2=hex('#1a1a20'), eye=hex('#ffd34d');
+  M4.trs(T,0,0.42,0,0,0,0,1,1,1); box(m,1.05,0.44,0.40,fur,T,0,0.6);
+  M4.trs(T,0.62,0.62,0,0,0,0,1,1,1); box(m,0.42,0.34,0.34,fur2,T,0,0.65);          // head
+  for(const sz of[-0.11,0.11]){ M4.trs(T,0.72,0.86,sz,0.2,0,0,1,1,1); pyramid(m,0.09,0.24,0.09,fur,T,0); } // ears
+  for(const sz of[-0.075,0.075]){ M4.trs(T,0.84,0.66,sz,0,0,0,1,1,1); box(m,0.03,0.05,0.05,eye,T,0,1); }     // eyes
+  for(const lx of[-0.35,0.35]) for(const lz of[-0.13,0.13]){ M4.trs(T,lx,0.15,lz,0,0,0,1,1,1); box(m,0.11,0.34,0.11,fur2,T,0,0.55); }
+  M4.trs(T,-0.62,0.5,0,0,0,0.5,1,1,1); box(m,0.5,0.12,0.12,fur2,T,0,0.6);           // tail
+  return upload(m);
+}
+function seedWilds(){
+  S.wilds=[];
+  const G=buildGiantMesh();
+  const spots=[[10,18],[15,13],[21,7]];
+  for(const sp of spots){ let x=sp[0],y=sp[1];
+    for(let k=0;k<10&&HGT(x,y)<0.55;k++){ x+=0.5; y-=0.5; }
+    S.wilds.push({giant:1, mesh:G, x, y, a:0, spd:0.38, tx:x, ty:y, repick:0, bob:0, ph:rnd(TAU)}); }
+  const W=buildWolfMesh(); let placed=0;
+  for(let y=2;y<MAP-2&&placed<4;y++) for(let x=2;x<MAP-2&&placed<4;x++){
+    const c=tiles[y][x]; if(c.t!==0) continue;
+    if(fbm(x*0.05+91.7,y*0.05-13.3)<=0.60) continue;
+    if(Math.hypot(x-SITE.x,y-SITE.y)<13) continue; if(landNear(x,y)) continue;
+    placed++; S.wilds.push({wolf:1, mesh:W, x:x+0.5, y:y+0.5, a:rnd(TAU), spd:1.5, tx:x, ty:y, repick:0, bob:0, ph:rnd(TAU), den:false});
+  }
+}
+function wildTick(dt){
+  if(!S.wilds) return;
+  for(const w of S.wilds){
+    if(w.wolf){ w.den=!nightNow(); if(w.den) { w.bob=0; continue; } }
+    const d=Math.hypot(w.tx-w.x,w.ty-w.y);
+    if(d<0.4){ if((w.repick-=dt)<=0){ w.repick=rnd(4,2);
+        const rr=w.giant?3.2:4.5;
+        w.tx=clamp(w.x+rnd(rr,-rr),1,MAP-2); w.ty=clamp(w.y+rnd(rr,-rr),1,MAP-2);
+        if(w.giant){ for(let k=0;k<8&&HGT(w.tx,w.ty)<0.5;k++){ w.tx+=rnd(1.5,-1.5); w.ty+=rnd(1.5,-1.5); } } } }
+    else { const a=Math.atan2(w.tx-w.x,w.ty-w.y);
+      const spd=w.spd*(nightNow()&&!w.wolf?0.6:1);
+      w.x+=Math.sin(a)*spd*dt; w.y+=Math.cos(a)*spd*dt; w.a=a; w.bob=Math.abs(Math.sin(G.t*(w.giant?2.2:7)))*(w.giant?0.06:0.05); }
+    w.gy=groundH(w.x,w.y);
+  }
+}
+/* ---------------- discovery: the elder names the lands ------------- */
+function tickLands(dt){
+  if(!S.started||S.mode!=='village') return;
+  S._landT=(S._landT==null?1.2:S._landT)-dt; if(S._landT>0) return; S._landT=0.6;
+  S.seen=S.seen||{};
+  const cx=FP.on?FP.x:CAM.tx, cy=FP.on?FP.y:CAM.ty;
+  for(const L of LANDS){ if(!S.seen[L.id]&&Math.hypot(cx-L.x,cy-L.y)<L.r+1.2){ S.seen[L.id]=1;
+      banner2(L.name,L.tag); chron(L.chron); A.say(8); saveGame(); break; } }
+  if(!S.seen.wolves&&nightNow()&&S.wilds){ for(const w of S.wilds){ if(w.wolf&&!w.den&&Math.hypot(cx-w.x,cy-w.y)<8){
+      S.seen.wolves=1; banner2('SHAPES IN THE TREELINE','the night has its own people');
+      chron('Something with bright eyes paced the treeline. The elder made the mud-sign. Werewolves, he said, the way he says weather.'); A.say(9); howlFar(); saveGame(); break; } } }
+  if(!S.seen.giants&&S.wilds){ for(const w of S.wilds){ if(w.giant&&Math.hypot(cx-w.x,cy-w.y)<9){
+      S.seen.giants=1; banner2('GIANTS ON THE WHITE ROCK','the elder says nothing for a very long time');
+      chron('The brood watched a giant cross the white range, patient as weather. The elder said nothing for a very long time.'); A.say(10); saveGame(); break; } } }
+  if(rnd(1)<0.5){ const L=landNear(cx,cy); if(L&&Math.hypot(cx-L.x,cy-L.y)<L.r+6){       // kingdom ambience
+      for(let i=0;i<2;i++){ const a=rnd(TAU), rr=rnd(L.r);
+        S.parts.push({x:L.x+Math.sin(a)*rr, y:HGT(L.x+Math.sin(a)*rr,L.y+Math.cos(a)*rr)+0.5+rnd(0.8), z:L.y+Math.cos(a)*rr,
+          vx:rnd(0.1,-0.1), vy:L.down?(-0.05-rnd(0.08)):(0.05+rnd(0.08)), vz:rnd(0.1,-0.1), t:0, life:2.4, col:L.amb, size:0.05}); } } }
+}
+function howlFar(){ A.tone(520,1.5,{type:'sawtooth',vol:0.16,slide:170}); A.tone(780,1.0,{type:'sine',vol:0.09,slide:380,delay:0.14}); }
 /* ===================== next-step hints (v24) ========================== */
 const HINTS=[
  {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
