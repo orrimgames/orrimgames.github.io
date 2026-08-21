@@ -43,7 +43,7 @@ function fbm(x,y){ let s=0,a=0.5,f=1; for(let i=0;i<4;i++){ s+=vnoise(x*f,y*f)*a
 /* ============ v59 GLOBE KERNEL - one source, shared by preview + game ============
    World born ON the sphere. One 3D noise field sampled by direction.
    Height below 0 IS the ocean. No square, no rim, no boundary conditions. */
-const R_WORLD=200;             // Daniel's call: option A - the world IS the ball
+const R_WORLD=150;             // v60 SPHERE YOU CAN FEEL - curvature at play altitude, all seat tilts under 17
 const SEA=0.0;
 function hash3(x,y,z){ const s=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453; return s-Math.floor(s); }
 function vnoise3(x,y,z){
@@ -678,7 +678,7 @@ function poseGoblin(g,t){
 /* ============================== world =================================== */
 let SKIN=null, SKIND=null, GOB=null, CLUB=null, WORLD=null, PROPS=[];
 const MAP=60;  // v43: one continuous land
-const PLANET_R=200;  // v59: option A - the map cap and the far lands ride the SAME small ball
+const PLANET_R=150;   // v60 SPHERE YOU CAN FEEL - the ground bows, the sea falls away
 function DROP(x,y){ const dx=x-SITE.x, dz=y-SITE.y, r2=dx*dx+dz*dz;
   return PLANET_R - Math.sqrt(Math.max(PLANET_R*PLANET_R - r2, 0.01)); }
 const tiles=[];
@@ -2833,7 +2833,7 @@ const QMAX=46;    // v59: same 13 degrees of great arc on the small ball
 function clampCam3(){
   const qx=CAM.tx-SITE.x, qy=CAM.ty-SITE.y, q=Math.hypot(qx,qy);
   if(q>QMAX){ CAM.tx=SITE.x+qx/q*QMAX; CAM.ty=SITE.y+qy/q*QMAX; }
-  CAM.zoom=clamp(CAM.zoom,0.022,1.9);
+  CAM.zoom=clamp(CAM.zoom,0.030,1.9);   // v60: ball shot tops out near dz 500
 }
 function setCamera(){
   const asp=glc.width/glc.height;
@@ -2847,7 +2847,7 @@ function setCamera(){
     const far=clamp(dz2*4+220, 480, 32000), near=clamp(far/2200, 0.35, 24);   // v52: one continuous view volume, boots to ball
     M4.persp(PROJ, 0.62, asp, near, far);
     const e=camEye();
-    const d=CAM.dist/CAM.zoom, lah=0.30*Math.cos(CAM.pitch)*Math.min(d,26.7);   // v52: look-ahead fades as the ball grows
+    const d=CAM.dist/CAM.zoom, lah=0.30*Math.cos(CAM.pitch)*Math.min(d,26.7);   // v52: look-ahead fades as the ball grows (unchanged at R=110: village distances are the same units)
     M4.look(VIEW, e[0],e[1],e[2], CAM.tx-Math.sin(CAM.yaw)*lah, CAM.gzh, CAM.ty-Math.cos(CAM.yaw)*lah, 0,1,0);
   }
   M4.mul(VP, PROJ, VIEW);
@@ -2947,7 +2947,7 @@ function scenePass(prog, skinProg){
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
   if(skinProg.u.uSun) setEnv(skinProg);
-  if(CAM.dist/CAM.zoom<340) drawGobs(skinProg);   // v52: sub-pixel cull, not a mode
+  if(CAM.dist/CAM.zoom<170) drawGobs(skinProg);   // v60: sub-pixel cull at the felt-ball scale
 }
 const V_WATER=`
 attribute vec3 aPos; attribute float aAo;
@@ -2987,7 +2987,7 @@ void main(){
 let WPROG2=null, PSEP=null, SKYCOL=null;
 function drawAtmo(){
   if(!ATMOM||!ATMOP) return;
-  const aOrb=clamp((CAM.dist/CAM.zoom-90)/330,0,1);   // v59: air grows as you rise - no switch
+  const aOrb=clamp((CAM.dist/CAM.zoom-45)/170,0,1);   // v60: air grows as you rise - no switch
   if(aOrb<=0.01) return;
   gl.useProgram(ATMOP.p);
   gl.uniformMatrix4fv(ATMOP.u.uVP,false,VP);
@@ -3024,8 +3024,9 @@ const F_PSEA=`precision mediump float; varying vec3 vW; varying float vDep;
   float d=distance(vW,uEye);
   float f=1.0-exp(-pow(d/uFogD,1.7));
   float eh=max(uEyeH-(0.0),1.5);
-  float hMax=sqrt(2.0*200.0*eh+eh*eh);                  // v59: horizon of the small ball's sea from this eye
-  f=max(f,smoothstep(hMax*0.45,hMax*0.85,d));           // the sea melts into the sky before its rim - no edge
+  float hMax=sqrt(2.0*150.0*eh+eh*eh);                  // v60: horizon of the felt-curvature ball
+  float ok=clamp((eh-40.0)/220.0,0.0,1.0);              // v60: from the mud, the limb DRAWS
+  f=max(f,smoothstep(hMax*(0.85-0.40*ok),hMax*(1.10-0.25*ok),d));   // melt owns the rim only up high
   vec3 sky=mix(uSkyA,uSkyB,clamp(d/(uFogD*2.2),0.0,1.0));
   gl_FragColor=vec4(mix(col,sky,f),0.97);
  }`;
@@ -3084,7 +3085,7 @@ function drawSky(){
   const top=LX(ka[1],kb[1]), mid=LX(ka[2],kb[2]), bot=LX(ka[3],kb[3]);
   const night=lerp(ka[4],kb[4],u);
   // v59/G3: the sky thins toward night as you rise. SKYSPACE=0 kills this in one line.
-  const SKYSPACE=0.75, sa=clamp((CAM.dist/CAM.zoom-110)/420,0,1)*SKYSPACE*(1-night);
+  const SKYSPACE=0.75, sa=clamp((CAM.dist/CAM.zoom-60)/220,0,1)*SKYSPACE*(1-night);   // v60: space arrives with the smaller ball
   const NT=[0.05,0.08,0.18], NM=[0.10,0.13,0.26], NB=[0.14,0.17,0.30];
   if(sa>0){ for(let i2=0;i2<3;i2++){ top[i2]=lerp(top[i2],NT[i2],sa); mid[i2]=lerp(mid[i2],NM[i2],sa); bot[i2]=lerp(bot[i2],NB[i2],sa); } }
   gl.uniform3fv(SPROG.u.uTop,top);
@@ -3102,7 +3103,7 @@ function drawSky(){
 function render(){
   G.dc=0; G.tri=0;
   setCamera(); setLight();
-  if(SHADOW.on&&CAM.dist/CAM.zoom<260){   // v52: altitude cull, invisible at range
+  if(SHADOW.on&&CAM.dist/CAM.zoom<140){   // v60: altitude cull, invisible at range
     let growing=false;
     for(const b of S.buildings) if(b.pop<1){ growing=true; break; }
     if(shadowDirty||growing){
@@ -3143,7 +3144,9 @@ function frame(ts){
   updateSun();
   if(CAM.mode==='iso'){ const g=groundH(CAM.tx,CAM.ty); CAM.gzh+=(g-CAM.gzh)*Math.min(1,G.dt*6); }
   const dz=CAM.dist/CAM.zoom;   // v52: altitude alone decides framing - there is no orbit state
-  if(S.introZoom>0){ S.introZoom=Math.max(0,S.introZoom-G.dt*0.5); CAM.zoom=lerp(1,0.8,S.introZoom); }
+  if(S.introZoom>0){ S.introZoom=Math.max(0,S.introZoom-G.dt*0.34);   // v60: every session opens ON the ball
+    CAM.zoom=1.0-(1.0-0.05)*Math.pow(S.introZoom,0.75);
+    CAM.yaw+=G.dt*0.10; shadowDirty=true; }
   if(S._holdT!=null){ if(!S.started&&saveExists&&touches.size===1&&G.t-S._holdT>1.5){ S._holdT=null; _wiping=true; clearSave(); location.reload(); } else if(touches.size!==1) S._holdT=null; }
   driveCeremony(G.dt);
   const tA=performance.now();
@@ -3576,7 +3579,7 @@ function drawInspect2(){
 function jobName2(j){ return {farmer:'Farmer',woodcutter:'Woodcutter',miner:'Stonecutter',digger:'Gold digger',idler:'Layabout',soldier:'Warrior'}[j]||j; }
 function moodWord2(m){ return m>0.8?'delighted':m>0.6?'happy':m>0.4?'fine':'grumbly'; }
 function drawFloats2(){
-  if(CAM.mode!=='fp' && CAM.dist/CAM.zoom>300) return;   // v59/G3: 1-2px toasts at orbit read as artifacts
+  if(CAM.mode!=='fp' && CAM.dist/CAM.zoom>160) return;   // v60: 1-2px toasts at orbit read as artifacts
   for(const f of S.floats){
     const p=projPt(f.x,f.y,f.z); if(!p) continue;
     const a=clamp(f.life*1.6,0,1);
@@ -4378,7 +4381,7 @@ function moveStep(e){
   } else if(v.length>=2){
     const d=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y);
     if(pinchLast>0){ const pr=d/pinchLast;
-      CAM.zoom=clamp(CAM.zoom*pr,0.022,1.9); }   // v52: pinch-out IS the orbit - no trigger
+      CAM.zoom=clamp(CAM.zoom*pr,0.030,1.9); }   // v52: pinch-out IS the orbit - no trigger
     pinchLast=d;
     const rot=Math.atan2(v[0].y-v[1].y,v[0].x-v[1].x);
     CAM.yaw=CAM.yaw-(rot-rotLast)*0.85;
