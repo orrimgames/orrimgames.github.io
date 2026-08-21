@@ -624,8 +624,10 @@ function HGT(x,y){
   if(rd<3.4){ const w=1-rd/3.4; h+=w*w*(1.30+fbm(x*0.5+40.2,y*0.5-7.7)*0.9); }
   const dc=Math.hypot(x-MAP/2,y-MAP/2);       // v43: calm basin for the village, heart of Orrim
   if(dc<10){ const w=clamp((10-dc)/4,0,1); h=h*(1-w)+0.26*w; }
-  const rim=Math.min(x,y,MAP-x,MAP-y);
-  if(rim<8){ const k=8-rim; h-=k*k*0.055; }   // v46/P1: the land falls away into the sea
+  const ca=Math.atan2(y-MAP/2,x-MAP/2);
+  const coastR=29+4.5*fbm(Math.cos(ca)*3+50.3, Math.sin(ca)*3+50.3);   // v50e: the continent is a body, not a square
+  const df=dc-coastR;
+  if(df>-6){ const k=df+6; h-=k*k*0.052; }   // the land falls away into the sea, following its own outline
   for(const L of LANDS){ const d=Math.hypot(x-L.x,y-L.y); if(d<L.r){ const w=clamp((L.r-d)/3,0,1); h=h*(1-w)+L.seatH*w; } }   // seats (and the god) rise above even the shore
   return h;
 }
@@ -696,7 +698,7 @@ function buildWorldMesh(){
     if(c.t===2){ // v24: water gets its own animated mesh; ao channel carries corner foam
       const fm=(cx,cy)=>{ for(let dy=-1;dy<=0;dy++)for(let dx=-1;dx<=0;dx++){
         const nx=cx+dx, ny=cy+dy;
-        if(nx<0||ny<0||nx>=MAP||ny>=MAP) return 1;
+        if(nx<0||ny<0||nx>=MAP||ny>=MAP) return 0;
         if(tiles[ny][nx].t!==2) return 1; } return 0; };
       const wv=[x,WATER-DROP(x,y),y, x+1,WATER-DROP(x+1,y),y, x+1,WATER-DROP(x+1,y+1),y+1, x,WATER-DROP(x,y+1),y+1];
       const fc=[fm(x,y),fm(x+1,y),fm(x+1,y+1),fm(x,y+1)];
@@ -2811,7 +2813,7 @@ function scenePass(prog, skinProg){
   if(prog.u.uSun) setEnv(prog);
   drawWorldStatics(prog);
   drawWater();
-  if(prog===PROG&&PLANETL){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }
+  if(prog===PROG&&PLANETL&&(S.orbit||CAM.dist/CAM.zoom>700)){ gl.useProgram(prog.p); drawMesh(prog,PLANETL); }
   gl.useProgram(skinProg.p);
   gl.uniformMatrix4fv(skinProg.u.uVP,false,VP);
   gl.uniformMatrix4fv(skinProg.u.uLightVP,false,LVP);
@@ -2832,6 +2834,7 @@ const F_WATER=`
 precision mediump float;
 varying vec3 vW; varying float vF;
 uniform highp float uT; uniform highp vec3 uSun;
+uniform vec3 uEye; uniform vec3 uSkyA; uniform vec3 uSkyB; uniform float uFogD;
 void main(){
   float day=clamp(uSun.y*1.35+0.28,0.14,1.0);
   float r1=sin(vW.x*3.4+uT*1.7+sin(vW.z*2.2-uT*1.3)*1.4);
@@ -2839,14 +2842,18 @@ void main(){
   float band=0.5+0.5*r1*r2;
   vec3 col=mix(vec3(0.04,0.26,0.40),vec3(0.10,0.50,0.68),band);
   col=mix(col,vec3(0.45,0.82,0.90),pow(band,2.2)*0.45);
+  float sd=smoothstep(27.0, 20.0, distance(vW.xz, vec2(30.5,30.5)));   // glint dies at the continent's rim
   float sp=pow(band,8.0);
-  col+=sp*vec3(0.80,0.95,1.0)*(0.25+0.55*day);
+  col+=sp*vec3(0.80,0.95,1.0)*(0.25+0.55*day)*sd;
   float sp2=pow(0.5+0.5*sin(vW.x*12.3+vW.z*10.7+uT*3.6)*sin(vW.x*8.7-vW.z*13.9-uT*2.8),9.0);
-  col+=sp2*vec3(0.9,1.0,1.0)*(0.15+0.55*day);
+  col+=sp2*vec3(0.9,1.0,1.0)*(0.15+0.55*day)*sd;
   float foam=vF*(0.60+0.40*sin(uT*2.4+vW.x*5.3+vW.z*4.1));
   col=mix(col,vec3(0.92,0.97,0.98),clamp(foam,0.0,1.0)*0.8);
   col*=day;
-  gl_FragColor=vec4(col,0.92);
+  float dd=distance(vW,uEye);
+  float ff=1.0-exp(-pow(dd/max(uFogD,1.0),1.7));
+  vec3 sky=mix(uSkyA,uSkyB,clamp(dd/(max(uFogD,1.0)*2.2),0.0,1.0));
+  gl_FragColor=vec4(mix(col,sky,ff),0.92);
 }`;
 let WPROG2=null, PSEP=null, SKYCOL=null;
 function drawAtmo(){
@@ -2867,8 +2874,8 @@ const F_PSEA=`precision mediump float; varying vec3 vW;
   float day=clamp(uSun.y*1.35+0.28,0.14,1.0);
   float b1=0.5+0.5*sin(vW.x*0.045+sin(vW.z*0.037+uT*0.10)*1.4+uT*0.13);
   float b2=0.5+0.5*sin(vW.z*0.050-uT*0.09+sin(vW.x*0.031+1.7)*1.2);
-  vec3 col=mix(vec3(0.05,0.20,0.33),vec3(0.09,0.34,0.50),b1*b2);
-  col=mix(col,vec3(0.20,0.45,0.60),pow(b1*b2,3.0)*0.5);
+  vec3 col=mix(vec3(0.045,0.25,0.39),vec3(0.09,0.47,0.64),b1*b2);
+  col=mix(col,vec3(0.35,0.70,0.80),pow(b1*b2,3.0)*0.4);
   col*=day;
   float d=distance(vW,uEye);
   float f=1.0-exp(-pow(d/uFogD,1.7));
@@ -2881,6 +2888,12 @@ function drawWater(){
   gl.uniformMatrix4fv(WPROG2.u.uVP,false,VP);
   gl.uniform1f(WPROG2.u.uT,G.t);
   if(WPROG2.u.uSun) gl.uniform3fv(WPROG2.u.uSun,SUN);
+  if(SKYCOL){ const e=camEye();
+    if(WPROG2.u.uEye) gl.uniform3f(WPROG2.u.uEye,e[0],e[1],e[2]);
+    if(WPROG2.u.uSkyA) gl.uniform3fv(WPROG2.u.uSkyA,SKYCOL.mid);
+    if(WPROG2.u.uSkyB) gl.uniform3fv(WPROG2.u.uSkyB,SKYCOL.bot);
+    if(WPROG2.u.uFogD) gl.uniform1f(WPROG2.u.uFogD, clamp((CAM.dist/CAM.zoom)*1.5, 500, 24000));
+  }
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   drawMesh(WPROG2,WATERM);
   if(PLANETM&&PSEP&&SKYCOL){
