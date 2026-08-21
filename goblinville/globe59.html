@@ -1,0 +1,260 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0;background:#000;overflow:hidden}canvas{display:block;width:100vw;height:100vh;touch-action:none}</style></head>
+<body><canvas id="c"></canvas><script>
+/* minimal GL scaffold for the G1 preview (the game's MB/upload/program live in-game; this is their twin) */
+const cvs=document.getElementById('c'), gl=cvs.getContext('webgl',{antialias:true});
+function rs(){ const d=Math.min(devicePixelRatio,2); cvs.width=innerWidth*d; cvs.height=innerHeight*d; gl.viewport(0,0,cvs.width,cvs.height); }
+addEventListener('resize',rs); rs();
+const TAU=Math.PI*2, clamp=(v,a,b)=>v<a?a:(v>b?b:v), lerp=(a,b,t)=>a+(b-a)*t, rnd=(a,b)=>b===undefined?Math.random()*a:b+Math.random()*(a-b);
+const M4={
+ id(){return new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]);},
+ mul(o,a,b){for(let J=0;J<16;J++){const c=J&3,r=J>>2;o[J]=a[c]*b[r*4]+a[c+4]*b[r*4+1]+a[c+8]*b[r*4+2]+a[c+12]*b[r*4+3];}return o;},
+ persp(o,f,asp,n,fa){const t=1/Math.tan(f/2);o.set([t/asp,0,0,0, 0,t,0,0, 0,0,(fa+n)/(n-fa),-1, 0,0,2*fa*n/(n-fa),0]);return o;},
+ look(o,ex,ey,ez,tx,ty,tz,ux,uy,uz){let fx=tx-ex,fy=ty-ey,fz=tz-ez;let l=Math.hypot(fx,fy,fz);fx/=l;fy/=l;fz/=l;
+  let sx=fy*uz-fz*uy,sy=fz*ux-fx*uz,sz=fx*uy-fy*ux;l=Math.hypot(sx,sy,sz);sx/=l;sy/=l;sz/=l;
+  const xu=sy*fz-sz*fy,yu=sz*fx-sx*fz,zu=sx*fy-sy*fx;
+  o.set([sx,xu,-fx,0, sy,yu,-fy,0, sz,zu,-fz,0, -(sx*ex+sy*ey+sz*ez),-(xu*ex+yu*ey+zu*ez),(fx*ex+fy*ey+fz*ez),1]);return o;}
+};
+function MB(){ return {pos:[],nor:[],col:[],ao:[],bone:[],idx:[],n:0}; }
+function upload(m){ const o={count:m.idx.length};
+ o.pos=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,o.pos); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(m.pos),gl.STATIC_DRAW);
+ o.nor=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,o.nor); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(m.nor),gl.STATIC_DRAW);
+ o.col=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,o.col); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(m.col),gl.STATIC_DRAW);
+ o.ao=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,o.ao); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(m.ao),gl.STATIC_DRAW);
+ o.idx=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,o.idx); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(m.idx),gl.STATIC_DRAW);
+ return o; }
+function shader(t,src){ const s=gl.createShader(t); gl.shaderSource(s,src); gl.compileShader(s);
+ if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+function program(vs,fs,attrs){ const p=gl.createProgram();
+ gl.attachShader(p,shader(gl.VERTEX_SHADER,vs)); gl.attachShader(p,shader(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(p);
+ if(!gl.getProgramParameter(p,gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+ const o={p,a:{},u:{}}; for(const a of attrs) o.a[a]=gl.getAttribLocation(p,a);
+ const n=gl.getProgramParameter(p,gl.ACTIVE_UNIFORMS);
+ for(let i=0;i<n;i++){ const info=gl.getActiveUniform(p,i); o.u[info.name.replace('[0]','')]=gl.getUniformLocation(p,info.name); }
+ return o; }
+function drawMesh(pr,m){
+ gl.bindBuffer(gl.ARRAY_BUFFER,m.pos); gl.enableVertexAttribArray(pr.a.aPos); gl.vertexAttribPointer(pr.a.aPos,3,gl.FLOAT,false,0,0);
+ if(pr.a.aNor>=0&&m.nor){ gl.bindBuffer(gl.ARRAY_BUFFER,m.nor); gl.enableVertexAttribArray(pr.a.aNor); gl.vertexAttribPointer(pr.a.aNor,3,gl.FLOAT,false,0,0); }
+ if(pr.a.aCol>=0&&m.col){ gl.bindBuffer(gl.ARRAY_BUFFER,m.col); gl.enableVertexAttribArray(pr.a.aCol); gl.vertexAttribPointer(pr.a.aCol,3,gl.FLOAT,false,0,0); }
+ if(pr.a.aAo>=0&&m.ao){ gl.bindBuffer(gl.ARRAY_BUFFER,m.ao); gl.enableVertexAttribArray(pr.a.aAo); gl.vertexAttribPointer(pr.a.aAo,1,gl.FLOAT,false,0,0); }
+ gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,m.idx); gl.drawElements(gl.TRIANGLES,m.count,gl.UNSIGNED_SHORT,0); }
+</script>
+<script>
+/* ============ v59 GLOBE KERNEL - one source, shared by preview + game ============
+   World born ON the sphere. One 3D noise field sampled by direction.
+   Height below 0 IS the ocean. No square, no rim, no boundary conditions. */
+const R_WORLD=200;             // Daniel's call: option A - the world IS the ball
+const SEA=0.0;
+function hash3(x,y,z){ const s=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453; return s-Math.floor(s); }
+function vnoise3(x,y,z){
+  const xi=Math.floor(x), yi=Math.floor(y), zi=Math.floor(z);
+  const xf=x-xi, yf=y-yi, zf=z-zi;
+  const sm=t=>t*t*(3-2*t), u=sm(xf), v=sm(yf), w=sm(zf);
+  let r=0;
+  for(const [dx,dy,dz,wt] of [[0,0,0,(1-u)*(1-v)*(1-w)],[1,0,0,u*(1-v)*(1-w)],[0,1,0,(1-u)*v*(1-w)],[1,1,0,u*v*(1-w)],
+                              [0,0,1,(1-u)*(1-v)*w],[1,0,1,u*(1-v)*w],[0,1,1,(1-u)*v*w],[1,1,1,u*v*w]])
+    r+=hash3(xi+dx,yi+dy,zi+dz)*wt;
+  return r;
+}
+function fbm3(x,y,z,oct){ let s=0,a=0.5,f=1,n=0; for(let i=0;i<(oct||4);i++){ s+=vnoise3(x*f,y*f,z*f)*a; n+=a; f*=2; a*=0.5; } return s/n; }
+
+/* cube-sphere: 6 faces of quads; dir = normalize(cube point). face: 0:+X 1:-X 2:+Y 3:-Y 4:+Z 5:-Z */
+function cubeDir(face,u,v,out){        // u,v in [-1,1]; writes unit dir into out[3]
+  let x,y,z;
+  switch(face){
+    case 0: x= 1; y=-v; z=-u; break;
+    case 1: x=-1; y=-v; z= u; break;
+    case 2: x= u; y= 1; z= v; break;
+    case 3: x= u; y=-1; z=-v; break;
+    case 4: x= u; y=-v; z= 1; break;
+    default:x=-u; y=-v; z=-1;
+  }
+  const l=Math.hypot(x,y,z); out[0]=x/l; out[1]=y/l; out[2]=z/l; return out;
+}
+
+/* --- the world field: everything hangs off the direction --- */
+const RIDGE_A1=[0.9,0.31,0.30], RIDGE_A2=[-0.2,0.97,0.14];   // two great-circle ranges (the White Rock wraps)
+(function(){ const n=a=>{const l=Math.hypot(...a);a[0]/=l;a[1]/=l;a[2]/=l;}; n(RIDGE_A1); n(RIDGE_A2); })();
+const SITE_DIR=[0.16,0.87,0.47]; (function(){const l=Math.hypot(...SITE_DIR);SITE_DIR[0]/=l;SITE_DIR[1]/=l;SITE_DIR[2]/=l;})();
+
+function worldField(p){        // p = unit dir; returns {h, snow, rock, land}
+  const wob=fbm3(p[0]*3.1+7.7, p[1]*3.1+2.2, p[2]*3.1-5.5, 3);
+  const c=fbm3(p[0]*1.6+ wob*0.9 +3.1, p[1]*1.6+ wob*0.9 -1.7, p[2]*1.6+ wob*0.9+9.4, 4);
+  let h=(c-0.50)*3.4;                      // continents vs seas; ~40% land coverage tuned at build
+  // great-circle ridges: distance to the ridge plane = |dot(p, axis)|
+  for(const ax of [RIDGE_A1,RIDGE_A2]){
+    const ad=Math.abs(p[0]*ax[0]+p[1]*ax[1]+p[2]*ax[2]);
+    const rd=Math.asin(Math.min(ad,1))*R_WORLD;             // units along the ground
+    const rw=3.4+ (fbm3(p[0]*9+4, p[1]*9-3, p[2]*9+8,3)-0.5)*1.6;
+    if(rd<rw&&h>SEA-0.4){ const k=1-rd/rw; h+=k*k*(1.30+wob*0.9); }
+  }
+  // the village basin: calm heart at SITE_DIR
+  const sd=Math.acos(Math.max(-1,Math.min(1,p[0]*SITE_DIR[0]+p[1]*SITE_DIR[1]+p[2]*SITE_DIR[2])))*R_WORLD;
+  if(sd<10){ const k=Math.min((10-sd)/4,1); h=h*(1-k)+0.26*k; }
+  h=Math.max(h, SEA-0.9);
+  const rock=h>0.62||c>0.70, snow=h>0.72;
+  return {h, rock, snow, land:h>SEA, c};
+}
+/* per-vertex color, lifted from biomeBase's palette logic */
+function globeColor(f,p){
+  const v=fbm3(p[0]*7.1+1.1, p[1]*7.1-3.3, p[2]*7.1+5.9, 3);
+  let r,g,b;
+  if(f.snow){ r=0.85;g=0.87;b=0.92; }
+  else if(f.rock){ r=0.45+0.08*v; g=0.43+0.07*v; b=0.47+0.06*v; }
+  else if(f.h<SEA+0.06){ r=0.79;g=0.70;b=0.47; }                       // beach sand
+  else { r=0.28+0.10*v; g=0.52+0.14*v; b=0.20+0.06*v; }                // grass
+  if(!f.rock&&!f.snow&&f.h>SEA+0.06&&fbm3(p[0]*4.9+91.7,p[1]*4.9-13.3,p[2]*4.9+7.1,3)>0.60){ // deep forest shadow
+    r=r*0.58+0.30*0.42; g=g*0.58+0.47*0.42; b=b*0.58+0.26*0.42; }
+  return [r,g,b];
+}
+/* build the world mesh: land quads (above-sea corners) + one water sphere shell handled outside */
+function buildGlobeMesh(MB, upload, N){
+  N=N||64;
+  const lm=MB(), wm=MB(), d=[0,0,0], n2=[0,0,0];
+  for(let face=0;face<6;face++){
+    const li=lm.pos.length/3|0;
+    for(let j=0;j<=N;j++) for(let i=0;i<=N;i++){
+      const u=i/N*2-1, v=j/N*2-1;
+      cubeDir(face,u,v,d);
+      const f=worldField(d);
+      const rr=R_WORLD+f.h;
+      lm.pos.push(d[0]*rr, d[1]*rr, d[2]*rr);
+      lm.nor.push(d[0],d[1],d[2]);                                        // sphere normal; shading stays simple
+      const c=globeColor(f,d);
+      lm.col.push(c[0],c[1],c[2]); lm.ao.push(1); lm.bone.push(0);
+      lm._f=(lm._f||[]); lm._f.push(f.land?1:0);
+    }
+    for(let j=0;j<N;j++) for(let i=0;i<N;i++){
+      const a=li+j*(N+1)+i, b=a+N+1;
+      const fl=lm._f;
+      if(!(fl[a]||fl[b]||fl[a+1]||fl[b+1])) continue;                     // underwater quads: the sea shell covers them
+      lm.idx.push(a,b,a+1, a+1,b,b+1); lm.n+=4;
+    }
+    delete lm._f;
+    // water shell: sphere at SEA level, coarser
+    const NW=32, wi=wm.pos.length/3|0;
+    for(let j=0;j<=NW;j++) for(let i=0;i<=NW;i++){
+      cubeDir(face,i/NW*2-1,j/NW*2-1,d);
+      const f=worldField(d);                                 // depth under this point = how deep the floor is
+      wm.pos.push(d[0]*(R_WORLD+SEA-0.05), d[1]*(R_WORLD+SEA-0.05), d[2]*(R_WORLD+SEA-0.05));
+      wm.nor.push(d[0],d[1],d[2]); wm.col.push(1,1,1);
+      wm.ao.push(Math.min(Math.max((SEA-f.h)/0.9,0),1));     // ao channel = water depth 0(shore)..1(deep)
+      wm.bone.push(0);
+    }
+    for(let j=0;j<NW;j++) for(let i=0;i<NW;i++){ const a=wi+j*(NW+1)+i, b=a+NW+1;
+      wm.idx.push(a,b,a+1, a+1,b,b+1); wm.n+=4; }
+  }
+  return {land:upload(lm), water:upload(wm)};
+}
+/* ===================== G1 preview main: the ball, day light, living water ===================== */
+gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE);
+const SUN=[0.55,0.62,0.42]; (function(){const l=Math.hypot(...SUN);SUN[0]/=l;SUN[1]/=l;SUN[2]/=l;})();
+const V_MAIN=`attribute vec3 aPos; attribute vec3 aNor; attribute vec3 aCol; attribute float aAo;
+ uniform mat4 uVP; varying vec3 vN; varying vec3 vC; varying vec3 vW;
+ void main(){ vN=aNor; vC=aCol; vW=aPos; gl_Position=uVP*vec4(aPos,1.0); }`;
+const F_MAIN=`precision mediump float; varying vec3 vN; varying vec3 vC; varying vec3 vW;
+ uniform vec3 uSun; uniform vec3 uEye; uniform vec3 uSkyA; uniform vec3 uSkyB; uniform float uFogD;
+ void main(){
+  float l=0.32+0.78*max(0.0,dot(normalize(vN),uSun));
+  vec3 c=vC*l;
+  float d=distance(vW,uEye);
+  float f=1.0-exp(-pow(d/uFogD,1.7));
+  vec3 sky=mix(uSkyA,uSkyB,clamp(d/(uFogD*2.0),0.0,1.0));
+  gl_FragColor=vec4(mix(c,sky,f),1.0);
+ }`;
+/* the sea: four tunable layers per Daniel's steer - swell, glint, depth-color, foam + the v58 rim-melt */
+const V_SEA=`attribute vec3 aPos; attribute vec3 aNor; attribute float aAo;
+ uniform mat4 uVP; uniform float uT;
+ varying vec3 vW; varying vec3 vN; varying float vDepth;
+ void main(){
+  vec3 p=aPos;
+  p+= aNor*( sin(uT*0.7 + (aPos.x+aPos.z)*0.20)*0.06 + sin(uT*1.3 + aPos.y*0.33)*0.04 );   // LAYER 1: moving swell (vertex breathing)
+  vW=p; vN=aNor; vDepth=aAo;
+  gl_Position=uVP*vec4(p,1.0); }`;
+const F_SEA=`precision mediump float; varying vec3 vW; varying vec3 vN; varying float vDepth;
+ uniform vec3 uSun; uniform vec3 uEye; uniform float uFogD; uniform float uEyeH; uniform highp float uT;
+ uniform vec3 uSkyA; uniform vec3 uSkyB;
+ void main(){
+  float rp=R_WORLD_F;
+  vec3 dn=vec3(vW.x*0.045+sin(vW.z*0.05+uT*0.10)*1.2, vW.y*0.05, vW.z*0.045+sin(vW.x*0.04+1.7)*1.1);  // perturbed bands
+  // LAYER 3: shallow vs deep
+  vec3 cShallow=vec3(0.10,0.55,0.62), cDeep=vec3(0.03,0.19,0.34);
+  vec3 c=mix(cShallow,cDeep,clamp(vDepth*1.25,0.0,1.0));
+  // LAYER 2: surface glint (long bands chasing the sun)
+  vec3 N=normalize(vN+dn*0.03);
+  vec3 V=normalize(uEye-vW);
+  vec3 H=normalize(uSun+V);
+  float glint=pow(max(0.0,dot(N,H)),28.0);
+  c+=glint*vec3(0.9,0.95,1.0)*0.85;
+  // LAYER 4: shoreline foam
+  float foam=smoothstep(0.16,0.05,vDepth)*(0.55+0.45*sin(uT*1.7+vW.x*2.1+vW.z*1.7));
+  c=mix(c,vec3(0.88,0.94,0.95),clamp(foam,0.0,0.85));
+  // horizon melt (v58 Fix A generalized to R_WORLD)
+  float d=distance(vW,uEye);
+  float f=1.0-exp(-pow(d/uFogD,1.7));
+  float eh=max(uEyeH-rp,1.5);
+  float hMax=sqrt(2.0*rp*eh+eh*eh);
+  f=max(f,smoothstep(hMax*0.45,hMax*0.85,d));
+  vec3 sky=mix(uSkyA,uSkyB,clamp(d/(uFogD*2.0),0.0,1.0));
+  gl_FragColor=vec4(mix(c,sky,f),0.97);
+ }`;
+gl.clearColor(0.02,0.03,0.08,1);
+const PM=program(V_MAIN.replace('R_WORLD_F',R_WORLD+'.0'),F_MAIN,['aPos','aNor','aCol']);
+const SM=program(V_SEA,F_SEA.replace('R_WORLD_F',R_WORLD+'.0'),['aPos','aNor','aAo']);
+const G=buildGlobeMesh(MB,upload,64);
+const PROJ=M4.id(), VIEW=M4.id(), VP=M4.id();
+const SKY=[0.36,0.62,0.93], SKYH=[0.72,0.84,0.96];
+let yaw=0.6, pitch=0.35, dist=560, targetAng=0;
+addEventListener('pointerdown',e=>{ targetAng=e.clientX; });
+addEventListener('pointermove',e=>{ if(targetAng){ yaw+=(e.clientX-targetAng)*0.008; targetAng=e.clientX; } });
+addEventListener('pointerup',()=>targetAng=0);
+let t0=performance.now();
+const CAMQ=new URLSearchParams(location.search);
+window.__setCam=(y,p,d)=>{ yaw=y; pitch=p; dist=d; };
+window.__stats=()=>{
+  let land=0,sea=0; const d2=[0,0,0];
+  for(let i=0;i<4000;i++){ const th=Math.random()*TAU, ph=Math.acos(Math.random()*2-1);
+    d2[0]=Math.sin(ph)*Math.cos(th); d2[1]=Math.cos(ph); d2[2]=Math.sin(ph)*Math.sin(th);
+    if(worldField(d2).land) land++; else sea++; }
+  // wrap test: sample full great-circle rings; a wrapped world has BOTH land and sea on every ring
+  let rings=0, wrapped=0;
+  for(let k=0;k<12;k++){ const ax=[Math.random()-0.5,Math.random()-0.5,Math.random()-0.5];
+    const l=Math.hypot(...ax); ax[0]/=l;ax[1]/=l;ax[2]/=l;
+    // basis around the circle
+    let b1=[ax[1],-ax[0],0]; let bl=Math.hypot(...b1); if(bl<0.1){b1=[0,ax[2],-ax[1]]; bl=Math.hypot(...b1);} b1[0]/=bl;b1[1]/=bl;b1[2]/=bl;
+    const b2=[ax[1]*b1[2]-ax[2]*b1[1], ax[2]*b1[0]-ax[0]*b1[2], ax[0]*b1[1]-ax[1]*b1[0]];
+    let hl=0,hs=0;
+    for(let i=0;i<120;i++){ const a=i/120*TAU;
+      d2[0]=b1[0]*Math.cos(a)+b2[0]*Math.sin(a); d2[1]=b1[1]*Math.cos(a)+b2[1]*Math.sin(a); d2[2]=b1[2]*Math.cos(a)+b2[2]*Math.sin(a);
+      if(worldField(d2).land) hl++; else hs++; }
+    rings++; if(hl>0&&hs>0) wrapped++; }
+  return {landFrac:+(land/4000).toFixed(3), ringsWrapped:wrapped+'/'+rings, vertsLand:G.land.count, vertsWat:G.water.count};
+};
+function frame(){
+  const t=(performance.now()-t0)/1000;
+  const e=[Math.sin(yaw)*Math.cos(pitch)*dist, Math.sin(pitch)*dist, Math.cos(yaw)*Math.cos(pitch)*dist];
+  M4.persp(PROJ,0.62,cvs.width/cvs.height,2,20000);
+  M4.look(VIEW,e[0],e[1],e[2],0,0,0,0,1,0);
+  M4.mul(VP,PROJ,VIEW);
+  const fog=clamp(dist*1.5,500,24000);
+  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  gl.useProgram(SM.p);
+  gl.uniformMatrix4fv(SM.u.uVP,false,VP);
+  gl.uniform3fv(SM.u.uSun,SUN); gl.uniform3f(SM.u.uEye,e[0],e[1],e[2]);
+  gl.uniform1f(SM.u.uT,t); gl.uniform1f(SM.u.uFogD,fog);
+  gl.uniform3fv(SM.u.uSkyA,SKY); gl.uniform3fv(SM.u.uSkyB,SKYH);
+  gl.uniform1f(SM.u.uEyeH,Math.hypot(e[0],e[1],e[2]));
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  drawMesh(SM,G.water);
+  gl.disable(gl.BLEND);
+  gl.useProgram(PM.p);
+  gl.uniformMatrix4fv(PM.u.uVP,false,VP);
+  gl.uniform3fv(PM.u.uSun,SUN); gl.uniform3f(PM.u.uEye,e[0],e[1],e[2]);
+  gl.uniform1f(PM.u.uFogD,fog); gl.uniform3fv(PM.u.uSkyA,SKY); gl.uniform3fv(PM.u.uSkyB,SKYH);
+  drawMesh(PM,G.land);
+  G.err=gl.getError();
+  G.frames=(G.frames||0)+1;
+  requestAnimationFrame(frame);
+}
+frame();
+</script></body></html>
