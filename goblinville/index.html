@@ -196,6 +196,26 @@ void main(){
   float h=shash(g);
   if(h>0.985&&vUv.y>0.35){ float tw=0.55+0.45*sin(uT*2.2+h*90.0);
     c+=vec3(0.9,0.95,1.0)*uNight*tw*0.85*smoothstep(0.985,1.0,h); }
+  // v45: a finer starfield under the old familiar one - faint, patient, colored anchors
+  { vec2 g2=floor(vUv*vec2(340.0,190.0)+17.0);
+    float h2=shash(g2);
+    if(h2>0.996&&vUv.y>0.42){ float tw2=0.5+0.5*sin(uT*1.7+h2*70.0);
+      c+=mix(vec3(0.72,0.82,1.0),vec3(1.0,0.88,0.74),step(0.9987,h2))*uNight*tw2*0.5*smoothstep(0.996,1.0,h2); }
+    // v45: THE DRAGON CONSTELLATION - VULKARRAX coiled low over the NE rim
+    if(uNight>0.45&&vUv.x>0.58&&vUv.y>0.58){
+      vec2 C=vec2(0.80,0.80); float best=1e3;
+      for(int i=0;i<16;i++){ float a=float(i)/15.0*4.6*3.14159;
+        float rr=mix(0.075,0.012,float(i)/15.0);
+        vec2 P=C+vec2(sin(a),cos(a))*rr; P.x+=float(i)/15.0*0.085;
+        best=min(best,distance(vec2(vUv.x,(vUv.y-0.60)/0.40*0.40+0.60),P)*vec2(1.0,1.18).y); }
+      float glow2=exp(-best*best*11000.0);
+      c+=vec3(1.0,0.72,0.35)*glow2*(uNight-0.45)*1.1; }
+    // v45: aurora over the white range - slow green-violet curtains
+    if(uNight>0.5){
+      float band=smoothstep(0.55,0.62,vUv.y)*(1.0-smoothstep(0.86,0.95,vUv.y));
+      float sway=sin(vUv.x*14.0+uT*0.35)*0.5+sin(vUv.x*5.5-uT*0.22)*0.5;
+      float am=band*smoothstep(0.20,0.75,0.5+0.5*sway);
+      c+=mix(vec3(0.15,0.85,0.45),vec3(0.5,0.3,0.95),0.5+0.5*sin(vUv.x*6.0+uT*0.18))*am*(uNight-0.5)*0.16; } }
   // v35: drifting clouds - two hash-noise layers sliding with time; rain thickens and greys them
   {
     vec2 p1=vec2(vUv.x*4.2+uT*0.010, vUv.y*7.5+uT*0.0015);
