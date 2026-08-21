@@ -555,6 +555,18 @@ const LANDS=[
   tint:[0.85,0.87,0.92],
   tag:'the elder lowers his staff: giants walk the white rock - count yourself small',
   chron:'The elder lowered his staff toward the white rock: Ironjaw Crag, where the giants walk. The brood counts itself small there.'},
+ {id:'orcs', name:'THE ORC HOLD', x:44, y:22, r:6, seatH:0.30, amb:'#e87a4d',
+  tint:[0.50,0.30,0.22],
+  tag:'the elder counts on his knuckles: the orcs number their wars higher than their winters',
+  chron:'East the ground went red with trampled mud: the Orc Hold. The elder counted on his knuckles - orcs number their wars higher than their winters.'},
+ {id:'men', name:'THE CITY OF MEN', x:36, y:44, r:6, seatH:0.30, amb:'#c8d8ff',
+  tint:[0.60,0.60,0.64],
+  tag:'the elder shrugs: men build tall, plan small, and arrive early',
+  chron:'The brood found walls fitted like teeth: the City of Men. Men build tall, plan small, and arrive early - the elder shrugged like it was a cough.'},
+ {id:'elves', name:'THE ELVEN GROVE', x:18, y:38, r:6, seatH:0.30, amb:'#bfffd8',
+  tint:[0.55,0.75,0.62],
+  tag:'the elder bows without knowing why: the grove has that effect on people',
+  chron:'In the green dim the brood found the Elven Grove, where the trees stand like they are listening. The elder bowed without knowing why.'},
  {id:'bedlam', name:'BEDLAM', x:52, y:52, r:5.5, seatH:0.28, amb:'#ff9e4d', down:true,
   tint:[0.30,0.16,0.12],
   tag:'the elder says the dragon bled here once - and the bleeding has not finished',
@@ -3411,8 +3423,41 @@ function buildDragonCoil(){
   for(const sx of[-1.9,1.9]){ M4.trs(T,sx,2.1,-0.6,0,sx>0?0.9:-0.9,sx>0?-0.35:0.35,1,1,1); pyramid(m,2.4,2.6,0.24,scale,T,0); } // folded wings, huge
   return upload(m);
 }
+function buildOrcHold(){
+  const m=MB(),T=M4.id(); const mud=hex('#8a4a30'), mud2=hex('#70381f'), timber=hex('#4a2f1d'), bone=hex('#d8cfc0'), red=hex('#a81e12');
+  M4.trs(T,0,0.7,0,0,0,0,1,1,1); box(m,2.6,1.4,2.0,mud,T,0,0.6);                    // the war-hold
+  M4.trs(T,0,1.7,0,0,0,0.78,1,1,1); box(m,3.0,0.6,2.4,mud2,T,0,0.6);
+  M4.trs(T,0,2.2,0,0,0,0,1,1,1); pyramid(m,2.2,0.9,1.8,timber,T,0);
+  for(const sx of[-1.9,1.9]){ M4.trs(T,sx,0.9,0.4,0,sx>0?0.28:-0.28,0,1,1,1); pyramid(m,0.16,1.8,0.16,bone,T,0); }  // tusk pikes
+  for(const q of[[-1.2,-0.9],[1.2,-0.9]]){ M4.trs(T,q[0],0.5,q[1],0,0,0,1,1,1); box(m,0.14,1.0,0.14,timber,T,0,0.7);
+    M4.trs(T,q[0],1.15,q[1],0,0,0,1,1,1); ball(m,0.16,6,bone,T,0,0.9); }          // trophy poles
+  M4.trs(T,0,1.05,1.02,0,0,0,1,1,1); box(m,0.5,0.9,0.06,red,T,0,0.8);               // the war-flag
+  return upload(m);
+}
+function buildMenCity(){
+  const m=MB(),T=M4.id(); const wall=hex('#9aa0a8'), wall2=hex('#7c828c'), roof=hex('#4a5a78');
+  M4.trs(T,0,0.75,0,0,0,0,1,1,1); box(m,1.7,1.5,1.3,wall,T,0,0.65);                 // hall
+  M4.trs(T,0,1.8,0,0,0,0.78,1,1,1); pyramid(m,1.9,0.8,1.5,roof,T,0);
+  for(const spec of[[-1.5,1.1],[1.5,1.1],[-1.5,-1.1],[1.5,-1.1],[0,1.5],[0,-1.5]]){ // the fitted walls
+    M4.trs(T,spec[0],0,spec[1],0,spec[0]?0:0.78,0,1,1,1); tube(m,0.26,0.22,1.0,5,spec===0?wall:wall2,T,0,true,true);
+    M4.trs(T,spec[0],1.12,spec[1],0,0,0,1,1,1); pyramid(m,0.5,0.42,0.5,roof,T,0); }
+  for(const pike of[[-1.0,0.62],[1.0,0.62]]){ M4.trs(T,pike[0],1.9,pike[1],0,0,0,1,1,1); box(m,0.05,0.9,0.05,wall2,T,0,0.7); }
+  M4.trs(T,0.98,1.95,0.63,0,0,0,1,1,1); box(m,0.34,0.5,0.04,roof,T,0,0.85);         // small proud banner
+  return upload(m);
+}
+function buildElfGrove(){
+  const m=MB(),T=M4.id(); const silver=hex('#c4d4cc'), silver2=hex('#9fb8aa'), gold=hex('#ffe6a0'), leaf=hex('#7fd8a8');
+  const P0=KP.tree_pineTallB;
+  for(let i=0;i<5;i++){ const a=i/5*TAU, rr=1.6;
+    M4.trs(T,Math.cos(a)*rr,0,Math.sin(a)*rr,0,a,0,1.9,2.6,1.9); kpush(m,P0,T,0.8); }
+  M4.trs(T,0,0,0,0,0,0,1,1,1); tube(m,0.16,0.10,3.2,7,silver,T,0,true,true);        // the listening spire
+  M4.trs(T,0,3.35,0,0,0,0.4,1,1,1); pyramid(m,0.5,0.9,0.5,silver2,T,0);
+  M4.trs(T,0,2.6,0,0,0,0,1,1,1); ball(m,0.13,8,gold,T,0,1);                         // grove-light
+  for(let i=0;i<7;i++){ const a=i/7*TAU; M4.trs(T,Math.cos(a)*0.85,0.06,Math.sin(a)*0.85,0,0,0,1,1,1); ball(m,0.07,5,leaf,T,0,0.85); }
+  return upload(m);
+}
 function seedLandmarks(){
-  const B={bone:buildBoneSpire,crimson:buildVampCourt,spire:buildWizardSpire,crag:buildOgreCrag,warrens:buildWarrens,hollow:buildHollow,ridge:buildRidge,bedlam:buildBedlam,vulkarrax:buildDragonCoil};
+  const B={bone:buildBoneSpire,crimson:buildVampCourt,spire:buildWizardSpire,crag:buildOgreCrag,warrens:buildWarrens,hollow:buildHollow,ridge:buildRidge,bedlam:buildBedlam,vulkarrax:buildDragonCoil,orcs:buildOrcHold,men:buildMenCity,elves:buildElfGrove};
   for(const L of LANDS) PROPS.push({mesh:B[L.id](), x:L.x, y:L.y, r:0, gy:groundH(L.x,L.y)-0.02, land:L.id});
 }
 
