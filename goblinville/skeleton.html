@@ -1,0 +1,139 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>skeleton</title>
+<style>
+ html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(180deg,#a9c2d8 0%,#cdd8d5 55%,#e6d8c4 100%);}
+ canvas{display:block;touch-action:none;}
+ #hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);font:600 13px -apple-system,system-ui,sans-serif;
+   color:#3d4a52;opacity:.75;pointer-events:none;transition:opacity .8s;letter-spacing:.02em;}
+</style></head><body>
+<div id="hint">drag to orbit &middot; pinch to zoom</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+(function(){
+const scene=new THREE.Scene();
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+document.body.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,0.1,100);
+
+/* toon band lighting - Goblinville register: hemi fill + banded sun */
+const grad=new THREE.DataTexture(new Uint8Array([90,150,215,255]),4,1,THREE.RedFormat);
+grad.needsUpdate=true; grad.minFilter=grad.magFilter=THREE.NearestFilter;
+const BONE=new THREE.MeshToonMaterial({color:0xefe6cc,gradientMap:grad});
+const BONE_D=new THREE.MeshToonMaterial({color:0xe0d3b4,gradientMap:grad});
+const DARK=new THREE.MeshToonMaterial({color:0x2a2333,gradientMap:grad});
+scene.add(new THREE.HemisphereLight(0xbcd6ea,0xd8c9a8,0.85));
+const sun=new THREE.DirectionalLight(0xfff2d8,1.35); sun.position.set(4,7,5); scene.add(sun);
+const rim=new THREE.DirectionalLight(0x9fb8d8,0.5); rim.position.set(-5,3,-4); scene.add(rim);
+
+const sk=new THREE.Group(); scene.add(sk);
+function mesh(geo,mat,x,y,z){ const m=new THREE.Mesh(geo,mat||BONE); m.position.set(x||0,y||0,z||0); return m; }
+function ico(r,d,sx,sy,sz){ const g=new THREE.IcosahedronGeometry(r,d); g.scale(sx||1,sy||1,sz||1); return g; }
+function cyl(r1,r2,len,seg){ return new THREE.CylinderGeometry(r1,r2,len,seg||7,1); }
+
+/* ---- skull: big friendly head, the cartoon lives here ---- */
+const head=new THREE.Group(); head.position.set(0,3.55,0); sk.add(head);
+head.add(mesh(ico(0.55,1,1.0,1.12,0.92),BONE,0,0.12,0));           // cranium
+const jaw=mesh(new THREE.BoxGeometry(0.5,0.24,0.42),BONE_D,0,-0.34,0.06); head.add(jaw);
+const cheekL=mesh(ico(0.16,0),BONE_D,-0.34,-0.10,0.18), cheekR=mesh(ico(0.16,0),BONE_D,0.34,-0.10,0.18);
+head.add(cheekL,cheekR);
+const eyeGeo=ico(0.155,1);
+head.add(mesh(eyeGeo,DARK,-0.21,0.16,0.42), mesh(eyeGeo,DARK,0.21,0.16,0.42));
+const nose=mesh(new THREE.ConeGeometry(0.09,0.16,4),DARK,0,-0.08,0.48); nose.rotation.x=Math.PI/2; nose.rotation.z=Math.PI/4; head.add(nose);
+sk.add(mesh(new THREE.BoxGeometry(0.11,0.52,0.10),BONE_D,0,2.49,0.36));   // sternum bar
+for(let i=-1.5;i<=1.5;i++){ const tooth=mesh(new THREE.BoxGeometry(0.09,0.10,0.06),BONE_D,i*0.11,-0.235,0.28); head.add(tooth); }
+head.rotation.x=-0.05;
+
+/* ---- neck, spine, ribs ---- */
+sk.add(mesh(cyl(0.10,0.11,0.25),BONE,0,3.0,0));
+for(let i=0;i<3;i++) sk.add(mesh(cyl(0.075,0.085,0.26),BONE,0,2.72-i*0.24,0));
+sk.add(mesh(ico(0.115,0),BONE_D,0,2.98,0), mesh(ico(0.115,0),BONE_D,0,2.50,0));
+/* clavicle bar */
+const clav=mesh(new THREE.BoxGeometry(1.15,0.13,0.13),BONE_D,0,2.86,0.02); sk.add(clav);
+/* ribs: chunky half-tori around the spine */
+const ribYs=[2.72,2.48,2.26], ribRs=[0.40,0.37,0.33];
+for(let i=0;i<3;i++){
+  const rib=new THREE.Mesh(new THREE.TorusGeometry(ribRs[i],0.085,4,14,Math.PI*1.25),BONE);
+  rib.position.set(0,ribYs[i],0.02); rib.rotation.x=Math.PI/2; rib.rotation.z=Math.PI*(1.875);
+  sk.add(rib);
+  // (sternum below, one bar)
+}
+/* pelvis */
+const pelv=new THREE.Group(); pelv.position.set(0,1.72,0); sk.add(pelv);
+pelv.add(mesh(ico(0.44,1,1.15,0.62,0.85),BONE,0,0.12,0));
+pelv.add(mesh(ico(0.13,0),BONE_D,-0.30,-0.06,0), mesh(ico(0.13,0),BONE_D,0.30,-0.06,0));
+
+/* ---- limbs ---- */
+function limb(root,side){ /* side=-1 left, 1 right */ }
+function buildArm(side){
+  const arm=new THREE.Group(); arm.position.set(side*0.60,2.86,0); sk.add(arm);
+  arm.add(mesh(ico(0.15,1),BONE_D,0,0,0));                         // shoulder ball
+  const up=mesh(cyl(0.095,0.085,0.55),BONE,0,-0.33,0); arm.add(up);
+  const elb=new THREE.Group(); elb.position.set(0,-0.62,0); arm.add(elb);
+  elb.add(mesh(ico(0.115,0),BONE_D,0,0,0));
+  elb.add(mesh(cyl(0.085,0.075,0.50),BONE,0,-0.30,0));
+  const wr=new THREE.Group(); wr.position.set(0,-0.58,0); elb.add(wr);
+  wr.add(mesh(ico(0.075,0),BONE_D,0,0,0));
+  const hand=mesh(new THREE.BoxGeometry(0.20,0.22,0.10),BONE,0,-0.18,0); wr.add(hand);
+  for(let f=0;f<3;f++){ const fin=mesh(new THREE.BoxGeometry(0.05,0.14,0.05),BONE,(f-1)*0.06,-0.36,0); wr.add(fin); }
+  const th=mesh(ico(0.055,0),BONE,side*0.11,-0.16,0.06); wr.add(th);
+  arm.rotation.z=side*-0.55;                                        // relaxed A-pose
+  elb.rotation.x=-0.28;                                             // slight forward bend
+  return arm;
+}
+buildArm(-1); buildArm(1);
+function buildLeg(side){
+  const leg=new THREE.Group(); leg.position.set(side*0.28,1.70,0); sk.add(leg);
+  leg.add(mesh(cyl(0.115,0.10,0.62),BONE,0,-0.36,0));               // femur
+  const kn=new THREE.Group(); kn.position.set(0,-0.72,0); leg.add(kn);
+  kn.add(mesh(ico(0.13,0),BONE_D,0,0,0));
+  kn.add(mesh(cyl(0.095,0.08,0.58),BONE,0,-0.34,0));                // shin
+  const ank=new THREE.Group(); ank.position.set(0,-0.66,0); kn.add(ank);
+  ank.add(mesh(ico(0.08,0),BONE_D,0,0,0));
+  const foot=mesh(new THREE.BoxGeometry(0.19,0.11,0.38),BONE,0,-0.09,0.10); ank.add(foot);
+  leg.rotation.z=side*0.06;
+  return leg;
+}
+buildLeg(-1); buildLeg(1);
+
+/* ground blob shadow - reads as floor without a floor mesh */
+const blob=new THREE.Mesh(new THREE.CircleGeometry(1.35,24),new THREE.MeshBasicMaterial({color:0x4a4f43,transparent:true,opacity:0.28}));
+blob.rotation.x=-Math.PI/2; blob.position.y=0.02; scene.add(blob);
+
+/* ---- camera orbit (own, no controls dependency) ---- */
+let yaw=0, pitch=0.12, dist=7.6, tyaw=0, tpitch=0.12, tdist=7.6;
+const TARGET=new THREE.Vector3(0,1.95,0);
+function setView(y,p,d){ tyaw=y; if(p!==undefined)tpitch=p; if(d!==undefined)tdist=d; }
+window.setView=setView;
+const ptrs=new Map(); let pinch0=0, dist0=7.6;
+const el=renderer.domElement;
+el.addEventListener('pointerdown',e=>{ el.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2){ const a=[...ptrs.values()]; pinch0=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y); dist0=tdist; }
+  document.getElementById('hint').style.opacity=0; });
+el.addEventListener('pointermove',e=>{ if(!ptrs.has(e.pointerId)) return;
+  const p=ptrs.get(e.pointerId); const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+  if(ptrs.size===1){ tyaw+=dx*0.008; tpitch=Math.max(-0.35,Math.min(1.25,tpitch+dy*0.006)); }
+  else if(ptrs.size===2){ const a=[...ptrs.values()]; const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+    if(pinch0>0) tdist=Math.max(4,Math.min(14,dist0*pinch0/Math.max(d,1))); } });
+const up=e=>{ ptrs.delete(e.pointerId); };
+el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up);
+el.addEventListener('wheel',e=>{ e.preventDefault(); tdist=Math.max(4,Math.min(14,tdist*(1+e.deltaY*0.001))); },{passive:false});
+
+let idle=0;
+function frame(){
+  requestAnimationFrame(frame);
+  idle+=1/60;
+  yaw+=(tyaw-yaw)*0.14; pitch+=(tpitch-pitch)*0.14; dist+=(tdist-dist)*0.14;
+  const cp=Math.cos(pitch);
+  camera.position.set(TARGET.x+Math.sin(yaw)*cp*dist, TARGET.y+Math.sin(pitch)*dist, TARGET.z+Math.cos(yaw)*cp*dist);
+  camera.lookAt(TARGET);
+  sk.rotation.y=Math.sin(idle*0.5)*0.02;                            // the tiniest breathe
+  renderer.render(scene,camera);
+}
+addEventListener('resize',()=>{ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); });
+frame();
+window.__ready=true;
+})();
+</script></body></html>
