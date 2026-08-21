@@ -155,7 +155,7 @@ const TBE=(()=>{  // tangent basis at SITE_DIR: TBE1 = map +y dir, TBE2 = map +x
   const s=SITE_DIR;
   let e2=[1,0,0]; const d=e2[0]*s[0]+e2[1]*s[1]+e2[2]*s[2];
   e2=[e2[0]-d*s[0], e2[1]-d*s[1], e2[2]-d*s[2]]; const l=_tlen(e2); e2=[e2[0]/l,e2[1]/l,e2[2]/l];
-  const e1=[s[1]*e2[2]-s[2]*e2[1], s[2]*e2[0]-s[0]*e2[2], s[0]*e2[1]-s[1]*e2[0]];
+  const e1=[e2[1]*s[2]-e2[2]*s[1], e2[2]*s[0]-e2[0]*s[2], e2[0]*s[1]-e2[1]*s[0]];   // v65: map +y -> world +z (was s x e2 = -z: the whole sphere mirrored against the authored map)
   return {e1,e2};
 })();
 function ballMat(out,x,y,ride,yaw){
@@ -3179,8 +3179,11 @@ function updateSun(){
   SUN=[0.48*Math.cos(a), Math.max(e,0.20), 0.34];
 }
 function camEye(){
-  if(CAM.mode==='fp'){ if(S.sail){ const bp=seaPt(CAM.fx,CAM.fy), d=bp.d, rb=1.34+Math.sin(FP.bob)*0.05;
-      return [bp.pos[0]+d[0]*rb, bp.pos[1]+d[1]*rb, bp.pos[2]+d[2]*rb]; }
+  if(CAM.mode==='fp'){ if(S.sail){ const bp=seaPt(CAM.fx,CAM.fy), d=bp.d, rb=1.42+Math.sin(FP.bob)*0.05;
+      const hx=Math.sin(CAM.fa), hz=Math.cos(CAM.fa);
+      const dot=hx*d[0]+hz*d[2], bx=hx-d[0]*dot, by=-d[1]*dot, bz=hz-d[2]*dot;   // v65b: stern cam - sit back over the wake, never inside the sail
+      const bl=Math.hypot(bx,by,bz)||1, PB=1.05;
+      return [bp.pos[0]+d[0]*rb-bx/bl*PB, bp.pos[1]+d[1]*rb-by/bl*PB, bp.pos[2]+d[2]*rb-bz/bl*PB]; }
     if(Math.hypot(CAM.fx-SITE.x,CAM.fy-SITE.y)>=31.5){
       const d=dirOf(CAM.fx,CAM.fy,[0,0,0]), gr=icoHeight(d)+0.52+Math.sin(FP.bob)*0.035;
       return [SITE.x+d[0]*gr, WATER-PLANET_R+d[1]*gr, SITE.y+d[2]*gr]; }
@@ -3210,11 +3213,11 @@ function setCamera(){
         d[0],d[1],d[2]);
     } else if(S.sail){
       const bp=seaPt(CAM.fx,CAM.fy), d=bp.d;
-      const bob=Math.sin(FP.bob)*0.06;
-      const eye=[bp.pos[0]+d[0]*(1.34+bob), bp.pos[1]+d[1]*(1.34+bob), bp.pos[2]+d[2]*(1.34+bob)];
+      const bob=Math.sin(FP.bob)*0.06, rb=1.42+bob;
       const vx=Math.sin(CAM.fa), vz=Math.cos(CAM.fa), dot=vx*d[0]+vz*d[2];
       let tx=vx-d[0]*dot, ty=-d[1]*dot, tz=vz-d[2]*dot;
       const tl=Math.hypot(tx,ty,tz)||1; tx/=tl; ty/=tl; tz/=tl;
+      const PB=1.05, eye=[bp.pos[0]+d[0]*rb-tx*PB, bp.pos[1]+d[1]*rb-ty*PB, bp.pos[2]+d[2]*rb-tz*PB];
       const cp=Math.cos(CAM.fp), sp=Math.sin(CAM.fp);
       M4.look(VIEW, eye[0],eye[1],eye[2],
         eye[0]+(tx*cp+d[0]*sp)*6, eye[1]+(ty*cp+d[1]*sp)*6, eye[2]+(tz*cp+d[2]*sp)*6,
