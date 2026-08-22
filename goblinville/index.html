@@ -1450,30 +1450,42 @@ const A = {
 
 /* v69: THE BROOD'S SONG - Daniel's Suno track is the village theme.
    Plays only inside the brood's basin, crossfades in/out over ~0.6s, yields the generative tune while it owns the air. */
-const BGM={aud:null, g:null, want:false, cur:0, on:false};
-function bgmSetup(){
-  if(BGM.aud||!A.ctx) return;
+/* v69: THE BROOD'S SONG - Daniel's Suno track is the village theme.
+   v71: MOONLIT REQUIEM - Daniel's Suno track is the Crimson Court's theme (vampire kingdom).
+   One systemic rule: a named ground owns a theme; the theme plays only inside its basin,
+   crossfades in/out over ~0.6s, and yields the generative tune while it owns the air.
+   An anchor is a live reference (SITE for the brood, LANDS for a kingdom) so themes follow the world. */
+const THEMES=[
+ {key:'village', file:'village-theme.mp3', anchor:function(){return {x:SITE.x,y:SITE.y};}, r:10},
+ {key:'vampire', file:'vampire-theme.mp3', anchor:function(){const L=LANDID.crimson; return L?{x:L.x,y:L.y}:null;}, r:10},
+];
+for(const T of THEMES){ T.aud=null; T.g=null; T.want=false; T.cur=0; T.on=false; }
+function themeSetup(T){
+  if(T.aud||!A.ctx) return;
   try{
-    BGM.aud=new Audio('village-theme.mp3'); BGM.aud.loop=true; BGM.aud.preload='auto';
-    const src=A.ctx.createMediaElementSource(BGM.aud);
-    BGM.g=A.ctx.createGain(); BGM.g.gain.value=0;
-    src.connect(BGM.g); BGM.g.connect(A.master);
-  }catch(e){ BGM.aud=null; }
+    T.aud=new Audio(T.file); T.aud.loop=true; T.aud.preload='auto';
+    const src=A.ctx.createMediaElementSource(T.aud);
+    T.g=A.ctx.createGain(); T.g.gain.value=0;
+    src.connect(T.g); T.g.connect(A.master);
+  }catch(e){ T.aud=null; }
 }
 function bgmTick(dt){
   if(!A.ctx||A.ctx.state!=='running') return;
-  if(!BGM.aud) bgmSetup(); if(!BGM.aud||!BGM.g) return;
   const px=FP.on?FP.x:CAM.tx, py=FP.on?FP.y:CAM.ty;
-  BGM.want = S.started && S.mode!=='battle' && !S.sail && Math.hypot(px-SITE.x,py-SITE.y)<10;
-  if(BGM.want && BGM.aud.paused){ BGM.aud.play().catch(()=>{}); }
-  const tgt=(BGM.want && !BGM.aud.paused && !A.muted)?0.5:0;
-  BGM.cur += (tgt-BGM.cur)*Math.min(1,dt*1.8);
-  if(Math.abs(BGM.cur-tgt)<0.008) BGM.cur=tgt;
-  BGM.g.gain.value=BGM.cur;
-  BGM.on = BGM.cur>0.05;
-  if(BGM.cur<=0.002 && !BGM.want && !BGM.aud.paused){ BGM.aud.pause(); }
+  for(const T of THEMES){
+    if(!T.aud) themeSetup(T); if(!T.aud||!T.g) continue;
+    const a=T.anchor(); if(!a){ T.want=false; continue; }
+    T.want = S.started && S.mode!=='battle' && !S.sail && Math.hypot(px-a.x,py-a.y)<T.r;
+    if(T.want && T.aud.paused){ T.aud.play().catch(()=>{}); }
+    const tgt=(T.want && !T.aud.paused && !A.muted)?0.5:0;
+    T.cur += (tgt-T.cur)*Math.min(1,dt*1.8);
+    if(Math.abs(T.cur-tgt)<0.008) T.cur=tgt;
+    T.g.gain.value=T.cur;
+    T.on = T.cur>0.05;
+    if(T.cur<=0.002 && !T.want && !T.aud.paused){ T.aud.pause(); }
+  }
 }
-
+function bgmAnyOn(){ for(const T of THEMES){ if(T.on) return true; } return false; }
 
 /* =================== shared helpers =================== */
 const pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -2050,7 +2062,7 @@ function updateWorld(dt){
   if(S.banner){ S.banner.tm+=dt; S.banner.life-=dt; if(S.banner.life<=0) S.banner=null; }
   if(S.inspect){ S.inspect.t-=dt; if(S.inspect.t<=0) S.inspect=null; }
   if(S.shake>0) S.shake=Math.max(0,S.shake-dt*20);
-  if(!BGM.on) A.music(G.t, S.dayT>0.78||S.dayT<0.06);   // v69: the brood's song owns the village air
+  if(!bgmAnyOn()) A.music(G.t, S.dayT>0.78||S.dayT<0.06);   // v71: a kingdom's song owns its ground's air
 }
 
 /* ============= building meshes (per BT key, built once, reused) ========== */
