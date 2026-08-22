@@ -1938,11 +1938,22 @@ function updateGob(g,dt){
   g.z=sitY(g.x,g.y);   // v66: ONE SEAT AUTHORITY - characters read the exact sphere surface the mesh is emitted in (sitY == icoHeight(dirOf)), never the planar-DROP projection;
 }
 
+/* v67: his clock - one 36-minute full turn of Orrim, in the DQ9 day/evening/night character (10:3:6 -> day 21:36, evening 3:36, night 10:48).
+   Everything visual (sky, sun, lamps, sleep, spawns) still reads S.dayT in its old frame (dawn 0.25, noon 0.5, dusk 0.75, midnight 0). */
+function clockRate(t){
+  if(t>=0.24&&t<0.70) return (0.70-0.24)/1296;  // day: 21:36
+  if(t>=0.70&&t<0.85) return (0.85-0.70)/216;   // evening: 3:36
+  return (1.24-0.85)/648;                        // night: 10:48
+}
+function tickClock(dt){
+  const t0=S.dayT; S.dayT=(S.dayT+dt*clockRate(t0))%1;
+  if(S.dayT<t0) S._dawnPulse=1;
+}
 function updateWorld(dt){
   checkQuest(); checkGoals(); tickHints(dt); tickShare(dt); S._achT=(S._achT==null?2:S._achT)-dt; if(S._achT<=0){ S._achT=1.8; checkBadges(); }
   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); courierTick(dt);   // v43 + v57 couriers
-  S.dayT=(S.dayT+dt/200)%1;
-  if(S.dayT<dt/200) { S.day++; chron('Day '+S.day+' dawned over Goblinville.');
+  if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
+    chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
     // v30: weather - a rainy spell can roll in at dawn
     if(rnd(1)<0.30){ S.wx.want=1; S.wx.until=S.t+rnd(95,45);
@@ -3540,7 +3551,7 @@ function frame(ts){
   driveCeremony(G.dt);
   const tA=performance.now();
   if(!QNOSIM){   // v20: the mud lives behind the title too
-    const upd=(h)=>{ if(FP.on) fpUpdate(h); if(S.mode==='battle') updateBattle(h); else updateWorld(h); };
+    const upd=(h)=>{ tickClock(h); if(FP.on) fpUpdate(h); if(S.mode==='battle') updateBattle(h); else updateWorld(h); };
     let rem=G.dt;
     while(rem>0.0001){ const h=Math.min(0.05,rem); upd(h); rem-=h; }   // fixed substeps: sim keeps real time even on slow frames
   }
