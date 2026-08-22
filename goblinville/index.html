@@ -1308,7 +1308,7 @@ function seedActors(){
     const a={x:11+Math.cos(i)*2.6+rnd(1,-1), y:13+Math.sin(i)*2.6+rnd(1,-1), z:0,
       ph:rnd(6), face:rnd(6), anim:'walk', spd:rnd(1.15,0.85), size:rnd(1.08,0.9),
       name:names[i], tx:0, ty:0, club:i%3===0};
-    a.tx=rnd(MAP-6,6); a.ty=rnd(MAP-6,6); a.z=groundH(a.x,a.y);
+    a.tx=rnd(MAP-6,6); a.ty=rnd(MAP-6,6); a.z=sitY(a.x,a.y);   // v66;
     actors.push(a);
   }
   actors[0].anim='chop'; actors[1].anim='sleep'; actors[2].anim='cheer';
@@ -1320,7 +1320,7 @@ function updateActors(dt){
       if(d<0.25){ a.tx=rnd(MAP-5,5); a.ty=rnd(MAP-5,5); a.anim=Math.random()<0.4?'carry':'walk'; }
       else { const sp=(a.anim==='carry'?0.9:1.35)*a.spd*dt; a.x+=dx/d*sp; a.y+=dy/d*sp; a.face=Math.atan2(dx,dy); }
     }
-    a.z=groundH(a.x,a.y);
+    a.z=sitY(a.x,a.y);   // v66;
   }
 }
 
@@ -1666,7 +1666,7 @@ function recount(){
 function spawnGob(tx,ty,silent){
   if(S.gobs.length>=S.popCap) return null;
   const tr=pick(TRAITS);
-  const g={x:tx,y:ty,z:groundH(tx,ty), tx:tx,ty:ty, name:pick(NAMES), trait:tr, job:'idler', state:'idle', st:0,
+  const g={x:tx,y:ty,z:sitY(tx,ty),/*v66*/ tx:tx,ty:ty, name:pick(NAMES), trait:tr, job:'idler', state:'idle', st:0,
     ph:rnd(TAU), face:rnd(TAU), moving:false, carry:null, amt:0, target:null, squash:0, emote:null, emoteT:0,
     spd:1.35*(tr.spd||1), speed:1.35*(tr.spd||1), size:tr.size||1, anim:'idle',
     mood:0.75, soldier:false, hp:40, fem:rnd(1)<0.5};
@@ -1935,7 +1935,7 @@ function updateGob(g,dt){
   g.anim = g.state==='sleep' ? 'sleep' : (g.moving? (g.carry?'carry':'walk') : (g.work? ((g.state==='chop'||g.state==='mine'||g.state==='dig')?'chop':'idle') : 'idle'));
   if(g.animT==null) g.animT=rnd(20);
   g.animT+=dt*(g.anim==='walk'||g.anim==='carry'?1.05: g.anim==='chop'?1.2: 0.75);
-  g.z=groundH(g.x,g.y);
+  g.z=sitY(g.x,g.y);   // v66: ONE SEAT AUTHORITY - characters read the exact sphere surface the mesh is emitted in (sitY == icoHeight(dirOf)), never the planar-DROP projection;
 }
 
 function updateWorld(dt){
@@ -2624,7 +2624,7 @@ function getRig(id){
 }
 function bunit(x,y,side,r2){
   const foe=side==='foe';
-  const g={x,y,z:groundH(x,y)-0.02, tx:x,ty:y, name:'', trait:null, job:'war', state:'idle', st:0,
+  const g={x,y,z:sitY(x,y)-0.02,/*v66*/ tx:x,ty:y, name:'', trait:null, job:'war', state:'idle', st:0,
     ph:rnd(TAU), face:rnd(TAU), moving:false, carry:null, amt:0, target:null, squash:0, emote:null, emoteT:0,
     spd:1.85, speed:1.85, size:foe?(r2&&r2.id==='bonechoir'?1.06:1):(0.95+rnd(0.2)), anim:'idle', animT:rnd(2),
     mood:0.7, soldier:true, fem:false, side,
@@ -2743,7 +2743,7 @@ function updateBattle(dt){
         puffW(g.x,(g.z||0)+0.3,g.y,7,'#c9d4a0'); }
       continue; }
     if(g.rout){ g.y-=2.6*dt; g.moving=true; g.sw=false; g.animT=(g.animT||0)+dt*2.2; g.face=Math.PI;
-      g.z=groundH(g.x,g.y)-0.02;
+      g.z=sitY(g.x,g.y)-0.02;   // v66;
       if(g.y<0.5){ const i2=S.gobs.indexOf(g); if(i2>=0) S.gobs.splice(i2,1);
         puffW(g.x,(g.z||0)+0.4,0.6,6,'#caa27a'); }
       continue; }
@@ -2757,7 +2757,7 @@ function updateBattle(dt){
       const sp=(g.side==='us'?1.9*rally:1.7)*dt;
       g.x+=dx/d*sp; g.y+=dy/d*sp; g.moving=true; g.sw=false;
       g.face=Math.atan2(dx,dy); g.animT=(g.animT||0)+dt*1.6;
-      g.z=groundH(g.x,g.y)-0.02;
+      g.z=sitY(g.x,g.y)-0.02;   // v66;
     } else {
       g.moving=false; g.animT=(g.animT||0)+dt; g.face=Math.atan2(dx,dy);
       g.sw=g.cool>0.30;
