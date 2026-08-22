@@ -4563,9 +4563,10 @@ function buildWolfMesh(){
 function seedWilds(){
   S.wilds=[];
   const G=buildGiantMesh();
-  const spots=[[10,18],[15,13],[21,7]];
+  const spots=[[10,18],[15,13],[17,11]];                                                     // v72: the ridge dies before the Crimson Court now - the third giant walks its last dry crest
   for(const sp of spots){ let x=sp[0],y=sp[1];
-    for(let k=0;k<10&&HGT(x,y)<0.55;k++){ x+=0.5; y-=0.5; }
+    for(let k=0;k<24&&HGT(Math.round(x),Math.round(y))<0.55;k++){ x+=rnd(1.6,-1.6); y+=rnd(1.6,-1.6); }
+    x=clamp(x,1,MAP-2); y=clamp(y,1,MAP-2);
     S.wilds.push({giant:1, mesh:G, x, y, a:0, spd:0.38, tx:x, ty:y, repick:0, bob:0, ph:rnd(TAU)}); }
   const W=buildWolfMesh(); let placed=0;
   for(let y=2;y<MAP-2&&placed<4;y++) for(let x=2;x<MAP-2&&placed<4;x++){
@@ -4589,7 +4590,7 @@ function wildTick(dt){
     if(d<0.4){ if((w.repick-=dt)<=0){ w.repick=rnd(4,2);
         const rr=w.giant?3.2:4.5;
         w.tx=clamp(w.x+rnd(rr,-rr),1,MAP-2); w.ty=clamp(w.y+rnd(rr,-rr),1,MAP-2);
-        if(w.giant){ for(let k=0;k<8&&HGT(w.tx,w.ty)<0.5;k++){ w.tx+=rnd(1.5,-1.5); w.ty+=rnd(1.5,-1.5); } } } }
+        for(let k=0;k<8&&HGT(w.tx,w.ty)<0.5;k++){ w.tx=clamp(w.tx+rnd(1.5,-1.5),1,MAP-2); w.ty=clamp(w.ty+rnd(1.5,-1.5),1,MAP-2); } } }   // v72: ONE rule - wilds walk dry ground (was giants only)
     else { const a=Math.atan2(w.tx-w.x,w.ty-w.y);
       const spd=w.spd*(nightNow()&&!w.wolf?0.6:1);
       w.x+=Math.sin(a)*spd*dt; w.y+=Math.cos(a)*spd*dt; w.a=a; w.bob=Math.abs(Math.sin(G.t*(w.giant?2.2:7)))*(w.giant?0.06:0.05); }
