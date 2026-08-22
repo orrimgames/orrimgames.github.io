@@ -704,47 +704,47 @@ function campHGT(x,y){
   return h;
 }
 const LANDS=[
- {id:'bone', name:'THE BONE KINGDOM', x:8, y:30, r:6.5, seatH:0.30, amb:'#9fd4ff',
+ {id:'bone', name:'THE BONE KINGDOM', x:6.0, y:30.0, r:6.5, seatH:0.30, amb:'#9fd4ff',
   tint:[0.80,0.83,0.90],
   tag:'the elder whispers: the Choir keeps its dead singing - keep walking',
   chron:'The elder whispered of the west: the Bone Kingdom, where the Choir keeps its dead singing.'},
- {id:'crimson', name:'THE CRIMSON COURT', x:30, y:7, r:6, seatH:0.34, amb:'#ff4d5e',
+ {id:'crimson', name:'THE CRIMSON COURT', x:20.1, y:8.1, r:6, seatH:0.34, amb:'#ff4d5e',
   tint:[0.55,0.28,0.32],
   tag:'the elder will not look north long: they remember the sun, and miss it',
   chron:'North, the elder said, and looked away: the Crimson Court, which remembers the sun, and misses it.'},
- {id:'spire', name:'SPIREHOLD', x:50, y:12, r:6, seatH:0.46, amb:'#7fe0ff',
+ {id:'spire', name:'SPIREHOLD', x:33.5, y:6.3, r:6, seatH:0.46, amb:'#7fe0ff',
   tint:[0.45,0.55,0.78],
   tag:'the elder taps the map: the sky-readers count our fires from there',
   chron:'The sky-readers of Spirehold keep tall eyes on Orrim. The elder says they counted our fires the night the hall was raised.'},
- {id:'warrens', name:'THE WARRENS', x:52, y:36, r:6, seatH:0.16, amb:'#d8c782',
+ {id:'warrens', name:'THE WARRENS', x:53.0, y:23.3, r:6, seatH:0.16, amb:'#d8c782',
   tint:[0.62,0.55,0.42],
   tag:'the elder spits: the ratkin dig where the river is soft',
   chron:'Where the river runs soft the ratkin dig. The elder spat on the ground twice, which is a blessing, from him.'},
- {id:'hollow', name:'THE HOLLOW', x:28, y:51, r:6.5, seatH:0.22, amb:'#d88fe8',
+ {id:'hollow', name:'THE HOLLOW', x:33.4, y:53.8, r:6.5, seatH:0.22, amb:'#d88fe8',
   tint:[0.52,0.42,0.62],
   tag:'the elder smiles sideways: the sporefolk speak kindly and mean nothing by it',
   chron:'South past the water, the Hollow. The elder says the sporefolk speak kindly and mean nothing by it, which is not a comfort.'},
- {id:'ridge', name:'IRONBEARD RIDGE', x:12, y:45, r:6, seatH:0.5, amb:'#c8b070',
+ {id:'ridge', name:'IRONBEARD RIDGE', x:9.8, y:43.0, r:6, seatH:0.5, amb:'#c8b070',
   tint:[0.62,0.60,0.55],
   tag:'the elder nods once: the ironbeards keep their word longer than their temper',
   chron:'On the southwest ridge the ironbeards strike stone morning to dusk. Their word outlasts their temper, which from the elder is praise.'},
- {id:'crag', name:'IRONJAW CRAG', x:12, y:10, r:6, seatH:0.9, amb:'#e8f2fa',
+ {id:'crag', name:'IRONJAW CRAG', x:9.8, y:17.0, r:6, seatH:0.9, amb:'#e8f2fa',
   tint:[0.85,0.87,0.92],
   tag:'the elder lowers his staff: giants walk the white rock - count yourself small',
   chron:'The elder lowered his staff toward the white rock: Ironjaw Crag, where the giants walk. The brood counts itself small there.'},
- {id:'orcs', name:'THE ORC HOLD', x:44, y:22, r:6, seatH:0.30, amb:'#e87a4d',
+ {id:'orcs', name:'THE ORC HOLD', x:45.7, y:11.9, r:6, seatH:0.30, amb:'#e87a4d',
   tint:[0.50,0.30,0.22],
   tag:'the elder counts on his knuckles: the orcs number their wars higher than their winters',
   chron:'East the ground went red with trampled mud: the Orc Hold. The elder counted on his knuckles - orcs number their wars higher than their winters.'},
- {id:'men', name:'THE CITY OF MEN', x:36, y:44, r:6, seatH:0.30, amb:'#c8d8ff',
+ {id:'men', name:'THE CITY OF MEN', x:45.7, y:48.1, r:6, seatH:0.30, amb:'#c8d8ff',
   tint:[0.60,0.60,0.64],
   tag:'the elder shrugs: men build tall, plan small, and arrive early',
   chron:'The brood found walls fitted like teeth: the City of Men. Men build tall, plan small, and arrive early - the elder shrugged like it was a cough.'},
- {id:'elves', name:'THE ELVEN GROVE', x:18, y:38, r:6, seatH:0.30, amb:'#bfffd8',
+ {id:'elves', name:'THE ELVEN GROVE', x:20.0, y:51.8, r:6, seatH:0.30, amb:'#bfffd8',
   tint:[0.55,0.75,0.62],
   tag:'the elder bows without knowing why: the grove has that effect on people',
   chron:'In the green dim the brood found the Elven Grove, where the trees stand like they are listening. The elder bowed without knowing why.'},
- {id:'bedlam', name:'BEDLAM', x:52, y:52, r:5.5, seatH:0.28, amb:'#ff9e4d', down:true,
+ {id:'bedlam', name:'BEDLAM', x:53.0, y:36.8, r:5.5, seatH:0.28, amb:'#ff9e4d', down:true,
   tint:[0.30,0.16,0.12],
   tag:'the elder says the dragon bled here once - and the bleeding has not finished',
   chron:'Bedlam, the corner where VULKARRAX bled in the first winter. The ribs in the ground are His. The embers there do not fall; they leave.'},
@@ -3819,11 +3819,12 @@ function seedPeoples(){
   // v68: savage tribes - three small wandering bands. No camps, no structures, nothing placed; they only roam.
   S.savages=[];
   const cmesh=buildCaveman();
-  const ST=[[SITE.x-17,SITE.y+14],[SITE.x+15,SITE.y-13],[SITE.x-6,SITE.y-19]];
+  const ST=[[18,22],[42,35],[26,44]];   // v70: band gaps in the respread world
   ST.forEach((st0,b)=>{
     const ax=clamp(st0[0],4,MAP-4), ay=clamp(st0[1],4,MAP-4);
     for(let i=0;i<3;i++){
-      const x=ax+rnd(2.4,-2.4), y=ay+rnd(2.4,-2.4);
+      let x=ax+rnd(2.4,-2.4), y=ay+rnd(2.4,-2.4);
+      for(let k=0;k<10&&tiles[Math.floor(clamp(y,0,MAP-1))][Math.floor(clamp(x,0,MAP-1))].t===2;k++){ x=ax+rnd(2.8,-2.8); y=ay+rnd(2.8,-2.8); }   // v70: savages do not start swimming
       S.savages.push({mesh:cmesh, x, y, a:0, tx:x, ty:y, repick:rnd(3), bob:0, ph:rnd(TAU), gy:0, spd:rnd(1.25,0.95), band:b});
     }
   });
