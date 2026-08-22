@@ -21,7 +21,8 @@ const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,0.1,100);
 /* toon band lighting - Goblinville register: hemi fill + banded sun */
 const grad=new THREE.DataTexture(new Uint8Array([90,150,215,255]),4,1,THREE.RedFormat);
 grad.needsUpdate=true; grad.minFilter=grad.magFilter=THREE.NearestFilter;
-const BONE=new THREE.MeshToonMaterial({color:0xefe6cc,gradientMap:grad});
+const BONE=new THREE.MeshToonMaterial({color:0xf1e4c2,gradientMap:grad});
+const TEETH=new THREE.MeshToonMaterial({color:0xf7eecf,gradientMap:grad});
 const BONE_D=new THREE.MeshToonMaterial({color:0xe0d3b4,gradientMap:grad});
 const DARK=new THREE.MeshToonMaterial({color:0x2a2333,gradientMap:grad});
 scene.add(new THREE.HemisphereLight(0xbcd6ea,0xd8c9a8,0.85));
@@ -34,16 +35,19 @@ function ico(r,d,sx,sy,sz){ const g=new THREE.IcosahedronGeometry(r,d); g.scale(
 function cyl(r1,r2,len,seg){ return new THREE.CylinderGeometry(r1,r2,len,seg||7,1); }
 
 /* ---- skull: big friendly head, the cartoon lives here ---- */
-const head=new THREE.Group(); head.position.set(0,3.55,0); sk.add(head);
-head.add(mesh(ico(0.55,1,1.0,1.12,0.92),BONE,0,0.12,0));           // cranium
+const head=new THREE.Group(); head.position.set(0,3.48,0); sk.add(head);
+head.add(mesh(ico(0.62,2,1.0,1.14,0.94),BONE,0,0.12,0));           // cranium - bigger
+const ck1=mesh(new THREE.BoxGeometry(0.022,0.30,0.022),DARK,0.31,0.50,0.40); ck1.rotation.z=0.32; head.add(ck1);   // the crack
+const ck2=mesh(new THREE.BoxGeometry(0.016,0.16,0.016),DARK,0.38,0.30,0.48); ck2.rotation.z=-0.42; head.add(ck2);  // crack fork
 const jaw=mesh(new THREE.BoxGeometry(0.5,0.24,0.42),BONE_D,0,-0.34,0.06); head.add(jaw);
 const cheekL=mesh(ico(0.16,0),BONE_D,-0.34,-0.10,0.18), cheekR=mesh(ico(0.16,0),BONE_D,0.34,-0.10,0.18);
 head.add(cheekL,cheekR);
-const eyeGeo=ico(0.155,1);
-head.add(mesh(eyeGeo,DARK,-0.21,0.16,0.42), mesh(eyeGeo,DARK,0.21,0.16,0.42));
+const eyeGeo=ico(0.205,1,0.92,1.22,0.62);
+head.add(mesh(eyeGeo,DARK,-0.235,0.17,0.42), mesh(eyeGeo,DARK,0.235,0.17,0.42));
 const nose=mesh(new THREE.ConeGeometry(0.09,0.16,4),DARK,0,-0.08,0.48); nose.rotation.x=Math.PI/2; nose.rotation.z=Math.PI/4; head.add(nose);
 sk.add(mesh(new THREE.BoxGeometry(0.11,0.52,0.10),BONE_D,0,2.49,0.36));   // sternum bar
-for(let i=-1.5;i<=1.5;i++){ const tooth=mesh(new THREE.BoxGeometry(0.09,0.10,0.06),BONE_D,i*0.11,-0.235,0.28); head.add(tooth); }
+for(let i=-2;i<=2;i++){ const tooth=mesh(ico(0.055,0),TEETH,i*0.105,-0.245,0.30); head.add(tooth); }
+for(let i=-1.5;i<=1.5;i++){ const tooth=mesh(ico(0.048,0),TEETH,i*0.105,-0.335,0.30); head.add(tooth); }
 head.rotation.x=-0.05;
 
 /* ---- neck, spine, ribs ---- */

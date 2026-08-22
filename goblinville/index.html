@@ -1951,7 +1951,7 @@ function tickClock(dt){
 }
 function updateWorld(dt){
   checkQuest(); checkGoals(); tickHints(dt); tickShare(dt); S._achT=(S._achT==null?2:S._achT)-dt; if(S._achT<=0){ S._achT=1.8; checkBadges(); }
-  tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); courierTick(dt);   // v43 + v57 couriers
+  tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
     chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
@@ -3285,6 +3285,7 @@ function drawWorldStatics(prog, noCrops){
   for(const p of PROPS){ if(!p.mesh) continue; M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
   if(S.wilds) for(const w of S.wilds){ if(w.hide||w.den) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v43 giants & wolves
   if(S.peoples) for(const w of S.peoples){ if(w.hide) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,w.tl||0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v48: the peoples keep their seats
+  if(S.savages) for(const w of S.savages){ M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v68: savages roam, seat on the same surface
   if(S.courier&&S.mode==='village'&&!FP.on){ const c=S.courier; M4.trs(MODEL,c.x,c.y,c.z,0,c.a||0,0,1,1,1); drawStatic(prog,(Math.sin(G.t*TAU*4.5)>0?COURU:COURD),MODEL); }   // v57: the post flies
   drawBuildings(prog, noCrops);
   drawGhost3(prog);
@@ -3639,23 +3640,41 @@ let QOK=false, QA=null, QM=null, QPROG=null, QSCALE=0.165, QA2=null, QM2=null, Q
 /* v63: the Bone Kingdom's people, given their own skin - chunky painted-toy skeletons (Daniel canon) */
 function buildSkeleton(o){
   const m=MB(),T=M4.id();
-  const nb=hex(o.skin||'#efe6cc'), jn=hex('#e0d3b4'), dk=hex('#2a2333'), glow=hex(o.eye||'#9fd4ff');
+  const iv=hex(o.skin||'#f1e4c2'), jn=hex('#dfcfa6'), dk=hex('#241d2e'), glow=hex(o.eye||'#9fd4ff'), tooth=hex('#f6ecd6');
   const w=o.w||0.9, h=o.h||1, hd=o.hd||1.3;
-  for(const sx of[-0.075,0.075]){ M4.trs(T,sx*w,0.115*h,0,0,0,0,1,1,1); tube(m,0.038,0.030,0.23,5,nb,T,0,true,true);
-    M4.trs(T,sx*w,0.205*h,0,0,0,0,1,1,1); ball(m,0.055,6,jn,T,0,0.9); }         // shin bones + knee knobs
-  M4.trs(T,0,0.315*h,0,0,0,0,1,1,1); box(m,0.30*w,0.06,0.20*w,nb,T,0,0.8);      // pelvis slab
-  M4.trs(T,0,0.355*h,0,0,0,0,1,1,1); box(m,0.10*w,0.08,0.10*w,jn,T,0,0.9);      // spine nub
-  M4.trs(T,0,0.475*h,0,0,0,0,1,1,1); box(m,0.24*w,0.25*h,0.15*w,dk,T,0,0.7);    // the hollow chest
-  for(let i=0;i<4;i++){ const ry=0.385*h+i*0.062*h, rw2=0.30*(1.0-0.06*Math.abs(i-1.5))*w;
-    M4.trs(T,0,ry,0,0,0,0,1,1,1); box(m,rw2*1.32,0.028,0.19*w,nb,T,0,0.9); }     // rib slats
-  M4.trs(T,0,0.60*h,0,0,0,0,1,1,1); box(m,0.44*w,0.045,0.13*w,nb,T,0,0.9);      // shoulder bar
-  for(const sx of[-0.21,0.21]){ M4.trs(T,sx*w,0.45*h,0,0,0,sx>0?0.16:-0.16,1,1,1); tube(m,0.032,0.026,0.20,5,nb,T,0,true,true);
-    M4.trs(T,sx*w,0.35*h,0,0,0,1,1,1); ball(m,0.05,6,jn,T,0,0.9); }              // arm bones + hand knobs
-  M4.trs(T,0,0.735*h,0,0,0,0,1,1,1); ball(m,0.155*hd,8,nb,T,0,0.9);              // the round solemn skull
-  M4.trs(T,0,0.64*h,0.045*hd,0,0,0,1,1,1); box(m,0.14*hd,0.045,0.12*hd,jn,T,0,0.85);  // jaw
-  for(const sx of[-0.052,0.052]){ M4.trs(T,sx*hd,0.73*h,0.115*hd,0,0,0,1,1,1); box(m,0.055,0.065,0.05,dk,T,0,0.95);
-    M4.trs(T,sx*hd,0.725*h,0.135*hd,0,0,0,1,1,1); box(m,0.018,0.018,0.018,glow,T,0,1); }  // sockets + choir-light eyes
-  M4.trs(T,0,0.675*h,0.115*hd,0.5,0,0,1,1,1); pyramid(m,0.03,0.05,0.03,dk,T,0); // nose notch
+  // chunky legs: thick shins, round knees, stub feet
+  for(const sx of[-0.08,0.08]){
+    M4.trs(T,sx*w,0.13*h,0,0,0,0,1,1,1); tube(m,0.046,0.038,0.26,6,iv,T,0,true,true);
+    M4.trs(T,sx*w,0.27*h,0,0,0,0,1,1,1); ball(m,0.068,7,jn,T,0,0.9);            // knee knob
+    M4.trs(T,sx*w,0.025*h,0.045*hd,0,0,0,1,1,1); ball(m,0.055,6,iv,T,0,0.85);   // stub foot
+  }
+  M4.trs(T,0,0.32*h,0,0,0,0,1,1,1); ball(m,0.155*w*1.6,8,iv,T,0,0.85);          // round pelvis
+  M4.trs(T,0,0.36*h,0,0,0,0,1,1,1); tube(m,0.035,0.035,0.10,6,jn,T,0,true,true); // spine
+  // ribcage: solid sternum + chunky ribs curving around
+  M4.trs(T,0,0.475*h,0.015,0,0,0,1,1,1); box(m,0.09*w,0.26*h,0.09*w,iv,T,0,0.9);  // sternum
+  for(let i=0;i<4;i++){ const ry=0.40*h+i*0.055*h, rw2=(0.30-0.03*Math.abs(i-1.5))*w;
+    M4.trs(T,0,ry,-0.01,0,0,0,1,1,1); ball(m,rw2*0.78,7,iv,T,0,0.78);            // rib mass
+    M4.trs(T,0,ry+0.004,0.13*w,0,0,0,1,1,1); box(m,rw2*1.35,0.030,0.10*w,iv,T,0,0.95); } // rib front slats
+  M4.trs(T,0,0.615*h,0,0,0,0,1,1,1); box(m,0.46*w,0.055,0.14*w,iv,T,0,0.9);      // shoulder bar
+  for(const sx of[-0.235,0.235]){
+    M4.trs(T,sx*w,0.47*h,0,0,0,sx>0?0.14:-0.14,1,1,1); tube(m,0.040,0.033,0.21,6,iv,T,0,true,true);
+    M4.trs(T,sx*w,0.36*h,0,0,0,1,1,1); ball(m,0.062,7,jn,T,0,0.9);               // elbow/hand knob
+    M4.trs(T,sx*w,0.575*h,0,0,0,1,1,1); ball(m,0.070,7,jn,T,0,0.9);              // shoulder knob
+  }
+  // THE SKULL - oversized, warm ivory, big dark sockets, rounded teeth, living crack
+  const sy=0.775*h, sr=0.185*hd;
+  M4.trs(T,0,sy,-0.005,0,0,0,1,1.06,0.94); ball(m,sr,9,iv,T,0,0.92);             // cranium
+  M4.trs(T,0,sy-sr*0.52,sr*0.62,0,0,0,1,1,1); box(m,sr*1.05,sr*0.55,sr*0.62,iv,T,0,0.88);  // jaw block
+  for(let i=0;i<5;i++){ const tx2=(i-2)*sr*0.20;
+    M4.trs(T,tx2,sy-sr*0.28,sr*0.90,0,0,0,1,1,1); ball(m,sr*0.085,5,tooth,T,0,1); }        // rounded top teeth
+  for(let i=0;i<4;i++){ const tx2=(i-1.5)*sr*0.22;
+    M4.trs(T,tx2,sy-sr*0.62,sr*0.80,0,0,0,1,1,1); ball(m,sr*0.075,5,tooth,T,0,1); }        // rounded bottom teeth
+  for(const sxs of[-0.5,0.5]){
+    M4.trs(T,sxs*sr,sy+sr*0.10,sr*0.78,0,0,0,1,1.25,0.6); ball(m,sr*0.30,7,dk,T,0,0.97);   // big dark socket
+    M4.trs(T,sxs*sr,sy+sr*0.08,sr*0.98,0,0,0,1,1,1); box(m,sr*0.07,sr*0.07,sr*0.05,glow,T,0,1); } // choir-light deep inside
+  M4.trs(T,0,sy-sr*0.22,sr*0.90,0.5,0,0,1,1,1); pyramid(m,sr*0.14,sr*0.22,sr*0.10,dk,T,0); // nose notch
+  M4.trs(T,sr*0.55,sy+sr*0.62,sr*0.55,0.5,0,0.5,1,1,1); box(m,sr*0.035,sr*0.42,sr*0.05,dk,T,0,0.9);  // the crack
+  M4.trs(T,sr*0.63,sy+sr*0.36,sr*0.70,0.7,0,0.9,1,1,1); box(m,sr*0.03,sr*0.20,sr*0.04,dk,T,0,0.9);   // crack fork
   return upload(m);
 }
 function buildFolk(o){
@@ -3684,6 +3703,40 @@ function buildFolk(o){
   if(o.staff){ M4.trs(T,0.30*w,0.42*h,0.02,0,0,-0.1,1,1,1); tube(m,0.02,0.02,0.9,5,hex('#6b4a2c'),T,0,true,true);
                M4.trs(T,0.33*w,0.91*h,0.02,0,0,0,1,1,1); ball(m,0.06,6,hex(o.glow||'#7fe0ff'),T,0,1); }
   if(o.eye){ for(const sx of[-0.045,0.045]){ M4.trs(T,sx*hd,0.585*h,0.10*hd,0,0,0,1,1,1); box(m,0.05,0.05,0.05,hex(o.eye),T,0,1); } }
+  return upload(m);
+}
+/* v68: THE SAVAGES - caveman cannibals. They build nothing. Small tribes roam the wild; the land stays untouched by them. */
+function buildCaveman(){
+  const m=MB(),T=M4.id();
+  const skin=hex('#c98a5e'), skin2=hex('#b5764c'), fur=hex('#6b4a2c'), fur2=hex('#54401f'), hair=hex('#6b4423'), hair2=hex('#4e3018'), dk=hex('#20160e');
+  const h=1.16, w=1.0;
+  // bare legs + bare feet
+  for(const sx of[-0.11,0.11]){
+    M4.trs(T,sx*w,0.135*h,0,0,0,0,1,1,1); box(m,0.13*w,0.27*h,0.13*w,skin,T,0,0.75);
+    M4.trs(T,sx*w,0.02*h,0.05,0,0,0,1,1,1); ball(m,0.085,6,skin2,T,0,0.9); }       // bare feet
+  // hips + fur loincloth with torn flaps
+  M4.trs(T,0,0.30*h,0,0,0,0,1,1,1); box(m,0.34*w,0.16*h,0.24*w,fur,T,0,0.8);
+  for(let i=0;i<5;i++){ const a=i/5*TAU+0.3;
+    M4.trs(T,Math.sin(a)*0.16*w,0.235*h,Math.cos(a)*0.12*w,0.5,a,0,1,1,1); pyramid(m,0.07,0.13,0.05,i%2?fur:fur2,T,0); } // torn fur flaps
+  // muscular torso: wide chest, thick shoulders
+  M4.trs(T,0,0.50*h,0,0,0,0,1,1,1); box(m,0.46*w,0.26*h,0.26*w,skin,T,0,0.8);
+  for(const sx of[-0.27,0.27]){ M4.trs(T,sx*w,0.58*h,0,0,0,0,1,1,1); ball(m,0.085,7,skin,T,0,0.85); }   // delts
+  // big arms, knuckles low
+  for(const sx of[-0.31,0.31]){
+    M4.trs(T,sx*w,0.42*h,0,0,0,sx>0?0.10:-0.10,1,1,1); tube(m,0.055,0.045,0.26,6,skin,T,0,true,true);
+    M4.trs(T,sx*w,0.29*h,0,0,0,1,1,1); ball(m,0.075,6,skin2,T,0,0.9); }          // big hands
+  // BIG head
+  M4.trs(T,0,0.76*h,0,0,0,0,1,1.02,0.96); ball(m,0.175,8,skin,T,0,0.9);
+  M4.trs(T,0,0.685*h,0.03,0,0,0,1,1,1); box(m,0.20,0.09,0.17,skin,T,0,0.85);     // jaw
+  M4.trs(T,0,0.80*h,0.165,0.12,0,0,1,1,1); box(m,0.20,0.045,0.03,dk,T,0,0.95);   // heavy brow
+  for(const sx of[-0.055,0.055]){ M4.trs(T,sx,0.765*h,0.16,0,0,0,1,1,1); box(m,0.045,0.05,0.03,hex('#fdfdf6'),T,0,1);
+    M4.trs(T,sx*0.9,0.762*h,0.185,0,0,0,1,1,1); box(m,0.018,0.022,0.015,dk,T,0,1); }   // white eyes + dark pupils
+  M4.trs(T,0,0.725*h,0.175,0,0,0,1,1,1); ball(m,0.035,5,skin2,T,0,0.9);          // flat nose
+  // wild brown mane: spikes everywhere
+  for(let i=0;i<7;i++){ const a=i/7*TAU;
+    M4.trs(T,Math.sin(a)*0.15,0.86*h+((i%2)?0.02:-0.01),Math.cos(a)*0.15,0.55,a*0.93,0,1,1,1); pyramid(m,0.075,0.17,0.075,i%2?hair:hair2,T,0); }
+  M4.trs(T,0,0.88*h,0,0,0,0,1,1,1); ball(m,0.16,7,hair,T,0,0.85);                // mane mass
+  M4.trs(T,0,0.72*h,-0.16,0.35,0,0,1,1,1); ball(m,0.13,7,hair2,T,0,0.9);         // shaggy back hair
   return upload(m);
 }
 const FOLK={
@@ -3737,6 +3790,17 @@ function seedPeoples(){
       S.peoples.push({L:L.id, mesh, x, y, a:0, tx:x, ty:y, repick:0, bob:0, ph:rnd(TAU), gy:0, spd:F.spd*rnd(1.2,0.8), F});
     }
   }
+  // v68: savage tribes - three small wandering bands. No camps, no structures, nothing placed; they only roam.
+  S.savages=[];
+  const cmesh=buildCaveman();
+  const ST=[[SITE.x-17,SITE.y+14],[SITE.x+15,SITE.y-13],[SITE.x-6,SITE.y-19]];
+  ST.forEach((st0,b)=>{
+    const ax=clamp(st0[0],4,MAP-4), ay=clamp(st0[1],4,MAP-4);
+    for(let i=0;i<3;i++){
+      const x=ax+rnd(2.4,-2.4), y=ay+rnd(2.4,-2.4);
+      S.savages.push({mesh:cmesh, x, y, a:0, tx:x, ty:y, repick:rnd(3), bob:0, ph:rnd(TAU), gy:0, spd:rnd(1.25,0.95), band:b});
+    }
+  });
 }
 function folkTick(dt){
   if(!S.peoples) return;
@@ -3755,6 +3819,25 @@ function folkTick(dt){
       w.bob=Math.abs(Math.sin(G.t*(3+w.spd*3)+w.ph))*0.04*(nm>1?0.5:1); }
     w.gy=sitY(w.x,w.y);
     w.tl=RACE_ACT[w.L]?RACE_ACT[w.L](w):0;
+  }
+}
+function savageTick(dt){
+  if(!S.savages) return;
+  for(const w of S.savages){
+    const d=Math.hypot(w.tx-w.x,w.ty-w.y);
+    if(d<0.4){ if((w.repick-=dt)<=0){ w.repick=rnd(6,2.5);
+        for(let k=0;k<10;k++){ const a=rnd(TAU), rr=rnd(9,3);
+          const nx2=w.x+Math.sin(a)*rr, ny2=w.y+Math.cos(a)*rr;
+          if(nx2<2||nx2>MAP-2||ny2<2||ny2>MAP-2) continue;
+          if(tiles[Math.floor(ny2)][Math.floor(nx2)].t===2) continue;          // not swimmers
+          const dk=Math.hypot(nx2-SITE.x,ny2-SITE.y); if(dk<11) continue;      // the village is off the menu
+          let inLand=false; for(const L of LANDS){ if(Math.hypot(nx2-L.x,ny2-L.y)<L.r*0.75){ inLand=true; break; } }
+          if(inLand) continue;                                                 // kingdom clearings are not theirs
+          w.tx=nx2; w.ty=ny2; break; } } }
+    else { const a=Math.atan2(w.tx-w.x,w.ty-w.y);
+      w.x+=Math.sin(a)*w.spd*dt; w.y+=Math.cos(a)*w.spd*dt; w.a=a;
+      w.bob=Math.abs(Math.sin(G.t*(3+w.spd*3)+w.ph))*0.05; }
+    w.gy=sitY(w.x,w.y);
   }
 }
 
