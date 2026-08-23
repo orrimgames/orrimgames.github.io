@@ -1847,7 +1847,7 @@ function updateGob(g,dt){
   if((S.wx?S.wx.rain:0)>0.3){ g.splT=(g.splT||0)-dt; }
   function step(txp,typ,arrive){
     const dx=txp-g.x, dy=typ-g.y, d=Math.hypot(dx,dy);
-    if(d<0.14){ arrive(); return; }
+    if(d<0.14 || spd*dt>=d){ g.x=txp; g.y=typ; arrive(); return; }   // v73: ONE RULE - a stride never skips its target: if this tick's movement covers the remaining distance, it arrives (low-fps dt spikes made haulers orbit the door 0.14 band forever)
     g.moving=true; g.face=Math.atan2(dx,dy);
     const k=spd*dt/d;
     const nx=g.x+dx*k, ny=g.y+dy*k;
