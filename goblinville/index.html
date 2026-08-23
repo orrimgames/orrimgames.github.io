@@ -2574,7 +2574,7 @@ function drawWarMap(){
   const R=REGIONS.find(r=>r.id===mapSel);
   ctx.fillStyle='rgba(14,9,16,0.9)'; ctx.fillRect(0,H-178,W,178);
   if(!R){
-    txt3('tap a region',W/2,H-128,16,'#e0c4aa','center',800);
+    txt3(TAPW()+' a region',W/2,H-128,16,'#e0c4aa','center',800);
     txt3('dashed lines are trade roads.',W/2,H-104,11.5,'#a89484','center',600);
     txt3('the red ones run to people who want your hot springs.',W/2,H-86,11.5,'#a89484','center',600);
   } else {
@@ -2898,7 +2898,7 @@ function drawBattleUI(){
   const FB=fightR();
   ctx.fillStyle='rgba(70,120,40,0.92)'; rrp(FB.x,FB.y,FB.w,FB.h,14); ctx.fill();
   txt3('FIGHT IN PERSON', FB.x+FB.w/2, FB.y+28, 14, '#e6ffc8','center',800);
-  if(S.war.aim) txt3('tap where the fire should fall',W/2,H-100,14,'#ffb45a','center',900,'#2a1208');
+  if(S.war.aim) txt3(TAPW()+' where the fire should fall',W/2,H-100,14,'#ffb45a','center',900,'#2a1208');
 }
 function dragonfireAtWorld(wx,wz){
   S.faith-=25; S.war.firedOnce=true; S.shake=14; A.build();
@@ -2940,7 +2940,7 @@ function warTap(x,y){
     if(inR(x,y,fightR())){ fpEnterBattle(); return true; }
     if(inR(x,y,retreatR())){ endBattle(false); return true; }
     if(inR(x,y,rallyR())){ if(!S.war.rallyUsed){ S.war.rallyUsed=true; S.war.rally=6; A.cheer(); toast2('CHAAARGE!'); } else A.deny(); return true; }
-    if(inR(x,y,fireR())){ if(S.faith>=25&&!S.war.firedOnce){ S.war.aim=true; toast2('tap where the fire should fall'); A.blip(); } else A.deny(); return true; }
+    if(inR(x,y,fireR())){ if(S.faith>=25&&!S.war.firedOnce){ S.war.aim=true; toast2(TAPW()+' where the fire should fall'); A.blip(); } else A.deny(); return true; }
     if(S.war.aim){ S.war.aim=false; const t=rayGround(x,y); if(t) dragonfireAtWorld(t[0],t[1]); return true; }
     return true;
   }
@@ -3023,7 +3023,7 @@ function fpEnter(){
   FP.a=Math.atan2(hx-FP.x, hy-FP.y); FP.pitch=0.06; FP.bob=0; FP.mv=null; FP.lk=null; FP.hurt=0;
   FP.iso={tx:CAM.tx,ty:CAM.ty,yaw:CAM.yaw,pitch:CAM.pitch,dist:CAM.dist,zoom:CAM.zoom,gzh:CAM.gzh};
   FP.on=true; FP.battle=false; CAM.mode='fp'; fpSyncCam();
-  A.pop(3); banner2('GOBLINVILLE, FROM THE MUD','drag left to walk, drag right to look');
+  A.pop(3); banner2('GOBLINVILLE, FROM THE MUD',DESK.mouse?'WASD to walk, drag to look':'drag left to walk, drag right to look');
 }
 function fpEnterBattle(){
   const us=S.gobs.filter(g=>g.side==='us'&&g.hp>0);
@@ -3129,15 +3129,18 @@ function drawWalkBtn(){
 }
 function drawFPUI(){
   const st=fpStickR();
+  if(!DESK.mouse){
   ctx.globalAlpha=FP.mv?0.5:0.28;
   ctx.fillStyle='#000'; ellp(st.x+st.w/2,st.y+st.h/2,st.w/2,st.h/2); ctx.fill();
   ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
   if(FP.mv){ ctx.fillStyle='#ffd9a0'; ellp(clamp(FP.mv.x,st.x+26,st.x+st.w-26),clamp(FP.mv.y,st.y+26,st.y+st.h-26),22,22); ctx.fill(); }
   ctx.globalAlpha=1;
+  }
   const e=fpExitR();
   ctx.fillStyle='rgba(20,14,20,0.82)'; rrp(e.x,e.y,e.w,e.h,12); ctx.fill();
   txt3(FP.battle?'\u2039 COMMAND':'\u2039 MAP VIEW', e.x+e.w/2, e.y+24, 12,'#ffe3c8','center',800);
-  txt3(FP.battle?'left drag move - right drag look - tap right to swing':'drag left to walk - drag right to look', W/2, H-14, 11.5,'rgba(255,240,225,0.7)','center',600);
+  txt3(DESK.mouse?(FP.battle?'WASD to move - drag to look - click to swing - Esc to command':'WASD to walk - drag to look - Esc to leave')
+               :(FP.battle?'left drag move - right drag look - tap right to swing':'drag left to walk - drag right to look'), W/2, H-14, 11.5,'rgba(255,240,225,0.7)','center',600);
   if(FP.battle && !S.war.result){
     const us=S.gobs.filter(g=>g.side==='us'&&g.hp>0).length, foe=S.gobs.filter(g=>g.side==='foe'&&g.hp>0).length;
     ctx.fillStyle='rgba(16,10,14,0.7)'; rrp(14,18,W-130,48,12); ctx.fill();
@@ -4079,7 +4082,7 @@ function drawGhostHint(){
   if(!S.sel) return;
   const T=BT[S.sel];
   const fr=S.tut<QUESTS.length;
-  txt3(S.ghost.show?(S.ghost.ok?(fr?'same spot again - tap to build':'tap again to build '+T.name):(fr?'blocked - wiggle to a clear patch':'blocked')):(fr?'tap the land to aim the '+T.name:'tap where to build the '+T.name), W/2, H-BARH-34, 15, '#fff','center',800);
+  txt3(S.ghost.show?(S.ghost.ok?(fr?'same spot again - '+TAPW()+' to build':TAPW()+' again to build '+T.name):(fr?'blocked - wiggle to a clear patch':'blocked')):(fr?TAPW()+' the land to aim the '+T.name:TAPW()+' where to build the '+T.name), W/2, H-BARH-34, 15, '#fff','center',800);
   const c=cancelR();
   ctx.fillStyle='rgba(190,60,60,0.92)'; rrp(c.x,c.y,c.w,c.h,14); ctx.fill();
   txt3('CANCEL',c.x+c.w/2,c.y+c.h/2,12,'#fff','center',800);
@@ -4158,7 +4161,7 @@ function drawTitle(){
   txt3('goblins keep the last hot springs of ORRIM', W/2, H*0.475, 13.5, '#d9bda8','center',600);
   txt3(S.victory?'they were small. they were many. they won.':'they are small. they are many. they are going to win.', W/2, H*0.51, 12, S.victory?'#ffd34d':'#a89484','center',600);
   if(saveExists) txt3(S.gobs.length+' goblins are keeping the fire', W/2, H*0.555, 11.5, '#c9b8a4','center',600,'rgba(20,12,20,0.8)');
-  if(Math.sin(G.t*2.2)>-0.3) txt3(saveExists?('tap to continue - Day '+S.day+' waits'):'tap to begin', W/2, H*0.82, 16, '#ffd28a','center',800,'rgba(20,12,20,0.8)');
+  if(Math.sin(G.t*2.2)>-0.3) txt3(saveExists?(TAPW()+' to continue - Day '+S.day+' waits'):TAPW()+' to begin', W/2, H*0.82, 16, '#ffd28a','center',800,'rgba(20,12,20,0.8)');
   if(saveExists) txt3('hold to start over', W/2, H*0.875, 11, '#a08a78','center',600,'rgba(20,12,20,0.8)');
 }
 function drawUI(){
@@ -4619,7 +4622,7 @@ function finishStory(){
   S.story=null;
   S.started=true; S.introZoom=0.5;
   banner2('MAKE IT BREATHE AGAIN','build, farm, and grow the brood'); A.pop(3);
-  if(S.tut<QUESTS.length){ toast2('tap the land - shrooms, trees, rocks'); S.tapCombo=S.tapCombo||0; A.say(9);
+  if(S.tut<QUESTS.length){ toast2(TAPW()+' the land - shrooms, trees, rocks'); S.tapCombo=S.tapCombo||0; A.say(9);
     for(const p of PROPS) if(p.fire){ sparkW(p.x,p.gy+0.6,p.y,26,'#ffd34d'); sparkW(p.x,p.gy+0.9,p.y,14,'#ff9a4d'); break; } }
   saveGame();
 }
@@ -4926,7 +4929,7 @@ function drawCeremony(){
     for(const L of lines){ txt3(L[0]+' - the banner burns bright',cx,ly,13.5,L[1],'center',700); ly+=24; }
     txt3('The Ember War is won. VULKARRAX sees you now.',cx,ly+10,13,'#d8ffd0','center',800);
     txt3('the brood keeps the fire - walk the roads not walked',cx,ly+34,11.5,'#a89484','center',600);
-    if(Math.sin(G.t*2.2)>-0.3) txt3('tap to keep building',cx,cy+162,14,'#ffd28a','center',800,'rgba(20,12,20,0.8)');
+    if(Math.sin(G.t*2.2)>-0.3) txt3(TAPW()+' to keep building',cx,cy+162,14,'#ffd28a','center',800,'rgba(20,12,20,0.8)');
   }
 }
 
@@ -4964,7 +4967,7 @@ function handleTap3(x,y){
       const unmet=QUESTS.findIndex(q=>{ try{ return !q.check(); }catch(e){ return false; } });
       if(unmet>=0){ S.tut=unmet; toast2('the elder returns - he was not finished'); A.say(8); }
     }
-    if(S.tut<QUESTS.length){ toast2('tap the land - shrooms, trees, rocks'); S.tapCombo=S.tapCombo||0; A.say(9);
+    if(S.tut<QUESTS.length){ toast2(TAPW()+' the land - shrooms, trees, rocks'); S.tapCombo=S.tapCombo||0; A.say(9);
       for(const p of PROPS) if(p.fire){ sparkW(p.x,p.gy+0.6,p.y,26,'#ffd34d'); sparkW(p.x,p.gy+0.9,p.y,14,'#ff9a4d'); break; } }
     saveGame(); return; }
   if(x>W-100 && y<60){ G.diag=((G.diag||0)+1)%3; return; }
@@ -5014,7 +5017,7 @@ function handleTap3(x,y){
   }
   else { const b=occ(t[0],t[1]); if(b){ S.pick=b; A.blip(); toast2(BT[b.key].name+' - '+BT[b.key].desc); } }
 }
-glc.addEventListener('touchstart',e=>{e.preventDefault();
+function startTouch(e){e.preventDefault();
   for(const t of e.changedTouches) touches.set(t.identifier,{x:t.clientX,y:t.clientY});
   if(FP.on){
     for(const t of e.changedTouches){
@@ -5038,7 +5041,8 @@ glc.addEventListener('touchstart',e=>{e.preventDefault();
     tapStart=null;
   }
   S._holdT=(!S.started&&saveExists&&touches.size===1)?G.t:null;
-},{passive:false});
+}
+glc.addEventListener('touchstart',startTouch,{passive:false});
 function moveStep(e){
   for(const t of e.changedTouches) if(touches.has(t.identifier)) touches.set(t.identifier,{x:t.clientX,y:t.clientY});
   if(FP.on){
@@ -5074,10 +5078,11 @@ function moveStep(e){
     clampCam3();
   }
 }
-glc.addEventListener('touchmove',e=>{e.preventDefault(); S._holdT=null;
+function moveTouch(e){e.preventDefault(); S._holdT=null;
   const evs=(e.getCoalescedEvents && e.getCoalescedEvents().length)?e.getCoalescedEvents():[e];
   for(const ev of evs) moveStep(ev);
-},{passive:false});
+}
+glc.addEventListener('touchmove',moveTouch,{passive:false});
 function endTouch(e){ e.preventDefault(); S._holdT=null;
   if(FP.on){
     for(const t of e.changedTouches){
@@ -5104,4 +5109,112 @@ function endTouch(e){ e.preventDefault(); S._holdT=null;
 }
 glc.addEventListener('touchend',endTouch,{passive:false});
 glc.addEventListener('touchcancel',endTouch,{passive:false});
+
+/* ================== v74: desktop - mouse, wheel, keyboard ==================
+   One rule: desktop input is translated into the touch pipeline, and every
+   shortcut hits the same rect a finger would hit. No parallel UI logic.      */
+const DESK={mouse:false, tlast:-1e9, keys:new Set(), rot:null, drag:false, hinted:false, last:performance.now()};
+function TAPW(){ return DESK.mouse?'click':'tap'; }            // one word authority: the copy follows the hand on the device
+function deskFresh(){ return performance.now()-DESK.tlast>1200; }   // ignore the compatibility mouse events a touch emits
+function deskPt(x,y){ return {preventDefault(){}, changedTouches:[{identifier:'m0',clientX:x,clientY:y}]}; }
+function deskTap(r){ if(r) handleTap3(r.x+r.w/2, r.y+r.h/2); }
+glc.addEventListener('touchstart',()=>{DESK.tlast=performance.now(); DESK.mouse=false;},{passive:true,capture:true});
+glc.addEventListener('touchmove',()=>{DESK.tlast=performance.now();},{passive:true,capture:true});
+glc.addEventListener('contextmenu',e=>e.preventDefault());
+glc.addEventListener('mousedown',e=>{
+  if(!deskFresh()) return;
+  e.preventDefault(); DESK.mouse=true; A.init(); A.resume();
+  if(e.button===2||e.button===1){ DESK.rot={x:e.clientX,y:e.clientY}; return; }
+  DESK.drag=true;
+  if(FP.on){ FP.lk={id:'m0',x:e.clientX,y:e.clientY,moved:0}; return; }
+  startTouch(deskPt(e.clientX,e.clientY));
+});
+window.addEventListener('mousemove',e=>{
+  if(!deskFresh()) return;
+  DESK.mouse=true;
+  if(!DESK.hinted && S.started){ DESK.hinted=true;
+    toast2('WASD or arrows to move  -  drag to pan  -  right-drag to turn  -  scroll to zoom  -  M map, V walk, Esc back'); }
+  if(DESK.rot){
+    const dx=e.clientX-DESK.rot.x, dy=e.clientY-DESK.rot.y; DESK.rot={x:e.clientX,y:e.clientY};
+    if(FP.on){ FP.a-=dx*0.006; FP.pitch=clamp(FP.pitch-dy*0.005,-0.95,0.9); }
+    else { CAM.yaw-=dx*0.006; CAM.pitch=clamp(CAM.pitch-dy*0.005,0.18,1.45); clampCam3(); }
+    return;
+  }
+  if(DESK.drag){ moveTouch(deskPt(e.clientX,e.clientY)); return; }
+  if(!FP.on && S.sel && e.clientY<H-BARH) updateGhost3(e.clientX,e.clientY);   // hover ghost: a mouse can aim before it commits
+});
+window.addEventListener('mouseup',e=>{
+  if(!deskFresh()) return;
+  if(DESK.rot){ DESK.rot=null; if(e.button===2||e.button===1) return; }
+  if(!DESK.drag) return;
+  DESK.drag=false;
+  endTouch(deskPt(e.clientX,e.clientY));
+});
+glc.addEventListener('wheel',e=>{
+  if(!deskFresh()||FP.on) return;
+  e.preventDefault();
+  CAM.zoom=clamp(CAM.zoom*Math.pow(1.0016,-e.deltaY),0.030,1.9);
+  clampCam3();
+},{passive:false});
+function deskCard(i){
+  if(i>=BKEYS.length) return;
+  barScroll=clamp(10+i*(CARDW+8)-W/2+CARDW/2,0,barScrollMax);
+  deskTap(cardRect2(i));
+}
+function deskShortcut(k,e){
+  if(!S.started){ if(k===' '||k==='Enter'){ e.preventDefault(); handleTap3(W/2,H/2); } return; }
+  if(k==='Escape'){
+    if(FP.on) fpExit();
+    else if(S.sel){ S.sel=null; S.ghost.show=false; ghostArmed=false; A.blip(); }
+    else if(S.mode==='war') deskTap(backR());
+    return;
+  }
+  if(S.mode==='battle'){
+    if(k===' '){ e.preventDefault(); deskTap(S.war.result?resultBtnR():rallyR()); return; }
+    if(k==='f'){ deskTap(fireR()); return; }
+    if(k==='r'){ deskTap(retreatR()); return; }
+    if(k==='Enter'&&!FP.on){ deskTap(fightR()); return; }
+    return;
+  }
+  if(S.mode==='war'){ if(k==='Enter'||k===' '){ e.preventDefault(); deskTap(sendR()); } return; }
+  if(k==='m'&&!FP.on){ deskTap(warBtnR()); return; }
+  if(k==='v'){ if(FP.on) fpExit(); else deskTap(walkBtnR()); return; }
+  if(!FP.on && k>='1' && k<='9'){ deskCard(+k-1); return; }
+}
+const DESKHOLD=['w','a','s','d','q','e','z','x','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+window.addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  const k=e.key.length===1?e.key.toLowerCase():e.key;
+  DESK.mouse=true;
+  if(DESKHOLD.indexOf(k)>=0){ DESK.keys.add(k); e.preventDefault(); }
+  if(e.repeat) return;
+  A.init(); A.resume();
+  deskShortcut(k,e);
+});
+window.addEventListener('keyup',e=>{ DESK.keys.delete(e.key.length===1?e.key.toLowerCase():e.key); });
+window.addEventListener('blur',()=>{ DESK.keys.clear(); DESK.rot=null; DESK.drag=false;
+  if(FP.mv&&FP.mv.id==='kbd') FP.mv=null; });
+function deskTick(){
+  const now=performance.now(), dt=Math.min(0.05,(now-DESK.last)/1000); DESK.last=now;
+  const K=DESK.keys;
+  const ax=((K.has('d')||K.has('ArrowRight'))?1:0)-((K.has('a')||K.has('ArrowLeft'))?1:0);
+  const ay=((K.has('s')||K.has('ArrowDown'))?1:0)-((K.has('w')||K.has('ArrowUp'))?1:0);
+  if(FP.on){
+    if(ax||ay){ const st=fpStickR(), cx=st.x+st.w/2, cy=st.y+st.h/2;
+      FP.mv={id:'kbd',x0:cx,y0:cy,x:cx+ax*54,y:cy+ay*54}; }
+    else if(FP.mv&&FP.mv.id==='kbd') FP.mv=null;
+  } else if(S.started){
+    if(ax||ay){
+      const sp=Math.min(CAM.dist/CAM.zoom,42)*0.9*dt;   // pan follows the altitude, but the ball view must not fling the camera
+      const fx=-Math.sin(CAM.yaw), fy=-Math.cos(CAM.yaw), rx=Math.cos(CAM.yaw), ry=-Math.sin(CAM.yaw);
+      CAM.tx+=(fx*-ay + rx*ax)*sp; CAM.ty+=(fy*-ay + ry*ax)*sp; clampCam3();
+    }
+    if(K.has('q')) CAM.yaw-=1.6*dt;
+    if(K.has('e')) CAM.yaw+=1.6*dt;
+    if(K.has('z')) CAM.zoom=clamp(CAM.zoom*(1+1.2*dt),0.030,1.9);
+    if(K.has('x')) CAM.zoom=clamp(CAM.zoom/(1+1.2*dt),0.030,1.9);
+  }
+  requestAnimationFrame(deskTick);
+}
+requestAnimationFrame(deskTick);
 </script></body></html>
