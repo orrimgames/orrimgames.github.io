@@ -2471,12 +2471,25 @@ const ROUTES=[['mud','ironbeard'],['mud','ratkin'],['mud','ogre'],['ratkin','iro
 let mapSel=null;
 function mpt(R){ return [W*R.x, 150+(H-330)*R.y]; }
 function warBtnR(){ return {x:14, y:300, w:88, h:42}; }   // v23: clear of the banner sweep zone
+function offersOpen(){   // same authority the map uses, counted for the village side
+  let n=0;
+  for(const R of REGIONS){ if(R.rival||R.home) continue; if(regionCue(R).s==='offer') n++; }
+  return n;
+}
 function drawWarBtn(){
-  const r=warBtnR();
+  const r=warBtnR(), n=offersOpen(), pu=0.5+0.5*Math.sin(G.t*3.1);
   ctx.fillStyle='rgba(120,26,34,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
-  ctx.strokeStyle='rgba(255,190,140,0.55)'; ctx.lineWidth=2; ctx.stroke();
+  ctx.strokeStyle=n?('rgba(255,208,120,'+(0.45+0.45*pu).toFixed(3)+')'):'rgba(255,190,140,0.55)';
+  ctx.lineWidth=n?2.6:2; ctx.stroke();
   txt3('WORLD', r.x+r.w/2, r.y+18, 12.5, '#ffc9a0','center',800);
   txt3(S.war.troops+' warriors', r.x+r.w/2, r.y+32, 11, '#ffe3c8','center',700);
+  if(n){   // the offer pip speaks the same amber the map speaks
+    const cx=r.x+r.w-8, cy=r.y+8, rr=8.4+0.9*pu;
+    ctx.strokeStyle='rgba(255,208,120,'+(0.25+0.35*pu).toFixed(3)+')'; ctx.lineWidth=2; ellp(cx,cy,rr+2.5,rr+2.5); ctx.stroke();
+    ctx.fillStyle='#ffd28a'; ellp(cx,cy,rr,rr); ctx.fill();
+    ctx.strokeStyle='rgba(60,26,16,0.9)'; ctx.lineWidth=1.5; ellp(cx,cy,rr,rr); ctx.stroke();
+    txt3(''+n, cx, cy+4, 12, '#3a1a10','center',900);
+  }
 }
 function uiCard(w0){   // a panel is a card, not a wall: phone width, capped so a laptop gets a panel instead of a banner
   const w=Math.min(W-48,w0||560);
