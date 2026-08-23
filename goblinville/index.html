@@ -2586,38 +2586,39 @@ function drawWarMap(){
     txt3('dashed lines are trade roads.',W/2,H-104,11.5,'#a89484','center',600);
     txt3('the red ones run to people who want your hot springs.',W/2,H-86,11.5,'#a89484','center',600);
   } else {
-    txt3(R.name,20,H-142,20,'#ffe3bd','left',900);
+    const IX=uiRail().x+8, IW=uiRail().w-16;
+    txt3(R.name,IX,H-142,20,'#ffe3bd','left',900);
     const words=R.note.split(' '); let line='',ly=H-120;
-    for(const w of words){ const t2=line?line+' '+w:w; if(t2.length>52){ txt3(line,20,ly,12.5,'#c9b09c','left',600); line=w; ly+=17; } else line=t2; }
-    if(line) txt3(line,20,ly,12.5,'#c9b09c','left',600);
+    for(const w of words){ const t2=line?line+' '+w:w; if(txtW3(t2,12.5,600)>IW){ txt3(line,IX,ly,12.5,'#c9b09c','left',600); line=w; ly+=17; } else line=t2; }
+    if(line) txt3(line,IX,ly,12.5,'#c9b09c','left',600);
     const rv=R.rival?RIVALS.find(x=>x.id===R.rival):null;
-    if(rv) txt3('needs '+rv.cost+' warriors   loot '+Object.keys(rv.loot).map(k=>rv.loot[k]+' '+k).join(', '),20,H-70,12,'#e0b98a','left',700);
-    else if(R.home) txt3('your village',20,H-70,12,'#bdf08a','left',700);
+    if(rv) txt3('needs '+rv.cost+' warriors   loot '+Object.keys(rv.loot).map(k=>rv.loot[k]+' '+k).join(', '),IX,H-70,12,'#e0b98a','left',700);
+    else if(R.home) txt3('your village',IX,H-70,12,'#bdf08a','left',700);
     else if(R.locked==='school' && hasShrine() && S.school==='none'){
-      txt3('VELLUMSPIRE answers. Their terms:',20,H-86,12,'#d8ccf0','left',800);
-      txt3('send one goblin to study - back in 3 days, twice as bright',20,H-70,11.5,'#c0b4e4','left',600);
+      txt3('VELLUMSPIRE answers. Their terms:',IX,H-86,12,'#d8ccf0','left',800);
+      txt3('send one goblin to study - back in 3 days, twice as bright',IX,H-70,11.5,'#c0b4e4','left',600);
     }
-    else if(R.locked==='school' && S.school==='away'&&S.scholar) txt3(S.scholar.name+' is in the tower. Day '+(S.day-S.scholar.day0)+' of 3.',20,H-70,11.5,'#c0b4e4','left',700);
-    else if(R.locked==='school' && S.school==='done') txt3('One of yours studied there. The tower respects the Mudmouth now.',20,H-70,11.5,'#c0b4e4','left',700);
+    else if(R.locked==='school' && S.school==='away'&&S.scholar) txt3(S.scholar.name+' is in the tower. Day '+(S.day-S.scholar.day0)+' of 3.',IX,H-70,11.5,'#c0b4e4','left',700);
+    else if(R.locked==='school' && S.school==='done') txt3('One of yours studied there. The tower respects the Mudmouth now.',IX,H-70,11.5,'#c0b4e4','left',700);
     else if(R.locked==='treaty' && S.war.banners.length>=2 && !S.war.treaty){
-      txt3('OSSIMUND THE UNRETURNED answers. His terms:',20,H-86,12,'#c8e0f0','left',800);
-      txt3('his dead march beside you - 4 gold tithe at dawn',20,H-70,11.5,'#a8c8dc','left',600);
+      txt3('OSSIMUND THE UNRETURNED answers. His terms:',IX,H-86,12,'#c8e0f0','left',800);
+      txt3('his dead march beside you - 4 gold tithe at dawn',IX,H-70,11.5,'#a8c8dc','left',600);
     }
-    else if(R.locked==='treaty' && S.war.treaty) txt3('The Cold King keeps his word. The north road is open to you.',20,H-70,11.5,'#bcd2e0','left',700);
-    else if(R.locked==='friends' && S.day<2) txt3('The Steps keep their silence. Come back after a few dawns.',20,H-70,11.5,'#a89484','left',600);
+    else if(R.locked==='treaty' && S.war.treaty) txt3('The Cold King keeps his word. The north road is open to you.',IX,H-70,11.5,'#bcd2e0','left',700);
+    else if(R.locked==='friends' && S.day<2) txt3('The Steps keep their silence. Come back after a few dawns.',IX,H-70,11.5,'#a89484','left',600);
     else if(R.locked==='friends' && !S.ogre.bound && S.ogre.fed<3){
-      txt3('The ogres are gone. The bowls they carved remain.',20,H-86,12,'#e8c9a0','left',800);
-      txt3('leave one full: 10 food, 5 gold - the mountain eats daily',20,H-70,11.5,'#d8b088','left',600);
+      txt3('The ogres are gone. The bowls they carved remain.',IX,H-86,12,'#e8c9a0','left',800);
+      txt3('leave one full: 10 food, 5 gold - the mountain eats daily',IX,H-70,11.5,'#d8b088','left',600);
     }
-    else if(R.locked==='friends' && S.ogre.bound && !S.ogre.used) txt3('The mountain remembers you. Once, it will answer.',20,H-70,11.5,'#e8c9a0','left',600);
-    else if(R.locked==='friends' && S.ogre.used) txt3('The debt is paid. The children sleep facing the mountain.',20,H-70,11.5,'#d8b088','left',600);
+    else if(R.locked==='friends' && S.ogre.bound && !S.ogre.used) txt3('The mountain remembers you. Once, it will answer.',IX,H-70,11.5,'#e8c9a0','left',600);
+    else if(R.locked==='friends' && S.ogre.used) txt3('The debt is paid. The children sleep facing the mountain.',IX,H-70,11.5,'#d8b088','left',600);
     else if(R.locked==='contract' && S.day>=3 && !S.vanto.signed && !S.vanto.main){
-      txt3('VANTOMERE answers. The contract, abridged:',20,H-86,12,'#ccd2f0','left',800);
-      txt3('20 food each dawn for 12 gold. Manners non-negotiable.',20,H-70,11.5,'#aab2d8','left',600);
+      txt3('VANTOMERE answers. The contract, abridged:',IX,H-86,12,'#ccd2f0','left',800);
+      txt3('20 food each dawn for 12 gold. Manners non-negotiable.',IX,H-70,11.5,'#aab2d8','left',600);
     }
-    else if(R.locked==='contract' && S.vanto.signed && !S.vanto.main) txt3('Deliveries: '+S.vanto.trades+' of 3. The envoy is almost pleased.',20,H-70,11.5,'#ccd2f0','left',600);
-    else if(R.locked==='contract' && S.vanto.main) txt3('The Warming Main hums. Warm hands carry half again.',20,H-70,11.5,'#ccd2f0','left',600);
-    else txt3({treaty:'Ossimund will offer a treaty when you are worth talking to. Two banners make you worth talking to.',school:'Send a goblin to study once you have a shrine.',friends:'The Steps keep their silence. Come back after a few dawns.',contract:'They will offer a contract, not a fight.'}[R.locked],20,H-70,11.5,'#a89484','left',600);
+    else if(R.locked==='contract' && S.vanto.signed && !S.vanto.main) txt3('Deliveries: '+S.vanto.trades+' of 3. The envoy is almost pleased.',IX,H-70,11.5,'#ccd2f0','left',600);
+    else if(R.locked==='contract' && S.vanto.main) txt3('The Warming Main hums. Warm hands carry half again.',IX,H-70,11.5,'#ccd2f0','left',600);
+    else txt3({treaty:'Ossimund will offer a treaty when you are worth talking to. Two banners make you worth talking to.',school:'Send a goblin to study once you have a shrine.',friends:'The Steps keep their silence. Come back after a few dawns.',contract:'They will offer a contract, not a fight.'}[R.locked],IX,H-70,11.5,'#a89484','left',600);
   }
   const B=backR(); ctx.fillStyle='rgba(60,50,60,0.95)'; rrp(B.x,B.y,B.w,B.h,14); ctx.fill();
   txt3('\u2039 VILLAGE',B.x+B.w/2,B.y+28,14,'#ffe3c8','center',900);
@@ -3153,10 +3154,11 @@ function drawFPUI(){
                :(FP.battle?'left drag move - right drag look - tap right to swing':'drag left to walk - drag right to look'), W/2, H-14, 11.5,'rgba(255,240,225,0.7)','center',600);
   if(FP.battle && !S.war.result){
     const us=S.gobs.filter(g=>g.side==='us'&&g.hp>0).length, foe=S.gobs.filter(g=>g.side==='foe'&&g.hp>0).length;
-    ctx.fillStyle='rgba(16,10,14,0.7)'; rrp(14,18,W-130,48,12); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.16)'; rrp(24,28,W-164,10,5); ctx.fill();
-    ctx.fillStyle=FP.hp>56?'#7fd84a':'#e0603c'; rrp(24,28,(W-164)*clamp(FP.hp/140,0,1),10,5); ctx.fill();
-    txt3('you '+Math.max(0,Math.round(FP.hp))+'   warband '+us+'   enemies '+foe+(FP.kills?'   felled '+FP.kills:''),24,58,12.5,'#ffe3c8','left',800);
+    const HR=uiRail();
+    ctx.fillStyle='rgba(16,10,14,0.7)'; rrp(HR.x+2,18,HR.w-106,48,12); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.16)'; rrp(HR.x+12,28,HR.w-140,10,5); ctx.fill();
+    ctx.fillStyle=FP.hp>56?'#7fd84a':'#e0603c'; rrp(HR.x+12,28,(HR.w-140)*clamp(FP.hp/140,0,1),10,5); ctx.fill();
+    txt3('you '+Math.max(0,Math.round(FP.hp))+'   warband '+us+'   enemies '+foe+(FP.kills?'   felled '+FP.kills:''),HR.x+12,58,12.5,'#ffe3c8','left',800);
     const R=rallyR(), used=S.war.rallyUsed;
     ctx.fillStyle=used?'rgba(60,55,60,0.9)':'rgba(190,120,30,0.95)'; rrp(R.x,R.y,R.w,R.h,14); ctx.fill();
     txt3(used?'RALLIED':'RALLY!',R.x+R.w/2,R.y+33,17,'#fff2dd','center',900);
@@ -5130,7 +5132,7 @@ glc.addEventListener('touchcancel',endTouch,{passive:false});
 /* ================== v74: desktop - mouse, wheel, keyboard ==================
    One rule: desktop input is translated into the touch pipeline, and every
    shortcut hits the same rect a finger would hit. No parallel UI logic.      */
-const DESK={mouse:false, tlast:-1e9, keys:new Set(), rot:null, drag:false, hinted:false, last:performance.now()};
+const DESK={mouse:(!('ontouchstart' in window) && !(navigator.maxTouchPoints>0)), tlast:-1e9, keys:new Set(), rot:null, drag:false, hinted:false, last:performance.now()};
 function TAPW(){ return DESK.mouse?'click':'tap'; }            // one word authority: the copy follows the hand on the device
 function deskFresh(){ return performance.now()-DESK.tlast>1200; }   // ignore the compatibility mouse events a touch emits
 function deskPt(x,y){ return {preventDefault(){}, changedTouches:[{identifier:'m0',clientX:x,clientY:y}]}; }
