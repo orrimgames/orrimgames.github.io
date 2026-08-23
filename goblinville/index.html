@@ -4307,6 +4307,11 @@ const BADGES=[
  {k:'banner3', t:'BREAKER OF HERESIES', check:function(){return S.war.banners.length>=3;}},
  {k:'day10', t:'TEN DAYS OF FIRE', check:function(){return S.day>=10;}},
  {k:'larder300', t:'FULL LARDERS', check:function(){return S.res.food>=300;}},
+ {k:'hearth', t:'HEARTH LIT', check:function(){return S.buildings.some(b=>b.key==='shrine');}},
+ {k:'ogre', t:'MOUNTAIN FRIEND', check:function(){return !!(S.ogre&&S.ogre.bound);}},
+ {k:'warmmain', t:'WARM HANDS', check:function(){return !!(S.vanto&&S.vanto.main);}},
+ {k:'scholar', t:'THE SCHOLAR', check:function(){return S.school==='done';}},
+ {k:'coldpeace', t:'COLD PEACE', check:function(){return !!S.war.treaty;}},
  {k:'victory', t:'THE SKY REMEMBERS', check:function(){return !!S.victory;}},
 ];
 function badgeCount(){ let n=0; if(S.ach) for(const k in S.ach) if(S.ach[k]) n++; return n; }
@@ -4813,6 +4818,12 @@ const GOALS=[
  {t:'Raise a GOLD MINE - shine for the hall', short:'a gold mine stands', check:function(){return S.buildings.some(b=>b.key==='mine');}},
  {t:'Stock 300 food before the lean days', short:'full larders', check:function(){return S.res.food>=300;}, prog:function(){return '  '+Math.min(300,Math.floor(S.res.food))+'/300';}},
  {t:'Take the Ratkin Warrens - silence a heresy', short:'first banner claimed', check:function(){return S.war.banners.indexOf('ratkin')>=0;}},
+ {t:'Raise an EMBER SHRINE for the fire', short:'the hearth is lit', check:function(){return S.buildings.some(b=>b.key==='shrine');}},
+ {t:'Feed the Ogre Steps three dawns', short:'the mountain answers', check:function(){return !!(S.ogre&&S.ogre.bound);}, prog:function(){return '  '+Math.min(3,(S.ogre&&S.ogre.fed)||0)+'/3';}},
+ {t:'Finish the Vantomere contract', short:'the Warming Main hums', check:function(){return !!(S.vanto&&S.vanto.main);}, prog:function(){return '  '+Math.min(3,(S.vanto&&S.vanto.trades)||0)+'/3';}},
+ {t:'Send a goblin to Vellumspire', short:'the brood has a scholar', check:function(){return S.school==='done';}},
+ {t:'See the tenth day', short:'ten days of fire', check:function(){return S.day>=10;}, prog:function(){return '  '+Math.min(10,S.day)+'/10';}},
+ {t:'Make the Cold Peace with Ossimund', short:'the north road is open', check:function(){return !!S.war.treaty;}},
  {t:'Silence every heresy - the sky remembers', short:'all heresies broken', check:function(){return S.war.banners.length>=3;}, prog:function(){return '  '+Math.min(3,S.war.banners.length)+'/3';}},
 ];
 function goalIdx(){ if(S._goal===undefined){ S._goal=0; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++; } return S._goal<GOALS.length?S._goal:-1; }
