@@ -4002,7 +4002,11 @@ function drawBIcon(k,cx,cy,s){
 /* ------------------------------- HUD bits ------------------------------- */
 let BARH=104, barScroll=0, barScrollMax=0;
 const CARDW=88, CARDH=84;
-function cardRect2(i){ return {x:10+i*(CARDW+8)-barScroll, y:H-BARH+10, w:CARDW, h:CARDH}; }
+function barX0(){   // one origin for the card row: thumb-anchored on a phone, centered when the screen is wider than the row
+  const rowW=BKEYS.length*(CARDW+8)-8;
+  return (rowW+40<=W)? Math.round((W-rowW)/2) : 10;
+}
+function cardRect2(i){ return {x:barX0()+i*(CARDW+8)-barScroll, y:H-BARH+10, w:CARDW, h:CARDH}; }
 function inR(x,y,r){ return x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h; }
 function cancelR(){ return {x:W-94,y:H-BARH-66,w:84,h:32}; }
 
@@ -4031,7 +4035,7 @@ function drawBuildMenu(){
   const g=ctx.createLinearGradient(0,y0-16,0,H);
   g.addColorStop(0,'rgba(16,12,22,0)'); g.addColorStop(0.35,'rgba(16,12,22,0.8)'); g.addColorStop(1,'rgba(10,8,14,0.95)');
   ctx.fillStyle=g; ctx.fillRect(0,y0-16,W,BARH+16);
-  barScrollMax=Math.max(0,10+BKEYS.length*(CARDW+8)-W+10);
+  barScrollMax=Math.max(0,barX0()+BKEYS.length*(CARDW+8)-W+10);
   barScroll=clamp(barScroll,0,barScrollMax);
   ctx.save(); ctx.beginPath(); ctx.rect(0,y0,W,BARH); ctx.clip();
   BKEYS.forEach((k,i)=>{
@@ -4820,7 +4824,7 @@ function drawGoal(){
   const off=txtW3(label,10.5,800)+10;
   txt3(full,r.x+26+off,r.y+r.h/2+1,fitSize2(full,r.w-72-off,12,700),'#ffe6ad','left',700,false);
 }
-function questR(){ return {x:8,y:72,w:W-16,h:24}; }
+function questR(){ const w=Math.min(W-16,560); return {x:8,y:72,w:w,h:24}; }   // a rail reads at phone width; a laptop does not need a 1900px pill
 function questXR(){ const r=questR(); return {x:r.x+r.w-28,y:r.y-3,w:28,h:r.h+6}; }
 function checkQuest(){
   if(!S.started||S.tut>=QUESTS.length) return;
@@ -5161,7 +5165,7 @@ glc.addEventListener('wheel',e=>{
 },{passive:false});
 function deskCard(i){
   if(i>=BKEYS.length) return;
-  barScroll=clamp(10+i*(CARDW+8)-W/2+CARDW/2,0,barScrollMax);
+  barScroll=clamp(barX0()+i*(CARDW+8)-W/2+CARDW/2,0,barScrollMax);
   deskTap(cardRect2(i));
 }
 function deskShortcut(k,e){
