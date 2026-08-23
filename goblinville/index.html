@@ -3945,6 +3945,10 @@ function txt3(s,x,y,size,c,align,weight,stroke){
   if(stroke!==false){ ctx.lineWidth=Math.max(2,size*0.22); ctx.strokeStyle='rgba(18,14,20,0.6)'; ctx.lineJoin='round'; ctx.strokeText(s,x,y); }
   ctx.fillStyle=c; ctx.fillText(s,x,y);
 }
+function txtW3(s,size,weight){   // one rule: text lays out after measured text, never after guessed text
+  ctx.font=(weight||800)+' '+size+'px system-ui,-apple-system,"Segoe UI",sans-serif';
+  return ctx.measureText(s).width;
+}
 function fitSize2(s,maxW,size,weight){
   let sz=size;
   for(let i=0;i<14;i++){ ctx.font=(weight||800)+' '+sz+'px system-ui,-apple-system,"Segoe UI",sans-serif';
@@ -4810,11 +4814,10 @@ function drawGoal(){
   ctx.fillStyle='rgba(24,18,30,0.62)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
   ctx.strokeStyle='rgba(150,200,255,0.4)'; ctx.lineWidth=1.2; ctx.stroke();
   ctx.fillStyle='#a8d8ff'; ellp(r.x+15,r.y+r.h/2,4,4); ctx.fill();
-  const label='THE BROOD WANTS  ';
-  const lw=ctx.measureText? 0:0;
+  const label='THE BROOD WANTS';
   const full=g.t+(g.prog?g.prog():'');
   txt3(label,r.x+26,r.y+r.h/2+1,10.5,'#8fb8e8','left',800,false);
-  const off=label.length*6.4;
+  const off=txtW3(label,10.5,800)+10;
   txt3(full,r.x+26+off,r.y+r.h/2+1,fitSize2(full,r.w-72-off,12,700),'#ffe6ad','left',700,false);
 }
 function questR(){ return {x:8,y:72,w:W-16,h:24}; }
@@ -5133,7 +5136,7 @@ window.addEventListener('mousemove',e=>{
   if(!deskFresh()) return;
   DESK.mouse=true;
   if(!DESK.hinted && S.started){ DESK.hinted=true;
-    toast2('WASD or arrows to move  -  drag to pan  -  right-drag to turn  -  scroll to zoom  -  M map, V walk, Esc back'); }
+    toast2('WASD or arrows to move  -  drag to pan  -  right-drag to turn  -  scroll to zoom  -  M map, V walk, Esc back, H keys'); }
   if(DESK.rot){
     const dx=e.clientX-DESK.rot.x, dy=e.clientY-DESK.rot.y; DESK.rot={x:e.clientX,y:e.clientY};
     if(FP.on){ FP.a-=dx*0.006; FP.pitch=clamp(FP.pitch-dy*0.005,-0.95,0.9); }
@@ -5179,6 +5182,7 @@ function deskShortcut(k,e){
   if(S.mode==='war'){ if(k==='Enter'||k===' '){ e.preventDefault(); deskTap(sendR()); } return; }
   if(k==='m'&&!FP.on){ deskTap(warBtnR()); return; }
   if(k==='v'){ if(FP.on) fpExit(); else deskTap(walkBtnR()); return; }
+  if(k==='h'){ toast2('WASD or arrows move  -  Q/E turn  -  Z/X zoom  -  1-9 build  -  M map  -  V walk  -  Esc back  -  H keys'); return; }
   if(!FP.on && k>='1' && k<='9'){ deskCard(+k-1); return; }
 }
 const DESKHOLD=['w','a','s','d','q','e','z','x','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
