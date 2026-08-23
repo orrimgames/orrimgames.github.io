@@ -2478,8 +2478,16 @@ function drawWarBtn(){
   txt3('WORLD', r.x+r.w/2, r.y+18, 12.5, '#ffc9a0','center',800);
   txt3(S.war.troops+' warriors', r.x+r.w/2, r.y+32, 11, '#ffe3c8','center',700);
 }
-function backR(){ return {x:14,y:H-58,w:100,h:44}; }
-function sendR(){ return {x:W-172,y:H-58,w:158,h:44}; }
+function uiCard(w0){   // a panel is a card, not a wall: phone width, capped so a laptop gets a panel instead of a banner
+  const w=Math.min(W-48,w0||560);
+  return {x:Math.round((W-w)/2), w:w};
+}
+function uiRail(){   // one band for the bottom action pairs: the phone's full width, capped so a laptop keeps them within reach of one another
+  const w=Math.min(W-24,720);
+  return {x:Math.round((W-w)/2), w:w};
+}
+function backR(){ const R=uiRail(); return {x:R.x+2,y:H-58,w:100,h:44}; }
+function sendR(){ const R=uiRail(); return {x:R.x+R.w-160,y:H-58,w:158,h:44}; }
 function blob(cx,cy,r,seed,squash){
   ctx.beginPath();
   for(let i=0;i<=26;i++){
@@ -2855,15 +2863,16 @@ function updateBattle(dt){
   for(let i=S.toasts.length-1;i>=0;i--){ const t=S.toasts[i]; t.t+=dt; t.life-=dt; if(t.life<=0) S.toasts.splice(i,1); }
   if(S.banner){ S.banner.tm+=dt; S.banner.life-=dt; if(S.banner.life<=0) S.banner=null; }
 }
-function rallyR(){ return {x:16,y:H-78,w:150,h:52}; }
-function fireR(){ return {x:W-166,y:H-78,w:150,h:52}; }
+function rallyR(){ const R=uiRail(); return {x:R.x+4,y:H-78,w:150,h:52}; }
+function fireR(){ const R=uiRail(); return {x:R.x+R.w-154,y:H-78,w:150,h:52}; }
 function retreatR(){ return {x:W/2-70,y:66,w:140,h:38}; }
 function resultBtnR(){ return {x:W/2-90,y:H/2+112,w:180,h:48}; }
 function drawBattleUI(){
   const us=S.gobs.filter(g=>g.side==='us'&&g.hp>0).length, foe=S.gobs.filter(g=>g.side==='foe'&&g.hp>0).length;
-  ctx.fillStyle='rgba(20,12,16,0.72)'; rrp(12,12,W-24,42,14); ctx.fill();
-  txt3('\u2694 '+us+'  goblins', 26, 39, 16, '#bdf08a','left',900);
-  txt3(S.war.foe.name+'  '+foe+' \u2620', W-26, 39, 15, '#ffb0a0','right',900);
+  const RB=uiRail();
+  ctx.fillStyle='rgba(20,12,16,0.72)'; rrp(RB.x,12,RB.w,42,14); ctx.fill();
+  txt3('\u2694 '+us+'  goblins', RB.x+14, 39, 16, '#bdf08a','left',900);
+  txt3(S.war.foe.name+'  '+foe+' \u2620', RB.x+RB.w-14, 39, 15, '#ffb0a0','right',900);
   if(S.war.result){
     const r=S.war.result;
     ctx.fillStyle='rgba(10,6,10,0.82)'; ctx.fillRect(0,0,W,H);
@@ -2872,7 +2881,8 @@ function drawBattleUI(){
       ctx.save(); ctx.translate(xx,yy); ctx.rotate(G.t*2.2+c.ph);
       ctx.globalAlpha=0.85; ctx.fillStyle=c.c; ctx.fillRect(-c.s/2,-c.s/2,c.s,c.s*0.6); ctx.restore(); }
       ctx.globalAlpha=1; }
-    ctx.fillStyle='rgba(38,26,34,0.98)'; rrp(24,H/2-170,W-48,332,20); ctx.fill();
+    const RP=uiCard(560);
+    ctx.fillStyle='rgba(38,26,34,0.98)'; rrp(RP.x,H/2-170,RP.w,332,20); ctx.fill();
     ctx.strokeStyle=r.win?'#ffcf7a':'#a35a5a'; ctx.lineWidth=3; ctx.stroke();
     txt3(r.win?'VICTORY':'DRIVEN OFF', W/2, H/2-118, 30, r.win?'#ffe6a8':'#ffb3a3','center',900,'#200e0e');
     txt3(r.name, W/2, H/2-88, 15, '#d9bda8','center',700);
@@ -2954,7 +2964,7 @@ const FP={on:false, battle:false, x:0, y:0, a:0, pitch:0, bob:0, mv:null, lk:nul
 function fpStickR(){ return {x:20,y:H-162,w:142,h:142}; }
 function fpExitR(){ return {x:W-96,y:22,w:82,h:38}; }
 function walkBtnR(){ return {x:14,y:352,w:88,h:42}; }   // v23: clear of the banner sweep zone
-function fightR(){ return {x:16,y:H-140,w:150,h:44}; }
+function fightR(){ const R=uiRail(); return {x:R.x+4,y:H-140,w:150,h:44}; }
 function fpWalkableAny(x,y){
   const rr=Math.hypot(x-SITE.x,y-SITE.y);
   if(rr<31.5||S.mode==='battle') return fpWalkable(x,y);
