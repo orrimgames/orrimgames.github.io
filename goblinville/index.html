@@ -1592,7 +1592,7 @@ const S={
   sel:null, ghost:{tx:0,ty:0,ok:false,show:false}, pick:null, inspect:null,
   toasts:[], banner:null, chronicle:[], omen:0,
   mode:'village', started:false, tut:0, shake:0, flash:0, tapCombo:0, metGob:0, sawMap:0, dawnSeen:0,
-  victory:0, ceremonyDone:0, victPhase:-1, victT:0,
+  victory:0, ceremonyDone:0, victPhase:-1, victT:0, goalDone:0,
   school:'none', scholar:null,
   ogre:{fed:0, lastDay:0, bound:false, used:false, pending:false},
   vanto:{signed:false, lapsed:false, trades:0, main:false}
@@ -4295,7 +4295,7 @@ function packSave(){
     war:{troops:S.war.troops, won:S.war.won, cd:S.war.cd, banners:S.war.banners, treaty:S.war.treaty},
     ach:S.ach||{}, seen:S.seen||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
-    victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
+    victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
     gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0})),
     chron:S.chronicle.slice(-60),
@@ -4343,6 +4343,7 @@ function restoreSave(sv){
   S.ach=sv.ach||{}; S.seen=sv.seen||{};
   S.tut=sv.tut||0; S.metGob=sv.metGob||0; S.sawMap=sv.sawMap||0; S.tapCombo=sv.tapCombo||0; S.dawnSeen=sv.dawnSeen||0; S.elderHush=sv.elderHush||0; S.hints=sv.hints||{};
   S.victory=sv.victory||0; S.ceremonyDone=sv.ceremonyDone||0; S.victPhase=-1; S.victT=0;
+  S.goalDone=sv.goalDone||0; S._goal=undefined;
   if(S.victory&&!S.ceremonyDone){ S.victPhase=0; S.victT=0; S._vB0=S._vB1=S._vB2=0; S._vf=0; }
   S.chronicle=sv.chron||[];
   S.sail=null; S.boat=sv.boat||null;
@@ -4843,18 +4844,25 @@ function courierTick(dt){
 function howlFar(){ A.tone(520,1.5,{type:'sawtooth',vol:0.16,slide:170}); A.tone(780,1.0,{type:'sine',vol:0.09,slide:380,delay:0.14}); }
 
 /* ===================== next-step hints (v24) ========================== */
-const HINTS=[
- {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
- {k:'train', m:'the Barracks trains warriors on its own - keep the farms fed', when:()=> S.buildings.some(b=>b.key==='barracks') && S.war.troops<1},
- {k:'raid', m:'open WORLD - the Ratkin Warrens are ripe for burning', when:()=> S.war.troops>=3 && S.war.banners.length<1},
- {k:'heresy', m:'every heresy kneels or burns - the fire is counting on you', when:()=> S.war.banners.length>=1 && S.war.banners.length<RIVALS.length && !S.victory},
+const HINTS=[   // war:1 marks a hint the ending makes obsolete - one rule retires the whole class
+ {k:'barracks', war:1, m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
+ {k:'train', war:1, m:'the Barracks trains warriors on its own - keep the farms fed', when:()=> S.buildings.some(b=>b.key==='barracks') && S.war.troops<1},
+ {k:'raid', war:1, m:'open WORLD - the Ratkin Warrens are ripe for burning', when:()=> S.war.troops>=3 && S.war.banners.length<1},
+ {k:'heresy', war:1, m:'every heresy kneels or burns - the fire is counting on you', when:()=> S.war.banners.length>=1 && S.war.banners.length<RIVALS.length},
+ {k:'aftermath', m:'the war is over - the mud is still hungry. build it as big as you like', when:()=> !!S.victory},
 ];
 function tickHints(dt){
   if(!S.started||S.tut<QUESTS.length||S.mode!=='village'||FP.on) return;
   S.hints=S.hints||{};
   S._hintT=(S._hintT==null?6:S._hintT)-dt;
   if(S._hintT>0) return; S._hintT=9;
-  for(const h of HINTS){ if(!S.hints[h.k]){ try{ if(h.when()){ S.hints[h.k]=1; toast2(h.m); A.say(5); } }catch(e){} break; } }
+  for(const h of HINTS){
+    if(S.hints[h.k]) continue;
+    if(h.war&&S.victory){ S.hints[h.k]=1; continue; }   // the war ended; its advice retires instead of blocking the queue
+    let on=false; try{ on=!!h.when(); }catch(e){}
+    if(on){ S.hints[h.k]=1; toast2(h.m); A.say(5); }
+    break;
+  }
 }
 
 /* ========================= first five minutes (v20) ==================== */
@@ -4880,25 +4888,34 @@ const GOALS=[
  {t:'Make the Cold Peace with Ossimund', short:'the north road is open', check:function(){return !!S.war.treaty;}},
  {t:'Silence every heresy - the sky remembers', short:'all heresies broken', check:function(){return S.war.banners.length>=RIVALS.length;}, prog:function(){return '  '+Math.min(RIVALS.length,S.war.banners.length)+'/'+RIVALS.length;}},
 ];
-function goalIdx(){ if(S._goal===undefined){ S._goal=0; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++; } return S._goal<GOALS.length?S._goal:-1; }
+function goalIdx(){   // a goal the brood already got stays got - larders empty again, the milestone does not
+  if(S._goal===undefined){ S._goal=Math.min(GOALS.length,S.goalDone||0);
+    while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++; }
+  if((S.goalDone||0)<S._goal) S.goalDone=S._goal;
+  return S._goal<GOALS.length?S._goal:-1; }
 function checkGoals(){
   if(!S.started||S.tut<QUESTS.length) return;
   checkVictory();   // the last goal and the badge read the same world state
   const i=goalIdx(); if(i<0) return;
   if(GOALS[i].check()){ const done=GOALS[i]; S._goal=i+1; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++;
+    S.goalDone=S._goal;
     A.pop(2); A.say(6); toast2('brood satisfied: '+done.short); offerShare('the brood got: '+done.short);
     if(S._goal>=GOALS.length){ banner2('THE BROOD WANTS NOTHING','Goblinville endures'); chron('The brood wanted, worked, and wanted no more - Goblinville endures.'); } }
 }
+function goalLine(){   // one source for the strip's text, wanting or done
+  const i=goalIdx();
+  if(i<0) return {label:'THE BROOD WANTS', text:'nothing at all - Goblinville endures, day '+S.day, done:true};
+  const g=GOALS[i];
+  return {label:'THE BROOD WANTS', text:g.t+(g.prog?g.prog():''), done:false};
+}
 function drawGoal(){
   if(!S.started||S.tut<QUESTS.length||S.mode!=='village'||FP.on) return;
-  const i=goalIdx(); if(i<0) return;
-  const g=GOALS[i], r=questR();
+  const L=goalLine(), r=questR();
   ctx.fillStyle='rgba(24,18,30,0.62)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
-  ctx.strokeStyle='rgba(150,200,255,0.4)'; ctx.lineWidth=1.2; ctx.stroke();
-  ctx.fillStyle='#a8d8ff'; ellp(r.x+15,r.y+r.h/2,4,4); ctx.fill();
-  const label='THE BROOD WANTS';
-  const full=g.t+(g.prog?g.prog():'');
-  txt3(label,r.x+26,r.y+r.h/2+1,10.5,'#8fb8e8','left',800,false);
+  ctx.strokeStyle=L.done?'rgba(255,208,120,0.42)':'rgba(150,200,255,0.4)'; ctx.lineWidth=1.2; ctx.stroke();
+  ctx.fillStyle=L.done?'#ffd28a':'#a8d8ff'; ellp(r.x+15,r.y+r.h/2,4,4); ctx.fill();
+  const label=L.label, full=L.text;
+  txt3(label,r.x+26,r.y+r.h/2+1,10.5,L.done?'#e0b98a':'#8fb8e8','left',800,false);
   const off=txtW3(label,10.5,800)+10;
   txt3(full,r.x+26+off,r.y+r.h/2+1,fitSize2(full,r.w-72-off,12,700),'#ffe6ad','left',700,false);
 }
