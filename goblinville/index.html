@@ -2542,6 +2542,33 @@ function regionIcon(k,x,y,s,c,c2){
   }
   ctx.restore();
 }
+function labX(x,t,sz,wt){ const h=txtW3(t,sz,wt)/2+8; return (h*2+16>W)?W/2:Math.max(h,Math.min(W-h,x)); }  // one rule: centered map labels never leave the viewport
+function regionCue(R){   // one authority for what a region is offering right now; the map and its labels both read this
+  if(R.locked==='treaty'){
+    if(S.war.treaty) return {s:'done', t:'the Cold Peace holds'};
+    if(S.war.banners.length>=2) return {s:'offer', t:'terms are on the table'};
+    return {s:'wait', t:'two banners would make you worth talking to'};
+  }
+  if(R.locked==='school'){
+    if(S.school==='done') return {s:'done', t:'a scholar came home'};
+    if(S.school==='away') return {s:'wait', t:'they are studying'};
+    if(hasShrine()) return {s:'offer', t:'the tower takes students'};
+    return {s:'wait', t:'the tower wants to see a shrine'};
+  }
+  if(R.locked==='friends'){
+    if(S.ogre.used) return {s:'done', t:'the debt is paid'};
+    if(S.ogre.bound) return {s:'done', t:'the mountain remembers'};
+    if(S.day<2) return {s:'wait', t:'the Steps keep their silence'};
+    return {s:'offer', t:S.ogre.fed>0?('bowls left \u00d7'+S.ogre.fed):'the bowls want filling'};
+  }
+  if(R.locked==='contract'){
+    if(S.vanto.main) return {s:'done', t:'the Main hums'};
+    if(S.vanto.signed) return {s:'wait', t:'deliveries \u00d7'+S.vanto.trades};
+    if(S.day>=3) return {s:'offer', t:'a contract waits'};
+    return {s:'wait', t:'the envoy has not arrived'};
+  }
+  return {s:'wait', t:'not yet reachable'};
+}
 function drawWarMap(){
   const g=ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,'#1b1426'); g.addColorStop(0.5,'#241a2c'); g.addColorStop(1,'#140f1a');
@@ -2565,15 +2592,24 @@ function drawWarMap(){
     if(sel){ ctx.strokeStyle='#ffd28a'; ctx.lineWidth=3; blob(p[0],p[1],R.r*0.66,seed,0.6); ctx.stroke(); }
     ctx.globalAlpha=1;
     regionIcon(R.kind,p[0],p[1]-4,Math.min(1,R.r/62)*0.92,R.c,R.c2);
-    txt3(R.name,p[0],p[1]+R.r*0.52+15,12.5,R.home?'#bdf08a':'#f4e2cc','center',800,'rgba(20,12,20,0.9)');
+    txt3(R.name,labX(p[0],R.name,12.5,800),p[1]+R.r*0.52+15,12.5,R.home?'#bdf08a':'#f4e2cc','center',800,'rgba(20,12,20,0.9)');
     if(R.rival){
       const won=S.war.won[R.rival]||0, cd=S.war.cd[R.rival]||0;
       if(won){ const fx=p[0]+R.r*0.34, fy=p[1]-R.r*0.30;
         ctx.strokeStyle='#3d2c1c'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(fx,fy-18); ctx.stroke();
         ctx.fillStyle='#5fa83c'; ctx.beginPath(); ctx.moveTo(fx,fy-18); ctx.lineTo(fx+13,fy-14); ctx.lineTo(fx,fy-9); ctx.closePath(); ctx.fill(); }
-      if(cd>0) txt3('regrouping '+Math.ceil(cd)+'d',p[0],p[1]+R.r*0.52+29,10.5,'#ff9d8a','center',700,'rgba(20,12,20,0.9)');
-      else if(won) txt3(S.victory?('kneels to the Mudmouth \u00d7'+won):('banner taken \u00d7'+won),p[0],p[1]+R.r*0.52+29,10.5,S.victory?'#ffd34d':'#9fe08a','center',700,'rgba(20,12,20,0.9)');
-    } else if(!R.home && sel) txt3(R.locked==='treaty'&&S.war.banners.length>=2 ? (S.war.treaty?'the Cold Peace holds':'terms are on the table') : (R.locked==='school'&&hasShrine() ? (S.school==='done'?'a scholar came home':(S.school==='away'?'they are studying':'the tower takes students')) : (R.locked==='friends' ? (S.ogre.used?'the debt is paid':(S.ogre.bound?'the mountain remembers':(S.ogre.fed>0?'bowls left \u00d7'+S.ogre.fed:'the Steps are quiet'))) : (R.locked==='contract' ? (S.vanto.main?'the Main hums':(S.vanto.signed?'deliveries \u00d7'+S.vanto.trades:'a contract waits')) : 'not yet reachable'))),p[0],p[1]+R.r*0.52+29,10.5,R.locked==='treaty'&&S.war.banners.length>=2?'#bcd2e0':'rgba(230,200,180,0.6)','center',600,'rgba(20,12,20,0.9)');
+      if(cd>0){ const _t='regrouping '+Math.ceil(cd)+'d'; txt3(_t,labX(p[0],_t,10.5,700),p[1]+R.r*0.52+29,10.5,'#ff9d8a','center',700,'rgba(20,12,20,0.9)'); }
+      else if(won){ const _t=S.victory?('kneels to the Mudmouth \u00d7'+won):('banner taken \u00d7'+won); txt3(_t,labX(p[0],_t,10.5,700),p[1]+R.r*0.52+29,10.5,S.victory?'#ffd34d':'#9fe08a','center',700,'rgba(20,12,20,0.9)'); }
+    } else if(!R.home){
+      const cue=regionCue(R);
+      if(cue.s==='offer'){                       // the eye needs to find the offer without tapping every rock
+        const pu=0.5+0.5*Math.sin(G.t*3.1+seed);
+        ctx.strokeStyle='rgba(255,208,120,'+(0.35+0.45*pu).toFixed(3)+')'; ctx.lineWidth=2.4;
+        blob(p[0],p[1],R.r*(0.70+0.05*pu),seed,0.6); ctx.stroke();
+        ctx.fillStyle='#ffd28a'; ellp(p[0]+R.r*0.34,p[1]-R.r*0.30,5,5); ctx.fill();
+      }
+      txt3(cue.t,labX(p[0],cue.t,10.5,cue.s==='offer'?800:600),p[1]+R.r*0.52+29,10.5,cue.s==='offer'?'#ffd28a':(cue.s==='done'?'#bcd2e0':'rgba(230,200,180,0.55)'),'center',cue.s==='offer'?800:600,'rgba(20,12,20,0.9)');
+    }
   }
   ctx.fillStyle='rgba(14,9,16,0.72)'; ctx.fillRect(0,0,W,132);
   txt3('ORRIM',W/2,58,32,'#ffd08a','center',900,'#2a1208');
