@@ -2772,6 +2772,16 @@ function startBattle(r){
   banner2('RAID: '+r.name.toUpperCase(), 'break their camp - take their banner');
   A.build();
 }
+function checkVictory(){   // victory is a state of the world, not a side effect of one battle
+  if(S.victory||S.war.banners.length<RIVALS.length) return false;
+  banner2('EVERY HERESY KNEELS','the Ember War is won - VULKARRAX sees you now');
+  chron('The last heresy knelt. From the Warrens to the Choir, every road now runs to the Mudmouth.');
+  chron('Something under the mountain opened one eye.');
+  S.victory=1;
+  if(!S.ceremonyDone){ S.victPhase=0; S.victT=0; S._vB0=S._vB1=S._vB2=0; S._vf=0; }
+  saveGame();
+  return true;
+}
 function endBattle(win){
   const r=S.war.foe;
   const survivors=S.gobs.filter(g=>g.side==='us'&&g.hp>0&&!g.legion).length;
@@ -2782,12 +2792,7 @@ function endBattle(win){
     for(const k in r.loot){ const v=Math.round(r.loot[k]*(0.7+rnd(0.5))); addRes(k,v); gained[k]=v; }
     S.war.won[r.id]=(S.war.won[r.id]||0)+1;
     if(S.war.won[r.id]===1){ S.war.banners.push(r.id); chron('The '+r.name+' fell. Their banner burns well.'); chron(r.heresy); offerShare(S.war.banners.length+' banner(s) taken - show the world');
-      if(S.war.banners.length===RIVALS.length){
-        banner2('THE FOUR HERESIES KNEEL','the Ember War is won - VULKARRAX sees you now');
-        chron('The last heresy knelt. From the Warrens to the Choir, every road now runs to the Mudmouth.');
-        chron('Something under the mountain opened one eye.');
-        S.victory=1; saveGame();
-      } }
+      checkVictory(); }
     S.faith=Math.min(99,S.faith+6);
   }
   if(win){ for(const b of S.buildings.slice()){ const cx=b.tx+b.w/2, cz=b.ty+b.h/2;
@@ -4842,7 +4847,7 @@ const HINTS=[
  {k:'barracks', m:'next: build a BARRACKS - the brood needs warriors', when:()=> !S.buildings.some(b=>b.key==='barracks')},
  {k:'train', m:'the Barracks trains warriors on its own - keep the farms fed', when:()=> S.buildings.some(b=>b.key==='barracks') && S.war.troops<1},
  {k:'raid', m:'open WORLD - the Ratkin Warrens are ripe for burning', when:()=> S.war.troops>=3 && S.war.banners.length<1},
- {k:'heresy', m:'four heresies kneel or burn - the fire is counting on you', when:()=> S.war.banners.length>=1 && S.war.banners.length<4 && !S.victory},
+ {k:'heresy', m:'every heresy kneels or burns - the fire is counting on you', when:()=> S.war.banners.length>=1 && S.war.banners.length<RIVALS.length && !S.victory},
 ];
 function tickHints(dt){
   if(!S.started||S.tut<QUESTS.length||S.mode!=='village'||FP.on) return;
@@ -4873,11 +4878,12 @@ const GOALS=[
  {t:'Send a goblin to Vellumspire', short:'the brood has a scholar', check:function(){return S.school==='done';}},
  {t:'See the tenth day', short:'ten days of fire', check:function(){return S.day>=10;}, prog:function(){return '  '+Math.min(10,S.day)+'/10';}},
  {t:'Make the Cold Peace with Ossimund', short:'the north road is open', check:function(){return !!S.war.treaty;}},
- {t:'Silence every heresy - the sky remembers', short:'all heresies broken', check:function(){return S.war.banners.length>=3;}, prog:function(){return '  '+Math.min(3,S.war.banners.length)+'/3';}},
+ {t:'Silence every heresy - the sky remembers', short:'all heresies broken', check:function(){return S.war.banners.length>=RIVALS.length;}, prog:function(){return '  '+Math.min(RIVALS.length,S.war.banners.length)+'/'+RIVALS.length;}},
 ];
 function goalIdx(){ if(S._goal===undefined){ S._goal=0; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++; } return S._goal<GOALS.length?S._goal:-1; }
 function checkGoals(){
   if(!S.started||S.tut<QUESTS.length) return;
+  checkVictory();   // the last goal and the badge read the same world state
   const i=goalIdx(); if(i<0) return;
   if(GOALS[i].check()){ const done=GOALS[i]; S._goal=i+1; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++;
     A.pop(2); A.say(6); toast2('brood satisfied: '+done.short); offerShare('the brood got: '+done.short);
