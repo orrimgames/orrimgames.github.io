@@ -1,18 +1,25 @@
-Goblinville probe harness - rebuild kit (container is disposable; GitHub is the archive)
+Goblinville probe harness - rebuild kit (containers are disposable; GitHub is the archive)
 
 Setup from a bare container:
   mkdir -p /tmp/gov21 && cd /tmp/gov21
   npm install puppeteer-core
-  curl -sSL -o index-v99.html 'https://orrimgames.github.io/goblinville/'      # verify md5 against the live ladder
+  curl -sSL -o goblinville-harness.tar.gz 'https://raw.githubusercontent.com/orrimgames/orrimgames.github.io/main/_tools/goblinville-harness.tar.gz' && tar xzf goblinville-harness.tar.gz
+  curl -sSL -o index-v99.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v99/goblinville/index.html'   # swap the tag for any version; verify md5
   curl -sO 'https://orrimgames.github.io/goblinville/village-theme.mp3'
-  curl -sO 'https://orrimgames.github.io/goblinville/vampire-theme.mp3'        # both are fetched at runtime; without them probes log two 404s
+  curl -sO 'https://orrimgames.github.io/goblinville/vampire-theme.mp3'   # the game fetches both at runtime; without them every probe logs two phantom 404s
   (setsid nohup python3 -m http.server 8945 >/tmp/srv.log 2>&1 &)
-  tar xzf goblinville-harness.tar.gz
 
-Run (one browser at a time; probes take 90-180s, a bash call caps at 120s, so launch detached and poll a done file):
-  FILE=index-vNN.html node chron.js m|d     # chronicle open/scroll/close, both viewports
-  FILE=index-vNN.html node desk.js 1920 1080 TAG   # mouse+keys: pan, zoom, rotate, card, ghost, place, war map, FP
-  node mobab.js index-vNN.html              # true-mobile real touch taps: card tap + double-tap place
-  node req.js '<url>'                       # list failed network requests
+Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so launch detached and poll a done file):
+  FILE=index-vNN.html node chron.js m|d              # chronicle open/scroll/close at both viewports
+  FILE=index-vNN.html node desk.js 1920 1080 TAG     # mouse+keys: pan, zoom, right-drag rotate, card, ghost, place, war map, first person
+  node mobab.js index-vNN.html                       # true mobile, real touch taps: card tap + double-tap place
+  FILE=index-vNN.html node persist.js d|m            # earn reversible milestones, break the conditions, save, reload, see what survived
+  node req.js '<url>'                                # list failed network requests
 
-Never use ?new=1 for persistence tests - it wipes the save.
+Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1), errs [] everywhere:
+  chron.js   empty card 150px tall at both widths; 42 seeded entries scroll 1858->0 mobile, 1112->0 desktop; close/reopen/close-corner all correct
+  desk.js    place 3 -> 4, war map and back, FP enter/walk/exit
+  mobab.js   ghost show/ok/armed, place 3 -> 4
+  persist.js badges brood8+day10+larder300, goalDone 1 and the quarry goal all survive food 400->5, pop 8->4, and a reload
+
+Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
