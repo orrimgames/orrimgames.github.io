@@ -1719,9 +1719,15 @@ function sparkW(x,y,z,n,c){ for(let i=0;i<n;i++) S.parts.push({x,y,z,vx:rnd(1.8,
 function floatW(x,y,z,t,c,big){ S.floats.push({x,y,z,txt:t,c:c||'#fff',life:1.4,big:big?1:0}); }
 function toast2(m){ S.toasts.push({m,t:0,life:2.6}); if(S.toasts.length>3) S.toasts.shift(); }
 function banner2(t,s){ S.banner={t,s,tm:0,life:4.2}; }
-function chron(line){   // v102: one rule - the chronicle keeps history, not repetition. A line already written today is not news again.
+function chron(line,keep){   // v102: no repetition. v103: a line marked keep is a milestone and outlives ordinary days.
   for(let i=S.chronicle.length-1;i>=0;i--){ const e=S.chronicle[i]; if(e.day!==S.day) break; if(e.line===line) return; }
-  S.chronicle.push({day:S.day,line}); if(S.chronicle.length>120) S.chronicle.shift(); }
+  S.chronicle.push(keep?{day:S.day,line,k:1}:{day:S.day,line});
+  if(S.chronicle.length>120) S.chronicle=chronTrim(S.chronicle,120); }
+function chronTrim(list,cap){   // one rule: the founding and the milestones are the last things to go
+  if(list.length<=cap) return list;
+  const out=list.slice(); let over=out.length-cap;
+  for(let i=0;i<out.length&&over>0;){ if(!out[i].k){ out.splice(i,1); over--; } else i++; }
+  return over>0?out.slice(over):out; }
 
 // v26: ambient life - chimney smoke by day, fireflies at night
 function tickAmbience(dt){
@@ -2409,7 +2415,7 @@ function initVillage(){
   recount();
   for(let i=0;i<4;i++) spawnGob(hx+1.5+rnd(2,-2), hy+3.2+rnd(1.2,-1.2), true);
   recount();
-  chron('The goblins planted a hall in the mud and called it Goblinville.');
+  chron('The goblins planted a hall in the mud and called it Goblinville.', true);
 }
 /* ============================ WAR + WORLD MAP =========================== */
 const RIVALS=[
@@ -4392,7 +4398,7 @@ function packSave(){
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
     gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0})),
-    chron:S.chronicle.slice(-60),
+    chron:chronTrim(S.chronicle,60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
     d:d, r:r};
 }
@@ -4463,13 +4469,21 @@ const BADGES=[
  {k:'coldpeace', t:'COLD PEACE', check:function(){return !!S.war.treaty;}},
  {k:'victory', t:'THE SKY REMEMBERS', check:function(){return !!S.victory;}},
 ];
+const BADGE_SAID=[   // the same event, told a few different ways - forty identical openers is not a chronicle
+ t=>'The brood earned a name for it: '+t+'.',
+ t=>'They started calling it '+t+'. It stuck.',
+ t=>'The elder cut a new mark in the hall post: '+t+'.',
+ t=>t+', said the mud, and the goblins agreed.',
+ t=>'Somebody shouted '+t+' and nobody argued.',
+ t=>'It went into the record as '+t+'. The record is a wall.',
+];
 function badgeCount(){ let n=0; if(S.ach) for(const k in S.ach) if(S.ach[k]) n++; return n; }
 function checkBadges(){
   if(!S.started) return;
   S.ach=S.ach||{};
   for(const bd of BADGES){ if(!S.ach[bd.k]){ try{ if(bd.check()){ S.ach[bd.k]=1;
     toast2('badge earned: '+bd.t+'  ('+badgeCount()+'/'+BADGES.length+')'); A.say(6);
-    chron('The brood earned a name for it: '+bd.t+'.');
+    chron(BADGE_SAID[(S.chronicle.length+bd.k.length)%BADGE_SAID.length](bd.t), true);
     offerShare('badge '+badgeCount()+' of '+BADGES.length); saveGame(); } }catch(e){} } }
 }
 function offerShare(why){ S._shareT=10; S._shareWhy=why; }
@@ -4995,7 +5009,7 @@ function checkGoals(){
   if(GOALS[i].check()){ const done=GOALS[i]; S._goal=i+1; while(S._goal<GOALS.length&&GOALS[S._goal].check()) S._goal++;
     S.goalDone=S._goal;
     A.pop(2); A.say(6); toast2('brood satisfied: '+done.short); offerShare('the brood got: '+done.short);
-    chron('The brood wanted '+done.short+', and got it.');
+    chron('The brood wanted '+done.short+', and got it.', true);
     if(S._goal>=GOALS.length){ banner2('THE BROOD WANTS NOTHING','Goblinville endures'); chron('The brood wanted, worked, and wanted no more - Goblinville endures.'); } }
 }
 function goalLine(){   // one source for the strip's text, wanting or done
@@ -5083,7 +5097,7 @@ function driveCeremony(dt){
     if(!S._vB1&&t>2.0){ S._vB1=1; A.cheer(); S.shake=9;
       for(const g of S.gobs){ g.emote='!'; g.emoteT=2.4; g.squash=0.7; g.mood=1;
         puffW(g.x,g.z+0.3,g.y,6,pick(VICT_COLORS)); }
-      chron(VICT_LINES[0]); chron(VICT_LINES[1]); chron(VICT_LINES[2]); chron(VICT_LINES[3]); chron(VICT_LINES[4]);
+      chron(VICT_LINES[0],true); chron(VICT_LINES[1],true); chron(VICT_LINES[2],true); chron(VICT_LINES[3],true); chron(VICT_LINES[4],true);
       if(S.war.treaty) chron('Even the Cold King raised a cold glass.');
       if(S.vanto&&S.vanto.main) chron('Vantomere delivered congratulations in triplicate. One of them was damp.');
       if(S.school==='done') chron('Vellumspire wrote your scholar\u2019s name in gold ink. It is spelled wrong. It is still gold.');
