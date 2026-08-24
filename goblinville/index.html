@@ -1988,7 +1988,7 @@ function tickClock(dt){
   if(S.dayT<t0) S._dawnPulse=1;
 }
 function updateWorld(dt){
-  checkQuest(); checkGoals(); tickHints(dt); tickShare(dt); S._achT=(S._achT==null?2:S._achT)-dt; if(S._achT<=0){ S._achT=1.8; checkBadges(); }
+  checkQuest(); checkGoals(); checkBadges(); tickHints(dt); tickShare(dt);   // v100: all three milestone rails sample every tick - a badge true for under 2s used to be missed
   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
     chron('Day '+S.day+' dawned over Goblinville.');
