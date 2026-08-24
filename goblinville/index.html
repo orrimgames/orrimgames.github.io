@@ -4192,10 +4192,19 @@ function drawHUD(){
     txt3(str,x+cw-8,y+chipH/2+1,fitSize2(str,cw-32,15,800),'#fff','right',800);
   });
   const y2=pad+chipH+6;
-  const lbl='Day '+S.day+'  -  '+S.gobs.length+'/'+S.popCap+' goblins';
-  ctx.font='800 12px system-ui'; const w2=ctx.measureText(lbl).width+20;
+  const lbl='Day '+S.day+'  -  '+S.gobs.length+'/'+S.popCap+' goblins', stall=stallReason();
+  ctx.font='800 12px system-ui';
+  const wLbl=ctx.measureText(lbl).width, wSt=stall?ctx.measureText('  -  '+stall).width:0;
+  const w2=wLbl+wSt+20;
   ctx.fillStyle='rgba(22,18,28,0.55)'; rrp(pad,y2,w2,22,11); ctx.fill();
-  txt3(lbl,pad+w2/2,y2+11,12,'#d8ffd0','center',800);
+  txt3(lbl,pad+10,y2+11,12,'#d8ffd0','left',800);
+  if(stall) txt3('  -  '+stall,pad+10+wLbl,y2+11,12,'#ffd34d','left',800);
+}
+function stallReason(){   // v106: a stalled brood says why, right in its own chip - room or food, the two things breeding reads
+  if(!S.started||S.tut<QUESTS.length) return null;
+  if(S.gobs.length>=S.popCap) return 'full - raise a hut';
+  if(S.res.food<30) return 'hungry - 30 food to breed';
+  return null;
 }
 function objCardKey(){   // v104: the thing the game is asking for right now, if it is a building
   if(S.tut<QUESTS.length) return null;   // the tutorial ring already owns its own targets
