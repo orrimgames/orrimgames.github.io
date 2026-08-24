@@ -4,7 +4,7 @@ Setup from a bare container:
   mkdir -p /tmp/gov21 && cd /tmp/gov21
   npm install puppeteer-core
   curl -sSL -o goblinville-harness.tar.gz 'https://raw.githubusercontent.com/orrimgames/orrimgames.github.io/main/_tools/goblinville-harness.tar.gz' && tar xzf goblinville-harness.tar.gz
-  curl -sSL -o index-v99.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v99/goblinville/index.html'   # swap the tag for any version; verify md5
+  curl -sSL -o index-v101.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v101/goblinville/index.html'   # swap the tag for any version; verify md5
   curl -sO 'https://orrimgames.github.io/goblinville/village-theme.mp3'
   curl -sO 'https://orrimgames.github.io/goblinville/vampire-theme.mp3'   # the game fetches both at runtime; without them every probe logs two phantom 404s
   (setsid nohup python3 -m http.server 8945 >/tmp/srv.log 2>&1 &)
