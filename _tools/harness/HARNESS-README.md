@@ -14,12 +14,14 @@ Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so
   FILE=index-vNN.html node desk.js 1920 1080 TAG     # mouse+keys: pan, zoom, right-drag rotate, card, ghost, place, war map, first person
   node mobab.js index-vNN.html                       # true mobile, real touch taps: card tap + double-tap place
   FILE=index-vNN.html node persist.js d|m            # earn reversible milestones, break the conditions, save, reload, see what survived
+  FILE=index-vNN.html node badgefast.js d|m            # badge latency: food over 300 for exactly two frames, then spent - did the badge fire
   node req.js '<url>'                                # list failed network requests
 
 Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1), errs [] everywhere:
   chron.js   empty card 150px tall at both widths; 42 seeded entries scroll 1858->0 mobile, 1112->0 desktop; close/reopen/close-corner all correct
   desk.js    place 3 -> 4, war map and back, FP enter/walk/exit
   mobab.js   ghost show/ok/armed, place 3 -> 4
+  badgefast.js on v99: badge missed (never fires); on v100: fires within 2 frames at both viewports
   persist.js badges brood8+day10+larder300, goalDone 1 and the quarry goal all survive food 400->5, pop 8->4, and a reload
 
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
