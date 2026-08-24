@@ -4,7 +4,7 @@ Setup from a bare container:
   mkdir -p /tmp/gov21 && cd /tmp/gov21
   npm install puppeteer-core
   curl -sSL -o goblinville-harness.tar.gz 'https://raw.githubusercontent.com/orrimgames/orrimgames.github.io/main/_tools/goblinville-harness.tar.gz' && tar xzf goblinville-harness.tar.gz
-  curl -sSL -o index-v102.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v102/goblinville/index.html'   # swap the tag for any version; verify md5
+  curl -sSL -o index-v103.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v103/goblinville/index.html'   # swap the tag for any version; verify md5
   curl -sO 'https://orrimgames.github.io/goblinville/village-theme.mp3'
   curl -sO 'https://orrimgames.github.io/goblinville/vampire-theme.mp3'   # the game fetches both at runtime; without them every probe logs two phantom 404s
   (setsid nohup python3 -m http.server 8945 >/tmp/srv.log 2>&1 &)
@@ -16,6 +16,7 @@ Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so
   FILE=index-vNN.html node persist.js d|m            # earn reversible milestones, break the conditions, save, reload, see what survived
   FILE=index-vNN.html node badgefast.js d|m            # badge latency: food over 300 for exactly two frames, then spent - did the badge fire
   FILE=index-vNN.html node chroncov.js d|m           # chronicle content: repetition suppressed, milestones recorded, survives reload
+  FILE=index-vNN.html node chrontrim.js d|m           # 200 ordinary days past both caps: do the founding and milestones survive
   node req.js '<url>'                                # list failed network requests
 
 Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1), errs [] everywhere:
