@@ -1590,7 +1590,7 @@ const S={
   buildings:[], gobs:[], parts:[], floats:[], fx:[],
   pop:0, popCap:0, age:0, day:0, dayT:0.28,
   sel:null, ghost:{tx:0,ty:0,ok:false,show:false}, pick:null, inspect:null,
-  toasts:[], banner:null, chronicle:[], omen:0,
+  toasts:[], banner:null, chronicle:[], chronOpen:false, omen:0,
   mode:'village', started:false, tut:0, shake:0, flash:0, tapCombo:0, metGob:0, sawMap:0, dawnSeen:0,
   victory:0, ceremonyDone:0, victPhase:-1, victT:0, goalDone:0,
   school:'none', scholar:null,
@@ -2491,6 +2491,70 @@ function drawWarBtn(){
     txt3(''+n, cx, cy+4, 12, '#3a1a10','center',900);
   }
 }
+function chronBtnR(){ return {x:14, y:404, w:88, h:42}; }
+function chronCardR(){ const c=uiCard(560); return {x:c.x, w:c.w}; }
+function wrapTo(text, iw, size, weight){   // one wrap rule, measured with the font we draw with
+  const words=String(text||'').split(' '); let line=''; const rows=[];
+  for(const w of words){ const t=line?line+' '+w:w; if(txtW3(t,size,weight)>iw){ if(line) rows.push(line); line=w; } else line=t; }
+  if(line) rows.push(line);
+  return rows.length?rows:['...'];
+}
+const CHRON_EMPTY='nothing written yet - the brood has not done anything worth remembering';
+function chronLines(){
+  const iw=chronCardR().w-44, out=[];
+  for(const e of S.chronicle) out.push({day:e.day, rows:wrapTo(e.line, iw, 12, 600)});
+  return out;
+}
+function chronPanel(){
+  const c=chronCardR(), ents=chronLines();
+  const body = ents.length ? chronH(ents) : (wrapTo(CHRON_EMPTY, c.w-44, 12, 600).length*17+16);
+  const h=clamp(52+body+14, 150, Math.max(150,H-96-96));
+  return {x:c.x, w:c.w, y:96, h};
+}
+function chronCloseR(){ const P=chronPanel(); return {x:P.x+P.w-46, y:P.y+8, w:38, h:38}; }
+function chronH(entries){ let h=8; for(const e of entries) h+=16+e.rows.length*17+8; return h; }
+function drawChronBtn(){
+  if(S.mode!=='village'||FP.on||!S.started) return;
+  const r=chronBtnR(), n=S.chronicle.length;
+  ctx.fillStyle='rgba(44,38,60,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
+  ctx.strokeStyle='rgba(200,190,255,0.42)'; ctx.lineWidth=2; ctx.stroke();
+  txt3('CHRONICLE', r.x+r.w/2, r.y+18, 11.5,'#ded6ff','center',800);
+  txt3(n?(n+' written'):'nothing yet', r.x+r.w/2, r.y+32, 10,'#b6aee0','center',600);
+}
+function drawChron(){
+  if(!S.chronOpen) return;
+  const P=chronPanel();
+  ctx.fillStyle='rgba(8,6,12,0.62)'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(22,17,30,0.97)'; rrp(P.x,P.y,P.w,P.h,16); ctx.fill();
+  ctx.strokeStyle='rgba(255,208,120,0.45)'; ctx.lineWidth=2; ctx.stroke();
+  txt3('THE CHRONICLE', P.x+22, P.y+32, 17,'#ffe3bd','left',900);
+  const C=chronCloseR();
+  ctx.fillStyle='rgba(60,50,60,0.95)'; rrp(C.x,C.y,C.w,C.h,12); ctx.fill();
+  txt3(DESK.mouse?'esc':'\u00d7', C.x+C.w/2, C.y+C.h/2+ (DESK.mouse?4:6), DESK.mouse?11:19,'#ffe3c8','center',800);
+  const entries=chronLines(), top=P.y+52, bot=P.y+P.h-14, view=bot-top;
+  const total=chronH(entries);
+  S._chronS=clamp(S._chronS||0, 0, Math.max(0,total-view));
+  ctx.save(); ctx.beginPath(); ctx.rect(P.x+8,top,P.w-16,view); ctx.clip();
+  let y=top+8-(S._chronS||0);
+  if(!entries.length){ let ey=top+8; for(const row of wrapTo(CHRON_EMPTY,P.w-44,12,600)){ txt3(row, P.x+22, ey+12, 12,'#9a8fb0','left',600); ey+=17; } }
+  for(const e of entries){
+    if(y>bot+40){ break; }
+    if(y>top-60){
+      txt3('day '+e.day, P.x+22, y+11, 10.5,'#ffd28a','left',800);
+      let ly=y+16;
+      for(const row of e.rows){ txt3(row, P.x+22, ly+12, 12,'#d8cdc0','left',600); ly+=17; }
+    }
+    y+=16+e.rows.length*17+8;
+  }
+  ctx.restore();
+  if(total>view){
+    const fr=view/total, sy=top+((S._chronS||0)/total)*view;
+    ctx.fillStyle='rgba(255,220,170,0.30)'; rrp(P.x+P.w-12,sy,4,Math.max(24,view*fr),2); ctx.fill();
+  }
+}
+function chronScroll(dy){ const P=chronPanel(), entries=chronLines(), view=P.h-66, total=chronH(entries);
+  S._chronS=clamp((S._chronS||0)+dy,0,Math.max(0,total-view)); }
+function toggleChron(){ S.chronOpen=!S.chronOpen; if(S.chronOpen){ const P=chronPanel(); S._chronS=Math.max(0,chronH(chronLines())-(P.h-66)); } A.blip(); }
 function uiCard(w0){   // a panel is a card, not a wall: phone width, capped so a laptop gets a panel instead of a banner
   const w=Math.min(W-48,w0||560);
   return {x:Math.round((W-w)/2), w:w};
@@ -3025,6 +3089,7 @@ function warTap(x,y){
     return true;
   }
   if(S._shareT>0&&inR(x,y,shareR())){ doShare(); return true; }
+  if(inR(x,y,chronBtnR())&&S.mode==='village'&&!FP.on){ toggleChron(); return true; }
   if(inR(x,y,warBtnR())){ S.mode='war'; S.sawMap=1; A.blip(); return true; }
   if(inR(x,y,walkBtnR())){ fpEnter(); return true; }
   return false;
@@ -4279,7 +4344,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawShare(); drawToasts2(); drawBanner2(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -5078,6 +5143,7 @@ function hitGob3(sxp,syp){
 function handleTap3(x,y){
   A.init(); A.resume();
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
+  if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
   if(!S.started){
     if(!saveExists&&!S.story){ startStory(); return true; }
@@ -5198,6 +5264,7 @@ function moveStep(e){
   }
 }
 function moveTouch(e){e.preventDefault(); S._holdT=null;
+  if(S.chronOpen){ for(const t of e.changedTouches){ const p=touches.get(t.identifier); if(p){ chronScroll(p.y-t.clientY); p.x=t.clientX; p.y=t.clientY; } } return; }
   const evs=(e.getCoalescedEvents && e.getCoalescedEvents().length)?e.getCoalescedEvents():[e];
   for(const ev of evs) moveStep(ev);
 }
@@ -5272,6 +5339,7 @@ window.addEventListener('mouseup',e=>{
 glc.addEventListener('wheel',e=>{
   if(!deskFresh()||FP.on) return;
   e.preventDefault();
+  if(S.chronOpen){ chronScroll(e.deltaY*0.6); return; }
   CAM.zoom=clamp(CAM.zoom*Math.pow(1.0016,-e.deltaY),0.030,1.9);
   clampCam3();
 },{passive:false});
@@ -5283,6 +5351,7 @@ function deskCard(i){
 function deskShortcut(k,e){
   if(!S.started){ if(k===' '||k==='Enter'){ e.preventDefault(); handleTap3(W/2,H/2); } return; }
   if(k==='Escape'){
+    if(S.chronOpen){ S.chronOpen=false; A.blip(); return; }
     if(FP.on) fpExit();
     else if(S.sel){ S.sel=null; S.ghost.show=false; ghostArmed=false; A.blip(); }
     else if(S.mode==='war') deskTap(backR());
@@ -5296,9 +5365,11 @@ function deskShortcut(k,e){
     return;
   }
   if(S.mode==='war'){ if(k==='Enter'||k===' '){ e.preventDefault(); deskTap(sendR()); } return; }
+  if(k==='c'&&!FP.on&&S.mode==='village'){ toggleChron(); return; }
+  if(S.chronOpen){ if(k==='ArrowUp') chronScroll(-40); if(k==='ArrowDown') chronScroll(40); return; }
   if(k==='m'&&!FP.on){ deskTap(warBtnR()); return; }
   if(k==='v'){ if(FP.on) fpExit(); else deskTap(walkBtnR()); return; }
-  if(k==='h'){ toast2('WASD or arrows move  -  Q/E turn  -  Z/X zoom  -  1-9 build  -  M map  -  V walk  -  Esc back  -  H keys'); return; }
+  if(k==='h'){ toast2('WASD or arrows move  -  Q/E turn  -  Z/X zoom  -  1-9 build  -  M map  -  V walk  -  C chronicle  -  Esc back  -  H keys'); return; }
   if(!FP.on && k>='1' && k<='9'){ deskCard(+k-1); return; }
 }
 const DESKHOLD=['w','a','s','d','q','e','z','x','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
