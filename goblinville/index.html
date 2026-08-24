@@ -2597,7 +2597,7 @@ function drawWarMap(){
     ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
   }
   ctx.restore();
-  const LBL=[];   // labels are queued, then placed by priority so a cue never lands on top of a name
+  const LBL=[], ART=[];   // labels are queued, then placed by priority so a cue never lands on top of a name or a region
   for(const R of REGIONS){
     const p=mpt(R), sel=mapSel===R.id, seed=R.id.length*1.7;
     ctx.globalAlpha=sel?1:0.94;
@@ -2606,6 +2606,7 @@ function drawWarMap(){
     if(sel){ ctx.strokeStyle='#ffd28a'; ctx.lineWidth=3; blob(p[0],p[1],R.r*0.66,seed,0.6); ctx.stroke(); }
     ctx.globalAlpha=1;
     regionIcon(R.kind,p[0],p[1]-4,Math.min(1,R.r/62)*0.92,R.c,R.c2);
+    ART.push({x0:p[0]-R.r*0.62,x1:p[0]+R.r*0.62,y0:p[1]-R.r*0.66,y1:p[1]+R.r*0.42});   // the rock and its icon are ink too
     LBL.push({pri:sel?0:1,x:p[0],y:p[1]+R.r*0.52+15,t:R.name,sz:12.5,wt:800,col:R.home?'#bdf08a':'#f4e2cc'});
     if(R.rival){
       const won=S.war.won[R.rival]||0, cd=S.war.cd[R.rival]||0;
@@ -2622,17 +2623,21 @@ function drawWarMap(){
         blob(p[0],p[1],R.r*(0.70+0.05*pu),seed,0.6); ctx.stroke();
         ctx.fillStyle='#ffd28a'; ellp(p[0]+R.r*0.34,p[1]-R.r*0.30,5,5); ctx.fill();
       }
-      LBL.push({pri:sel?0:(cue.s==='wait'?3:2),x:p[0],y:p[1]+R.r*0.52+29,t:cue.t,sz:10.5,wt:cue.s==='offer'?800:600,col:cue.s==='offer'?'#ffd28a':(cue.s==='done'?'#bcd2e0':'rgba(230,200,180,0.55)')});
+      LBL.push({pri:sel?0:(cue.s==='wait'?3:2),x:p[0],y:p[1]+R.r*0.52+29,alt:[p[1]+R.r*0.52+43,p[1]-R.r*0.66-8],t:cue.t,sz:10.5,wt:cue.s==='offer'?800:600,col:cue.s==='offer'?'#ffd28a':(cue.s==='done'?'#bcd2e0':'rgba(230,200,180,0.55)')});
     }
   }
   LBL.sort((a,b)=>a.pri-b.pri);
   const PLACED=[];
   for(const L of LBL){
     const w=txtW3(L.t,L.sz,L.wt), x=labX(L.x,L.t,L.sz,L.wt);
-    const box={x0:x-w/2-3,x1:x+w/2+3,y0:L.y-L.sz+1.5,y1:L.y+2.5};   // the box is the ink, not the line box - a region's own two lines must not fight
-    if(L.pri>1&&PLACED.some(b=>!(box.x1<b.x0||box.x0>b.x1||box.y1<b.y0||box.y0>b.y1))) continue;   // names and the selection win; a crowded cue steps aside
-    PLACED.push(box);
-    txt3(L.t,x,L.y,L.sz,L.col,'center',L.wt,'rgba(20,12,20,0.9)');
+    const boxAt=(y)=>({x0:x-w/2-3,x1:x+w/2+3,y0:y-L.sz+1.5,y1:y+2.5});   // the box is the ink, not the line box
+    const hits=(box)=>PLACED.concat(ART).some(b=>!(box.x1<b.x0||box.x0>b.x1||box.y1<b.y0||box.y0>b.y1));
+    const spots=[L.y].concat(L.alt||[]);
+    let y=null;
+    for(const c of spots){ if(L.pri<=1||!hits(boxAt(c))){ y=c; break; } }
+    if(y===null){ if(L.pri>2) continue; y=L.y; }   // an offer always speaks, even crowded; a waiting line yields
+    PLACED.push(boxAt(y));
+    txt3(L.t,x,y,L.sz,L.col,'center',L.wt,'rgba(20,12,20,0.9)');
   }
   ctx.fillStyle='rgba(14,9,16,0.72)'; ctx.fillRect(0,0,W,132);
   txt3('ORRIM',W/2,58,32,'#ffd08a','center',900,'#2a1208');
