@@ -3016,8 +3016,9 @@ function warTap(x,y){
 }
 /* ===================== first person ===================== */
 const FP={on:false, battle:false, x:0, y:0, a:0, pitch:0, bob:0, mv:null, lk:null, swing:0, hp:140, hurt:0, kills:0, iso:null};
-function fpStickR(){ return {x:20,y:H-162,w:142,h:142}; }
-function fpExitR(){ return {x:W-96,y:22,w:82,h:38}; }
+function fpStickR(){ const bot=(FP.battle&&!S.war.result)?rallyR().y-12:H-20; return {x:20,y:bot-142,w:142,h:142}; }   // the stick never shares pixels with the battle rail
+function fpExitLabel(){ return FP.battle?'\u2039 COMMAND':'\u2039 MAP VIEW'; }
+function fpExitR(){ const w=Math.max(82,Math.round(txtW3(fpExitLabel(),12,800))+26); return {x:W-14-w,y:22,w:w,h:38}; }
 function walkBtnR(){ return {x:14,y:352,w:88,h:42}; }   // v23: clear of the banner sweep zone
 function fightR(){ const R=uiRail(); return {x:R.x+4,y:H-140,w:150,h:44}; }
 function fpWalkableAny(x,y){
@@ -3203,15 +3204,16 @@ function drawFPUI(){
   }
   const e=fpExitR();
   ctx.fillStyle='rgba(20,14,20,0.82)'; rrp(e.x,e.y,e.w,e.h,12); ctx.fill();
-  txt3(FP.battle?'\u2039 COMMAND':'\u2039 MAP VIEW', e.x+e.w/2, e.y+24, 12,'#ffe3c8','center',800);
+  txt3(fpExitLabel(), e.x+e.w/2, e.y+24, 12,'#ffe3c8','center',800);
   txt3(DESK.mouse?(FP.battle?'WASD to move - drag to look - click to swing - Esc to command':'WASD to walk - drag to look - Esc to leave')
                :(FP.battle?'left drag move - right drag look - tap right to swing':'drag left to walk - drag right to look'), W/2, H-14, 11.5,'rgba(255,240,225,0.7)','center',600);
   if(FP.battle && !S.war.result){
     const us=S.gobs.filter(g=>g.side==='us'&&g.hp>0).length, foe=S.gobs.filter(g=>g.side==='foe'&&g.hp>0).length;
     const HR=uiRail();
-    ctx.fillStyle='rgba(16,10,14,0.7)'; rrp(HR.x+2,18,HR.w-106,48,12); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.16)'; rrp(HR.x+12,28,HR.w-140,10,5); ctx.fill();
-    ctx.fillStyle=FP.hp>56?'#7fd84a':'#e0603c'; rrp(HR.x+12,28,(HR.w-140)*clamp(FP.hp/140,0,1),10,5); ctx.fill();
+    const PW=Math.max(150,Math.min(HR.w-8,fpExitR().x-10-(HR.x+2)));   // the HUD keeps the rail's width and still never reaches the command button
+    ctx.fillStyle='rgba(16,10,14,0.7)'; rrp(HR.x+2,18,PW,48,12); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.16)'; rrp(HR.x+12,28,PW-20,10,5); ctx.fill();
+    ctx.fillStyle=FP.hp>56?'#7fd84a':'#e0603c'; rrp(HR.x+12,28,(PW-20)*clamp(FP.hp/140,0,1),10,5); ctx.fill();
     txt3('you '+Math.max(0,Math.round(FP.hp))+'   warband '+us+'   enemies '+foe+(FP.kills?'   felled '+FP.kills:''),HR.x+12,58,12.5,'#ffe3c8','left',800);
     const R=rallyR(), used=S.war.rallyUsed;
     ctx.fillStyle=used?'rgba(60,55,60,0.9)':'rgba(190,120,30,0.95)'; rrp(R.x,R.y,R.w,R.h,14); ctx.fill();
