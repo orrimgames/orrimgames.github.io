@@ -3757,6 +3757,7 @@ function frame(ts){
   if(S.story&&!S.started) tickStory(G.dt);
   if(S._holdT!=null){ if(!S.started&&saveExists&&touches.size===1&&G.t-S._holdT>1.5){ S._holdT=null; _wiping=true; clearSave(); location.reload(); } else if(touches.size!==1) S._holdT=null; }
   driveCeremony(G.dt);
+  barNudgeTick(G.dt);
   const tA=performance.now();
   if(!QNOSIM){   // v20: the mud lives behind the title too
     const upd=(h)=>{ tickClock(h); bgmTick(h); if(FP.on) fpUpdate(h); if(S.mode==='battle') updateBattle(h); else updateWorld(h); };
@@ -4210,6 +4211,25 @@ function barJumpR(){   // the card the brood wants is off the end of the bar: a 
   const c=cardRect2(i); if(c.x>=-2&&c.x+c.w<=W+2) return null;
   const right=c.x>0, name=BT[k].name, w=pillW([[name,11,800]],11), h=34;
   return {x:right?W-8-w:8, y:H-BARH-h-10, w:w, h:h, i:i, right:right};
+}
+let barNudge=null, barLearned=false, barWait=0; const barNudged={};   // v105: the bar teaches its own scrolling, once per goal, and stops once the player has scrolled it
+function barNudgeTick(dt){
+  if(!S.started||FP.on||S.mode!=='village'||S.chronOpen||S.tut<QUESTS.length){ barNudge=null; return; }
+  if(barDrag){ barNudge=null; return; }
+  const k=objCardKey();
+  if(!k){ barNudge=null; return; }
+  if(!barNudge&&!barLearned&&!barNudged[k]){
+    const j=barJumpR();
+    if(!j){ barWait=0; }
+    else { barWait+=dt;   // let the goal land and the eye settle before the bar moves, or the motion happens while nobody is looking
+      if(barWait>1.2){ barNudged[k]=1; barNudge={k:k, t:0, base:barScroll, dir:j.right?1:-1}; } }
+  }
+  if(!barNudge) return;
+  if(barNudge.k!==k||S.sel===barNudge.k){ barScroll=clamp(barNudge.base,0,barScrollMax); barNudge=null; return; }
+  barNudge.t+=dt;
+  const p=barNudge.t/0.9;
+  if(p>=1){ barScroll=clamp(barNudge.base,0,barScrollMax); barNudge=null; return; }
+  barScroll=clamp(barNudge.base+barNudge.dir*26*Math.sin(Math.PI*p)*Math.sin(Math.PI*p),0,barScrollMax);
 }
 function barJumpTo(i){   // centre the wanted card, the way a thumb would have scrolled to it
   const target=barX0()+i*(CARDW+8)-W/2+CARDW/2;
@@ -5216,7 +5236,7 @@ function handleTap3(x,y){
   if(S.tut<QUESTS.length && inR(x,y,questXR())){ S.tut=QUESTS.length; S.elderHush=1; A.grumble(); toast2('the elder stops talking'); saveGame(); return; }
   if(S.tut<QUESTS.length && inR(x,y,questR())){ A.say(); return; }
   if(warTap(x,y)) return;
-  { const j=barJumpR(); if(j&&inR(x,y,j)){ barJumpTo(j.i); A.blip(); return; } }
+  { const j=barJumpR(); if(j&&inR(x,y,j)){ barJumpTo(j.i); barLearned=true; barNudge=null; A.blip(); return; } }
   if(y>H-BARH){
     for(let i=0;i<BKEYS.length;i++){
       if(inR(x,y,cardRect2(i))){
@@ -5302,7 +5322,7 @@ function moveStep(e){
   const v=[...touches.values()];
   if(v.length===1){
     if(tapStart) tapStart.moved=Math.max(tapStart.moved,Math.hypot(v[0].x-tapStart.x,v[0].y-tapStart.y));
-    if(barDrag){ barScroll=clamp(barDrag.s0-(v[0].x-barDrag.x0),0,barScrollMax); }
+    if(barDrag){ barScroll=clamp(barDrag.s0-(v[0].x-barDrag.x0),0,barScrollMax); if(Math.abs(v[0].x-barDrag.x0)>6){ barLearned=true; barNudge=null; } }
     else if(S.sel && v[0].y<H-BARH){ updateGhost3(v[0].x,v[0].y); if(tapStart&&tapStart.moved>10) ghostArmed=false; }
     else if(panGrab){   // v52: drag slides the ball at any altitude
       const now=rayGround(v[0].x,v[0].y);
