@@ -2470,7 +2470,16 @@ const ROUTES=[['mud','ironbeard'],['mud','ratkin'],['mud','ogre'],['ratkin','iro
   ['vanto','bloom'],['vellum','cauldron'],['karrow','choir'],['mud','vellum']];
 let mapSel=null;
 function mpt(R){ return [W*R.x, 150+(H-330)*R.y]; }
-function warBtnR(){ return {x:14, y:300, w:88, h:42}; }   // v23: clear of the banner sweep zone
+function pillW(labels, pad){   // v101: a pill is as wide as the widest label it draws, never a hardcoded number
+  let mx=0; for(const l of labels){ const w=txtW3(l[0],l[1],l[2]); if(w>mx) mx=w; }
+  return Math.ceil(mx+2*(pad==null?15:pad));
+}
+function sideBtnW(){   // the village left column: one width for the three buttons so they stay a column
+  return Math.max(88, pillW([['WORLD',11.5,800],['WALK IN',11.5,800],['CHRONICLE',11.5,800],
+    [((S.war&&S.war.troops)||0)+' warriors',10,600],['first person',10,600],
+    [(S.chronicle&&S.chronicle.length?S.chronicle.length+' written':'nothing yet'),10,600]], 13));
+}
+function warBtnR(){ return {x:14, y:300, w:sideBtnW(), h:42}; }   // v23: clear of the banner sweep zone
 function offersOpen(){   // same authority the map uses, counted for the village side
   let n=0;
   for(const R of REGIONS){ if(R.rival||R.home) continue; if(regionCue(R).s==='offer') n++; }
@@ -2491,7 +2500,7 @@ function drawWarBtn(){
     txt3(''+n, cx, cy+4, 12, '#3a1a10','center',900);
   }
 }
-function chronBtnR(){ return {x:14, y:404, w:88, h:42}; }
+function chronBtnR(){ return {x:14, y:404, w:sideBtnW(), h:42}; }
 function chronCardR(){ const c=uiCard(560); return {x:c.x, w:c.w}; }
 function wrapTo(text, iw, size, weight){   // one wrap rule, measured with the font we draw with
   const words=String(text||'').split(' '); let line=''; const rows=[];
@@ -3099,7 +3108,7 @@ const FP={on:false, battle:false, x:0, y:0, a:0, pitch:0, bob:0, mv:null, lk:nul
 function fpStickR(){ const bot=(FP.battle&&!S.war.result)?rallyR().y-12:H-20; return {x:20,y:bot-142,w:142,h:142}; }   // the stick never shares pixels with the battle rail
 function fpExitLabel(){ return FP.battle?'\u2039 COMMAND':'\u2039 MAP VIEW'; }
 function fpExitR(){ const w=Math.max(82,Math.round(txtW3(fpExitLabel(),12,800))+26); return {x:W-14-w,y:22,w:w,h:38}; }
-function walkBtnR(){ return {x:14,y:352,w:88,h:42}; }   // v23: clear of the banner sweep zone
+function walkBtnR(){ return {x:14,y:352,w:sideBtnW(), h:42}; }   // v23: clear of the banner sweep zone
 function fightR(){ const R=uiRail(); return {x:R.x+4,y:H-140,w:150,h:44}; }
 function fpWalkableAny(x,y){
   const rr=Math.hypot(x-SITE.x,y-SITE.y);
@@ -4460,7 +4469,7 @@ function checkBadges(){
     offerShare('badge '+badgeCount()+' of '+BADGES.length); saveGame(); } }catch(e){} } }
 }
 function offerShare(why){ S._shareT=10; S._shareWhy=why; }
-function shareR(){ return {x:W-118,y:352,w:104,h:42}; }
+function shareR(){ const w=pillW([['SHARE BROOD',13,900]],15); return {x:W-14-w, y:352, w:w, h:42}; }   // right-anchored: it grows leftward, never off the edge
 function shareText(){
   return 'GOBLINVILLE - my brood: '+S.gobs.length+' goblins, day '+S.day+', '+
     S.war.banners.length+' banners taken, '+badgeCount()+'/'+BADGES.length+' badges. Grow your own brood:';
@@ -4483,7 +4492,7 @@ function drawShare(){
   ctx.restore();
   const a=clamp(S._shareT/10,0,1);
   ctx.strokeStyle='rgba(255,211,77,0.6)'; ctx.lineWidth=2.5; ctx.beginPath();
-  ctx.arc(r.x+14,r.y+r.h/2,6,-Math.PI/2,-Math.PI/2+a*TAU); ctx.stroke();
+  ctx.arc(r.x-12,r.y+r.h/2,6,-Math.PI/2,-Math.PI/2+a*TAU); ctx.stroke();   // v101: the pill hugs its text now, so the timer ring sits outside it instead of on the first letter
   if(S._shareWhy) txt3(S._shareWhy,r.x+r.w/2,r.y+r.h+16,9.5,'#d8c49a','center',800);
 }
 
