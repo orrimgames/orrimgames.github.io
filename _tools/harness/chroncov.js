@@ -1,6 +1,6 @@
 // chronicle content: repetition suppressed, milestones recorded, survives a reload
 const puppeteer=require('puppeteer-core');
-const MOB=process.argv[2]==='m', FILE=process.env.FILE||'index-v103.html';
+const MOB=process.argv[2]==='m', FILE=process.env.FILE||'index-v104.html';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const skip=async p=>{ for(let i=0;i<5;i++){ await p.evaluate(()=>{ S.story=null; S.started=true; S.introZoom=0; S.tut=QUESTS.length; S.elderHush=1; S.mode='village'; S.dayT=0.4; }); await sleep(300);} };
 (async()=>{
