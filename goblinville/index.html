@@ -4196,6 +4196,24 @@ function drawHUD(){
   ctx.fillStyle='rgba(22,18,28,0.55)'; rrp(pad,y2,w2,22,11); ctx.fill();
   txt3(lbl,pad+w2/2,y2+11,12,'#d8ffd0','center',800);
 }
+function objCardKey(){   // v104: the thing the game is asking for right now, if it is a building
+  if(S.tut<QUESTS.length) return null;   // the tutorial ring already owns its own targets
+  const i=goalIdx(); if(i<0) return null;
+  return GOALS[i].card||null; }
+function ringRect(r,pad){   // one pulsing ring, used by the tutorial and the goal rail alike
+  const pl=0.5+0.5*Math.sin(G.t*4), q=(pad==null?4:pad);
+  ctx.save(); ctx.strokeStyle='#ffd34d'; ctx.globalAlpha=0.55+0.4*pl; ctx.lineWidth=2.5;
+  rrp(r.x-q,r.y-q,r.w+2*q,r.h+2*q,14); ctx.stroke(); ctx.restore(); }
+function barJumpR(){   // the card the brood wants is off the end of the bar: a way to get there, sized to its own label
+  const k=objCardKey(); if(!k||barScrollMax<=0) return null;
+  const i=BKEYS.indexOf(k); if(i<0) return null;
+  const c=cardRect2(i); if(c.x>=-2&&c.x+c.w<=W+2) return null;
+  const right=c.x>0, name=BT[k].name, w=pillW([[name,11,800]],11), h=34;
+  return {x:right?W-8-w:8, y:H-BARH-h-10, w:w, h:h, i:i, right:right};
+}
+function barJumpTo(i){   // centre the wanted card, the way a thumb would have scrolled to it
+  const target=barX0()+i*(CARDW+8)-W/2+CARDW/2;
+  barScroll=clamp(target,0,barScrollMax); }
 function drawBuildMenu(){
   const y0=H-BARH;
   const g=ctx.createLinearGradient(0,y0-16,0,H);
@@ -4362,7 +4380,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -4985,11 +5003,11 @@ const QUESTS=[
 // v39: THE BROOD WANTS - post-tutorial goal rail: visible progress, stakes, and always a next move
 const GOALS=[
  {t:'Grow the brood to 8 goblins', short:'a bigger brood', check:function(){return S.gobs.length>=8;}, prog:function(){return '  '+Math.min(8,S.gobs.length)+'/8';}},
- {t:'Raise a QUARRY - stone builds the future', short:'a quarry stands', check:function(){return S.buildings.some(b=>b.key==='quarry');}},
- {t:'Raise a GOLD MINE - shine for the hall', short:'a gold mine stands', check:function(){return S.buildings.some(b=>b.key==='mine');}},
+ {t:'Raise a QUARRY - stone builds the future', short:'a quarry stands', card:'quarry', check:function(){return S.buildings.some(b=>b.key==='quarry');}},
+ {t:'Raise a GOLD MINE - shine for the hall', short:'a gold mine stands', card:'mine', check:function(){return S.buildings.some(b=>b.key==='mine');}},
  {t:'Stock 300 food before the lean days', short:'full larders', check:function(){return S.res.food>=300;}, prog:function(){return '  '+Math.min(300,Math.floor(S.res.food))+'/300';}},
  {t:'Take the Ratkin Warrens - silence a heresy', short:'first banner claimed', check:function(){return S.war.banners.indexOf('ratkin')>=0;}},
- {t:'Raise an EMBER SHRINE for the fire', short:'the hearth is lit', check:function(){return S.buildings.some(b=>b.key==='shrine');}},
+ {t:'Raise an EMBER SHRINE for the fire', short:'the hearth is lit', card:'shrine', check:function(){return S.buildings.some(b=>b.key==='shrine');}},
  {t:'Feed the Ogre Steps three dawns', short:'the mountain answers', check:function(){return !!(S.ogre&&S.ogre.bound);}, prog:function(){return '  '+Math.min(3,(S.ogre&&S.ogre.fed)||0)+'/3';}},
  {t:'Finish the Vantomere contract', short:'the Warming Main hums', check:function(){return !!(S.vanto&&S.vanto.main);}, prog:function(){return '  '+Math.min(3,(S.vanto&&S.vanto.trades)||0)+'/3';}},
  {t:'Send a goblin to Vellumspire', short:'the brood has a scholar', check:function(){return S.school==='done';}},
@@ -5054,6 +5072,17 @@ function drawQuest(){
   ctx.fillStyle='rgba(18,14,24,0.85)'; rrp(xr.x+3,xr.y+3,xr.w-6,xr.h-6,8); ctx.fill();
   ctx.strokeStyle='rgba(255,211,77,0.55)'; ctx.lineWidth=1.3; ctx.stroke();
   txt3('\u00d7',xr.x+xr.w/2,xr.y+xr.h/2-1,14,'rgba(255,227,173,0.8)','center',800,false);
+}
+function drawObjCard(){   // v104: the build the brood is asking for gets the same ring the tutorial uses, and a way back to it when it is off the bar
+  if(!S.started||FP.on||S.mode!=='village'||S.chronOpen) return;
+  const k=objCardKey(); if(!k) return;
+  const cr=cardRect2(BKEYS.indexOf(k));
+  if(cr.x>=-2&&cr.x+cr.w<=W+2){ if(S.sel!==k) ringRect(cr); return; }
+  const j=barJumpR(); if(!j) return;
+  const pl=0.5+0.5*Math.sin(G.t*4);
+  ctx.fillStyle='rgba(46,34,8,0.92)'; rrp(j.x,j.y,j.w,j.h,11); ctx.fill();
+  ctx.strokeStyle='#ffd34d'; ctx.globalAlpha=0.6+0.4*pl; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=1;
+  txt3((j.right?'':'\u2039 ')+BT[k].name+(j.right?' \u203a':''), j.x+j.w/2, j.y+j.h/2+1, 11,'#ffe6ad','center',800);
 }
 function drawQuestRing(){
   if(!S.started||S.tut>=QUESTS.length) return;
@@ -5187,6 +5216,7 @@ function handleTap3(x,y){
   if(S.tut<QUESTS.length && inR(x,y,questXR())){ S.tut=QUESTS.length; S.elderHush=1; A.grumble(); toast2('the elder stops talking'); saveGame(); return; }
   if(S.tut<QUESTS.length && inR(x,y,questR())){ A.say(); return; }
   if(warTap(x,y)) return;
+  { const j=barJumpR(); if(j&&inR(x,y,j)){ barJumpTo(j.i); A.blip(); return; } }
   if(y>H-BARH){
     for(let i=0;i<BKEYS.length;i++){
       if(inR(x,y,cardRect2(i))){
