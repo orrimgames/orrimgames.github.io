@@ -1,6 +1,6 @@
 // which fixed-width pills can't hold the text they draw? measure with the same txtW3 the game draws with
 const puppeteer=require('puppeteer-core');
-const MOB=process.argv[2]==='m', FILE=process.env.FILE||'index-v104.html';
+const MOB=process.argv[2]==='m', FILE=process.env.FILE||'index-v106.html';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{
  const b=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});

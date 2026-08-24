@@ -1,7 +1,7 @@
 // desktop harness: mouse + keys only, no direct calls to game input helpers
 const puppeteer=require('puppeteer-core');
 const W=+process.argv[2]||1920, H=+process.argv[3]||1080, TAG=process.argv[4]||'d';
-const FILE=process.env.FILE||'index-v99.html';
+const FILE=process.env.FILE||'index-v106.html';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{
  const b=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});

@@ -4,7 +4,7 @@ Setup from a bare container:
   mkdir -p /tmp/gov21 && cd /tmp/gov21
   npm install puppeteer-core
   curl -sSL -o goblinville-harness.tar.gz 'https://raw.githubusercontent.com/orrimgames/orrimgames.github.io/main/_tools/goblinville-harness.tar.gz' && tar xzf goblinville-harness.tar.gz
-  curl -sSL -o index-v104.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v104/goblinville/index.html'   # swap the tag for any version; verify md5
+  curl -sSL -o index-v106.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v106/goblinville/index.html'   # swap the tag for any version; verify md5
   curl -sO 'https://orrimgames.github.io/goblinville/village-theme.mp3'
   curl -sO 'https://orrimgames.github.io/goblinville/vampire-theme.mp3'   # the game fetches both at runtime; without them every probe logs two phantom 404s
   (setsid nohup python3 -m http.server 8945 >/tmp/srv.log 2>&1 &)
@@ -20,6 +20,8 @@ Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so
   FILE=index-vNN.html node pillw.js m|d               # measured pill widths: share pill, countdown ring, no fixed-width overflow
   FILE=index-vNN.html node cards390.js m|d           # which build cards are reachable on screen, and does any ring point off-screen
   FILE=index-vNN.html node goalcard.js m|d           # the goal's build card: ring on it, edge pill when it is off the bar, tap scrolls to it
+  FILE=index-vNN.html node nudge.js m|d              # the bar teaches its own scrolling: one nudge per goal, never after the player scrolls
+  FILE=index-vNN.html node stallchip.js m|d          # brood stall chip: null in tutorial, full at cap, hungry under 30 food, null when growing
   node req.js '<url>'                                # list failed network requests
 
 Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1), errs [] everywhere:
@@ -31,6 +33,8 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   persist.js badges brood8+day10+larder300, goalDone 1 and the quarry goal all survive food 400->5, pop 8->4, and a reload
   goalcard.js on v104 at 390: goal forced to GOLD MINE, pill at 297,696, tap scrolls barScroll 0 -> 243, card on screen, pill gone; at 1920 all ten cards fit so jump is null and only the ring draws
   cards390.js at 390: 4 of 10 cards on screen, barScrollMax 590 - this is why an objective may point at a card the player cannot see
+  nudge.js   on v105 at 390: single ~26px arc ~1.3s after the goal arms, back to the exact resting scroll, nudged once per goal key, none after barLearned; null at 1920
+  stallchip.js on v106 at both widths: null during tutorial, 'full - raise a hut' at cap, 'hungry - 30 food to breed' at 10 food, null when growing
 
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
-Head at the time of this kit: v104 (md5 c18ccf68dd7d751dce3780886573240f), tagged v104.
+Head at the time of this kit: v106 (md5 897b5f9058e7c54738dd570481464e1f).
