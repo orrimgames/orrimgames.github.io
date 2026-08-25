@@ -1,6 +1,6 @@
 // does the game point at the building it is asking for, even when the card is off the end of the bar?
 const puppeteer=require('puppeteer-core');
-const MOB=process.argv[2]!=='d', FILE=process.env.FILE||'index-v106.html';
+const MOB=process.argv[2]!=='d', FILE=process.env.FILE||'index-v110.html';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{
  const b=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});

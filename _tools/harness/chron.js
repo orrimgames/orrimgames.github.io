@@ -1,5 +1,5 @@
 const puppeteer=require('puppeteer-core');
-const MOB=process.argv[2]==='m', FILE=process.env.FILE||'index-v106.html';
+const MOB=process.argv[2]==='m', FILE=process.env.FILE||'index-v110.html';
 (async()=>{
  const b=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const p=await b.newPage();

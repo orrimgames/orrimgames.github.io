@@ -1,6 +1,6 @@
 // v105: does the bar teach itself? one subtle self-scroll when the wanted card is off the end, once per goal, never after the player has scrolled
 const puppeteer=require('puppeteer-core');
-const MOB=process.argv[2]!=='d', FILE=process.env.FILE||'index-v106.html';
+const MOB=process.argv[2]!=='d', FILE=process.env.FILE||'index-v110.html';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{
  const b=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:'new',args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
