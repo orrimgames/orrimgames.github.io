@@ -4190,8 +4190,9 @@ function drawHUD(){
     ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=1.4; ctx.stroke();
     ctx.save(); ctx.translate(x+15,y+chipH/2); drawResIcon2(k,0,0,11); ctx.restore();
     const v=k==='faith'?Math.floor(S.faith):Math.floor(S.res[k]);
-    const str=v>=1000?(v/1000).toFixed(1)+'k':String(v);
-    txt3(str,x+cw-8,y+chipH/2+1,fitSize2(str,cw-32,15,800),'#fff','right',800);
+    let str=v>=1000?(v/1000).toFixed(1)+'k':String(v), col='#fff';
+    if(k!=='faith'&&S.res[k]>=capOf(k)){ str=Math.floor(S.res[k])+'/'+capOf(k); col='#ffd34d'; }   // v108: a full stockpile shows its ceiling - the storehouse answer is one card over
+    txt3(str,x+cw-8,y+chipH/2+1,fitSize2(str,cw-32,15,800),col,'right',800);
   });
   const y2=pad+chipH+6;
   const lbl='Day '+S.day+'  -  '+S.gobs.length+'/'+S.popCap+' goblins', stall=stallReason();
