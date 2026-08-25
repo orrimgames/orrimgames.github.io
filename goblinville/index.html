@@ -4217,12 +4217,26 @@ function drawHUD(){
   ctx.fillStyle='rgba(22,18,28,0.55)'; rrp(pad,y2,w2,22,11); ctx.fill();
   txt3(lbl,pad+10,y2+11,12,'#d8ffd0','left',800);
   if(stall) txt3('  -  '+stall,pad+10+wLbl,y2+11,12,'#ffd34d','left',800);
+  const store=storeReason();
+  if(store){   // v111: two full stockpiles point at the fix, right beside the numbers that prove it
+    const x3=pad+w2+6, maxW=W-pad-x3;
+    if(maxW>70){ const fs=fitSize2(store,maxW-20,12,800); ctx.font='800 '+fs+'px system-ui';
+      const w3=ctx.measureText(store).width+20;
+      ctx.fillStyle='rgba(40,30,16,0.62)'; rrp(x3,y2,w3,22,11); ctx.fill();
+      ctx.strokeStyle='rgba(255,211,77,0.5)'; ctx.lineWidth=1.4; ctx.stroke();
+      txt3(store,x3+10,y2+11,fs,'#ffd34d','left',800); } }
 }
 function stallReason(){   // v106: a stalled brood says why, right in its own chip - room or food, the two things breeding reads
   if(!S.started||S.tut<QUESTS.length) return null;
   if(S.gobs.length>=S.popCap) return 'full - raise a hut';
   if(S.res.food<30) return 'hungry - 30 food to breed';
   return null;
+}
+function storeReason(){   // v111: the UI answers the question the player has right now - the v108 amber ceiling is the 'what', this is the 'so what'
+  if(!S.started||S.tut<QUESTS.length) return null;   // the tutorial owns the teaching until it is done
+  if(BKEYS.indexOf('store')<0) return null;
+  let n=0; for(const k of ['food','wood','stone','gold']) if(S.res[k]>=capOf(k)) n++;
+  return n>=2?'full - raise a storehouse':null;
 }
 function objCardKey(){   // v104: the thing the game is asking for right now, if it is a building
   if(S.tut<QUESTS.length) return null;   // the tutorial ring already owns its own targets
