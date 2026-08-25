@@ -32,6 +32,10 @@ Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so
   FILE=index-vNN.html node stallbanner.js m|d        # raid-stall guard: frozen fight fires 'going nowhere' once at 45s; normal raids never; re-arms on hp change
   node pacing.js                                 # day-1 audit brain: tutorial through goals, sim-stepped 0.05s, chunked
   node pacing2.js                                # war-economy audit: raid through day 3, real updateBattle substeps, 60s battle stall dumps state, dismisses result screens
+  node pacing3.js                                # minimum-viable-raiding: two barracks, raid at 10 troops with fire+rally
+  node pacing4.js                                # tier-2 probe: raid at full 16-troop cap with fire+rally
+  node pacing5.js                                # tier-4 probe: three barracks, raid at full 24-troop cap
+  node pacing6.js                                # tier-4 vs ogre: 24 troops, ogre force-bound (probe cheat: skips the 3-dawn bowl timeline)
   node battlerate.js                             # N isolated raids, real updateBattle: resolve rate and seconds-to-resolution
   node battlestuck.js                            # one isolated 5v9, state dump over time (precursor to pacing2's watchdog)
   FILE=index-vNN.html node intro.js m|d              # cold open plays, taps advance beats, SKIP lands clean, save returns skip the story
@@ -56,6 +60,7 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   storechip.js on v111 at both widths: quiet during tutorial, surfaces at 2+ capped stockpiles, clears after a storehouse rises
   stallbanner.js on v112 at both widths: normal 5v9 resolves with 0 fires; frozen fight (atk 0, towers off) fires once at 45s; hp change re-arms
   pacing2.js on v111: raid resolves as a 15-20s loss (5v9 tier 1); the result screen waits for leaveBattle() - a harness that never dismisses it false-stalls the run (the Aug 25 'stalemate' was exactly this; battles have no in-game deadlock)
+  war ladder on v112 (pacing2-6, day 0-3 sims): 5 troops no support 0/67 vs t1; 10+fire+rally wins t1, 0/47 vs t2; 16+fire+rally sweeps t1-t3 day 1, 0/28 vs t4; 24+fire+rally 0/21 vs t4; 24+bound ogre wins ALL four tiers 4/4 - the rescue clause is the tier-4 key, and it never bonds organically (3 bowls, 3 dawns, food-starved)
 
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
 Head at the time of this kit: v112 (md5 0487146dab7f56aeeeb5cb342ff264d8).

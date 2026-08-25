@@ -1,4 +1,4 @@
-// pacing audit 2: the war-leaning player - first raid through day 3. Scripted, sim-stepped 0.05s, chunked.
+// pacing audit 6: tier-4 vs OGRE - 24 troops, fire+rally, ogre force-bound (probe cheat: skips the 3-dawn bowl timeline). Based on pacing5. - first raid through day 3. Scripted, sim-stepped 0.05s, chunked.
 // battles run real updateBattle substeps; training is updateWar (auto, barracks); ogre via offerSteps; vanto signing needs map taps - recorded as wait, not played.
 const puppeteer=require('puppeteer-core');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -63,9 +63,10 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
    const next=RIVALS.find(r=>S.war.banners.indexOf(r.id)<0);
    if(next){
     const nb=warBuildings();
-    const wantB=next.tier>=2?2:1;
+    const wantB=3;
     if(nb<wantB) return P.buildOrTap('barracks','rock');
-    if(S.war.troops>=next.cost+2){ P.raids++; P.ev.push({t:Math.round(P.t),ev:'raid '+next.id+' (tier '+next.tier+', '+S.war.troops+' troops)'});
+    if(next.id==='bonechoir'&&!S.ogre.bound){ S.ogre.bound=true; P.ev.push({t:Math.round(P.t),ev:'ogre BOUND (forced for probe)'}); }
+    if(S.war.troops>=24){ P.raids++; P.ev.push({t:Math.round(P.t),ev:'raid '+next.id+' (tier '+next.tier+', '+S.war.troops+' troops)'});
       const b0=S.war.banners.length; startBattle(next); P._raidB0=b0; P.battleT=0; return 'battle'; }
     return 'wait:training '+S.war.troops+'/'+(next.cost+2); }
    if(gi>=0) return 'wait:goal '+gi+' ('+GOALS[gi].short+')';
@@ -75,7 +76,10 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
    const dt=0.05; let n=0;
    while(S.day<3 && n<maxSteps){
     tickClock(dt);
-    if(S.mode==='battle'){ const b0=S.war.banners.length; updateBattle(dt); P.battleT=(P.battleT||0)+dt;
+    if(S.mode==='battle'){ const b0=S.war.banners.length;
+     if(!S.war.result){ if(!S.war.rallyUsed&&(P.battleT||0)>1){ S.war.rallyUsed=true; S.war.rally=6; }
+      if(S.faith>=25&&!S.war.firedOnce){ const h=S.buildings.find(b=>b.key==='hall'); if(h) dragonfireAtWorld(h.tx+0.5,h.ty+0.5); } }
+     updateBattle(dt); P.battleT=(P.battleT||0)+dt;
       if(P.battleT>60&&!P.stuckDump){ P.stuckDump={t:Math.round(P.t),
         units:S.gobs.map(g=>({side:g.side,hp:Math.round(g.hp),x:+g.x.toFixed(1),y:+g.y.toFixed(1),rout:!!g.rout,die:g.die||0})),
         bld:S.buildings.map(b=>({k:b.key,hp:Math.round(b.hp),tx:b.tx,ty:b.ty}))}; P.ev.push({t:Math.round(P.t),ev:'BATTLE STUCK 60s - state dumped'}); }
