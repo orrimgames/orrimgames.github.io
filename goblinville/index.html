@@ -2532,6 +2532,20 @@ function chronPanel(){
 }
 function chronCloseR(){ const P=chronPanel(); return {x:P.x+P.w-46, y:P.y+8, w:38, h:38}; }
 function chronH(entries){ let h=8; for(const e of entries) h+=16+e.rows.length*17+8; return h; }
+function drawMuteBtn(){
+  if(S.mode!=='village'||FP.on||!S.started) return;
+  const r=muteR();
+  ctx.fillStyle='rgba(44,38,60,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
+  ctx.strokeStyle='rgba(200,190,255,0.42)'; ctx.lineWidth=2; ctx.stroke();
+  const cx=r.x+r.w/2, cy=r.y+r.h/2;
+  ctx.fillStyle='#ded6ff';
+  ctx.beginPath(); ctx.moveTo(cx-13,cy-5); ctx.lineTo(cx-6,cy-5); ctx.lineTo(cx+1,cy-12); ctx.lineTo(cx+1,cy+12); ctx.lineTo(cx-6,cy+5); ctx.lineTo(cx-13,cy+5); ctx.closePath(); ctx.fill();
+  if(A.muted){ ctx.strokeStyle='#ff9c9c'; ctx.lineWidth=2.6;
+    ctx.beginPath(); ctx.moveTo(cx+5,cy-8); ctx.lineTo(cx+14,cy+8); ctx.moveTo(cx+14,cy-8); ctx.lineTo(cx+5,cy+8); ctx.stroke(); }
+  else { ctx.strokeStyle='#ded6ff'; ctx.lineWidth=2.2;
+    ctx.beginPath(); ctx.arc(cx+3,cy,7,-1.1,1.1); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx+3,cy,12,-1.0,1.0); ctx.stroke(); }
+}
 function drawChronBtn(){
   if(S.mode!=='village'||FP.on||!S.started) return;
   const r=chronBtnR(), n=S.chronicle.length;
@@ -4178,6 +4192,7 @@ function cardRect2(i){ return {x:barX0()+i*(CARDW+8)-barScroll, y:H-BARH+10, w:C
 function inR(x,y,r){ return x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h; }
 function cancelR(){ return {x:W-94,y:H-BARH-66,w:84,h:32}; }
 
+function muteR(){ return {x:14, y:456, w:sideBtnW(), h:42}; }   // v110: the sound has one switch, and it remembers - fourth button in the command column
 function drawHUD(){
   const pad=8, chipH=32;
   const keys=['food','wood','stone','gold'];
@@ -4412,7 +4427,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -4440,7 +4455,7 @@ function packSave(){
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){ const c=tiles[y][x];
     d.push({tree:1,rock:2,shroom:3,tuft:4,reed:5,stump:6,grave:7,deadtree:8}[c.deco]||0);
     if(c.regrow!=null&&c.regrow>0) r[y*MAP+x]=Math.round(c.regrow); }
-  return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, day:S.day, dayT:S.dayT,
+  return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, muted:!!S.muted, day:S.day, dayT:S.dayT,
     omen:S.omen, school:S.school, scholar:S.scholar, ogre:S.ogre, vanto:S.vanto,
     war:{troops:S.war.troops, won:S.war.won, cd:S.war.cd, banners:S.war.banners, treaty:S.war.treaty},
     ach:S.ach||{}, seen:S.seen||{},
@@ -4484,7 +4499,7 @@ function restoreSave(sv){
     g.state='idle'; g.st=rnd(1.5,0.2); g.target=null; g.carry=null; g.amt=0; g.emote=null; g.emoteT=0; g.ph=rnd(TAU);
     if(g.vet) g.tint=[1.10,0.96,0.96]; }
   Object.assign(S.res,sv.res); Object.assign(S.cap,sv.cap||{});
-  S.faith=sv.faith||0; S.day=sv.day||0; S.dayT=(sv.dayT==null?0.28:sv.dayT); S.omen=sv.omen||0;
+  S.faith=sv.faith||0; S.muted=!!sv.muted; A.setMute(S.muted); S.day=sv.day||0; S.dayT=(sv.dayT==null?0.28:sv.dayT); S.omen=sv.omen||0;
   S.school=sv.school||'none'; S.scholar=sv.scholar||null;
   if(sv.ogre) Object.assign(S.ogre,sv.ogre);
   if(sv.vanto) Object.assign(S.vanto,sv.vanto);
@@ -5248,6 +5263,7 @@ function handleTap3(x,y){
   if(S.tut<QUESTS.length && inR(x,y,questXR())){ S.tut=QUESTS.length; S.elderHush=1; A.grumble(); toast2('the elder stops talking'); saveGame(); return; }
   if(S.tut<QUESTS.length && inR(x,y,questR())){ A.say(); return; }
   if(warTap(x,y)) return;
+  if(S.mode==='village'&&!FP.on&&inR(x,y,muteR())){ S.muted=!S.muted; A.setMute(S.muted); if(!S.muted) A.blip(); saveGame(); return; }
   { const j=barJumpR(); if(j&&inR(x,y,j)){ barJumpTo(j.i); barLearned=true; barNudge=null; A.blip(); return; } }
   if(y>H-BARH){
     for(let i=0;i<BKEYS.length;i++){
