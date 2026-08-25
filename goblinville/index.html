@@ -254,7 +254,8 @@ function layout(){
   if(gl) gl.viewport(0,0,glc.width,glc.height);
 }
 function staticUIKey(){ return [W,H,DPR,S.day,S.gobs.length,S.popCap,S.sel,Math.round(barScroll*40),
-  Math.floor(S.res.food),Math.floor(S.res.wood),Math.floor(S.res.stone),Math.floor(S.res.gold)].join('|'); }
+  Math.floor(S.res.food),Math.floor(S.res.wood),Math.floor(S.res.stone),Math.floor(S.res.gold),
+  Math.floor(S.faith),hasShrine()?1:0].join('|'); }
 function renderStaticUI(){
   const k=staticUIKey(); if(k===uiKey) return; uiKey=k;
   ctx2.setTransform(DPR,0,0,DPR,0,0); ctx2.clearRect(0,0,W,H);
@@ -4180,6 +4181,7 @@ function cancelR(){ return {x:W-94,y:H-BARH-66,w:84,h:32}; }
 function drawHUD(){
   const pad=8, chipH=32;
   const keys=['food','wood','stone','gold'];
+  if(S.faith>0||hasShrine()) keys.push('faith');   // v107: anything the village stockpiles gets a chip - the shrine's faith is one
   const total=W-pad*2;
   const cw=Math.min(88,(total-6*(keys.length-1))/keys.length);
   keys.forEach((k,i)=>{
@@ -4187,7 +4189,7 @@ function drawHUD(){
     ctx.fillStyle='rgba(22,18,28,0.62)'; rrp(x,y,cw,chipH,chipH/2); ctx.fill();
     ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=1.4; ctx.stroke();
     ctx.save(); ctx.translate(x+15,y+chipH/2); drawResIcon2(k,0,0,11); ctx.restore();
-    const v=Math.floor(S.res[k]);
+    const v=k==='faith'?Math.floor(S.faith):Math.floor(S.res[k]);
     const str=v>=1000?(v/1000).toFixed(1)+'k':String(v);
     txt3(str,x+cw-8,y+chipH/2+1,fitSize2(str,cw-32,15,800),'#fff','right',800);
   });
