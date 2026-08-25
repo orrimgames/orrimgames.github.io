@@ -2877,7 +2877,7 @@ function startBattle(r){
   if(S.war.treaty) for(let i=0;i<2;i++){ const g2=bunit(4.4+i*0.9, MAP-2.2,'us',r);
     g2.tint=[0.82,0.92,1.3]; g2.rig='bonechoir'; g2.legion=true; g2.hp=70; g2.max=70; g2.atk=8; }
   S.war.troops-=S.war.deployed;
-  S.war.rally=0; S.war.rallyUsed=false; S.war.firedOnce=false; S.war.aim=false; S.war.result=null; S.war.foe=r;
+  S.war.rally=0; S.war.rallyUsed=false; S.war.firedOnce=false; S.war.aim=false; S.war.result=null; S.war.foe=r; S.war.stallT=0; S.war._hpSum=-1; S.war._stallTold=0;   // v112: a deadlocked raid says so
   S.mode='battle'; mapSel=null; FP.on=false; FP.battle=false; CAM.mode='iso';
   CAM.tx=mid; CAM.ty=mid+2; CAM.yaw=0.9; CAM.pitch=0.78; CAM.dist=15; CAM.zoom=1; shadowDirty=true;
   rebuildWorld();
@@ -3018,6 +3018,13 @@ function updateBattle(dt){
     const us=S.gobs.some(g=>g.side==='us'&&g.hp>0),
           foes=S.gobs.some(g=>g.side==='foe'&&g.hp>0)||S.buildings.some(b=>b.key==='hall');
     if(!us) endBattle(false); else if(!foes) endBattle(true);
+  }
+  if(!S.war.result){   // v112: no-hp-change for 45s means this fight is going nowhere - say so, once per lull (normal raids resolve in 15-20s)
+    let hpSum=0; for(const g of S.gobs) hpSum+=Math.max(0,Math.round(g.hp*10)); for(const b of S.buildings) hpSum+=Math.max(0,Math.round(b.hp*10));
+    if(hpSum!==S.war._hpSum){ S.war._hpSum=hpSum; S.war.stallT=0; S.war._stallTold=0; }
+    else { S.war.stallT+=dt;
+      if(S.war.stallT>45&&!S.war._stallTold){ S.war._stallTold=1;
+        banner2('THE RAID IS GOING NOWHERE','RETREAT brings the brood home'); A.say(9); } }
   }
   if(S.shake>0) S.shake=Math.max(0,S.shake-dt*22);
   if(!S.war.result){ let cx=0,cy=0,n=0;
