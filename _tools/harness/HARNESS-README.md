@@ -28,6 +28,7 @@ Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so
   FILE=index-vNN.html node mutechip.js m|d           # sound switch: tap toggles, survives a reload, toggles back
   FILE=index-vNN.html node battle.js m|d             # raid smoke, real taps: WORLD->SEND->dragonfire->rally->win->home->persist
   node req.js '<url>'                                # list failed network requests
+  FILE=index-vNN.html node victory.js m|d            # ending smoke: force all banners, dawn fireworks, ENDURES card taps, persist, no replay
 
 Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1), errs [] everywhere:
   chron.js   empty card 150px tall at both widths; 42 seeded entries scroll 1858->0 mobile, 1112->0 desktop; close/reopen/close-corner all correct
@@ -42,6 +43,7 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   capchip.js  on v108 at both widths: food pinned at cap draws amber '400/400'; storehouse raises the cap and the chip goes plain
   mutechip.js on v110 at both widths: tap mutes (icon X), reload stays muted, tap restores
   battle.js   on v110 at both widths: deploy 10v9+2 towers, dragonfire 30->5 faith, rally consumed, win card, stash restores village, banner survives reload
+  victory.js  on v110 at both widths: checkVictory fires, phase 0->tap->1->tap->done, share offered, ceremonyDone survives reload, no replay
   nudge.js   on v105 at 390: single ~26px arc ~1.3s after the goal arms, back to the exact resting scroll, nudged once per goal key, none after barLearned; null at 1920
   stallchip.js on v106 at both widths: null during tutorial, 'full - raise a hut' at cap, 'hungry - 30 food to breed' at 10 food, null when growing
 
