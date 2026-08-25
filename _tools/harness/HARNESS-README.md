@@ -7,7 +7,6 @@ Setup from a bare container:
   curl -sSL -o index-v110.html 'https://github.com/orrimgames/orrimgames.github.io/raw/v110/goblinville/index.html'   # swap the tag for any version; verify md5
   curl -sO 'https://orrimgames.github.io/goblinville/village-theme.mp3'
   curl -sO 'https://orrimgames.github.io/goblinville/vampire-theme.mp3'   # the game fetches both at runtime; without them every probe logs two phantom 404s
-  for f in rig-ratkin.js rig-ironbeard.js rig-sporefolk.js rig-bonechoir.js; do curl -sO "https://orrimgames.github.io/goblinville/$f"; done   # foe battle rigs; without them battle probes log a phantom rig 404
   (setsid nohup python3 -m http.server 8945 >/tmp/srv.log 2>&1 &)
 
 Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so launch detached and poll a done file):
@@ -29,6 +28,14 @@ Run (one browser at a time; probes take 90-180s and a bash call caps at 120s, so
   FILE=index-vNN.html node battle.js m|d             # raid smoke, real taps: WORLD->SEND->dragonfire->rally->win->home->persist
   node req.js '<url>'                                # list failed network requests
   FILE=index-vNN.html node victory.js m|d            # ending smoke: force all banners, dawn fireworks, ENDURES card taps, persist, no replay
+  FILE=index-vNN.html node storechip.js m|d          # 2+ stockpiles at cap surfaces the storehouse; tutorial-quiet; clears when it stops mattering
+  FILE=index-vNN.html node stallbanner.js m|d        # raid-stall guard: frozen fight fires 'going nowhere' once at 45s; normal raids never; re-arms on hp change
+  node pacing.js                                 # day-1 audit brain: tutorial through goals, sim-stepped 0.05s, chunked
+  node pacing2.js                                # war-economy audit: raid through day 3, real updateBattle substeps, 60s battle stall dumps state, dismisses result screens
+  node battlerate.js                             # N isolated raids, real updateBattle: resolve rate and seconds-to-resolution
+  node battlestuck.js                            # one isolated 5v9, state dump over time (precursor to pacing2's watchdog)
+  FILE=index-vNN.html node intro.js m|d              # cold open plays, taps advance beats, SKIP lands clean, save returns skip the story
+  FILE=index-vNN.html node autofin.js m|d            # how long the cold open actually takes headless, and does it land clean
 
 Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1), errs [] everywhere:
   chron.js   empty card 150px tall at both widths; 42 seeded entries scroll 1858->0 mobile, 1112->0 desktop; close/reopen/close-corner all correct
@@ -46,6 +53,9 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   victory.js  on v110 at both widths: checkVictory fires, phase 0->tap->1->tap->done, share offered, ceremonyDone survives reload, no replay
   nudge.js   on v105 at 390: single ~26px arc ~1.3s after the goal arms, back to the exact resting scroll, nudged once per goal key, none after barLearned; null at 1920
   stallchip.js on v106 at both widths: null during tutorial, 'full - raise a hut' at cap, 'hungry - 30 food to breed' at 10 food, null when growing
+  storechip.js on v111 at both widths: quiet during tutorial, surfaces at 2+ capped stockpiles, clears after a storehouse rises
+  stallbanner.js on v112 at both widths: normal 5v9 resolves with 0 fires; frozen fight (atk 0, towers off) fires once at 45s; hp change re-arms
+  pacing2.js on v111: raid resolves as a 15-20s loss (5v9 tier 1); the result screen waits for leaveBattle() - a harness that never dismisses it false-stalls the run (the Aug 25 'stalemate' was exactly this; battles have no in-game deadlock)
 
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
-Head at the time of this kit: v110 (md5 c2436ec35b02f88e69f0a033557324b5).
+Head at the time of this kit: v112 (md5 0487146dab7f56aeeeb5cb342ff264d8).
