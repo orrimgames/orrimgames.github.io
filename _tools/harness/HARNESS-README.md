@@ -64,5 +64,10 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   war ladder on v112 (pacing2-6, day 0-3 sims): 5 troops no support 0/67 vs t1; 10+fire+rally wins t1, 0/47 vs t2; 16+fire+rally sweeps t1-t3 day 1, 0/28 vs t4; 24+fire+rally 0/21 vs t4; 24+bound ogre wins ALL four tiers 4/4 - the rescue clause is the tier-4 key, and it never bonds organically (3 bowls, 3 dawns, food-starved)
   vanto.js on v112 at 390: real-tap sign works; 20f->12g per dawn for 3 dawns then the trade STOPS and the Main's x1.5 carry takes over; hungry dawn lapses the contract; state survives reload
 
+  treaty.js  on v112 at 390: real-tap Cold Peace - 2 banners -> WORLD -> karrow -> ACCEPT pill, treaty=true, legion pair (70hp/8atk) joins the next battle, 4g/dawn tithe, an unpaid tithe breaks the treaty instantly, state survives reload
+  school.js  on v112 at 390: real-tap Vellumspire - shrine -> WORLD -> vellum -> SEND pill, gob leaves 7->6, dawn letters days 4-5, day-6 scholarReturn ('Thump the Scholar', job scholar, purple tint, +5 faith); catches the v112 save-whitelist scholar drop (fixed v113)
+  pacing7.js on v112: treaty + 16 troops + fire + rally vs bonechoir 0/30 - the legion pair does not crack tier 4; probe cheats labeled in-file (pre-signed treaty, dawn tithe top-up)
+  pacing.js, treaty.js, school.js all take FILE=<file> env to target any build (default historical)
+
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
 Head at the time of this kit: v112 (md5 0487146dab7f56aeeeb5cb342ff264d8).

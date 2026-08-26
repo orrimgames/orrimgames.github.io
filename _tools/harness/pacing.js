@@ -7,7 +7,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const p=await b.newPage();
  await p.setViewport({width:390,height:844,deviceScaleFactor:2,isMobile:true,hasTouch:true});
  const errs=[]; p.on('pageerror',e=>errs.push(e.message));
- await p.goto('http://localhost:8945/index-v110.html?new=1',{waitUntil:'load',timeout:120000});
+ await p.goto('http://localhost:8945/'+(process.env.FILE||'index-v110.html')+'?new=1',{waitUntil:'load',timeout:120000});
  let t0=Date.now(); while(Date.now()-t0<120000){ if(await p.evaluate(()=>window.G&&G.frame>4).catch(()=>false)) break; await sleep(400); }
  const out=await p.evaluate(()=>{
   S.story=null; S.started=true; S.introZoom=0; S.elderHush=1; S.mode='village';
