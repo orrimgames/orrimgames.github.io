@@ -2458,6 +2458,7 @@ const REGIONS=[
   {id:'mud',    name:'The Mudmouth',   kind:'mud',   x:0.50,y:0.62, r:74, c:'#5fa83c', c2:'#3f7d28', home:true,
    note:'Home. The last hot springs in Orrim, and the goblins boil mushrooms in them.'},
   {id:'cauldron',name:'The Cauldron',  kind:'volcano',x:0.72,y:0.32, r:66, c:'#7c3a2a', c2:'#4a1f18',
+   status:'It sleeps. Let it.',
    note:'A wound, not a mountain. VULKARRAX sleeps inside. Ash falls from it on omen days.'},
   {id:'ironbeard',name:'Ironbeard Deep',kind:'mountain',x:0.24,y:0.34,r:60, c:'#8a8f96', c2:'#5c626b', rival:'ironbeard',
    note:'Dwarves quarrying the furnace\u2019s cooled bones and selling warmth by weight.'},
@@ -2597,7 +2598,22 @@ function uiRail(){   // one band for the bottom action pairs: the phone's full w
   return {x:Math.round((W-w)/2), w:w};
 }
 function backR(){ const R=uiRail(); return {x:R.x+2,y:H-58,w:100,h:44}; }
-function sendR(){ const R=uiRail(); return {x:R.x+R.w-160,y:H-58,w:158,h:44}; }
+function sendR(){ const R=uiRail(), L=mapPill();   // v115: the pill is as wide as its label (v101 rule), never a hardcoded 158
+  const w=L?Math.max(158,pillW([[L.t,L.sz,L.wt]],15)):158;
+  return {x:R.x+R.w-2-w,y:H-58,w:w,h:44}; }
+function mapPill(){   // v115: one authority for the map action pill - draw, width, and hit tests all read this
+  const R=REGIONS.find(r=>r.id===mapSel); if(!R) return null;
+  if(R.locked==='school'&&hasShrine()&&S.school==='none') return {act:'school',t:'SEND A SCHOLAR',sz:13,wt:800,fill:'rgba(120,96,180,0.95)',col:'#f2ecff'};
+  if(R.locked==='treaty'&&S.war.banners.length>=2&&!S.war.treaty) return {act:'treaty',t:'ACCEPT THE COLD PEACE',sz:12.5,wt:800,fill:'rgba(90,140,170,0.95)',col:'#eaf6ff'};
+  if(R.locked==='friends'&&S.day>=2&&!S.ogre.bound&&S.ogre.fed<3){
+    const today=(S.ogre.lastDay||0)>=S.day, ok=!today&&S.res.food>=10&&S.res.gold>=5;
+    return {act:'friends',t:today?'the mountain eats once a day':(ok?'LEAVE AN OFFERING':'need 10 food, 5 gold'),sz:12.5,wt:800,fill:ok?'rgba(160,110,60,0.95)':'rgba(80,66,52,0.9)',col:ok?'#fff0dc':'#c8b4a0'}; }
+  if(R.locked==='contract'&&S.day>=3&&!S.vanto.signed&&!S.vanto.main)
+    return {act:'contract',t:S.vanto.lapsed?'RE-SIGN THE CONTRACT':'SIGN THE CONTRACT',sz:12.5,wt:800,fill:'rgba(110,116,160,0.95)',col:'#f0f2ff'};
+  if(R.rival){ const rv=RIVALS.find(x=>x.id===R.rival), ok=S.war.troops>=rv.cost&&!(S.war.cd[rv.id]>0);
+    return {act:'raid',ok:ok,t:ok?'RAID '+R.name.toUpperCase().replace('THE ',''):(S.war.cd[rv.id]>0?'regrouping':'need '+rv.cost+' warriors'),sz:ok?14:12.5,wt:ok?900:800,fill:ok?'rgba(175,42,44,0.98)':'rgba(70,60,64,0.9)',col:ok?'#fff0dd':'#a89a94'}; }
+  return null;
+}
 function blob(cx,cy,r,seed,squash){
   ctx.beginPath();
   for(let i=0;i<=26;i++){
@@ -2753,65 +2769,43 @@ function drawWarMap(){
     for(const w of words){ const t2=line?line+' '+w:w; if(txtW3(t2,12.5,600)>IW){ txt3(line,IX,ly,12.5,'#c9b09c','left',600); line=w; ly+=17; } else line=t2; }
     if(line) txt3(line,IX,ly,12.5,'#c9b09c','left',600);
     const rv=R.rival?RIVALS.find(x=>x.id===R.rival):null;
-    if(rv) txt3('needs '+rv.cost+' warriors   loot '+Object.keys(rv.loot).map(k=>rv.loot[k]+' '+k).join(', '),IX,H-70,12,'#e0b98a','left',700);
+    if(rv) txt3('needs '+rv.cost+' warriors   loot '+Object.keys(rv.loot).map(k=>rv.loot[k]+' '+k).join(', '),IX,H-70,fitSize2('needs '+rv.cost+' warriors   loot '+Object.keys(rv.loot).map(k=>rv.loot[k]+' '+k).join(', '),IW,12,700),'#e0b98a','left',700);
     else if(R.home) txt3('your village',IX,H-70,12,'#bdf08a','left',700);
     else if(R.locked==='school' && hasShrine() && S.school==='none'){
       txt3('VELLUMSPIRE answers. Their terms:',IX,H-86,12,'#d8ccf0','left',800);
-      txt3('send one goblin to study - back in 3 days, twice as bright',IX,H-70,11.5,'#c0b4e4','left',600);
+      txt3('send one goblin to study - back in 3 days, twice as bright',IX,H-70,fitSize2('send one goblin to study - back in 3 days, twice as bright',IW,11.5,600),'#c0b4e4','left',600);
     }
-    else if(R.locked==='school' && S.school==='away'&&S.scholar) txt3(S.scholar.name+' is in the tower. Day '+(S.day-S.scholar.day0)+' of 3.',IX,H-70,11.5,'#c0b4e4','left',700);
-    else if(R.locked==='school' && S.school==='done') txt3('One of yours studied there. The tower respects the Mudmouth now.',IX,H-70,11.5,'#c0b4e4','left',700);
+    else if(R.locked==='school' && S.school==='away'&&S.scholar) txt3(S.scholar.name+' is in the tower. Day '+(S.day-S.scholar.day0)+' of 3.',IX,H-70,fitSize2(S.scholar.name+' is in the tower. Day '+(S.day-S.scholar.day0)+' of 3.',IW,11.5,700),'#c0b4e4','left',700);
+    else if(R.locked==='school' && S.school==='done') txt3('One of yours studied there. The tower respects the Mudmouth now.',IX,H-70,fitSize2('One of yours studied there. The tower respects the Mudmouth now.',IW,11.5,700),'#c0b4e4','left',700);
     else if(R.locked==='treaty' && S.war.banners.length>=2 && !S.war.treaty){
       txt3('OSSIMUND THE UNRETURNED answers. His terms:',IX,H-86,12,'#c8e0f0','left',800);
-      txt3('his dead march beside you - 4 gold tithe at dawn',IX,H-70,11.5,'#a8c8dc','left',600);
+      txt3('his dead march beside you - 4 gold tithe at dawn',IX,H-70,fitSize2('his dead march beside you - 4 gold tithe at dawn',IW,11.5,600),'#a8c8dc','left',600);
     }
-    else if(R.locked==='treaty' && S.war.treaty) txt3('The Cold King keeps his word. The north road is open to you.',IX,H-70,11.5,'#bcd2e0','left',700);
-    else if(R.locked==='friends' && S.day<2) txt3('The Steps keep their silence. Come back after a few dawns.',IX,H-70,11.5,'#a89484','left',600);
+    else if(R.locked==='treaty' && S.war.treaty) txt3('The Cold King keeps his word. The north road is open to you.',IX,H-70,fitSize2('The Cold King keeps his word. The north road is open to you.',IW,11.5,700),'#bcd2e0','left',700);
+    else if(R.locked==='friends' && S.day<2) txt3('The Steps keep their silence. Come back after a few dawns.',IX,H-70,fitSize2('The Steps keep their silence. Come back after a few dawns.',IW,11.5,600),'#a89484','left',600);
     else if(R.locked==='friends' && !S.ogre.bound && S.ogre.fed<3){
       txt3('The ogres are gone. The bowls they carved remain.',IX,H-86,12,'#e8c9a0','left',800);
-      txt3('leave one full: 10 food, 5 gold - the mountain eats daily',IX,H-70,11.5,'#d8b088','left',600);
+      txt3('leave one full: 10 food, 5 gold - the mountain eats daily',IX,H-70,fitSize2('leave one full: 10 food, 5 gold - the mountain eats daily',IW,11.5,600),'#d8b088','left',600);
     }
-    else if(R.locked==='friends' && S.ogre.bound && !S.ogre.used) txt3('The mountain remembers you. Once, it will answer.',IX,H-70,11.5,'#e8c9a0','left',600);
-    else if(R.locked==='friends' && S.ogre.used) txt3('The debt is paid. The children sleep facing the mountain.',IX,H-70,11.5,'#d8b088','left',600);
+    else if(R.locked==='friends' && S.ogre.bound && !S.ogre.used) txt3('The mountain remembers you. Once, it will answer.',IX,H-70,fitSize2('The mountain remembers you. Once, it will answer.',IW,11.5,600),'#e8c9a0','left',600);
+    else if(R.locked==='friends' && S.ogre.used) txt3('The debt is paid. The children sleep facing the mountain.',IX,H-70,fitSize2('The debt is paid. The children sleep facing the mountain.',IW,11.5,600),'#d8b088','left',600);
     else if(R.locked==='contract' && S.day>=3 && !S.vanto.signed && !S.vanto.main){
       txt3('VANTOMERE answers. The contract, abridged:',IX,H-86,12,'#ccd2f0','left',800);
-      txt3('20 food each dawn for 12 gold. Manners non-negotiable.',IX,H-70,11.5,'#aab2d8','left',600);
+      txt3('20 food each dawn for 12 gold. Manners non-negotiable.',IX,H-70,fitSize2('20 food each dawn for 12 gold. Manners non-negotiable.',IW,11.5,600),'#aab2d8','left',600);
     }
-    else if(R.locked==='contract' && S.vanto.signed && !S.vanto.main) txt3('Deliveries: '+S.vanto.trades+' of 3. The envoy is almost pleased.',IX,H-70,11.5,'#ccd2f0','left',600);
-    else if(R.locked==='contract' && S.vanto.main) txt3('The Warming Main hums. Warm hands carry half again.',IX,H-70,11.5,'#ccd2f0','left',600);
-    else txt3({treaty:'Ossimund will offer a treaty when you are worth talking to. Two banners make you worth talking to.',school:'Send a goblin to study once you have a shrine.',friends:'The Steps keep their silence. Come back after a few dawns.',contract:'They will offer a contract, not a fight.'}[R.locked],IX,H-70,11.5,'#a89484','left',600);
+    else if(R.locked==='contract' && S.vanto.signed && !S.vanto.main) txt3('Deliveries: '+S.vanto.trades+' of 3. The envoy is almost pleased.',IX,H-70,fitSize2('Deliveries: '+S.vanto.trades+' of 3. The envoy is almost pleased.',IW,11.5,600),'#ccd2f0','left',600);
+    else if(R.locked==='contract' && S.vanto.main) txt3('The Warming Main hums. Warm hands carry half again.',IX,H-70,fitSize2('The Warming Main hums. Warm hands carry half again.',IW,11.5,600),'#ccd2f0','left',600);
+    else {   // v115: ungated nodes fall back to R.status, then a real line - never 'undefined'; long guidance wraps into the two status slots
+      const st={treaty:'Ossimund will offer a treaty when you are worth talking to. Two banners make you worth talking to.',school:'Send a goblin to study once you have a shrine.',friends:'The Steps keep their silence. Come back after a few dawns.',contract:'They will offer a contract, not a fight.'}[R.locked]||R.status||'the wilds watch';
+      const ws=st.split(' '); let line='',ly=H-86;
+      for(const w of ws){ const t=line?line+' '+w:w; if(txtW3(t,11.5,600)>IW&&line){ txt3(line,IX,ly,11.5,'#a89484','left',600); line=w; ly+=17; } else line=t; }
+      if(line) txt3(line,IX,ly,11.5,'#a89484','left',600); }
   }
   const B=backR(); ctx.fillStyle='rgba(60,50,60,0.95)'; rrp(B.x,B.y,B.w,B.h,14); ctx.fill();
   txt3('\u2039 VILLAGE',B.x+B.w/2,B.y+28,14,'#ffe3c8','center',900);
-  if(R&&R.locked==='school'&&hasShrine()&&S.school==='none'){
-    const S2=sendR();
-    ctx.fillStyle='rgba(120,96,180,0.95)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
-    txt3('SEND A SCHOLAR', S2.x+S2.w/2, S2.y+27, 13, '#f2ecff','center',800);
-  }
-  if(R&&R.locked==='treaty'&&S.war.banners.length>=2&&!S.war.treaty){
-    const S2=sendR();
-    ctx.fillStyle='rgba(90,140,170,0.95)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
-    txt3('ACCEPT THE COLD PEACE', S2.x+S2.w/2, S2.y+27, 12.5, '#eaf6ff','center',800);
-  }
-  if(R&&R.locked==='friends'&&S.day>=2&&!S.ogre.bound&&S.ogre.fed<3){
-    const S2=sendR();
-    const today=(S.ogre.lastDay||0)>=S.day;
-    const ok=!today&&S.res.food>=10&&S.res.gold>=5;
-    ctx.fillStyle=ok?'rgba(160,110,60,0.95)':'rgba(80,66,52,0.9)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
-    txt3(today?'the mountain eats once a day':(ok?'LEAVE AN OFFERING':'need 10 food, 5 gold'),S2.x+S2.w/2,S2.y+27,12.5,ok?'#fff0dc':'#c8b4a0','center',800);
-  }
-  if(R&&R.locked==='contract'&&S.day>=3&&!S.vanto.signed&&!S.vanto.main){
-    const S2=sendR();
-    ctx.fillStyle='rgba(110,116,160,0.95)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
-    txt3(S.vanto.lapsed?'RE-SIGN THE CONTRACT':'SIGN THE CONTRACT',S2.x+S2.w/2,S2.y+27,12.5,'#f0f2ff','center',800);
-  }
-  if(R&&R.rival){
-    const rv=RIVALS.find(x=>x.id===R.rival), S2=sendR();
-    const ok=S.war.troops>=rv.cost && !(S.war.cd[rv.id]>0);
-    ctx.fillStyle=ok?'rgba(175,42,44,0.98)':'rgba(70,60,64,0.9)'; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
-    txt3(ok?'RAID '+R.name.toUpperCase().replace('THE ',''):(S.war.cd[rv.id]>0?'regrouping':'need '+rv.cost+' warriors'),
-      S2.x+S2.w/2,S2.y+27,ok?14:12.5,ok?'#fff0dd':'#a89a94','center',900);
-  }
+  const PL=mapPill();   // v115: one draw, driven by the same authority the taps use
+  if(PL){ const S2=sendR(); ctx.fillStyle=PL.fill; rrp(S2.x,S2.y,S2.w,S2.h,14); ctx.fill();
+    txt3(PL.t,S2.x+S2.w/2,S2.y+27,PL.sz,PL.col,'center',PL.wt); }
 }
 /* ---------- battle ---------- */
 function genCamp26(r){
@@ -3101,14 +3095,15 @@ function warTap(x,y){
   if(S.mode==='war'){
     if(inR(x,y,backR())){ S.mode='village'; mapSel=null; A.blip(); return true; }
     const selR=REGIONS.find(R=>R.id===mapSel);
-    if(selR&&selR.locked==='treaty'&&S.war.banners.length>=2&&!S.war.treaty&&inR(x,y,sendR())){ acceptTreaty(); return true; }
-    if(selR&&selR.locked==='school'&&hasShrine()&&S.school==='none'&&inR(x,y,sendR())){ sendScholar(); return true; }
-    if(selR&&selR.locked==='friends'&&S.day>=2&&!S.ogre.bound&&S.ogre.fed<3&&inR(x,y,sendR())){ offerSteps(); return true; }
-    if(selR&&selR.locked==='contract'&&S.day>=3&&!S.vanto.signed&&!S.vanto.main&&inR(x,y,sendR())){ signContract(); return true; }
-    const r=(selR&&selR.rival)?RIVALS.find(x2=>x2.id===selR.rival):null;
-    if(r && inR(x,y,sendR())){
-      if(S.war.troops>=r.cost && !(S.war.cd[r.id]>0)){ startBattle(r); }
-      else { A.deny(); toast2(S.war.cd[r.id]>0?'They are still regrouping':'Train more warriors at the Barracks'); }
+    const PL=mapPill();   // v115: same authority as the draw - the tappable pill is the drawn pill
+    if(PL&&inR(x,y,sendR())){
+      if(PL.act==='treaty') acceptTreaty();
+      else if(PL.act==='school') sendScholar();
+      else if(PL.act==='friends') offerSteps();
+      else if(PL.act==='contract') signContract();
+      else if(PL.act==='raid'){ const r=(selR&&selR.rival)?RIVALS.find(x2=>x2.id===selR.rival):null;
+        if(r&&S.war.troops>=r.cost && !(S.war.cd[r.id]>0)){ startBattle(r); }
+        else { A.deny(); toast2(S.war.cd[r.id]>0?'They are still regrouping':'Train more warriors at the Barracks'); } }
       return true;
     }
     if(y<H-178 && y>132){
