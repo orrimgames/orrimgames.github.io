@@ -69,5 +69,10 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   pacing7.js on v112: treaty + 16 troops + fire + rally vs bonechoir 0/30 - the legion pair does not crack tier 4; probe cheats labeled in-file (pre-signed treaty, dawn tithe top-up)
   pacing.js, treaty.js, school.js all take FILE=<file> env to target any build (default historical)
 
+  boat.js    on v113 at 390: real-tap WALK->FP, SAIL from a boardable shore ('THE SEA IS A ROAD'), held-stick sailing (RAF), COME ASHORE parks S.boat, boat survives reload, re-board works. NOTE: the first tap after any reload is the designed welcome-back gate ('GOBLINVILLE REMEMBERS YOU') - probes must retry or pre-tap
+  ogre.js    on v113 at 390: real-tap LEAVE AN OFFERING x3 days (10f+5g each, one/day, day>=2) -> bound on the dawn after bowl 3 (earliest day 5); same-day and starved denies are clean; ogre state survives reload
+  ogrebat.js on v113 at 390 (pre-bound cheat, labeled in-file): rescue fires on the first battle tick (2 troops, foes>=3x), 16 foes rout and despawn, 3 foe towers smashed, 2 survivors raze the hall -> WIN in 45 sim-s; never refires (identical second raid wiped in 11 sim-s)
+
+Stepper rule: battles tick updateBattle(dt), the village ticks updateWorld(dt). A battle-mode updateWorld loop freezes combat and starves RAF (og2 read a frozen battle because of this).
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
-Head at the time of this kit: v112 (md5 0487146dab7f56aeeeb5cb342ff264d8).
+Head at the time of this kit: v113 (md5 bb1df94518b955dbec3293d33331d977).
