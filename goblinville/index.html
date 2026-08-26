@@ -5400,7 +5400,7 @@ function endTouch(e){ e.preventDefault(); S._holdT=null;
   if(FP.on){
     for(const t of e.changedTouches){
       touches.delete(t.identifier);
-      if(FP.mv&&t.identifier===FP.mv.id) FP.mv=null;
+      if(FP.mv&&t.identifier===FP.mv.id){ if(Math.hypot(t.clientX-FP.mv.x0,t.clientY-FP.mv.y0)<12) fpTap(t.clientX,t.clientY); FP.mv=null; }   // v114: a non-drag walk-stick touch is a tap - the rally pill lives on the left
       else if(FP.lk&&t.identifier===FP.lk.id){ if(FP.lk.moved<12) fpTap(t.clientX,t.clientY); FP.lk=null; }
     }
     return;
