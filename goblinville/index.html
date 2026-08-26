@@ -4483,7 +4483,7 @@ function packSave(){
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
-    gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0})),
+    gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0,scholar:g.scholar?1:0})),
     chron:chronTrim(S.chronicle,60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
     d:d, r:r};
@@ -4516,9 +4516,9 @@ function restoreSave(sv){
   recount();
   for(const go of sv.gobs){ const g=spawnGob(go.x,go.y,true); if(!g) continue;
     for(const k in go) if(k!=='x'&&k!=='y') g[k]=go[k];
-    g.fem=!!g.fem; g.soldier=!!g.soldier;
+    g.fem=!!g.fem; g.soldier=!!g.soldier; g.scholar=!!g.scholar;
     g.state='idle'; g.st=rnd(1.5,0.2); g.target=null; g.carry=null; g.amt=0; g.emote=null; g.emoteT=0; g.ph=rnd(TAU);
-    if(g.vet) g.tint=[1.10,0.96,0.96]; }
+    if(g.vet) g.tint=[1.10,0.96,0.96]; if(g.scholar) g.tint=[0.85,0.72,1.3]; }
   Object.assign(S.res,sv.res); Object.assign(S.cap,sv.cap||{});
   S.faith=sv.faith||0; S.muted=!!sv.muted; A.setMute(S.muted); S.day=sv.day||0; S.dayT=(sv.dayT==null?0.28:sv.dayT); S.omen=sv.omen||0;
   S.school=sv.school||'none'; S.scholar=sv.scholar||null;
