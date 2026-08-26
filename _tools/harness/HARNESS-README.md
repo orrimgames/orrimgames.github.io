@@ -74,5 +74,12 @@ Known-good baseline against unmodified v99 (md5 3e6692586528b33844864342517497a1
   ogrebat.js on v113 at 390 (pre-bound cheat, labeled in-file): rescue fires on the first battle tick (2 troops, foes>=3x), 16 foes rout and despawn, 3 foe towers smashed, 2 survivors raze the hall -> WIN in 45 sim-s; never refires (identical second raid wiped in 11 sim-s)
 
 Stepper rule: battles tick updateBattle(dt), the village ticks updateWorld(dt). A battle-mode updateWorld loop freezes combat and starves RAF (og2 read a frozen battle because of this).
+  story.js   on v113 at 390: fresh-boot title -> real taps through all 4 beats -> finishStory; SKIP pill; hands-off auto-advance; save+reload -> no replay (welcome-back gate)
+  hush.js    on v113 at 390: quest X hush (tut->max, elderHush persists, post-hush taps no-op) and the elder-returns rewind (tut=max + quests unmet + no hush -> boot tap rewinds tut to first unmet). NOTE: S.toast is not the toast field name - toast copy unread in this probe
+  prod.js    on v113 at 390: farm/lumber/quarry/mine placed for real, pop completes, job manager assigns (3/3/2/1 of 9), chop/mine/dig states fire, wood +128 / stone +36 / gold +10 in 120 sim-s, stumps carry regrow, state survives reload. Farm loop is day-scale - covered indirectly by the pacing ladder
+  fpbat.js   on v113 found the v114 bug: touch taps on the rail-left rally pill were swallowed (startTouch claims x<W*0.45 as the walk stick; only lk touches can become fpTaps). On v114: rallyOK assertion green - mv-side non-drag taps route through fpTap. Desktop mouse does NOT share the mv/lk split (fpdesk.js)
+  fpdesk.js  desktop companion: v113 rally click already worked, v114 identical - regression guard
+  fpbat.js's downed leg: chief hp forced low + parked in the foe pack (labeled cheat) -> 'dragged you home' -> iso, battle rages on
+
 Never use ?new=1 for persistence tests - it wipes the save. Re-goto the plain URL instead.
-Head at the time of this kit: v113 (md5 bb1df94518b955dbec3293d33331d977).
+Head at the time of this kit: v114 (md5 1c8d08e2292510c688b99960d398fbe7).
