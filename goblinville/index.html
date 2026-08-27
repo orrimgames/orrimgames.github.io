@@ -1767,7 +1767,7 @@ function tickAmbience(dt){
 }
 // v30: light rainy spells
 function tickWeather(dt){
-  if(S.t>S.wx.until) S.wx.want=0;
+  if(S.wx.want){ S.wx.left=(S.wx.left||0)-dt; if(S.wx.left<=0) S.wx.want=0; }   // v116: the spell clock counts down in updateWorld dt - S.t never existed
   S.wx.rain+=(S.wx.want-S.wx.rain)*Math.min(1,dt*0.5);
   if(S.wx.rain<0.01) S.wx.rain=0;
 }
@@ -2004,7 +2004,7 @@ function updateWorld(dt){
     chron('Day '+S.day+' dawned over Goblinville.');
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
     // v30: weather - a rainy spell can roll in at dawn
-    if(rnd(1)<0.30){ S.wx.want=1; S.wx.until=S.t+rnd(95,45);
+    if(rnd(1)<0.30){ S.wx.want=1; S.wx.left=rnd(95,45);   // v116: countdown, not an S.t wall-clock
       toast2('rain rolls over the Mudmouth');
       if(rnd(1)<0.5) chron('Rain day. The mud enjoyed it more than the goblins did.'); }
     if(S.victory){ addRes('food',15); addRes('gold',5); if(rnd(1)<0.35) chron('The Ember kept the fire another night. Small mercies, enormous ones, count the same.'); }
@@ -2438,7 +2438,7 @@ const RIVALS=[
    heresy:'THE BONE CHOIR HERESY: "The Ember made us and it will unmake us. We sharpen the spear that ends it."'}
 ];
 S.war={troops:0, train:0, sel:null, won:{}, cd:{}, banners:[], rally:0, result:null, treaty:false};
-S.wx={rain:0, want:0, until:0};
+S.wx={rain:0, want:0, left:0};   // v116
 function warBuildings(){ return S.buildings.filter(b=>b.key==='barracks'&&b.pop>=1).length; }
 function updateWar(dt){
   const nb=warBuildings();
