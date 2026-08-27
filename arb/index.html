@@ -144,6 +144,8 @@ const KALSHI_API = "https://api.elections.kalshi.com/trade-api/v2";
    First working entry wins; rest are fallbacks. A self-hosted proxy URL can be
    added at the top of this list with no other change. */
 const PROXIES = [
+  { name: "self", make: u => "https://kalshi-proxy.orrimgames.deno.net/markets?" + u.split("?")[1],
+    parse: t => JSON.parse(t) },
   { name: "r.jina.ai", make: u => "https://r.jina.ai/" + u,
     parse: t => { const i = t.indexOf("{"), j = t.lastIndexOf("}");
       if (i < 0 || j <= i) throw new Error("bad wrapper");
