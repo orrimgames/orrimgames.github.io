@@ -1,0 +1,922 @@
+{
+ "generated_at": "2026-08-27T23:08:18.584071Z",
+ "engine": "SQX v0.1 (research only - backtests, no live trading)",
+ "data": {
+  "source": "Binance public kline dumps (data.binance.vision), spot 1h",
+  "asset": "BTCUSDT",
+  "bars": 40151,
+  "range": [
+   "2022-01-01",
+   "2026-07-31"
+  ],
+  "splits": {
+   "train": "2022-01..2024-07",
+   "test": "2024-08..2025-06",
+   "holdout": "2025-07..2026-07"
+  }
+ },
+ "cost_model": {
+  "fee_bps_per_side": 10,
+  "slippage_bps_per_side": 5,
+  "roundtrip_bps": 30
+ },
+ "search": {
+  "generations": 45,
+  "genomes_evaluated": 3080,
+  "method": "random + genetic mutation over indicator/rule grammar"
+ },
+ "controls": [
+  "train/test/holdout splits (holdout touched once, only for passes)",
+  "5-fold walk-forward on train (need >=3 positive)",
+  "deflated Sharpe ratio vs 3080 trials (need p<0.05)",
+  "parameter sensitivity: 8 random +/-25-30%% perturbations (need median>0)",
+  "cross-asset check on ETHUSDT (need sharpe > -0.5)"
+ ],
+ "leaderboard": [
+  {
+   "desc": "ROC(24) > 5% momentum | vol>2.0x SMA(20) | stop 2.0xATR, tgt 2.0xATR, max 168h",
+   "train": {
+    "ret": 0.5814,
+    "sharpe": 1.466,
+    "dd": -0.1108,
+    "n": 63,
+    "wr": 0.651,
+    "pf": 1.927,
+    "avg": 0.00759
+   },
+   "walk_forward": {
+    "folds": [
+     1.58,
+     1.48,
+     1.55,
+     0.52,
+     1.37
+    ],
+    "pos": 5
+   },
+   "dsr_p": 0.8981,
+   "sensitivity": {
+    "median": 1.01,
+    "worst": 0.39
+   },
+   "test": {
+    "ret": -0.0593,
+    "sharpe": -0.496,
+    "dd": -0.1619,
+    "n": 22,
+    "wr": 0.5,
+    "pf": 0.804,
+    "avg": -0.00249
+   },
+   "eth_check": {
+    "ret": -0.2014,
+    "sharpe": -0.359,
+    "dd": -0.3684,
+    "n": 88,
+    "wr": 0.455,
+    "pf": 0.867,
+    "avg": -0.00208
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 168,
+    "k": 0.05,
+    "kind": "roc_mom",
+    "stop": 2.0,
+    "tgt": 2.0,
+    "trend": null,
+    "volf": [
+     20,
+     2.0
+    ],
+    "w": 24
+   }
+  },
+  {
+   "desc": "RSI(14) < 30 mean-reversion | trend: close>SMA(150), vol>1.5x SMA(20) | stop 1.0xATR, tgt none, max 72h",
+   "train": {
+    "ret": 0.6578,
+    "sharpe": 1.444,
+    "dd": -0.1433,
+    "n": 74,
+    "wr": 0.216,
+    "pf": 2.071,
+    "avg": 0.00763
+   },
+   "walk_forward": {
+    "folds": [
+     -0.01,
+     3.3,
+     3.69,
+     0.12,
+     0.12
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.8861,
+   "sensitivity": {
+    "median": 1.05,
+    "worst": 0.4
+   },
+   "test": {
+    "ret": -0.0451,
+    "sharpe": -0.441,
+    "dd": -0.1288,
+    "n": 29,
+    "wr": 0.103,
+    "pf": 0.817,
+    "avg": -0.00136
+   },
+   "eth_check": {
+    "ret": -0.3713,
+    "sharpe": -1.158,
+    "dd": -0.4217,
+    "n": 86,
+    "wr": 0.07,
+    "pf": 0.508,
+    "avg": -0.00506
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 72,
+    "kind": "rsi_rev",
+    "lvl": 30,
+    "stop": 1.0,
+    "tgt": null,
+    "trend": 150,
+    "volf": [
+     20,
+     1.5
+    ],
+    "w": 14
+   }
+  },
+  {
+   "desc": "ROC(12) > 3% momentum | trend: close>SMA(100), vol>2.0x SMA(20) | stop 2.0xATR, tgt 6.0xATR, max 336h",
+   "train": {
+    "ret": 1.1611,
+    "sharpe": 1.411,
+    "dd": -0.1857,
+    "n": 86,
+    "wr": 0.384,
+    "pf": 1.739,
+    "avg": 0.00997
+   },
+   "walk_forward": {
+    "folds": [
+     0.78,
+     2.15,
+     2.13,
+     1.49,
+     1.45
+    ],
+    "pos": 5
+   },
+   "dsr_p": 0.9055,
+   "sensitivity": {
+    "median": 0.87,
+    "worst": 0.46
+   },
+   "test": {
+    "ret": -0.0627,
+    "sharpe": -0.219,
+    "dd": -0.2402,
+    "n": 35,
+    "wr": 0.286,
+    "pf": 0.918,
+    "avg": -0.00128
+   },
+   "eth_check": {
+    "ret": 0.7274,
+    "sharpe": 0.868,
+    "dd": -0.2787,
+    "n": 101,
+    "wr": 0.317,
+    "pf": 1.387,
+    "avg": 0.00663
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 336,
+    "k": 0.03,
+    "kind": "roc_mom",
+    "stop": 2.0,
+    "tgt": 6.0,
+    "trend": 100,
+    "volf": [
+     20,
+     2.0
+    ],
+    "w": 12
+   }
+  },
+  {
+   "desc": "EMA(20) x EMA(100) golden/death cross | vol>1.5x SMA(20) | stop 1.0xATR, tgt none, max 168h",
+   "train": {
+    "ret": 0.7496,
+    "sharpe": 1.396,
+    "dd": -0.1306,
+    "n": 48,
+    "wr": 0.146,
+    "pf": 2.706,
+    "avg": 0.01349
+   },
+   "walk_forward": {
+    "folds": [
+     0.44,
+     1.17,
+     1.9,
+     1.94,
+     2.19
+    ],
+    "pos": 5
+   },
+   "dsr_p": 0.9094,
+   "sensitivity": {
+    "median": 1.14,
+    "worst": 0.89
+   },
+   "test": {
+    "ret": -0.1728,
+    "sharpe": -1.711,
+    "dd": -0.2198,
+    "n": 19,
+    "wr": 0.0,
+    "pf": 0.0,
+    "avg": -0.00993
+   },
+   "eth_check": {
+    "ret": -0.0584,
+    "sharpe": -0.077,
+    "dd": -0.3484,
+    "n": 42,
+    "wr": 0.048,
+    "pf": 0.957,
+    "avg": -0.00042
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "a": 20,
+    "b": 100,
+    "hold": 168,
+    "kind": "ma_cross",
+    "ma": "ema",
+    "stop": 1.0,
+    "tgt": null,
+    "trend": null,
+    "volf": [
+     20,
+     1.5
+    ]
+   }
+  },
+  {
+   "desc": "EMA(13) x EMA(89) golden/death cross | trend: close>SMA(100), vol>1.5x SMA(20) | stop 1.0xATR, tgt none, max 168h",
+   "train": {
+    "ret": 0.6467,
+    "sharpe": 1.164,
+    "dd": -0.1544,
+    "n": 60,
+    "wr": 0.117,
+    "pf": 2.175,
+    "avg": 0.01009
+   },
+   "walk_forward": {
+    "folds": [
+     -0.09,
+     1.43,
+     2.26,
+     2.66,
+     1.45
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9561,
+   "sensitivity": {
+    "median": 1.04,
+    "worst": 0.9
+   },
+   "test": {
+    "ret": -0.0017,
+    "sharpe": 0.055,
+    "dd": -0.1242,
+    "n": 18,
+    "wr": 0.167,
+    "pf": 1.033,
+    "avg": 0.00028
+   },
+   "eth_check": {
+    "ret": 0.2693,
+    "sharpe": 0.54,
+    "dd": -0.3014,
+    "n": 56,
+    "wr": 0.089,
+    "pf": 1.635,
+    "avg": 0.00576
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "a": 13,
+    "b": 89,
+    "hold": 168,
+    "kind": "ma_cross",
+    "ma": "ema",
+    "stop": 1.0,
+    "tgt": null,
+    "trend": 100,
+    "volf": [
+     20,
+     1.5
+    ]
+   }
+  },
+  {
+   "desc": "RSI(21) < 35 mean-reversion | trend: close>SMA(100), vol>1.0x SMA(20) | stop 1.5xATR, tgt none, max 72h",
+   "train": {
+    "ret": 0.421,
+    "sharpe": 0.956,
+    "dd": -0.1766,
+    "n": 57,
+    "wr": 0.298,
+    "pf": 1.721,
+    "avg": 0.00707
+   },
+   "walk_forward": {
+    "folds": [
+     0.14,
+     2.75,
+     3.78,
+     0.83,
+     -1.46
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9793,
+   "sensitivity": {
+    "median": 0.78,
+    "worst": 0.64
+   },
+   "test": {
+    "ret": 0.0136,
+    "sharpe": 0.188,
+    "dd": -0.075,
+    "n": 24,
+    "wr": 0.25,
+    "pf": 1.108,
+    "avg": 0.00085
+   },
+   "eth_check": {
+    "ret": -0.2045,
+    "sharpe": -0.457,
+    "dd": -0.3203,
+    "n": 56,
+    "wr": 0.179,
+    "pf": 0.702,
+    "avg": -0.00364
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 72,
+    "kind": "rsi_rev",
+    "lvl": 35,
+    "stop": 1.5,
+    "tgt": null,
+    "trend": 100,
+    "volf": [
+     20,
+     1.0
+    ],
+    "w": 21
+   }
+  },
+  {
+   "desc": "zscore(20) < -2.0 dip buy | trend: close>SMA(100) | stop 4.0xATR, tgt none, max 120h",
+   "train": {
+    "ret": 0.7954,
+    "sharpe": 1.017,
+    "dd": -0.2542,
+    "n": 78,
+    "wr": 0.397,
+    "pf": 1.607,
+    "avg": 0.00897
+   },
+   "walk_forward": {
+    "folds": [
+     0.57,
+     1.74,
+     2.32,
+     0.79,
+     0.47
+    ],
+    "pos": 5
+   },
+   "dsr_p": 0.9741,
+   "sensitivity": {
+    "median": 0.7,
+    "worst": 0.4
+   },
+   "test": {
+    "ret": 0.2427,
+    "sharpe": 0.996,
+    "dd": -0.1723,
+    "n": 32,
+    "wr": 0.344,
+    "pf": 1.602,
+    "avg": 0.00781
+   },
+   "eth_check": {
+    "ret": 1.9099,
+    "sharpe": 1.41,
+    "dd": -0.2536,
+    "n": 83,
+    "wr": 0.446,
+    "pf": 1.834,
+    "avg": 0.01503
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 120,
+    "k": 2.0,
+    "kind": "zs_rev",
+    "stop": 4.0,
+    "tgt": null,
+    "trend": 100,
+    "volf": null,
+    "w": 20
+   }
+  },
+  {
+   "desc": "SMA(8) x SMA(50) golden/death cross | trend: close>SMA(150), vol>1.5x SMA(20) | stop 1.0xATR, tgt none, max 168h",
+   "train": {
+    "ret": 0.4666,
+    "sharpe": 0.965,
+    "dd": -0.2296,
+    "n": 69,
+    "wr": 0.101,
+    "pf": 1.79,
+    "avg": 0.00682
+   },
+   "walk_forward": {
+    "folds": [
+     -1.26,
+     1.06,
+     1.85,
+     2.67,
+     1.94
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9788,
+   "sensitivity": {
+    "median": 0.77,
+    "worst": 0.22
+   },
+   "test": {
+    "ret": -0.0932,
+    "sharpe": -0.891,
+    "dd": -0.1428,
+    "n": 21,
+    "wr": 0.095,
+    "pf": 0.447,
+    "avg": -0.0045
+   },
+   "eth_check": {
+    "ret": 0.4801,
+    "sharpe": 0.932,
+    "dd": -0.2123,
+    "n": 61,
+    "wr": 0.131,
+    "pf": 1.874,
+    "avg": 0.00758
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "a": 8,
+    "b": 50,
+    "hold": 168,
+    "kind": "ma_cross",
+    "ma": "sma",
+    "stop": 1.0,
+    "tgt": null,
+    "trend": 150,
+    "volf": [
+     20,
+     1.5
+    ]
+   }
+  },
+  {
+   "desc": "RSI(9) < 40 mean-reversion | trend: close>SMA(200), vol>1.0x SMA(20) | stop 4.0xATR, tgt none, max 336h",
+   "train": {
+    "ret": 1.2895,
+    "sharpe": 1.141,
+    "dd": -0.3296,
+    "n": 68,
+    "wr": 0.309,
+    "pf": 1.735,
+    "avg": 0.01512
+   },
+   "walk_forward": {
+    "folds": [
+     -0.03,
+     1.29,
+     1.56,
+     1.73,
+     2.08
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9595,
+   "sensitivity": {
+    "median": 0.62,
+    "worst": 0.36
+   },
+   "test": {
+    "ret": 0.164,
+    "sharpe": 0.644,
+    "dd": -0.3912,
+    "n": 33,
+    "wr": 0.273,
+    "pf": 1.337,
+    "avg": 0.0068
+   },
+   "eth_check": {
+    "ret": 0.3361,
+    "sharpe": 0.486,
+    "dd": -0.3958,
+    "n": 76,
+    "wr": 0.211,
+    "pf": 1.281,
+    "avg": 0.00772
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 336,
+    "kind": "rsi_rev",
+    "lvl": 40,
+    "stop": 4.0,
+    "tgt": null,
+    "trend": 200,
+    "volf": [
+     20,
+     1.0
+    ],
+    "w": 9
+   }
+  },
+  {
+   "desc": "EMA(30) x EMA(55) golden/death cross | trend: close>SMA(150), vol>1.5x SMA(20) | stop 1.0xATR, tgt none, max 168h",
+   "train": {
+    "ret": 0.5774,
+    "sharpe": 1.102,
+    "dd": -0.263,
+    "n": 54,
+    "wr": 0.111,
+    "pf": 2.185,
+    "avg": 0.01032
+   },
+   "walk_forward": {
+    "folds": [
+     -0.58,
+     1.59,
+     2.52,
+     2.42,
+     1.36
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9646,
+   "sensitivity": {
+    "median": 1.07,
+    "worst": 0.7
+   },
+   "test": {
+    "ret": -0.0152,
+    "sharpe": -0.152,
+    "dd": -0.0946,
+    "n": 10,
+    "wr": 0.1,
+    "pf": 0.847,
+    "avg": -0.00126
+   },
+   "eth_check": {
+    "ret": 0.281,
+    "sharpe": 0.649,
+    "dd": -0.1985,
+    "n": 35,
+    "wr": 0.114,
+    "pf": 2.019,
+    "avg": 0.00906
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "a": 30,
+    "b": 55,
+    "hold": 168,
+    "kind": "ma_cross",
+    "ma": "ema",
+    "stop": 1.0,
+    "tgt": null,
+    "trend": 150,
+    "volf": [
+     20,
+     1.5
+    ]
+   }
+  },
+  {
+   "desc": "ROC(48) > 5% momentum | trend: close>SMA(100) | stop 2.0xATR, tgt 8.0xATR, max 336h",
+   "train": {
+    "ret": 0.9549,
+    "sharpe": 1.026,
+    "dd": -0.2968,
+    "n": 95,
+    "wr": 0.295,
+    "pf": 1.52,
+    "avg": 0.00847
+   },
+   "walk_forward": {
+    "folds": [
+     -0.21,
+     0.66,
+     1.62,
+     2.09,
+     1.94
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9728,
+   "sensitivity": {
+    "median": 0.85,
+    "worst": 0.37
+   },
+   "test": {
+    "ret": 0.0088,
+    "sharpe": 0.172,
+    "dd": -0.2833,
+    "n": 42,
+    "wr": 0.238,
+    "pf": 1.069,
+    "avg": 0.00106
+   },
+   "eth_check": {
+    "ret": 0.2734,
+    "sharpe": 0.439,
+    "dd": -0.4088,
+    "n": 120,
+    "wr": 0.242,
+    "pf": 1.185,
+    "avg": 0.00346
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 336,
+    "k": 0.05,
+    "kind": "roc_mom",
+    "stop": 2.0,
+    "tgt": 8.0,
+    "trend": 100,
+    "volf": null,
+    "w": 48
+   }
+  },
+  {
+   "desc": "SMA(10) x SMA(89) golden/death cross | trend: close>SMA(150), vol>1.5x SMA(20) | stop 1.0xATR, tgt none, max 168h",
+   "train": {
+    "ret": 0.3915,
+    "sharpe": 0.9,
+    "dd": -0.1942,
+    "n": 50,
+    "wr": 0.1,
+    "pf": 1.948,
+    "avg": 0.00798
+   },
+   "walk_forward": {
+    "folds": [
+     0.1,
+     -0.33,
+     1.05,
+     1.62,
+     1.75
+    ],
+    "pos": 4
+   },
+   "dsr_p": 0.9839,
+   "sensitivity": {
+    "median": 0.71,
+    "worst": 0.55
+   },
+   "test": {
+    "ret": 0.0281,
+    "sharpe": 0.322,
+    "dd": -0.086,
+    "n": 19,
+    "wr": 0.158,
+    "pf": 1.24,
+    "avg": 0.00189
+   },
+   "eth_check": {
+    "ret": 0.3152,
+    "sharpe": 0.687,
+    "dd": -0.177,
+    "n": 42,
+    "wr": 0.143,
+    "pf": 1.927,
+    "avg": 0.00807
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "a": 10,
+    "b": 89,
+    "hold": 168,
+    "kind": "ma_cross",
+    "ma": "sma",
+    "stop": 1.0,
+    "tgt": null,
+    "trend": 150,
+    "volf": [
+     20,
+     1.5
+    ]
+   }
+  },
+  {
+   "desc": "ROC(6) > 2% momentum | trend: close>SMA(100), vol>2.0x SMA(20) | stop 2.5xATR, tgt 6.0xATR, max 120h",
+   "train": {
+    "ret": 0.6578,
+    "sharpe": 0.914,
+    "dd": -0.278,
+    "n": 124,
+    "wr": 0.395,
+    "pf": 1.333,
+    "avg": 0.00486
+   },
+   "walk_forward": {
+    "folds": [
+     0.04,
+     1.93,
+     0.84,
+     1.6,
+     1.82
+    ],
+    "pos": 5
+   },
+   "dsr_p": 0.9826,
+   "sensitivity": {
+    "median": 0.76,
+    "worst": -0.13
+   },
+   "test": {
+    "ret": -0.1793,
+    "sharpe": -0.738,
+    "dd": -0.4185,
+    "n": 45,
+    "wr": 0.311,
+    "pf": 0.788,
+    "avg": -0.00376
+   },
+   "eth_check": {
+    "ret": -0.0486,
+    "sharpe": 0.098,
+    "dd": -0.3855,
+    "n": 143,
+    "wr": 0.336,
+    "pf": 1.03,
+    "avg": 0.00054
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 120,
+    "k": 0.02,
+    "kind": "roc_mom",
+    "stop": 2.5,
+    "tgt": 6.0,
+    "trend": 100,
+    "volf": [
+     20,
+     2.0
+    ],
+    "w": 6
+   }
+  },
+  {
+   "desc": "EMA(34) x EMA(89) golden/death cross | trend: close>SMA(200), vol>1.0x SMA(20) | stop 3.0xATR, tgt 2.0xATR, max 24h",
+   "train": {
+    "ret": 0.1204,
+    "sharpe": 0.592,
+    "dd": -0.1085,
+    "n": 45,
+    "wr": 0.622,
+    "pf": 1.409,
+    "avg": 0.00269
+   },
+   "walk_forward": {
+    "folds": [
+     1.53,
+     1.35,
+     -0.21,
+     -1.17,
+     0.32
+    ],
+    "pos": 3
+   },
+   "dsr_p": 0.9954,
+   "sensitivity": {
+    "median": 0.41,
+    "worst": 0.06
+   },
+   "test": {
+    "ret": -0.0349,
+    "sharpe": -0.363,
+    "dd": -0.0963,
+    "n": 21,
+    "wr": 0.571,
+    "pf": 0.825,
+    "avg": -0.00152
+   },
+   "eth_check": {
+    "ret": -0.0981,
+    "sharpe": -0.332,
+    "dd": -0.2609,
+    "n": 60,
+    "wr": 0.533,
+    "pf": 0.851,
+    "avg": -0.00148
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "a": 34,
+    "b": 89,
+    "hold": 24,
+    "kind": "ma_cross",
+    "ma": "ema",
+    "stop": 3.0,
+    "tgt": 2.0,
+    "trend": 200,
+    "volf": [
+     20,
+     1.0
+    ]
+   }
+  },
+  {
+   "desc": "zscore(50) < -1.0 dip buy | trend: close>SMA(100), vol>1.5x SMA(20) | stop 2.0xATR, tgt 1.5xATR, max 336h",
+   "train": {
+    "ret": 0.0734,
+    "sharpe": 0.523,
+    "dd": -0.0695,
+    "n": 41,
+    "wr": 0.61,
+    "pf": 1.336,
+    "avg": 0.00182
+   },
+   "walk_forward": {
+    "folds": [
+     1.32,
+     1.03,
+     -0.04,
+     -1.4,
+     0.4
+    ],
+    "pos": 3
+   },
+   "dsr_p": 0.997,
+   "sensitivity": {
+    "median": -0.01,
+    "worst": -0.46
+   },
+   "test": {
+    "ret": -0.0513,
+    "sharpe": -1.264,
+    "dd": -0.0599,
+    "n": 17,
+    "wr": 0.529,
+    "pf": 0.536,
+    "avg": -0.00303
+   },
+   "eth_check": {
+    "ret": -0.0693,
+    "sharpe": -0.381,
+    "dd": -0.1637,
+    "n": 37,
+    "wr": 0.514,
+    "pf": 0.797,
+    "avg": -0.0018
+   },
+   "verdict": "OVERFIT/WEAK",
+   "genome": {
+    "hold": 336,
+    "k": 1.0,
+    "kind": "zs_rev",
+    "stop": 2.0,
+    "tgt": 1.5,
+    "trend": 100,
+    "volf": [
+     20,
+     1.5
+    ],
+    "w": 50
+   }
+  }
+ ]
+}
