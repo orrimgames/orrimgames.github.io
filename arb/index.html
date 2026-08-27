@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>arbscan - prediction market arb monitor</title>
+<style>
+  :root { --bg:#0b0e11; --panel:#12161b; --line:#1f262e; --txt:#c9d4dc; --dim:#6b7a86;
+          --green:#2ecc71; --red:#e74c3c; --amber:#f1c40f; --blue:#3498db; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt);
+         font:13px/1.45 "SF Mono",Menlo,Consolas,"Courier New",monospace; }
+  a { color:var(--blue); text-decoration:none; } a:hover { text-decoration:underline; }
+  .wrap { max-width:1100px; margin:0 auto; padding:18px 14px 60px; }
+  header { border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px; }
+  h1 { font-size:17px; margin:0 0 6px; letter-spacing:.5px; }
+  h1 .dot { color:var(--green); }
+  .meta { color:var(--dim); font-size:12px; }
+  .meta b { color:var(--txt); font-weight:normal; }
+  h2 { font-size:13px; margin:22px 0 8px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; }
+  h2 .n { color:var(--txt); }
+  table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--dim); font-weight:normal; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .pos { color:var(--green); } .neg { color:var(--red); } .warn { color:var(--amber); }
+  .t1 { color:var(--green); font-weight:bold; } .t2 { color:var(--amber); font-weight:bold; }
+  .ev { max-width:420px; }
+  .legs { color:var(--dim); font-size:11px; margin-top:3px; }
+  .badge { display:inline-block; padding:0 5px; border:1px solid var(--line); border-radius:3px;
+           font-size:10px; color:var(--dim); margin-left:6px; }
+  .badge.live { color:var(--green); border-color:var(--green); }
+  .badge.snap { color:var(--amber); border-color:var(--amber); }
+  .funnel { background:var(--panel); border:1px solid var(--line); padding:10px 12px; color:var(--dim); }
+  .funnel b { color:var(--txt); font-weight:normal; }
+  .err { background:#2a1113; border:1px solid var(--red); padding:10px 12px; color:var(--red); }
+  .note { color:var(--dim); font-size:11px; margin-top:6px; }
+  .flash { animation:fl .8s; } @keyframes fl { 0% { background:#1d31324; } 100% { background:transparent; } }
+  footer { margin-top:26px; color:var(--dim); font-size:11px; border-top:1px solid var(--line); padding-top:10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>arbscan <span class="dot">&#9679;</span> prediction-market arbitrage monitor</h1>
+    <div class="meta" id="meta">loading data.json ...</div>
+  </header>
+  <div id="errbox"></div>
+  <div id="funnelbox"></div>
+  <h2>Tier 1 - mechanical arbs <span class="n" id="n1"></span></h2>
+  <div class="note">negRisk events, complete outcome space, exactly one leg resolves YES. net = gross - taker fees, per $1 payout set.</div>
+  <div id="t1box"></div>
+  <h2>Tier 2 - semantic candidates <span class="n" id="n2"></span> <span class="warn" style="font-size:11px">(unverified exclusivity - read rules before believing any of these)</span></h2>
+  <div class="note">Venue says "mutually exclusive" but that usually means AT MOST one - an unlisted outcome resolves every leg NO. Fat edges here are usually the implicit "field" price, not arbs.</div>
+  <div id="t2box"></div>
+  <h2>Cross-venue (Polymarket x Kalshi) <span class="n" id="nx"></span></h2>
+  <div class="note">Fuzzy title match + YES@cheap venue / NO@other venue. Resolution-text mismatches are the classic false positive - verify the rules word by word.</div>
+  <div id="xbox"></div>
+  <h2>Intra-binary (crossed books) <span class="n" id="nb"></span></h2>
+  <div id="bbox"></div>
+  <footer id="foot"></footer>
+</div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const fmtC = x => (x >= 0 ? "+" : "-") + (Math.abs(x) * 100).toFixed(2) + "c";
+const cls = x => x > 0 ? "pos" : (x < 0 ? "neg" : "");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let DATA = null;
+
+function legsLine(h) {
+  if (!h.legs_detail) return "";
+  const top = h.legs_detail.slice().sort((a, b) => b[1] - a[1]).slice(0, 4);
+  return '<div class="legs">' + top.map(l => esc(l[0]) + " " + (l[1] * 100).toFixed(1) + "c").join(" | ") +
+    (h.legs_detail.length > 4 ? " | +" + (h.legs_detail.length - 4) + " more" : "") + "</div>";
+}
+
+function rowIE(h, liveHtml) {
+  return `<tr data-slug="${esc(h.event_slug || "")}" data-venue="${h.venue}">
+    <td class="ev"><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.event)}</a>${legsLine(h)}</td>
+    <td class="num">${h.n_legs}</td>
+    <td class="num">${esc(h.coverage || "?")}</td>
+    <td class="num pos">${fmtC(h.gross)}</td>
+    <td class="num neg">${fmtC(-h.fees)}</td>
+    <td class="num ${cls(h.net)}" data-net>${fmtC(h.net)}</td>
+    <td class="num" data-live>${liveHtml}</td></tr>`;
+}
+
+function tableIE(hits, liveColLabel) {
+  if (!hits.length) return '<div class="funnel">none</div>';
+  return `<table><tr><th>event</th><th>legs</th><th>cov</th><th>gross</th><th>fees</th><th>net @ scan</th><th>${liveColLabel}</th></tr>
+    ${hits.map(h => rowIE(h, '<span class="badge">pending</span>')).join("")}</table>`;
+}
+
+function render(d) {
+  DATA = d;
+  const m = d.meta;
+  const age = Math.max(0, (Date.now() / 1000 - m.ts));
+  $("meta").innerHTML =
+    `last scan <b>${esc(m.generated_at)}</b> (${age.toFixed(0)}s ago) | scanned <b>${esc(m.stats)}</b> | ` +
+    `poly fees: <b>${esc(m.fee_models.polymarket)}</b> | kalshi: <b>${esc(m.fee_models.kalshi)}</b>`;
+  const ie = d.intra_event || [];
+  const t1 = ie.filter(h => h.tier === 1), t2 = ie.filter(h => h.tier !== 1);
+  $("n1").textContent = `(${t1.length})`; $("n2").textContent = `(${t2.length})`;
+  $("nx").textContent = `(${(d.cross || []).length})`; $("nb").textContent = `(${(d.intra_binary || []).length})`;
+  $("t1box").innerHTML = tableIE(t1, "live check");
+  $("t2box").innerHTML = tableIE(t2, "live check");
+  // cross-venue
+  const xv = d.cross || [];
+  $("xbox").innerHTML = xv.length ? `<table><tr><th>poly</th><th>kalshi</th><th>dir</th><th>sim</th><th>gross</th><th>net</th></tr>` +
+    xv.map(h => `<tr><td class="ev"><a href="${esc(h.poly_url)}" target="_blank" rel="noopener">${esc(h.poly)}</a></td>
+      <td class="ev"><a href="${esc(h.kalshi_url)}" target="_blank" rel="noopener">${esc(h.kalshi)}</a></td>
+      <td>${esc(h.direction)}</td><td class="num">${h.sim}</td>
+      <td class="num pos">${fmtC(h.gross)}</td><td class="num ${cls(h.net)}">${fmtC(h.net)}</td></tr>`).join("") + "</table>"
+    : '<div class="funnel">none net of fees</div>';
+  $("bbox").innerHTML = '<div class="funnel">none - crossed books get matched instantly</div>';
+  $("foot").innerHTML =
+    `data.json regenerated every 5 min by GitHub Actions (arb/scan.py). Polymarket rows re-checked live in your browser against gamma-api;
+     Kalshi rows are scan snapshots (their API blocks browser CORS). Sources: ${esc(m.sources.polymarket)} ; ${esc(m.sources.kalshi)}.
+     Read-only. No orders, no keys.`;
+  liveRecheck();
+}
+
+// Live re-check of Polymarket rows straight from the browser (gamma CORS is open).
+async function liveRecheck() {
+  const rows = document.querySelectorAll('tr[data-venue="polymarket"][data-slug]');
+  for (const tr of rows) {
+    const slug = tr.getAttribute("data-slug");
+    if (!slug) continue;
+    const cell = tr.querySelector("[data-live]");
+    try {
+      const r = await fetch("https://gamma-api.polymarket.com/events?slug=" + encodeURIComponent(slug), { cache: "no-store" });
+      const arr = await r.json();
+      const ev = arr && arr[0];
+      if (!ev) { cell.innerHTML = '<span class="badge snap">gone</span>'; continue; }
+      let sum = 0, complete = true, n = 0, fees = 0;
+      for (const mk of ev.markets || []) {
+        const ok = mk.active && !mk.closed && mk.acceptingOrders !== false && mk.enableOrderBook !== false;
+        const bid = parseFloat(mk.bestBid), ask = parseFloat(mk.bestAsk);
+        if (!ok || !(bid > 0 && ask > bid && ask < 1)) { complete = false; break; }
+        sum += ask; n++;
+        const fs = mk.feeSchedule || {};
+        const rate = mk.feesEnabled ? (parseFloat(fs.rate) || 0) : 0;
+        fees += rate * ask * (1 - ask);
+      }
+      if (!complete || n < 2) { cell.innerHTML = '<span class="badge snap">incomplete</span>'; continue; }
+      const net = 1 - sum - fees;
+      cell.innerHTML = `<span class="${cls(net)}">${fmtC(net)}</span> <span class="badge live">live</span>`;
+      tr.classList.remove("flash"); void tr.offsetWidth; tr.classList.add("flash");
+    } catch (e) {
+      cell.innerHTML = '<span class="badge snap">err</span>';
+    }
+  }
+  const anyKalshi = document.querySelector('tr[data-venue="kalshi"] [data-live]');
+  document.querySelectorAll('tr[data-venue="kalshi"] [data-live]').forEach(c => {
+    c.innerHTML = '<span class="badge snap">snapshot</span>';
+  });
+}
+
+async function load() {
+  try {
+    const r = await fetch("data.json?cb=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    render(await r.json());
+    $("errbox").innerHTML = "";
+  } catch (e) {
+    $("errbox").innerHTML = `<div class="err">data.json unavailable: ${esc(e.message)} - Actions job may not have run yet.</div>`;
+  }
+}
+load();
+setInterval(load, 60000);          // data.json refreshes on the Actions cadence
+setInterval(liveRecheck, 45000);   // browser-side poly re-check between scans
+</script>
+</body>
+</html>
