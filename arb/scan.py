@@ -28,6 +28,15 @@ DATE_PAT = re.compile(
     r"|\b20[0-9]{2}\b|\bq[1-4]\b|\bweek\b|\bday\b)", re.I)
 
 UA = {"User-Agent": "arbscan/0.1 (read-only research)"}
+
+def _parse_ids(v):
+    """gamma clobTokenIds arrives as a JSON-encoded string; normalize to list."""
+    if isinstance(v, str):
+        try:
+            return json.loads(v)
+        except Exception:
+            return []
+    return v or []
 S = requests.Session()
 S.headers.update(UA)
 
@@ -94,7 +103,7 @@ def poly_normalize(events):
                 "end": e.get("endDate") or m.get("endDate") or "",
                 "url": f"https://polymarket.com/event/{e.get('slug','')}",
                 "slug": m.get("slug") or "",
-                "tokens": m.get("clobTokenIds") or [],
+                "tokens": _parse_ids(m.get("clobTokenIds")),
                 "neg_risk": bool(e.get("negRisk")),
             })
         if not legs:
@@ -198,7 +207,10 @@ def scan_intra_binary(books, min_profit=0.0):
         if gross <= min_profit:
             continue
         fees = m["fee_fn"](m["yes_ask"]) + m["fee_fn"](m["no_ask"])
-        hits.append({**m, "gross": gross, "fees": fees, "net": gross - fees,
+        capital = m["yes_ask"] + m["no_ask"] + fees
+        net = gross - fees
+        hits.append({**m, "gross": gross, "fees": fees, "net": net,
+                     "capital": capital, "roi": net / capital if capital > 0 else 0.0,
                      "kind": "intra-binary"})
     return hits
 
@@ -219,11 +231,23 @@ def scan_intra_event(multis, min_profit=0.0, max_legs=60):
         if gross <= min_profit:
             continue
         fees = sum(l["fee_fn"](l["yes_ask"]) for l in legs)
+        capital = cost + fees
+        net = gross - fees
+        legs_out = []
+        for l in legs:
+            d = {"label": l["label"], "ask": l["yes_ask"], "fee": l["fee_rate"]}
+            if l["venue"] == "polymarket":
+                toks = l.get("tokens") or []
+                d["token"] = toks[0] if toks else None
+            else:
+                d["ticker"] = l.get("ticker")
+            legs_out.append(d)
         hits.append({"venue": legs[0]["venue"], "event": ev["title"],
                      "n_legs": len(legs), "gross": gross, "fees": fees,
-                     "net": gross - fees, "url": ev["url"],
+                     "net": net, "capital": capital,
+                     "roi": net / capital if capital > 0 else 0.0, "url": ev["url"],
                      "neg_risk": ev.get("neg_risk"), "coverage": ev.get("coverage"), "tier": tier,
-                     "legs_detail": [(l["label"], l["yes_ask"]) for l in legs],
+                     "legs": legs_out,
                      "kind": "intra-event"})
     return sorted(hits, key=lambda h: -h["net"])
 
@@ -280,9 +304,22 @@ def scan_cross(poly_books, kalshi_books, min_sim=0.55, min_net=0.0):
                 net = gross - fees
                 if net <= min_net:
                     continue
+                capital = buy_yes["yes_ask"] + buy_no["no_ask"] + fees
+                def side(leg, px_key):
+                    d = {"venue": leg["venue"], "ask": leg[px_key], "fee": leg["fee_rate"]}
+                    toks = leg.get("tokens") or []
+                    if leg["venue"] == "polymarket":
+                        d["token_yes"] = toks[0] if len(toks) > 0 else None
+                        d["token_no"] = toks[1] if len(toks) > 1 else None
+                    else:
+                        d["ticker"] = leg.get("ticker")
+                    return d
                 hits.append({"kind": "cross-venue", "direction": direction,
                              "sim": round(sim, 3), "gross": gross, "fees": fees,
-                             "net": net,
+                             "net": net, "capital": capital,
+                             "roi": net / capital if capital > 0 else 0.0,
+                             "yes_leg": side(buy_yes, "yes_ask"),
+                             "no_leg": side(buy_no, "no_ask"),
                              "poly": p["question"], "kalshi": k["question"],
                              "poly_url": p["url"], "kalshi_url": k["url"],
                              "poly_end": p["end"], "kalshi_end": k["end"]})
@@ -355,6 +392,7 @@ def run_scan(args):
                 "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 "ts": time.time(),
                 "scan_seconds": round(dt, 1),
+                "schema": 2,
                 "stats": stats,
                 "fee_models": {
                     "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",

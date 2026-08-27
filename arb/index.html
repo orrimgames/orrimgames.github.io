@@ -3,173 +3,548 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>arbscan - prediction market arb monitor</title>
+<title>ARBSCAN - prediction market arbitrage, live</title>
 <style>
-  :root { --bg:#0b0e11; --panel:#12161b; --line:#1f262e; --txt:#c9d4dc; --dim:#6b7a86;
-          --green:#2ecc71; --red:#e74c3c; --amber:#f1c40f; --blue:#3498db; }
+  :root { --bg:#0d1220; --panel:#131a2e; --panel2:#0f1524; --line:#223052; --line2:#1a2540;
+    --txt:#dbe4f0; --dim:#7b8aa5; --dim2:#55637e;
+    --green:#34f5a2; --red:#ff5d6c; --amber:#ffc24b; --blue:#5aa9ff; --purple:#a78bfa; }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--txt);
-         font:13px/1.45 "SF Mono",Menlo,Consolas,"Courier New",monospace; }
+  html,body { margin:0; padding:0; }
+  body { background:radial-gradient(1200px 500px at 50% -100px, #16203a 0%, var(--bg) 55%);
+         color:var(--txt); min-height:100vh;
+         font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif; }
   a { color:var(--blue); text-decoration:none; } a:hover { text-decoration:underline; }
-  .wrap { max-width:1100px; margin:0 auto; padding:18px 14px 60px; }
-  header { border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px; }
-  h1 { font-size:17px; margin:0 0 6px; letter-spacing:.5px; }
-  h1 .dot { color:var(--green); }
-  .meta { color:var(--dim); font-size:12px; }
-  .meta b { color:var(--txt); font-weight:normal; }
-  h2 { font-size:13px; margin:22px 0 8px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; }
-  h2 .n { color:var(--txt); }
-  table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); }
-  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
-  th { color:var(--dim); font-weight:normal; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
-  td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .pos { color:var(--green); } .neg { color:var(--red); } .warn { color:var(--amber); }
-  .t1 { color:var(--green); font-weight:bold; } .t2 { color:var(--amber); font-weight:bold; }
-  .ev { max-width:420px; }
-  .legs { color:var(--dim); font-size:11px; margin-top:3px; }
-  .badge { display:inline-block; padding:0 5px; border:1px solid var(--line); border-radius:3px;
-           font-size:10px; color:var(--dim); margin-left:6px; }
-  .badge.live { color:var(--green); border-color:var(--green); }
-  .badge.snap { color:var(--amber); border-color:var(--amber); }
-  .funnel { background:var(--panel); border:1px solid var(--line); padding:10px 12px; color:var(--dim); }
-  .funnel b { color:var(--txt); font-weight:normal; }
-  .err { background:#2a1113; border:1px solid var(--red); padding:10px 12px; color:var(--red); }
-  .note { color:var(--dim); font-size:11px; margin-top:6px; }
-  .flash { animation:fl .8s; } @keyframes fl { 0% { background:#1d31324; } 100% { background:transparent; } }
-  footer { margin-top:26px; color:var(--dim); font-size:11px; border-top:1px solid var(--line); padding-top:10px; }
+  .wrap { max-width:1180px; margin:0 auto; padding:20px 16px 70px; }
+  header { display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-bottom:16px; }
+  .brand { display:flex; align-items:baseline; gap:10px; }
+  .brand h1 { font-size:20px; margin:0; letter-spacing:2.5px; font-weight:800; }
+  .brand h1 .dot { color:var(--green); text-shadow:0 0 12px var(--green); }
+  .brand .sub { color:var(--dim); font-size:12px; letter-spacing:.4px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; }
+  .chip { display:flex; align-items:center; gap:7px; background:var(--panel); border:1px solid var(--line);
+          border-radius:999px; padding:5px 12px; font-size:11px; letter-spacing:.6px;
+          text-transform:uppercase; color:var(--dim); white-space:nowrap; }
+  .chip b { color:var(--txt); font-weight:600; }
+  .dotpulse { width:8px; height:8px; border-radius:50%; background:var(--dim2); flex:none; }
+  .dotpulse.on { background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 2s infinite; }
+  .dotpulse.warn { background:var(--amber); box-shadow:0 0 8px var(--amber); }
+  .dotpulse.err { background:var(--red); box-shadow:0 0 8px var(--red); }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.45; } }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:16px; }
+  .card { background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--line);
+          border-radius:10px; padding:12px 14px; }
+  .card .k { font-size:10px; letter-spacing:1.2px; text-transform:uppercase; color:var(--dim); margin-bottom:5px; }
+  .card .v { font-size:22px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .card .v.green { color:var(--green); text-shadow:0 0 14px rgba(52,245,162,.35); }
+  .card .v.amber { color:var(--amber); }
+  .card .s { font-size:11px; color:var(--dim); margin-top:3px; }
+  .controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:12px; }
+  .tabs { display:flex; gap:6px; flex-wrap:wrap; }
+  .tab { background:var(--panel2); border:1px solid var(--line); color:var(--dim); border-radius:8px;
+         padding:7px 14px; font-size:12px; letter-spacing:.4px; cursor:pointer; user-select:none; }
+  .tab:hover { color:var(--txt); border-color:var(--dim2); }
+  .tab.active { color:var(--bg); background:var(--green); border-color:var(--green); font-weight:700; }
+  .tab .n { opacity:.75; font-weight:400; margin-left:4px; }
+  .tab.active .n { opacity:.85; }
+  #q { margin-left:auto; background:var(--panel2); border:1px solid var(--line); border-radius:8px;
+       color:var(--txt); padding:7px 12px; font-size:13px; width:220px; outline:none; }
+  #q:focus { border-color:var(--blue); }
+  #q::placeholder { color:var(--dim2); }
+  .tblwrap { background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line2); vertical-align:middle; }
+  thead th { background:var(--panel2); color:var(--dim); font-size:10px; font-weight:600;
+             text-transform:uppercase; letter-spacing:1px; cursor:pointer; user-select:none; white-space:nowrap; }
+  thead th:hover { color:var(--txt); }
+  thead th .arr { color:var(--green); }
+  tbody tr { transition:background .15s; }
+  tbody tr:hover { background:rgba(90,169,255,.05); }
+  tbody tr:last-child td { border-bottom:none; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;
+           font-family:"SF Mono",Menlo,Consolas,monospace; font-size:13px; }
+  td.roi { font-size:16px; font-weight:700; }
+  .pos { color:var(--green); } .neg { color:var(--red); }
+  .ev { max-width:430px; }
+  .ev a { color:var(--txt); font-weight:600; }
+  .ev a:hover { color:var(--blue); }
+  .ev .sub2 { color:var(--dim); font-size:12px; margin-top:2px; }
+  .ev .sub2 a { color:var(--dim); font-weight:400; }
+  .legs { color:var(--dim2); font-size:11px; margin-top:4px; font-family:"SF Mono",Menlo,Consolas,monospace; }
+  .legs b { color:var(--dim); font-weight:400; }
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:10px; font-weight:700;
+           letter-spacing:.6px; white-space:nowrap; }
+  .b-t1 { color:#06281a; background:var(--green); }
+  .b-t2 { color:#2e2104; background:var(--amber); }
+  .b-xv { color:#1d1136; background:var(--purple); }
+  .b-ib { color:#0a1f33; background:var(--blue); }
+  .feed { display:inline-flex; align-items:center; gap:5px; font-size:10px; letter-spacing:.5px;
+          text-transform:uppercase; white-space:nowrap; }
+  .feed .fd { width:6px; height:6px; border-radius:50%; }
+  .f-live { color:var(--green); } .f-live .fd { background:var(--green); box-shadow:0 0 6px var(--green); animation:pulse 1.6s infinite; }
+  .f-snap { color:var(--amber); } .f-snap .fd { background:var(--amber); }
+  .f-mix  { color:var(--blue); } .f-mix .fd { background:var(--blue); box-shadow:0 0 6px var(--blue); animation:pulse 1.6s infinite; }
+  .flash-up { animation:fup .9s; } .flash-dn { animation:fdn .9s; }
+  @keyframes fup { 0% { background:rgba(52,245,162,.22); } 100% { background:transparent; } }
+  @keyframes fdn { 0% { background:rgba(255,93,108,.22); } 100% { background:transparent; } }
+  .empty { padding:26px; text-align:center; color:var(--dim); }
+  .note { color:var(--dim); font-size:12px; margin:10px 2px 0; }
+  .note b { color:var(--txt); font-weight:600; }
+  .err { background:#2a1218; border:1px solid var(--red); border-radius:10px; padding:12px 14px; color:var(--red); margin-bottom:12px; }
+  footer { margin-top:26px; color:var(--dim2); font-size:11px; border-top:1px solid var(--line2); padding-top:12px; line-height:1.7; }
+  footer b { color:var(--dim); font-weight:600; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>arbscan <span class="dot">&#9679;</span> prediction-market arbitrage monitor</h1>
-    <div class="meta" id="meta">loading data.json ...</div>
+    <div class="brand">
+      <h1>ARBSCAN <span class="dot">&#9679;</span></h1>
+      <span class="sub">prediction-market arbitrage, live</span>
+    </div>
+    <div class="chips">
+      <div class="chip"><span class="dotpulse" id="polyDot"></span>POLY&nbsp;<b id="polyTxt">connecting</b></div>
+      <div class="chip"><span class="dotpulse" id="kalDot"></span>KALSHI&nbsp;<b id="kalTxt">connecting</b></div>
+      <div class="chip">SCAN&nbsp;<b id="scanTxt">-</b></div>
+    </div>
   </header>
   <div id="errbox"></div>
-  <div id="funnelbox"></div>
-  <h2>Tier 1 - mechanical arbs <span class="n" id="n1"></span></h2>
-  <div class="note">negRisk events, complete outcome space, exactly one leg resolves YES. net = gross - taker fees, per $1 payout set.</div>
-  <div id="t1box"></div>
-  <h2>Tier 2 - semantic candidates <span class="n" id="n2"></span> <span class="warn" style="font-size:11px">(unverified exclusivity - read rules before believing any of these)</span></h2>
-  <div class="note">Venue says "mutually exclusive" but that usually means AT MOST one - an unlisted outcome resolves every leg NO. Fat edges here are usually the implicit "field" price, not arbs.</div>
-  <div id="t2box"></div>
-  <h2>Cross-venue (Polymarket x Kalshi) <span class="n" id="nx"></span></h2>
-  <div class="note">Fuzzy title match + YES@cheap venue / NO@other venue. Resolution-text mismatches are the classic false positive - verify the rules word by word.</div>
-  <div id="xbox"></div>
-  <h2>Intra-binary (crossed books) <span class="n" id="nb"></span></h2>
-  <div id="bbox"></div>
+  <div class="cards">
+    <div class="card"><div class="k">Best mechanical ROI</div><div class="v green" id="cBest">-</div><div class="s">per $1 payout set, net of fees</div></div>
+    <div class="card"><div class="k">Mechanical (Tier 1)</div><div class="v" id="cT1">-</div><div class="s">complete outcome space, provable</div></div>
+    <div class="card"><div class="k">Candidates (Tier 2)</div><div class="v amber" id="cT2">-</div><div class="s">unverified exclusivity - read rules</div></div>
+    <div class="card"><div class="k">Live legs</div><div class="v" id="cLegs">-</div><div class="s" id="cLegsS">poly ws + kalshi proxy</div></div>
+  </div>
+  <div class="controls">
+    <div class="tabs" id="tabs"></div>
+    <input id="q" type="text" placeholder="filter events...">
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead><tr id="headRow">
+        <th data-k="roi" style="text-align:right">ROI %</th>
+        <th data-k="net" style="text-align:right">Net / set</th>
+        <th data-k="capital" style="text-align:right">Capital / set</th>
+        <th data-k="tier">Type</th>
+        <th>Feed</th>
+        <th data-k="event">Event</th>
+        <th data-k="nLegs" style="text-align:right">Legs</th>
+      </tr></thead>
+      <tbody id="tbody"><tr><td colspan="7" class="empty">loading data.json ...</td></tr></tbody>
+    </table>
+  </div>
+  <div class="note" id="tierNote"></div>
   <footer id="foot"></footer>
 </div>
 <script>
 "use strict";
+/* ================= config ================= */
+const POLY_WS = "wss://ws-subscriptions-clob.polymarket.com/ws/market";
+const KALSHI_API = "https://api.elections.kalshi.com/trade-api/v2";
+/* Kalshi 403s any browser Origin, so its quotes ride through a CORS proxy.
+   First working entry wins; rest are fallbacks. A self-hosted proxy URL can be
+   added at the top of this list with no other change. */
+const PROXIES = [
+  { name: "r.jina.ai", make: u => "https://r.jina.ai/" + u,
+    parse: t => { const i = t.indexOf("{"), j = t.lastIndexOf("}");
+      if (i < 0 || j <= i) throw new Error("bad wrapper");
+      return JSON.parse(t.slice(i, j + 1)); } },
+  { name: "cors.lol", make: u => "https://api.cors.lol/?url=" + encodeURIComponent(u),
+    parse: t => JSON.parse(t) },
+];
+const KALSHI_POLL_MS = 20000;   /* ~15 req/min per browser through the proxy */
+const KALSHI_CHUNK = 45;
+const DATA_REFRESH_MS = 60000;  /* data.json regenerates on the 5-min Actions cron */
+const RENDER_MS = 400;
+
+/* ================= state ================= */
 const $ = id => document.getElementById(id);
+const S = { rows: [], meta: null,
+  book: new Map(), kal: new Map(),
+  kalLastOk: 0, kalProxy: null, kalFails: 0,
+  polyState: "connecting",
+  filter: "mech", q: "", sortKey: "roi", sortDir: -1,
+  prevRoi: new Map(), flash: new Map(), dataTs: 0 };
+
+/* ================= fmt ================= */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtPct = r => { const p = r * 100, a = Math.abs(p);
+  return (p >= 0 ? "+" : "-") + (a >= 100 ? a.toFixed(0) : a.toFixed(2)) + "%"; };
 const fmtC = x => (x >= 0 ? "+" : "-") + (Math.abs(x) * 100).toFixed(2) + "c";
-const cls = x => x > 0 ? "pos" : (x < 0 ? "neg" : "");
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let DATA = null;
+const fmtCost = x => (x * 100).toFixed(2) + "c";
+const ago = ts => { const s = Math.max(0, (Date.now() - ts) / 1000);
+  if (s < 60) return s.toFixed(0) + "s ago";
+  if (s < 3600) return (s / 60).toFixed(0) + "m ago";
+  return (s / 3600).toFixed(1) + "h ago"; };
+const polyFee = (rate, p) => rate * p * (1 - p);
+const kalFee = p => Math.ceil(0.07 * p * (1 - p) * 100) / 100;
 
-function legsLine(h) {
-  if (!h.legs_detail) return "";
-  const top = h.legs_detail.slice().sort((a, b) => b[1] - a[1]).slice(0, 4);
-  return '<div class="legs">' + top.map(l => esc(l[0]) + " " + (l[1] * 100).toFixed(1) + "c").join(" | ") +
-    (h.legs_detail.length > 4 ? " | +" + (h.legs_detail.length - 4) + " more" : "") + "</div>";
+/* ================= model ================= */
+function buildRows(d) {
+  const rows = [];
+  for (const h of (d.intra_event || []))
+    rows.push({ kind: "ie", tier: h.tier, venue: h.venue, event: h.event, url: h.url,
+      nLegs: h.n_legs, coverage: h.coverage, legs: h.legs || [],
+      snap: { capital: h.capital, net: h.net, roi: h.roi } });
+  for (const h of (d.cross || []))
+    rows.push({ kind: "xv", tier: 3, venue: "mixed", event: h.poly, event2: h.kalshi,
+      url: h.poly_url, url2: h.kalshi_url, direction: h.direction, sim: h.sim,
+      yesLeg: h.yes_leg, noLeg: h.no_leg, nLegs: 2,
+      snap: { capital: h.capital, net: h.net, roi: h.roi } });
+  for (const h of (d.intra_binary || []))
+    rows.push({ kind: "ib", tier: 1, venue: h.venue, event: h.question || h.event, url: h.url,
+      yesToken: (h.tokens || [])[0] || null, noToken: (h.tokens || [])[1] || null,
+      ticker: h.ticker || null, feeRate: h.fee_rate || 0, ya: h.yes_ask, na: h.no_ask, nLegs: 2,
+      snap: { capital: h.capital, net: h.net, roi: h.roi } });
+  rows.forEach((r, i) => r.id = "r" + i);
+  return rows;
 }
 
-function rowIE(h, liveHtml) {
-  return `<tr data-slug="${esc(h.event_slug || "")}" data-venue="${h.venue}">
-    <td class="ev"><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.event)}</a>${legsLine(h)}</td>
-    <td class="num">${h.n_legs}</td>
-    <td class="num">${esc(h.coverage || "?")}</td>
-    <td class="num pos">${fmtC(h.gross)}</td>
-    <td class="num neg">${fmtC(-h.fees)}</td>
-    <td class="num ${cls(h.net)}" data-net>${fmtC(h.net)}</td>
-    <td class="num" data-live>${liveHtml}</td></tr>`;
+/* live numbers when feeds cover the row, scan snapshot otherwise */
+function computeRow(r) {
+  let capital = 0, live = true;
+  const legOut = [];
+  const takePoly = (token, snapAsk, feeRate) => {
+    const b = token ? S.book.get(token) : null;
+    const ask = b ? b.ask : snapAsk;
+    if (!b) live = false;
+    capital += ask + polyFee(feeRate || 0, ask);
+    return ask;
+  };
+  const takeKal = (ticker, side, snapAsk) => {
+    const k = ticker ? S.kal.get(ticker) : null;
+    const fresh = k && (Date.now() - k.t < 120000);
+    const ask = fresh ? (side === "yes" ? k.ya : k.na) : snapAsk;
+    if (!fresh) live = false;
+    capital += ask + kalFee(ask);
+    return ask;
+  };
+  if (r.kind === "ie") {
+    if (!r.legs.length) return { capital: r.snap.capital, net: r.snap.net, roi: r.snap.roi, live: false, legOut };
+    for (const l of r.legs) {
+      let ask;
+      if (r.venue === "polymarket") ask = takePoly(l.token, l.ask, l.fee);
+      else ask = takeKal(l.ticker, "yes", l.ask);
+      legOut.push([l.label, ask]);
+    }
+  } else if (r.kind === "xv") {
+    let aY, aN;
+    if (r.yesLeg.venue === "polymarket") aY = takePoly(r.yesLeg.token_yes, r.yesLeg.ask, r.yesLeg.fee);
+    else aY = takeKal(r.yesLeg.ticker, "yes", r.yesLeg.ask);
+    if (r.noLeg.venue === "polymarket") aN = takePoly(r.noLeg.token_no, r.noLeg.ask, r.noLeg.fee);
+    else aN = takeKal(r.noLeg.ticker, "no", r.noLeg.ask);
+    legOut.push(["YES " + r.yesLeg.venue, aY], ["NO " + r.noLeg.venue, aN]);
+  } else { /* ib */
+    let aY, aN;
+    if (r.venue === "polymarket") { aY = takePoly(r.yesToken, r.ya, r.feeRate); aN = takePoly(r.noToken, r.na, r.feeRate); }
+    else { aY = takeKal(r.ticker, "yes", r.ya); aN = takeKal(r.ticker, "no", r.na); }
+    legOut.push(["YES", aY], ["NO", aN]);
+  }
+  const net = 1 - capital;
+  return { capital, net, roi: capital > 0 ? net / capital : 0, live, legOut };
 }
-
-function tableIE(hits, liveColLabel) {
-  if (!hits.length) return '<div class="funnel">none</div>';
-  return `<table><tr><th>event</th><th>legs</th><th>cov</th><th>gross</th><th>fees</th><th>net @ scan</th><th>${liveColLabel}</th></tr>
-    ${hits.map(h => rowIE(h, '<span class="badge">pending</span>')).join("")}</table>`;
+/* ================= polymarket websocket (true streaming) ================= */
+/* The market channel honors ONE subscribe message per connection, so all
+   tokens go in a single message; very large sets spill to extra connections. */
+const MAX_SUB_PER_CONN = 400;
+let wsPool = [];
+function polyTokens() {
+  const t = new Set();
+  for (const r of S.rows) {
+    if (r.kind === "ie" && r.venue === "polymarket") r.legs.forEach(l => l.token && t.add(l.token));
+    if (r.kind === "xv") {
+      if (r.yesLeg.venue === "polymarket" && r.yesLeg.token_yes) t.add(r.yesLeg.token_yes);
+      if (r.noLeg.venue === "polymarket" && r.noLeg.token_no) t.add(r.noLeg.token_no);
+    }
+    if (r.kind === "ib" && r.venue === "polymarket") { r.yesToken && t.add(r.yesToken); r.noToken && t.add(r.noToken); }
+  }
+  return [...t];
 }
-
-function render(d) {
-  DATA = d;
-  const m = d.meta;
-  const age = Math.max(0, (Date.now() / 1000 - m.ts));
-  $("meta").innerHTML =
-    `last scan <b>${esc(m.generated_at)}</b> (${age.toFixed(0)}s ago) | scanned <b>${esc(m.stats)}</b> | ` +
-    `poly fees: <b>${esc(m.fee_models.polymarket)}</b> | kalshi: <b>${esc(m.fee_models.kalshi)}</b>`;
-  const ie = d.intra_event || [];
-  const t1 = ie.filter(h => h.tier === 1), t2 = ie.filter(h => h.tier !== 1);
-  $("n1").textContent = `(${t1.length})`; $("n2").textContent = `(${t2.length})`;
-  $("nx").textContent = `(${(d.cross || []).length})`; $("nb").textContent = `(${(d.intra_binary || []).length})`;
-  $("t1box").innerHTML = tableIE(t1, "live check");
-  $("t2box").innerHTML = tableIE(t2, "live check");
-  // cross-venue
-  const xv = d.cross || [];
-  $("xbox").innerHTML = xv.length ? `<table><tr><th>poly</th><th>kalshi</th><th>dir</th><th>sim</th><th>gross</th><th>net</th></tr>` +
-    xv.map(h => `<tr><td class="ev"><a href="${esc(h.poly_url)}" target="_blank" rel="noopener">${esc(h.poly)}</a></td>
-      <td class="ev"><a href="${esc(h.kalshi_url)}" target="_blank" rel="noopener">${esc(h.kalshi)}</a></td>
-      <td>${esc(h.direction)}</td><td class="num">${h.sim}</td>
-      <td class="num pos">${fmtC(h.gross)}</td><td class="num ${cls(h.net)}">${fmtC(h.net)}</td></tr>`).join("") + "</table>"
-    : '<div class="funnel">none net of fees</div>';
-  $("bbox").innerHTML = '<div class="funnel">none - crossed books get matched instantly</div>';
-  $("foot").innerHTML =
-    `data.json regenerated every 5 min by GitHub Actions (arb/scan.py). Polymarket rows re-checked live in your browser against gamma-api;
-     Kalshi rows are scan snapshots (their API blocks browser CORS). Sources: ${esc(m.sources.polymarket)} ; ${esc(m.sources.kalshi)}.
-     Read-only. No orders, no keys.`;
-  liveRecheck();
+function setPolyChip() {
+  const open = wsPool.filter(w => w.state === "open").length;
+  const d = $("polyDot"), tx = $("polyTxt");
+  if (!wsPool.length) { d.className = "dotpulse err"; tx.textContent = "no poly rows"; return; }
+  if (open === wsPool.length) { d.className = "dotpulse on"; tx.textContent = "streaming"; }
+  else if (open > 0) { d.className = "dotpulse warn"; tx.textContent = "partial"; }
+  else { d.className = "dotpulse warn"; tx.textContent = "reconnecting"; }
 }
-
-// Live re-check of Polymarket rows straight from the browser (gamma CORS is open).
-async function liveRecheck() {
-  const rows = document.querySelectorAll('tr[data-venue="polymarket"][data-slug]');
-  for (const tr of rows) {
-    const slug = tr.getAttribute("data-slug");
-    if (!slug) continue;
-    const cell = tr.querySelector("[data-live]");
-    try {
-      const r = await fetch("https://gamma-api.polymarket.com/events?slug=" + encodeURIComponent(slug), { cache: "no-store" });
-      const arr = await r.json();
-      const ev = arr && arr[0];
-      if (!ev) { cell.innerHTML = '<span class="badge snap">gone</span>'; continue; }
-      let sum = 0, complete = true, n = 0, fees = 0;
-      for (const mk of ev.markets || []) {
-        const ok = mk.active && !mk.closed && mk.acceptingOrders !== false && mk.enableOrderBook !== false;
-        const bid = parseFloat(mk.bestBid), ask = parseFloat(mk.bestAsk);
-        if (!ok || !(bid > 0 && ask > bid && ask < 1)) { complete = false; break; }
-        sum += ask; n++;
-        const fs = mk.feeSchedule || {};
-        const rate = mk.feesEnabled ? (parseFloat(fs.rate) || 0) : 0;
-        fees += rate * ask * (1 - ask);
+function handlePolyMsg(ev) {
+  let d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+  for (const m of (Array.isArray(d) ? d : [d])) {
+    if (m.event_type === "book") {
+      let bid = 0, ask = 0;
+      for (const b of (m.bids || [])) { const p = parseFloat(b.price); if (p > bid) bid = p; }
+      for (const a of (m.asks || [])) { const p = parseFloat(a.price); if (!ask || p < ask) ask = p; }
+      if (bid || ask) S.book.set(String(m.asset_id), { bid, ask, t: Date.now() });
+    } else if (m.event_type === "price_change") {
+      for (const c of (m.price_changes || [])) {
+        const id = String(c.asset_id);
+        const cur = S.book.get(id) || { bid: 0, ask: 0 };
+        S.book.set(id, { bid: parseFloat(c.best_bid) || cur.bid,
+                         ask: parseFloat(c.best_ask) || cur.ask, t: Date.now() });
       }
-      if (!complete || n < 2) { cell.innerHTML = '<span class="badge snap">incomplete</span>'; continue; }
-      const net = 1 - sum - fees;
-      cell.innerHTML = `<span class="${cls(net)}">${fmtC(net)}</span> <span class="badge live">live</span>`;
-      tr.classList.remove("flash"); void tr.offsetWidth; tr.classList.add("flash");
-    } catch (e) {
-      cell.innerHTML = '<span class="badge snap">err</span>';
     }
   }
-  const anyKalshi = document.querySelector('tr[data-venue="kalshi"] [data-live]');
-  document.querySelectorAll('tr[data-venue="kalshi"] [data-live]').forEach(c => {
-    c.innerHTML = '<span class="badge snap">snapshot</span>';
-  });
+}
+function openPolyWs(toks) {
+  const w = { ws: null, state: "connecting", retry: 0, ping: null, toks };
+  wsPool.push(w);
+  const connect = () => {
+    w.state = "connecting"; setPolyChip();
+    try { w.ws && w.ws.close(); } catch (e) {}
+    const ws = new WebSocket(POLY_WS);
+    w.ws = ws;
+    ws.onopen = () => {
+      w.retry = 0; w.state = "open"; setPolyChip();
+      ws.send(JSON.stringify({ type: "market", assets_ids: w.toks }));
+      clearInterval(w.ping);
+      w.ping = setInterval(() => { if (ws.readyState === 1) ws.send("PING"); }, 10000);
+    };
+    ws.onmessage = handlePolyMsg;
+    ws.onclose = () => {
+      w.state = "closed"; clearInterval(w.ping); setPolyChip();
+      const wait = Math.min(15000, 2000 * Math.pow(2, w.retry++));
+      setTimeout(connect, wait);
+    };
+    ws.onerror = () => { try { ws.close(); } catch (e) {} };
+  };
+  connect();
+}
+function connectPoly() {
+  for (const w of wsPool) { if (w.ws) { w.ws.onclose = null; try { w.ws.close(); } catch (e) {} } clearInterval(w.ping); }
+  wsPool = [];
+  const toks = polyTokens();
+  for (let i = 0; i < toks.length; i += MAX_SUB_PER_CONN) openPolyWs(toks.slice(i, i + MAX_SUB_PER_CONN));
+  setPolyChip();
 }
 
-async function load() {
-  try {
-    const r = await fetch("data.json?cb=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    render(await r.json());
-    $("errbox").innerHTML = "";
-  } catch (e) {
-    $("errbox").innerHTML = `<div class="err">data.json unavailable: ${esc(e.message)} - Actions job may not have run yet.</div>`;
+/* ================= kalshi via CORS proxy (no-auth workaround) ================= */
+function kalTickers() {
+  const t = new Set();
+  for (const r of S.rows) {
+    if (r.kind === "ie" && r.venue === "kalshi") r.legs.forEach(l => l.ticker && t.add(l.ticker));
+    if (r.kind === "xv") { r.yesLeg.ticker && t.add(r.yesLeg.ticker); r.noLeg.ticker && t.add(r.noLeg.ticker); }
+    if (r.kind === "ib" && r.venue === "kalshi" && r.ticker) t.add(r.ticker);
   }
+  return [...t];
 }
-load();
-setInterval(load, 60000);          // data.json refreshes on the Actions cadence
-setInterval(liveRecheck, 45000);   // browser-side poly re-check between scans
+function setKalChip() {
+  const d = $("kalDot"), tx = $("kalTxt");
+  if (S.kalLastOk && Date.now() - S.kalLastOk < 90000) {
+    d.className = "dotpulse on";
+    tx.textContent = "live ~" + (KALSHI_POLL_MS / 1000) + "s via " + (S.kalProxy || "proxy");
+  } else if (kalTickers().length) {
+    d.className = "dotpulse warn"; tx.textContent = "snapshot (proxy down)";
+  } else { d.className = "dotpulse"; tx.textContent = "no kalshi rows"; }
+}
+const kalNum = v => { const f = parseFloat(v); return Number.isFinite(f) ? f : 0; };
+async function fetchKalshiChunk(tickers) {
+  const url = KALSHI_API + "/markets?tickers=" + tickers.join(",") + "&limit=100&cb=" + Date.now();
+  let lastErr = null;
+  const order = S.kalProxy ? [...PROXIES].sort((a, b) => (a.name === S.kalProxy ? -1 : b.name === S.kalProxy ? 1 : 0)) : PROXIES;
+  for (const p of order) {
+    try {
+      const r = await fetch(p.make(url), { cache: "no-store" });
+      if (!r.ok) throw new Error(p.name + " HTTP " + r.status);
+      const d = p.parse(await r.text());
+      S.kalProxy = p.name;
+      return d.markets || [];
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error("all proxies failed");
+}
+async function pollKalshi() {
+  const tk = kalTickers();
+  if (!tk.length) { setKalChip(); return; }
+  let anyOk = false;
+  for (let i = 0; i < tk.length; i += KALSHI_CHUNK) {
+    try {
+      const ms = await fetchKalshiChunk(tk.slice(i, i + KALSHI_CHUNK));
+      for (const m of ms) {
+        let ya = kalNum(m.yes_ask_dollars), yb = kalNum(m.yes_bid_dollars);
+        let na = kalNum(m.no_ask_dollars), nb = kalNum(m.no_bid_dollars);
+        if (ya <= 0 && nb > 0) ya = 1 - nb;
+        if (na <= 0 && yb > 0) na = 1 - yb;
+        if (yb <= 0 && na > 0) yb = 1 - na;
+        if (nb <= 0 && ya > 0) nb = 1 - ya;
+        if (ya > 0 || yb > 0) S.kal.set(m.ticker, { ya, yb, na, nb, t: Date.now() });
+      }
+      anyOk = true;
+    } catch (e) { /* chunk failed; keep snapshot for these tickers */ }
+    await new Promise(r => setTimeout(r, 300));
+  }
+  if (anyOk) { S.kalLastOk = Date.now(); S.kalFails = 0; }
+  else S.kalFails++;
+  setKalChip();
+}
+/* ================= render ================= */
+const FILTERS = [
+  ["mech", "Mechanical"], ["all", "All"], ["cand", "Candidates"], ["xv", "Cross-venue"],
+];
+function matchFilter(r) {
+  if (S.filter === "mech") return r.tier === 1;
+  if (S.filter === "cand") return r.tier === 2;
+  if (S.filter === "xv") return r.kind === "xv";
+  return true;
+}
+function matchQ(r) {
+  if (!S.q) return true;
+  const q = S.q.toLowerCase();
+  return (r.event || "").toLowerCase().includes(q) || (r.event2 || "").toLowerCase().includes(q);
+}
+function typeBadge(r) {
+  if (r.kind === "xv") return '<span class="badge b-xv">CROSS</span>';
+  if (r.kind === "ib") return '<span class="badge b-ib">BINARY</span>';
+  return r.tier === 1 ? '<span class="badge b-t1">T1 MECH</span>' : '<span class="badge b-t2">T2 CAND</span>';
+}
+function feedBadge(r, c) {
+  if (r.kind === "xv") {
+    const pl = (r.yesLeg.venue === "polymarket" ? r.yesLeg.token_yes : r.noLeg.token_no);
+    const polyLive = pl ? S.book.has(pl) : true;
+    const kalT = r.yesLeg.ticker || r.noLeg.ticker;
+    const k = kalT ? S.kal.get(kalT) : null;
+    const kalLive = k && Date.now() - k.t < 120000;
+    if (polyLive && kalLive) return '<span class="feed f-live"><span class="fd"></span>live both</span>';
+    if (polyLive) return '<span class="feed f-mix"><span class="fd"></span>poly live</span>';
+    if (kalLive) return '<span class="feed f-mix"><span class="fd"></span>kalshi live</span>';
+    return '<span class="feed f-snap"><span class="fd"></span>snapshot</span>';
+  }
+  return c.live
+    ? '<span class="feed f-live"><span class="fd"></span>' + (r.venue === "polymarket" ? "live ws" : "live") + '</span>'
+    : '<span class="feed f-snap"><span class="fd"></span>snapshot</span>';
+}
+function legsLine(r, c) {
+  if (!c.legOut || !c.legOut.length) return "";
+  const top = c.legOut.slice().sort((a, b) => b[1] - a[1]).slice(0, 3);
+  let s = top.map(l => "<b>" + esc(l[0]) + "</b> " + (l[1] * 100).toFixed(1) + "c").join(" | ");
+  if (c.legOut.length > 3) s += " | +" + (c.legOut.length - 3) + " more";
+  return '<div class="legs">' + s + "</div>";
+}
+function rowHtml(r, c) {
+  const roiCls = c.roi > 0 ? "pos" : "neg";
+  const fl = S.flash.get(r.id);
+  const evHtml = r.kind === "xv"
+    ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.event) + "</a>" +
+      '<div class="sub2">&#8596; <a href="' + esc(r.url2) + '" target="_blank" rel="noopener">' + esc(r.event2) + "</a>" +
+      " &middot; sim " + r.sim.toFixed(2) + "</div>"
+    : '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.event) + "</a>" + legsLine(r, c);
+  return '<tr id="' + r.id + '"' + (fl ? ' class="' + fl + '"' : "") + '>' +
+    '<td class="num roi ' + roiCls + '">' + fmtPct(c.roi) + "</td>" +
+    '<td class="num ' + roiCls + '">' + fmtC(c.net) + "</td>" +
+    '<td class="num">' + fmtCost(c.capital) + "</td>" +
+    "<td>" + typeBadge(r) + "</td>" +
+    "<td>" + feedBadge(r, c) + "</td>" +
+    '<td class="ev">' + evHtml + "</td>" +
+    '<td class="num">' + r.nLegs + "</td></tr>";
+}
+function sortVal(r, c, k) {
+  if (k === "event") return (r.event || "").toLowerCase();
+  if (k === "tier") return r.tier;
+  if (k === "nLegs") return r.nLegs;
+  return c[k];
+}
+function renderTable() {
+  const vis = [];
+  for (const r of S.rows) {
+    if (!matchFilter(r) || !matchQ(r)) continue;
+    const c = computeRow(r);
+    const prev = S.prevRoi.get(r.id);
+    if (prev !== undefined && Math.abs(c.roi - prev) > 0.0005)
+      S.flash.set(r.id, c.roi > prev ? "flash-up" : "flash-dn");
+    S.prevRoi.set(r.id, c.roi);
+    vis.push([r, c]);
+  }
+  vis.sort((a, b) => {
+    const va = sortVal(a[0], a[1], S.sortKey), vb = sortVal(b[0], b[1], S.sortKey);
+    const cmp = typeof va === "string" ? va.localeCompare(vb) : (va - vb);
+    return cmp * S.sortDir || (b[1].roi - a[1].roi);
+  });
+  $("tbody").innerHTML = vis.length
+    ? vis.map(([r, c]) => rowHtml(r, c)).join("")
+    : '<tr><td colspan="7" class="empty">no rows match</td></tr>';
+  S.flash.clear();
+}
+function renderTabs() {
+  const n = f => S.rows.filter(r => ({ mech: r.tier === 1, cand: r.tier === 2, xv: r.kind === "xv", all: true })[f]).length;
+  $("tabs").innerHTML = FILTERS.map(([f, label]) =>
+    '<div class="tab' + (S.filter === f ? " active" : "") + '" data-f="' + f + '">' +
+    label + '<span class="n">' + n(f) + "</span></div>").join("");
+  document.querySelectorAll(".tab").forEach(t =>
+    t.onclick = () => { S.filter = t.dataset.f; renderTabs(); renderTable(); renderNote(); });
+}
+function renderCards() {
+  const t1 = S.rows.filter(r => r.tier === 1 && r.kind !== "xv");
+  let best = null, bestR = null;
+  for (const r of t1) { const c = computeRow(r); if (!best || c.roi > best.roi) { best = c; bestR = r; } }
+  $("cBest").textContent = best ? fmtPct(best.roi) : "-";
+  $("cT1").textContent = t1.length;
+  $("cT2").textContent = S.rows.filter(r => r.tier === 2).length;
+  $("cLegs").textContent = S.book.size + S.kal.size;
+  $("cLegsS").textContent = S.book.size + " poly ws + " + S.kal.size + " kalshi proxy";
+}
+function renderNote() {
+  const notes = {
+    mech: "<b>Tier 1:</b> negRisk events with a complete outcome space - exactly one leg resolves YES, so the set pays $1 mechanically. ROI = net profit / capital locked per set, after taker fees.",
+    cand: "<b>Tier 2:</b> venue says \"mutually exclusive\" but that usually means AT MOST one - an unlisted outcome resolves every leg NO. Fat edges here are usually the implicit field price, not arbs. Read the rules before believing any of these.",
+    xv: "<b>Cross-venue:</b> fuzzy title match + YES on the cheap venue / NO on the other. Resolution-text mismatches are the classic false positive - verify the rules word for word.",
+    all: "ROI = net profit / capital locked per $1 payout set, after taker fees. T1 rows are mechanical; T2 and cross rows need rule verification.",
+  };
+  $("tierNote").innerHTML = notes[S.filter] || notes.all;
+}
+function renderHeader() {
+  if (S.meta) $("scanTxt").textContent = ago(S.meta.ts * 1000);
+}
+function renderHead() {
+  document.querySelectorAll("#headRow th").forEach(th => {
+    const k = th.dataset.k; if (!k) return;
+    th.innerHTML = th.textContent.replace(/ [▲▼]$/, "") +
+      (S.sortKey === k ? ' <span class="arr">' + (S.sortDir === -1 ? "▼" : "▲") + "</span>" : "");
+    th.onclick = () => {
+      if (S.sortKey === k) S.sortDir *= -1;
+      else { S.sortKey = k; S.sortDir = k === "event" ? 1 : -1; }
+      renderHead(); renderTable();
+    };
+  });
+}
+function renderAll() { renderHeader(); renderCards(); renderTabs(); renderNote(); renderHead(); renderTable(); }
+
+/* ================= boot ================= */
+async function loadData() {
+  try {
+    let d;
+    if (window.__EMBED_DATA) { d = window.__EMBED_DATA; }
+    else {
+      const r = await fetch("data.json?cb=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      d = await r.json();
+    }
+    if (d.meta && d.meta.ts !== S.dataTs) {
+      S.dataTs = d.meta.ts; S.meta = d.meta;
+      S.rows = buildRows(d);
+      if (!d.meta.schema || d.meta.schema < 2)
+        $("errbox").innerHTML = '<div class="err">old data.json schema - live legs disabled until the Actions job runs the new scan.py</div>';
+      else $("errbox").innerHTML = "";
+      renderAll();
+      connectPoly();
+    }
+  } catch (e) {
+    $("errbox").innerHTML = '<div class="err">data.json unavailable: ' + esc(e.message) + " - Actions job may not have run yet.</div>";
+  }
+  renderHeader();
+}
+$("q").oninput = e => { S.q = e.target.value; renderTable(); };
+$("foot").innerHTML =
+  "<b>How to read this:</b> one \"set\" buys every leg once and pays $1 no matter the outcome. " +
+  "<b>Capital</b> = what the set costs (asks + taker fees). <b>Net</b> = $1 - capital. <b>ROI</b> = net / capital. " +
+  "Poly fees: rate&middot;p&middot;(1-p) from each market's fee schedule. Kalshi fees: ceil(0.07&middot;p&middot;(1-p)&middot;100)/100 per contract.<br>" +
+  "<b>Feeds:</b> Polymarket streams live over its public websocket (ws-subscriptions-clob, market channel). " +
+  "Kalshi blocks browser CORS, so Kalshi quotes poll every ~" + (KALSHI_POLL_MS / 1000) + "s through a public CORS proxy; " +
+  "if the proxy is down the rows fall back to the GitHub Actions scan snapshot (data.json, every 5 min). " +
+  "Cross-venue rows mix both. Read-only: no keys, no orders, nothing placed.";
+loadData();
+pollKalshi();
+setInterval(loadData, DATA_REFRESH_MS);
+setInterval(pollKalshi, KALSHI_POLL_MS);
+setInterval(() => { renderCards(); renderTable(); renderHeader(); }, RENDER_MS);
 </script>
 </body>
 </html>
