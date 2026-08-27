@@ -47,6 +47,9 @@
   <div class="sub" id="sub">Loading leaderboard.json&hellip;</div>
   <div class="cards" id="cards"></div>
   <div class="controls"><h2>Overfitting gauntlet (every strategy must clear all five)</h2><ul id="ctrls"></ul></div>
+  <h2 style="font-size:18px;margin:28px 0 12px">10-asset portfolios <span style="color:var(--dim);font-size:13px;font-weight:400">same genome on every symbol, equal weight</span></h2>
+  <div id="pboard"></div>
+  <h2 style="font-size:18px;margin:28px 0 12px">BTC single-asset candidates</h2>
   <div id="board"></div>
   <div class="foot">Research only. Backtests and paper metrics &mdash; no live trading, no broker connections, no money moves.
   Past backtest performance predicts nothing, especially the stuff that passes.</div>
@@ -67,6 +70,33 @@ fetch('leaderboard.json').then(r=>r.json()).then(b=>{
   document.getElementById('ctrls').innerHTML = b.controls.map(c=>`<li>${c}</li>`).join('');
   const fmt = (x,d=2)=> (x>0?'+':'') + Number(x).toFixed(d);
   const cls = x => x>0 ? 'pos' : 'neg';
+  if (b.portfolios) {
+    document.getElementById('pboard').innerHTML = b.portfolios.map((e,i)=>{
+      const row=(label,m)=> m ? `<tr><td>${label}</td><td class="${cls(m.sharpe)}">${fmt(m.sharpe)}</td>
+        <td class="${cls(m.ret)}">${fmt(m.ret*100,1)}%</td><td>${(m.dd*100).toFixed(1)}%</td></tr>`:'';
+      return `<div class="strat" onclick="this.classList.toggle('open')">
+        <div class="strat-head">
+          <span class="rank">#${i+1}</span>
+          <span class="badge ${e.verdict}">${e.verdict}</span>
+          <span class="desc">${e.desc}</span>
+          <span class="pills">
+            <span class="pill">train SR <b class="${cls(e.train.sharpe)}">${fmt(e.train.sharpe)}</b></span>
+            <span class="pill">test SR <b class="${cls(e.test.sharpe)}">${fmt(e.test.sharpe)}</b></span>
+            <span class="pill">breadth <b>${Math.round(e.breadth_test*10)}/10</b></span>
+            <span class="pill">DSR p <b>${e.dsr_p}</b></span>
+          </span>
+        </div>
+        <div class="detail">
+          <table><tr><th>Split</th><th>Sharpe</th><th>Return</th><th>Max DD</th></tr>
+          ${row('Portfolio train', e.train)}${row('Portfolio test', e.test)}${row('Portfolio holdout', e.holdout)}</table>
+          <p class="foot">Walk-forward: ${e.walk_forward.folds.join(', ')} (${e.walk_forward.pos}/5) ·
+          Sensitivity median ${e.sensitivity.median}, worst ${e.sensitivity.worst} ·
+          Per-symbol test Sharpe: ${Object.entries(e.per_symbol_test).map(([k,v])=>k.replace('USDT','')+' '+v).join(' · ')} ·
+          Genome: <code>${JSON.stringify(e.genome)}</code></p>
+        </div>
+      </div>`;
+    }).join('');
+  }
   document.getElementById('board').innerHTML = b.leaderboard.map((e,i)=>{
     const row = (label,m)=> m ? `<tr><td>${label}</td><td class="${cls(m.sharpe)}">${fmt(m.sharpe)}</td>
       <td class="${cls(m.ret)}">${fmt(m.ret*100,1)}%</td><td>${(m.dd*100).toFixed(1)}%</td>
