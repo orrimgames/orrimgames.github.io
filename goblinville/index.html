@@ -2528,7 +2528,7 @@ function chronLines(){
 function chronPanel(){
   const c=chronCardR(), ents=chronLines();
   const body = ents.length ? chronH(ents) : (wrapTo(CHRON_EMPTY, c.w-44, 12, 600).length*17+16);
-  const h=clamp(52+body+14, 150, Math.max(150,H-96-96));
+  const h=clamp(52+body+14, 150, Math.max(150,H-96-(BARH+16)));   // v118: the bottom margin clears the build bar, not just the screen edge
   return {x:c.x, w:c.w, y:96, h};
 }
 function chronCloseR(){ const P=chronPanel(); return {x:P.x+P.w-46, y:P.y+8, w:38, h:38}; }
@@ -5387,7 +5387,9 @@ function moveStep(e){
   }
 }
 function moveTouch(e){e.preventDefault(); S._holdT=null;
-  if(S.chronOpen){ for(const t of e.changedTouches){ const p=touches.get(t.identifier); if(p){ chronScroll(p.y-t.clientY); p.x=t.clientX; p.y=t.clientY; } } return; }
+  if(S.chronOpen){ for(const t of e.changedTouches){ const p=touches.get(t.identifier); if(p){
+    if(tapStart) tapStart.moved=Math.max(tapStart.moved,Math.hypot(t.clientX-tapStart.x,t.clientY-tapStart.y));   // v118: a scroll-drag is not a tap - without this the release closed the panel it was scrolling
+    chronScroll(p.y-t.clientY); p.x=t.clientX; p.y=t.clientY; } } return; }
   const evs=(e.getCoalescedEvents && e.getCoalescedEvents().length)?e.getCoalescedEvents():[e];
   for(const ev of evs) moveStep(ev);
 }
