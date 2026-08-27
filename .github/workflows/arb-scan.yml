@@ -1,1 +1,27 @@
-arb scanner workflow (5-min schedule + dispatch)
+name: arbscan
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: arbscan
+  cancel-in-progress: false
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: scan
+        run: python arb/scan.py --json arb/data.json
+      - name: commit data
+        run: |
+          git config user.name "arbscan-bot"
+          git config user.email "arbscan-bot@users.noreply.github.com"
+          git add arb/data.json
+          git diff --cached --quiet || (git commit -m "arbscan data $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
