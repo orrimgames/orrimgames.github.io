@@ -5335,7 +5335,8 @@ function startTouch(e){e.preventDefault();
   }
   const v=[...touches.values()];
   if(v.length===1){
-    if(S.sel && v[0].y<H-BARH) updateGhost3(v[0].x,v[0].y);
+    // v117: no ghost pre-update on touch-down - it pre-answered the tap handler's same-tile confirm
+    // question, so every second tap built at an unseen spot. Drag-aim still flows through moveStep.
     tapStart={x:v[0].x,y:v[0].y,t:performance.now(),moved:0};
     panGrab=v[0].y<H-BARH? rayGround(v[0].x,v[0].y) : null;
     barDrag = v[0].y>H-BARH ? {x0:v[0].x, s0:barScroll} : null;
