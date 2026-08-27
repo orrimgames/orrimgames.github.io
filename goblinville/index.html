@@ -5230,9 +5230,9 @@ function drawCeremony(){
       txt3(sig[i],sx,sy+1,10,'rgba(22,16,24,0.95)','center',900,false); }
     const lines=[['The Warrens kneel','#c9b393'],['The Deep kneels','#7fa8d8'],['The Bloom kneels','#c986dc'],['The Choir kneels','#ffe9b0']];
     let ly=cy-34;
-    for(const L of lines){ txt3(L[0]+' - the banner burns bright',cx,ly,13.5,L[1],'center',700); ly+=24; }
-    txt3('The Ember War is won. VULKARRAX sees you now.',cx,ly+10,13,'#d8ffd0','center',800);
-    txt3('the brood keeps the fire - walk the roads not walked',cx,ly+34,11.5,'#a89484','center',600);
+    for(const L of lines){ const kline=L[0]+' - the banner burns bright'; txt3(kline,cx,ly,fitSize2(kline,cw-32,13.5,700),L[1],'center',700); ly+=24; }   // v119: kneel lines fit the card the way the title does
+    txt3('The Ember War is won. VULKARRAX sees you now.',cx,ly+10,fitSize2('The Ember War is won. VULKARRAX sees you now.',cw-32,13,800),'#d8ffd0','center',800);
+    txt3('the brood keeps the fire - walk the roads not walked',cx,ly+34,fitSize2('the brood keeps the fire - walk the roads not walked',cw-32,11.5,600),'#a89484','center',600);
     if(Math.sin(G.t*2.2)>-0.3) txt3(TAPW()+' to keep building',cx,cy+162,14,'#ffd28a','center',800,'rgba(20,12,20,0.8)');
   }
 }
