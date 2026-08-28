@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-28T20:41:49Z",
-  "ts": 1787949709.2463346,
-  "scan_seconds": 15.0,
+  "generated_at": "2026-08-28T20:52:17Z",
+  "ts": 1787950337.5063276,
+  "scan_seconds": 14.4,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 193 binary + 1660 multi | kalshi: 5000 events -> 782 binary + 1405 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 204 binary + 1653 multi | kalshi: 5000 events -> 783 binary + 1405 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -476,11 +476,11 @@
    "venue": "kalshi",
    "event": "Next DCCC chair?",
    "n_legs": 9,
-   "gross": 0.633,
+   "gross": 0.632,
    "fees": 0.09,
-   "net": 0.543,
-   "capital": 0.45699999999999996,
-   "roi": 1.1881838074398252,
+   "net": 0.542,
+   "capital": 0.45799999999999996,
+   "roi": 1.183406113537118,
    "url": "https://kalshi.com/events/KXDCCCCHAIR-27MAR02",
    "neg_risk": null,
    "coverage": "9/9",
@@ -488,7 +488,7 @@
    "legs": [
     {
      "label": "Greg Stanton",
-     "ask": 0.046,
+     "ask": 0.047,
      "fee": 0.07,
      "ticker": "KXDCCCCHAIR-27MAR02-GSTA"
     },
@@ -548,11 +548,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.5249999999999999,
-   "fees": 0.02998933,
-   "net": 0.49501066999999993,
-   "capital": 0.50498933,
-   "roi": 0.9802398597213924,
+   "gross": 0.5349999999999999,
+   "fees": 0.029464330000000004,
+   "net": 0.5055356699999999,
+   "capital": 0.49446433,
+   "roi": 1.022390573653715,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -566,7 +566,7 @@
     },
     {
      "label": "$25M",
-     "ask": 0.13,
+     "ask": 0.12,
      "fee": 0.07,
      "token": "44037677528734997694595756236271521523823950190281601825184634217232352709386"
     },
@@ -716,11 +716,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.348,
-   "fees": 0.041016500000000004,
-   "net": 0.30698349999999996,
-   "capital": 0.6930165,
-   "roi": 0.44296708664223716,
+   "gross": 0.349,
+   "fees": 0.040959310000000006,
+   "net": 0.30804068999999995,
+   "capital": 0.69195931,
+   "roi": 0.4451716821325808,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -776,13 +776,67 @@
     },
     {
      "label": "$300M",
-     "ask": 0.092,
+     "ask": 0.091,
      "fee": 0.07,
      "token": "29038954839483761326156091612813755283483527889927269685441096217717416698382"
     }
    ],
    "kind": "intra-event",
    "event_slug": "pacifica-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Umia listed on ___ within 30 days of TGE?",
+   "n_legs": 6,
+   "gross": 0.32999999999999996,
+   "fees": 0.04098500000000001,
+   "net": 0.28901499999999997,
+   "capital": 0.7109850000000001,
+   "roi": 0.40649943388397775,
+   "url": "https://polymarket.com/event/umia-listed-on-within-30-days-of-tge",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Binance",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "49558536559171493502291433973555802860188651649330238307383626983840028441529"
+    },
+    {
+     "label": "Bybit",
+     "ask": 0.2,
+     "fee": 0.07,
+     "token": "8447212632103701366355652528683322599955835480232818415831187335853669251682"
+    },
+    {
+     "label": "Coinbase",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "100274695762804441137789437616169200620884928843312571305211764904095697790157"
+    },
+    {
+     "label": "Kraken",
+     "ask": 0.11,
+     "fee": 0.07,
+     "token": "106433218583364021223202058015009991698793518696674092752952630069186368038158"
+    },
+    {
+     "label": "OKX",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "37131954997338223764145388655077264097975567655219768654193828585639131194486"
+    },
+    {
+     "label": "Upbit",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "110413802822076073018369720392940705038077004732235765042806890942894846456798"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "umia-listed-on-within-30-days-of-tge"
   },
   {
    "venue": "polymarket",
@@ -819,60 +873,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "will-any-ai-model-reach-coding-arena-score-by-december-31"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Umia listed on ___ within 30 days of TGE?",
-   "n_legs": 6,
-   "gross": 0.31000000000000005,
-   "fees": 0.041965,
-   "net": 0.268035,
-   "capital": 0.731965,
-   "roi": 0.36618554165841266,
-   "url": "https://polymarket.com/event/umia-listed-on-within-30-days-of-tge",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Binance",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "49558536559171493502291433973555802860188651649330238307383626983840028441529"
-    },
-    {
-     "label": "Bybit",
-     "ask": 0.21,
-     "fee": 0.07,
-     "token": "8447212632103701366355652528683322599955835480232818415831187335853669251682"
-    },
-    {
-     "label": "Coinbase",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "100274695762804441137789437616169200620884928843312571305211764904095697790157"
-    },
-    {
-     "label": "Kraken",
-     "ask": 0.11,
-     "fee": 0.07,
-     "token": "106433218583364021223202058015009991698793518696674092752952630069186368038158"
-    },
-    {
-     "label": "OKX",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "37131954997338223764145388655077264097975567655219768654193828585639131194486"
-    },
-    {
-     "label": "Upbit",
-     "ask": 0.1,
-     "fee": 0.07,
-     "token": "110413802822076073018369720392940705038077004732235765042806890942894846456798"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "umia-listed-on-within-30-days-of-tge"
   },
   {
    "venue": "polymarket",
@@ -1577,42 +1577,6 @@
    "event_slug": "KXPRESTURKEYR1-28"
   },
   {
-   "venue": "polymarket",
-   "event": "AC Milan vs. Venezia FC",
-   "n_legs": 3,
-   "gross": 0.0050000000000000044,
-   "fees": 0.00884375,
-   "net": -0.0038437499999999947,
-   "capital": 1.00384375,
-   "roi": -0.0038290321576440506,
-   "url": "https://polymarket.com/event/sea-mil-ven-2026-08-28",
-   "neg_risk": true,
-   "coverage": "3/3",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "AC Milan",
-     "ask": 0.9,
-     "fee": 0.05,
-     "token": "100520810836139744788098656215742414685087550041934977279890505124568166030885"
-    },
-    {
-     "label": "Draw (AC Milan vs. Venezia FC)",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "28537859303234590685313765389058392973118105597373538711367252654343964851711"
-    },
-    {
-     "label": "Venezia FC",
-     "ask": 0.005,
-     "fee": 0.05,
-     "token": "71086795422481287216017833233674555077393398497007647827934934809370084279846"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "sea-mil-ven-2026-08-28"
-  },
-  {
    "venue": "kalshi",
    "event": "How many Attorneys General will Trump have?",
    "n_legs": 4,
@@ -1895,66 +1859,6 @@
    "event_slug": "HOUSECA49-26"
   },
   {
-   "venue": "polymarket",
-   "event": "Berlin State Elections: AfD # of seats?",
-   "n_legs": 7,
-   "gross": 0.015999999999999903,
-   "fees": 0.03140984,
-   "net": -0.015409840000000098,
-   "capital": 1.01540984,
-   "roi": -0.015175980567610117,
-   "url": "https://polymarket.com/event/berlin-state-elections-afd-of-seats-20260805192827457",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<20",
-     "ask": 0.024,
-     "fee": 0.04,
-     "token": "48534561218201335311266554292358869389629234228819903126335192620233598846635"
-    },
-    {
-     "label": "20-22",
-     "ask": 0.07,
-     "fee": 0.04,
-     "token": "14470166465441665371969470197741517600068142553244517199064198675349387641466"
-    },
-    {
-     "label": "23-25",
-     "ask": 0.033,
-     "fee": 0.04,
-     "token": "182607933015891658331605298108483444706153077240032086677410372939323266011"
-    },
-    {
-     "label": "26-28",
-     "ask": 0.14,
-     "fee": 0.04,
-     "token": "99973444365792941719627966252066243988675676170899254935874722588718518653612"
-    },
-    {
-     "label": "29-31",
-     "ask": 0.23,
-     "fee": 0.04,
-     "token": "71476640323947820621672069238827207630446854728170131473472532548438135000739"
-    },
-    {
-     "label": "32-34",
-     "ask": 0.22,
-     "fee": 0.04,
-     "token": "19764720949627424269888693011111113810811555357338881838618006092537268928024"
-    },
-    {
-     "label": "35+",
-     "ask": 0.267,
-     "fee": 0.04,
-     "token": "43519153331685441247890489935392982100503948147022319719561417456521370621591"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "berlin-state-elections-afd-of-seats-20260805192827457"
-  },
-  {
    "venue": "kalshi",
    "event": "PA-13 House winner?",
    "n_legs": 2,
@@ -2123,6 +2027,54 @@
    "event_slug": "balance-of-power-2026-midterms"
   },
   {
+   "venue": "polymarket",
+   "event": "Fed Decision in December?",
+   "n_legs": 5,
+   "gross": 0.010000000000000009,
+   "fees": 0.0281325,
+   "net": -0.018132499999999992,
+   "capital": 1.0181324999999999,
+   "roi": -0.017809568008093243,
+   "url": "https://polymarket.com/event/fed-decision-in-december-20260729232808632",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "50+ bps decrease",
+     "ask": 0.01,
+     "fee": 0.05,
+     "token": "17640596861394454242836532536014033416733783473450136742726948856144855149507"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.045,
+     "fee": 0.05,
+     "token": "77367448845023382525249480243608609306658725883285195065573683809293972009019"
+    },
+    {
+     "label": "No change",
+     "ask": 0.43,
+     "fee": 0.05,
+     "token": "42865728742506860386768556888821101266630139112044622335353850919229585308601"
+    },
+    {
+     "label": "25 bps increase",
+     "ask": 0.49,
+     "fee": 0.05,
+     "token": "111662129652828266889360374468657435151479595863413519836161861837506140152890"
+    },
+    {
+     "label": "50+ bps increase",
+     "ask": 0.015,
+     "fee": 0.05,
+     "token": "35090254409399344650860070211816464534198960801264823587796928404808383727584"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "fed-decision-in-december-20260729232808632"
+  },
+  {
    "venue": "kalshi",
    "event": "California Governor winner? (Person)",
    "n_legs": 2,
@@ -2138,13 +2090,13 @@
    "legs": [
     {
      "label": "Xavier Becerra",
-     "ask": 0.966,
+     "ask": 0.965,
      "fee": 0.07,
      "ticker": "KXGOVCA-26-XBEC"
     },
     {
      "label": "Steve Hilton",
-     "ask": 0.033,
+     "ask": 0.034,
      "fee": 0.07,
      "ticker": "KXGOVCA-26-SHIL"
     }
@@ -2357,54 +2309,6 @@
    "event_slug": "KXDSAENDORSE28-28MAR01"
   },
   {
-   "venue": "polymarket",
-   "event": "Fed Decision in December?",
-   "n_legs": 5,
-   "gross": 0.007000000000000006,
-   "fees": 0.028275750000000002,
-   "net": -0.021275749999999996,
-   "capital": 1.02127575,
-   "roi": -0.02083252246026599,
-   "url": "https://polymarket.com/event/fed-decision-in-december-20260729232808632",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "50+ bps decrease",
-     "ask": 0.012,
-     "fee": 0.05,
-     "token": "17640596861394454242836532536014033416733783473450136742726948856144855149507"
-    },
-    {
-     "label": "25 bps decrease",
-     "ask": 0.046,
-     "fee": 0.05,
-     "token": "77367448845023382525249480243608609306658725883285195065573683809293972009019"
-    },
-    {
-     "label": "No change",
-     "ask": 0.43,
-     "fee": 0.05,
-     "token": "42865728742506860386768556888821101266630139112044622335353850919229585308601"
-    },
-    {
-     "label": "25 bps increase",
-     "ask": 0.49,
-     "fee": 0.05,
-     "token": "111662129652828266889360374468657435151479595863413519836161861837506140152890"
-    },
-    {
-     "label": "50+ bps increase",
-     "ask": 0.015,
-     "fee": 0.05,
-     "token": "35090254409399344650860070211816464534198960801264823587796928404808383727584"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "fed-decision-in-december-20260729232808632"
-  },
-  {
    "venue": "kalshi",
    "event": "2028 Republican VP nominee",
    "n_legs": 22,
@@ -2595,6 +2499,66 @@
    ],
    "kind": "intra-event",
    "event_slug": "sachsen-anhalt-parliamentary-election-spd-vote-share"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Berlin State Elections: AfD # of seats?",
+   "n_legs": 7,
+   "gross": 0.006000000000000005,
+   "fees": 0.03169384,
+   "net": -0.025693839999999996,
+   "capital": 1.02569384,
+   "roi": -0.025050204064791883,
+   "url": "https://polymarket.com/event/berlin-state-elections-afd-of-seats-20260805192827457",
+   "neg_risk": true,
+   "coverage": "7/7",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<20",
+     "ask": 0.024,
+     "fee": 0.04,
+     "token": "48534561218201335311266554292358869389629234228819903126335192620233598846635"
+    },
+    {
+     "label": "20-22",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "14470166465441665371969470197741517600068142553244517199064198675349387641466"
+    },
+    {
+     "label": "23-25",
+     "ask": 0.033,
+     "fee": 0.04,
+     "token": "182607933015891658331605298108483444706153077240032086677410372939323266011"
+    },
+    {
+     "label": "26-28",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "99973444365792941719627966252066243988675676170899254935874722588718518653612"
+    },
+    {
+     "label": "29-31",
+     "ask": 0.23,
+     "fee": 0.04,
+     "token": "71476640323947820621672069238827207630446854728170131473472532548438135000739"
+    },
+    {
+     "label": "32-34",
+     "ask": 0.22,
+     "fee": 0.04,
+     "token": "19764720949627424269888693011111113810811555357338881838618006092537268928024"
+    },
+    {
+     "label": "35+",
+     "ask": 0.267,
+     "fee": 0.04,
+     "token": "43519153331685441247890489935392982100503948147022319719561417456521370621591"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "berlin-state-elections-afd-of-seats-20260805192827457"
   },
   {
    "venue": "polymarket",
