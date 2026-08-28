@@ -429,16 +429,7 @@ function connectKalshiStream() {
   try { es = new EventSource(KALSHI_STREAM + "?tickers=" + encodeURIComponent(key)); }
   catch (e) { startKalshiPoll(); return; }
   kalES = es; kalESKey = key;
-  es.onmessage = ev => {
-    try {
-      const m = JSON.parse(ev.data);
-      if (m.type === "tick") ingestKalshi(m.ticker, m.ya, m.yb, m.na, m.nb);
-      else if (m.type === "snapshot") for (const q of m.quotes || []) ingestKalshi(q.ticker, q.ya, q.yb, q.na, q.nb);
-      else return;
-      S.kalLastOk = Date.now(); S.kalFails = 0; S.kalMode = "stream"; S.kalProxy = "relay";
-      setKalChip();
-    } catch (e) {}
-  };
+  es.onmessage = ev => { try { kalStreamMessage(JSON.parse(ev.data)); } catch (e) {} };
   es.onerror = () => {
     if (es.readyState === 2) {  /* CLOSED: server rejected (not configured yet) - poll, retry stream periodically */
       if (kalES === es) { kalES = null; kalESKey = ""; }
@@ -448,6 +439,28 @@ function connectKalshiStream() {
       kalStreamRetry = setTimeout(connectKalshiStream, 120000);
     }
   };
+}
+/* the chip may claim "streaming" only when quotes are actually arriving:
+   an empty snapshot (relay up, upstream ws down) must NOT flip the mode */
+function kalStreamMessage(m) {
+  if (m.type === "tick") ingestKalshi(m.ticker, m.ya, m.yb, m.na, m.nb);
+  else if (m.type === "snapshot") {
+    const qs = m.quotes || [];
+    for (const q of qs) ingestKalshi(q.ticker, q.ya, q.yb, q.na, q.nb);
+    if (!qs.length) return;
+  } else return;
+  S.kalLastOk = Date.now(); S.kalFails = 0; S.kalMode = "stream"; S.kalProxy = "relay";
+  setKalChip();
+}
+/* stream gone quiet (upstream dead, relay hanging): drop to polling honestly, retry stream later */
+function kalWatchdog() {
+  if (S.kalMode === "stream" && Date.now() - S.kalLastOk > 45000) {
+    if (kalES) { kalES.close(); kalES = null; kalESKey = ""; }
+    S.kalMode = "poll";
+    startKalshiPoll();
+    clearTimeout(kalStreamRetry);
+    kalStreamRetry = setTimeout(connectKalshiStream, 120000);
+  }
 }
 /* after every data.json load: keep the kalshi feed matched to the current row set */
 function kalshiFeedTick() { connectKalshiStream(); }
@@ -639,7 +652,7 @@ $("foot").innerHTML =
   "Cross-venue rows mix both. Read-only: no orders, nothing placed.";
 loadData();
 setInterval(loadData, DATA_REFRESH_MS);
-setInterval(() => { renderCards(); renderTable(); renderHeader(); setKalChip(); }, RENDER_MS);
+setInterval(() => { renderCards(); renderTable(); renderHeader(); setKalChip(); kalWatchdog(); }, RENDER_MS);
 </script>
 </body>
 </html>
