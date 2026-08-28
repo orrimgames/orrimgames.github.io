@@ -185,7 +185,7 @@ const S = { rows: [], meta: null,
   book: new Map(), kal: new Map(),
   kalLastOk: 0, kalProxy: null, kalFails: 0,
   polyState: "connecting",
-  filter: "mech", q: "", sortKey: "roi", sortDir: -1, kalMode: "poll", showUnverified: false,
+  filter: "mech", q: "", sortKey: "roi", sortDir: -1, kalMode: "poll", showUnverified: false, minRoi: 0.01,
   prevRoi: new Map(), flash: new Map(), dataTs: 0 };
 
 /* ================= fmt ================= */
@@ -460,8 +460,12 @@ function allFilters() {
   if (S.showUnverified) f.push(["cand", "Candidates"], ["xv", "Cross-venue"], ["all", "All"]);
   return f;
 }
+/* verified board only shows rows beating the ROI floor (default +1.0% net of fees) */
+function passRoi(r) { return S.minRoi <= -1 || computeRow(r).roi > S.minRoi; }
+const ROI_STEPS = [0.01, 0.0025, -1];  /* +1.0% -> +0.25% -> any -> back */
+function roiLabel() { return S.minRoi <= -1 ? "any ROI" : "min +" + (S.minRoi * 100).toFixed(2).replace(/0$/, "") + "%"; }
 function matchFilter(r) {
-  if (S.filter === "mech") return r.tier === 1;
+  if (S.filter === "mech") return r.tier === 1 && passRoi(r);
   if (S.filter === "cand") return r.tier === 2;
   if (S.filter === "xv") return r.kind === "xv";
   return true;
@@ -540,20 +544,27 @@ function renderTable() {
   });
   $("tbody").innerHTML = vis.length
     ? vis.map(([r, c]) => rowHtml(r, c)).join("")
-    : '<tr><td colspan="7" class="empty">no rows match</td></tr>';
+    : '<tr><td colspan="7" class="empty">' + (S.filter === "mech" && S.minRoi > -1
+      ? "no verified rows above " + roiLabel().slice(4) + " right now - tap '" + roiLabel() + "' to widen the floor"
+      : "no rows match") + "</td></tr>";
   S.flash.clear();
 }
 function renderTabs() {
-  const n = f => S.rows.filter(r => ({ mech: r.tier === 1, cand: r.tier === 2, xv: r.kind === "xv", all: true })[f]).length;
+  const n = f => S.rows.filter(r => ({ mech: r.tier === 1 && passRoi(r), cand: r.tier === 2, xv: r.kind === "xv", all: true })[f]).length;
   const fs = allFilters();
   if (!fs.some(([f]) => f === S.filter)) S.filter = "mech";
   $("tabs").innerHTML = fs.map(([f, label]) =>
     '<div class="tab' + (S.filter === f ? " active" : "") + '" data-f="' + f + '">' +
     label + '<span class="n">' + n(f) + "</span></div>").join("") +
+    '<div class="tab ghost" id="roiT" title="ROI floor for the Verified board">' + roiLabel() + "</div>" +
     '<div class="tab ghost" id="unvT">' + (S.showUnverified ? "hide unverified" : "show unverified") + "</div>";
   document.querySelectorAll(".tab[data-f]").forEach(t =>
     t.onclick = () => { S.filter = t.dataset.f; renderTabs(); renderTable(); renderNote(); });
   $("unvT").onclick = () => { S.showUnverified = !S.showUnverified; renderTabs(); renderTable(); renderNote(); };
+  $("roiT").onclick = () => {
+    S.minRoi = ROI_STEPS[(ROI_STEPS.indexOf(S.minRoi) + 1) % ROI_STEPS.length];
+    renderTabs(); renderTable();
+  };
 }
 function renderCards() {
   const t1 = S.rows.filter(r => r.tier === 1 && r.kind !== "xv");
@@ -567,7 +578,7 @@ function renderCards() {
 }
 function renderNote() {
   const notes = {
-    mech: "<b>Verified only:</b> every row has a complete outcome space - exactly one leg resolves YES, so the set pays $1 mechanically. ROI = net / capital per set, after taker fees. Unverified candidates and cross-venue matches are hidden - use the dashed toggle above to see them.",
+    mech: "<b>Verified only, above the ROI floor:</b> every row has a complete outcome space - exactly one leg resolves YES, so the set pays $1 mechanically. ROI = net / capital per set, after taker fees. The dashed toggles widen the ROI floor and reveal unverified candidates/cross-venue matches.",
     cand: "<b>Tier 2:</b> venue says \"mutually exclusive\" but that usually means AT MOST one - an unlisted outcome resolves every leg NO. Fat edges here are usually the implicit field price, not arbs. Read the rules before believing any of these.",
     xv: "<b>Cross-venue:</b> fuzzy title match + YES on the cheap venue / NO on the other. Resolution-text mismatches are the classic false positive - verify the rules word for word.",
     all: "ROI = net profit / capital locked per $1 payout set, after taker fees. T1 rows are mechanical; T2 and cross rows need rule verification.",
