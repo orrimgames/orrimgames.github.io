@@ -292,6 +292,7 @@ function setPolyChip() {
 }
 function handlePolyMsg(ev) {
   let d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+  S.polyLastOk = Date.now();
   for (const m of (Array.isArray(d) ? d : [d])) {
     if (m.event_type === "book") {
       let bid = 0, ask = 0;
@@ -599,7 +600,12 @@ function renderNote() {
   $("tierNote").innerHTML = notes[S.filter] || notes.all;
 }
 function renderHeader() {
-  if (S.meta) $("scanTxt").textContent = ago(S.meta.ts * 1000);
+  const kalLive = S.kalMode === "stream" && (Date.now() - (S.kalLastOk || 0) < 45000);
+  const polyLive = wsPool.some(w => w.state === "open") && (Date.now() - (S.polyLastOk || 0) < 45000);
+  const scanAge = S.meta ? ago(S.meta.ts * 1000) : "...";
+  /* when tick streams are flowing the board is repricing continuously - say so,
+     and demote the cron scan to what it is: discovery/backfill age */
+  $("scanTxt").textContent = (kalLive || polyLive) ? "live now (discovery " + scanAge + ")" : scanAge;
 }
 function renderHead() {
   document.querySelectorAll("#headRow th").forEach(th => {
