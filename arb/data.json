@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-29T15:41:10Z",
-  "ts": 1788018070.0713296,
-  "scan_seconds": 13.3,
+  "generated_at": "2026-08-29T15:41:34Z",
+  "ts": 1788018094.3032143,
+  "scan_seconds": 9.8,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 210 binary + 1715 multi | kalshi: 5000 events -> 785 binary + 1403 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 209 binary + 1716 multi | kalshi: 5000 events -> 785 binary + 1403 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -795,6 +795,42 @@
    ],
    "kind": "intra-event",
    "event_slug": "idiots-rotten-tomatoes-score"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Stevenage FC vs. Doncaster Rovers FC",
+   "n_legs": 3,
+   "gross": 0.43999999999999995,
+   "fees": 0.022680000000000002,
+   "net": 0.41731999999999997,
+   "capital": 0.5826800000000001,
+   "roi": 0.7162078670968626,
+   "url": "https://polymarket.com/event/el1-ste-don-2026-08-29",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Stevenage FC",
+     "ask": 0.18,
+     "fee": 0.05,
+     "token": "24429578944501915048886077769207659294860947976205733000605721759256182458971"
+    },
+    {
+     "label": "Draw (Stevenage FC vs. Doncaster Rovers FC)",
+     "ask": 0.22,
+     "fee": 0.05,
+     "token": "111324778127463819384211450067317065754202892518623521745372228826039885079820"
+    },
+    {
+     "label": "Doncaster Rovers FC",
+     "ask": 0.16,
+     "fee": 0.05,
+     "token": "24171790348761791322808872873379027794340362555084000452929179580248932982236"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "el1-ste-don-2026-08-29"
   },
   {
    "venue": "kalshi",
@@ -1754,11 +1790,11 @@
    "venue": "polymarket",
    "event": "Shein IPO Closing Market Cap Above __?",
    "n_legs": 5,
-   "gross": 0.039000000000000035,
-   "fees": 0.017447,
-   "net": 0.021553000000000034,
-   "capital": 0.978447,
-   "roi": 0.022027764406247895,
+   "gross": 0.040000000000000036,
+   "fees": 0.01740808,
+   "net": 0.022591920000000036,
+   "capital": 0.97740808,
+   "roi": 0.023114112173085406,
    "url": "https://polymarket.com/event/shein-ipo-closing-market-cap-above-20260727205430939",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1766,7 +1802,7 @@
    "legs": [
     {
      "label": "\u2191 400B HKD",
-     "ask": 0.014,
+     "ask": 0.013,
      "fee": 0.04,
      "token": "102999292571256874909169739750598386721925395260789923286518407433992333136883"
     },
@@ -2592,6 +2628,54 @@
   },
   {
    "venue": "kalshi",
+   "event": "Fed decision in Apr 2027?",
+   "n_legs": 5,
+   "gross": 0.040000000000000036,
+   "fees": 0.06,
+   "net": -0.019999999999999962,
+   "capital": 1.02,
+   "roi": -0.019607843137254864,
+   "url": "https://kalshi.com/events/KXFEDDECISION-27APR",
+   "neg_risk": null,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Cut >25bps",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-C26"
+    },
+    {
+     "label": "Cut 25bps",
+     "ask": 0.14,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-C25"
+    },
+    {
+     "label": "Fed maintains rate",
+     "ask": 0.6,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-H0"
+    },
+    {
+     "label": "Hike 25bps",
+     "ask": 0.11,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-H25"
+    },
+    {
+     "label": "Hike >25bps",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-H26"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXFEDDECISION-27APR"
+  },
+  {
+   "venue": "kalshi",
    "event": "How many reconciliation bills will be passed in 2026?",
    "n_legs": 2,
    "gross": 0.020000000000000018,
@@ -2973,54 +3057,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPHILIPPINESPRES-28"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Fed decision in Apr 2027?",
-   "n_legs": 5,
-   "gross": 0.030000000000000027,
-   "fees": 0.06,
-   "net": -0.02999999999999997,
-   "capital": 1.03,
-   "roi": -0.02912621359223298,
-   "url": "https://kalshi.com/events/KXFEDDECISION-27APR",
-   "neg_risk": null,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Cut >25bps",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-C26"
-    },
-    {
-     "label": "Cut 25bps",
-     "ask": 0.14,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-C25"
-    },
-    {
-     "label": "Fed maintains rate",
-     "ask": 0.61,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-H0"
-    },
-    {
-     "label": "Hike 25bps",
-     "ask": 0.11,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-H25"
-    },
-    {
-     "label": "Hike >25bps",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-H26"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXFEDDECISION-27APR"
   },
   {
    "venue": "kalshi",
