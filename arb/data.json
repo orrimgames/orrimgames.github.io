@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-29T13:13:50Z",
-  "ts": 1788009230.024418,
-  "scan_seconds": 11.4,
+  "generated_at": "2026-08-29T13:15:03Z",
+  "ts": 1788009303.6737301,
+  "scan_seconds": 13.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 190 binary + 1757 multi | kalshi: 5000 events -> 783 binary + 1406 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 193 binary + 1757 multi | kalshi: 5000 events -> 783 binary + 1406 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -698,11 +698,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.536,
-   "fees": 0.029379980000000003,
-   "net": 0.5066200200000001,
-   "capital": 0.49337998000000005,
-   "roi": 1.0268353815248037,
+   "gross": 0.5369999999999999,
+   "fees": 0.029320970000000002,
+   "net": 0.5076790299999999,
+   "capital": 0.49232097,
+   "roi": 1.031195218030221,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -722,7 +722,7 @@
     },
     {
      "label": "$50M",
-     "ask": 0.079,
+     "ask": 0.078,
      "fee": 0.07,
      "token": "69626151402846862779475550621233927524301107136544704332168040527442555586381"
     },
@@ -908,11 +908,11 @@
    "venue": "polymarket",
    "event": "Umia listed on ___ within 30 days of TGE?",
    "n_legs": 6,
-   "gross": 0.31999999999999995,
-   "fees": 0.04181800000000001,
-   "net": 0.27818199999999993,
-   "capital": 0.7218180000000001,
-   "roi": 0.38539077717651804,
+   "gross": 0.33999999999999997,
+   "fees": 0.040698000000000005,
+   "net": 0.29930199999999996,
+   "capital": 0.700698,
+   "roi": 0.4271483577803846,
    "url": "https://polymarket.com/event/umia-listed-on-within-30-days-of-tge",
    "neg_risk": false,
    "coverage": "6/6",
@@ -938,7 +938,7 @@
     },
     {
      "label": "Kraken",
-     "ask": 0.11,
+     "ask": 0.09,
      "fee": 0.07,
      "token": "106433218583364021223202058015009991698793518696674092752952630069186368038158"
     },
@@ -1028,11 +1028,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.20399999999999996,
-   "fees": 0.04798808,
-   "net": 0.15601191999999997,
-   "capital": 0.84398808,
-   "roi": 0.18485085713532823,
+   "gross": 0.23399999999999999,
+   "fees": 0.04691708000000001,
+   "net": 0.18708291999999999,
+   "capital": 0.8129170800000001,
+   "roi": 0.23013776509653355,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1040,7 +1040,7 @@
    "legs": [
     {
      "label": "$50M",
-     "ask": 0.26,
+     "ask": 0.23,
      "fee": 0.07,
      "token": "16795957534988501215235347348644372320002983627408040830654583226326934050970"
     },
@@ -1854,6 +1854,36 @@
   },
   {
    "venue": "kalshi",
+   "event": "Annual Return: Gold vs. Silver",
+   "n_legs": 2,
+   "gross": 0.050000000000000044,
+   "fees": 0.04,
+   "net": 0.010000000000000044,
+   "capital": 0.99,
+   "roi": 0.010101010101010145,
+   "url": "https://kalshi.com/events/KXGOLDVSSILVER-26DEC31",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Gold",
+     "ask": 0.77,
+     "fee": 0.07,
+     "ticker": "KXGOLDVSSILVER-26DEC31-XAU"
+    },
+    {
+     "label": "Silver",
+     "ask": 0.18,
+     "fee": 0.07,
+     "ticker": "KXGOLDVSSILVER-26DEC31-XAG"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXGOLDVSSILVER-26DEC31"
+  },
+  {
+   "venue": "kalshi",
    "event": "Bank of England rate decision in December",
    "n_legs": 5,
    "gross": 0.08999999999999997,
@@ -1983,36 +2013,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXLOSEREELECTIONRSEN-2026"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Annual Return: Gold vs. Silver",
-   "n_legs": 2,
-   "gross": 0.040000000000000036,
-   "fees": 0.04,
-   "net": 3.469446951953614e-17,
-   "capital": 1.0,
-   "roi": 3.469446951953614e-17,
-   "url": "https://kalshi.com/events/KXGOLDVSSILVER-26DEC31",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Gold",
-     "ask": 0.77,
-     "fee": 0.07,
-     "ticker": "KXGOLDVSSILVER-26DEC31-XAU"
-    },
-    {
-     "label": "Silver",
-     "ask": 0.19,
-     "fee": 0.07,
-     "ticker": "KXGOLDVSSILVER-26DEC31-XAG"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXGOLDVSSILVER-26DEC31"
   },
   {
    "venue": "polymarket",
@@ -2559,42 +2559,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXDSAENDORSE28-28MAR01"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Plymouth Argyle FC vs. Bradford City AFC",
-   "n_legs": 3,
-   "gross": 0.010000000000000009,
-   "fees": 0.032735,
-   "net": -0.02273499999999999,
-   "capital": 1.022735,
-   "roi": -0.02222960982072579,
-   "url": "https://polymarket.com/event/el1-ply-bra-2026-08-29",
-   "neg_risk": true,
-   "coverage": "3/3",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "Plymouth Argyle FC",
-     "ask": 0.4,
-     "fee": 0.05,
-     "token": "15171502944587363862048065333751881796877037887116396986425241580614007789163"
-    },
-    {
-     "label": "Draw (Plymouth Argyle FC vs. Bradford City AFC)",
-     "ask": 0.27,
-     "fee": 0.05,
-     "token": "56765191386378373030122226867293281859121011830591449823899535418578052304617"
-    },
-    {
-     "label": "Bradford City AFC",
-     "ask": 0.32,
-     "fee": 0.05,
-     "token": "21818612387877164504593282867848225157941104260074383035563827065465470842561"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "el1-ply-bra-2026-08-29"
   },
   {
    "venue": "kalshi",
