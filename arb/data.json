@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-29T16:44:05Z",
-  "ts": 1788021845.6879523,
-  "scan_seconds": 12.9,
+  "generated_at": "2026-08-29T16:44:57Z",
+  "ts": 1788021897.5821908,
+  "scan_seconds": 16.9,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 197 binary + 1693 multi | kalshi: 5000 events -> 786 binary + 1402 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 196 binary + 1695 multi | kalshi: 5000 events -> 786 binary + 1402 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1634,11 +1634,11 @@
    "venue": "kalshi",
    "event": "2028 Presidential matchup",
    "n_legs": 16,
-   "gross": 0.20199999999999996,
+   "gross": 0.20099999999999996,
    "fees": 0.16,
-   "net": 0.041999999999999954,
-   "capital": 0.9580000000000001,
-   "roi": 0.04384133611691018,
+   "net": 0.04099999999999995,
+   "capital": 0.9590000000000001,
+   "roi": 0.042752867570385766,
    "url": "https://kalshi.com/events/KXPRESMATCHUP-28NOV07",
    "neg_risk": null,
    "coverage": "16/16",
@@ -1670,7 +1670,7 @@
     },
     {
      "label": "Jon Ossoff v. JD Vance",
-     "ask": 0.077,
+     "ask": 0.078,
      "fee": 0.07,
      "ticker": "KXPRESMATCHUP-28NOV07-JOSSJVAN"
     },
@@ -2651,14 +2651,68 @@
    "event_slug": "KXDSAENDORSE28-28MAR01"
   },
   {
+   "venue": "polymarket",
+   "event": "Quebec General Election: PCQ # Seats?",
+   "n_legs": 6,
+   "gross": 0.010000000000000009,
+   "fees": 0.032092,
+   "net": -0.022091999999999994,
+   "capital": 1.022092,
+   "roi": -0.02161449262884358,
+   "url": "https://polymarket.com/event/of-seats-won-by-pcq-in-the-2026-quebec-general-election",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<5",
+     "ask": 0.17,
+     "fee": 0.04,
+     "token": "96330415335656482279822732446065662970522652058663263801537185477382354646804"
+    },
+    {
+     "label": "5-7",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "86530002706471400248903699069780794037969249002576063121813370718890796170703"
+    },
+    {
+     "label": "8-10",
+     "ask": 0.25,
+     "fee": 0.04,
+     "token": "83785898891894054301819648459035741498740808640709924919744181871782343366369"
+    },
+    {
+     "label": "11-13",
+     "ask": 0.24,
+     "fee": 0.04,
+     "token": "93529479326079104027720334595426978966867699161744398728265010770962115617694"
+    },
+    {
+     "label": "14-16",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "8064981962363519229289653770034637971697410351948011111193100853014422652833"
+    },
+    {
+     "label": "17+",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "45269391449692483792011553109828023930879105820163146733083117047231295922802"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "of-seats-won-by-pcq-in-the-2026-quebec-general-election"
+  },
+  {
    "venue": "kalshi",
    "event": "2028 Republican VP nominee",
    "n_legs": 22,
-   "gross": 0.20799999999999996,
+   "gross": 0.20599999999999996,
    "fees": 0.23,
-   "net": -0.022000000000000047,
-   "capital": 1.022,
-   "roi": -0.021526418786692807,
+   "net": -0.02400000000000005,
+   "capital": 1.024,
+   "roi": -0.02343750000000005,
    "url": "https://kalshi.com/events/KXVPRESNOMR-28",
    "neg_risk": null,
    "coverage": "22/22",
@@ -2786,7 +2840,7 @@
     },
     {
      "label": "Erika Kirk",
-     "ask": 0.027,
+     "ask": 0.029,
      "fee": 0.07,
      "ticker": "KXVPRESNOMR-28-EKIR"
     },
@@ -2799,60 +2853,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXVPRESNOMR-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Quebec General Election: PCQ # Seats?",
-   "n_legs": 6,
-   "gross": 0.010000000000000009,
-   "fees": 0.032092,
-   "net": -0.022091999999999994,
-   "capital": 1.022092,
-   "roi": -0.02161449262884358,
-   "url": "https://polymarket.com/event/of-seats-won-by-pcq-in-the-2026-quebec-general-election",
-   "neg_risk": true,
-   "coverage": "6/6",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<5",
-     "ask": 0.17,
-     "fee": 0.04,
-     "token": "96330415335656482279822732446065662970522652058663263801537185477382354646804"
-    },
-    {
-     "label": "5-7",
-     "ask": 0.13,
-     "fee": 0.04,
-     "token": "86530002706471400248903699069780794037969249002576063121813370718890796170703"
-    },
-    {
-     "label": "8-10",
-     "ask": 0.25,
-     "fee": 0.04,
-     "token": "83785898891894054301819648459035741498740808640709924919744181871782343366369"
-    },
-    {
-     "label": "11-13",
-     "ask": 0.24,
-     "fee": 0.04,
-     "token": "93529479326079104027720334595426978966867699161744398728265010770962115617694"
-    },
-    {
-     "label": "14-16",
-     "ask": 0.13,
-     "fee": 0.04,
-     "token": "8064981962363519229289653770034637971697410351948011111193100853014422652833"
-    },
-    {
-     "label": "17+",
-     "ask": 0.07,
-     "fee": 0.04,
-     "token": "45269391449692483792011553109828023930879105820163146733083117047231295922802"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "of-seats-won-by-pcq-in-the-2026-quebec-general-election"
   },
   {
    "venue": "polymarket",
