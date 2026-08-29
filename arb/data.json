@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-29T06:06:56Z",
-  "ts": 1787983616.2205944,
-  "scan_seconds": 9.2,
+  "generated_at": "2026-08-29T06:08:21Z",
+  "ts": 1787983701.0963712,
+  "scan_seconds": 10.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 198 binary + 1828 multi | kalshi: 5000 events -> 779 binary + 1407 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 201 binary + 1824 multi | kalshi: 5000 events -> 779 binary + 1407 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -116,11 +116,11 @@
    "venue": "polymarket",
    "event": "Switzerland\u2019s September Referendum: What will pass?",
    "n_legs": 2,
-   "gross": 0.903,
-   "fees": 0.0036726,
-   "net": 0.8993274,
-   "capital": 0.1006726,
-   "roi": 8.933189368308755,
+   "gross": 0.899,
+   "fees": 0.0038214,
+   "net": 0.8951786,
+   "capital": 0.10482140000000001,
+   "roi": 8.540036671900966,
    "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
    "neg_risk": false,
    "coverage": "2/2",
@@ -134,7 +134,7 @@
     },
     {
      "label": "Food initiative",
-     "ask": 0.033,
+     "ask": 0.037,
      "fee": 0.04,
      "token": "23797619466496830824327729794059922941928506828173754246963736799336377251150"
     }
@@ -2682,36 +2682,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "Annual Return: DXY vs. Gold",
-   "n_legs": 2,
-   "gross": 0.010000000000000009,
-   "fees": 0.04,
-   "net": -0.029999999999999992,
-   "capital": 1.03,
-   "roi": -0.029126213592233,
-   "url": "https://kalshi.com/events/KXDXYVSGOLD-26DEC31",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "U.S. Dollar Index",
-     "ask": 0.4,
-     "fee": 0.07,
-     "ticker": "KXDXYVSGOLD-26DEC31-DXY"
-    },
-    {
-     "label": "Gold",
-     "ask": 0.59,
-     "fee": 0.07,
-     "ticker": "KXDXYVSGOLD-26DEC31-XAU"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXDXYVSGOLD-26DEC31"
-  },
-  {
-   "venue": "kalshi",
    "event": "Who will DSA endorse in the 2028 presidential election?",
    "n_legs": 6,
    "gross": 0.04999999999999993,
@@ -3429,6 +3399,35 @@
    "kalshi_url": "https://kalshi.com/markets/KXABRAHAMQ-27-JAN01",
    "poly_end": "2027-01-01T04:59:00Z",
    "kalshi_end": "2027-01-01T15:00:00Z"
+  },
+  {
+   "kind": "cross-venue",
+   "direction": "YES@poly+NO@kalshi",
+   "sim": 0.75,
+   "gross": 0.029999999999999916,
+   "fees": 0.027055000000000003,
+   "net": 0.002944999999999913,
+   "capital": 0.9970550000000001,
+   "roi": 0.0029536986425020813,
+   "yes_leg": {
+    "venue": "polymarket",
+    "ask": 0.17,
+    "fee": 0.05,
+    "token_yes": "75971664127723976087466985937865139676371988915908568595607526815212140357980",
+    "token_no": "63288727222857538715525574191584916211293137089612615781724211046379219138896"
+   },
+   "no_leg": {
+    "venue": "kalshi",
+    "ask": 0.8,
+    "fee": 0.07,
+    "ticker": "KXENGAGEMENTTRUDEAUPERRY-26"
+   },
+   "poly": "Katy Perry and Justin Trudeau engaged by end of 2026?",
+   "kalshi": "Will Katy Perry and Justin Trudeau be engaged in 2026?",
+   "poly_url": "https://polymarket.com/event/katy-perry-and-justin-trudeau-engaged-by-end-of-2026",
+   "kalshi_url": "https://kalshi.com/markets/KXENGAGEMENTTRUDEAUPERRY-26",
+   "poly_end": "2026-12-31T00:00:00Z",
+   "kalshi_end": "2027-01-01T04:59:00Z"
   },
   {
    "kind": "cross-venue",
