@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-31T20:11:01Z",
-  "ts": 1788207061.9562235,
-  "scan_seconds": 10.4,
+  "generated_at": "2026-08-31T20:21:40Z",
+  "ts": 1788207700.2692528,
+  "scan_seconds": 14.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 242 binary + 1601 multi | kalshi: 5000 events -> 812 binary + 1395 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 233 binary + 1591 multi | kalshi: 5000 events -> 810 binary + 1395 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "Switzerland\u2019s September Referendum: What will pass?",
    "n_legs": 2,
-   "gross": 0.923,
-   "fees": 0.00295692,
-   "net": 0.92004308,
-   "capital": 0.07995692,
-   "roi": 11.50673487673112,
+   "gross": 0.92,
+   "fees": 0.00306912,
+   "net": 0.91693088,
+   "capital": 0.08306912,
+   "roi": 11.03816773308782,
    "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
    "neg_risk": false,
    "coverage": "2/2",
@@ -38,7 +38,7 @@
     },
     {
      "label": "Food initiative",
-     "ask": 0.031,
+     "ask": 0.034,
      "fee": 0.04,
      "token": "23797619466496830824327729794059922941928506828173754246963736799336377251150"
     }
@@ -116,11 +116,11 @@
    "venue": "polymarket",
    "event": "How high will US unemployment go in 2026?",
    "n_legs": 5,
-   "gross": 0.667,
-   "fees": 0.015523450000000001,
-   "net": 0.65147655,
-   "capital": 0.34852345,
-   "roi": 1.8692473921051798,
+   "gross": 0.6659999999999999,
+   "fees": 0.015566900000000002,
+   "net": 0.6504330999999999,
+   "capital": 0.3495669,
+   "roi": 1.8606827477086643,
    "url": "https://polymarket.com/event/how-high-will-us-unemployment-go-in-2026",
    "neg_risk": false,
    "coverage": "5/5",
@@ -152,7 +152,7 @@
     },
     {
      "label": "10.0%",
-     "ask": 0.065,
+     "ask": 0.066,
      "fee": 0.05,
      "token": "110104517594305701703368847857137645764627692040793896777571821383476400421969"
     }
@@ -350,11 +350,11 @@
    "venue": "polymarket",
    "event": "Theo FDV above ___ one day after launch?",
    "n_legs": 4,
-   "gross": 0.43999999999999995,
-   "fees": 0.029578640000000003,
-   "net": 0.41042135999999996,
-   "capital": 0.58957864,
-   "roi": 0.6961265760916981,
+   "gross": 0.44999999999999996,
+   "fees": 0.029263640000000004,
+   "net": 0.42073636,
+   "capital": 0.5792636400000001,
+   "roi": 0.7263296553534758,
    "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "4/4",
@@ -368,7 +368,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.28,
+     "ask": 0.27,
      "fee": 0.07,
      "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
     },
@@ -444,13 +444,55 @@
   },
   {
    "venue": "polymarket",
+   "event": "\"The Fix\" Rotten Tomatoes Score?",
+   "n_legs": 4,
+   "gross": 0.31999999999999995,
+   "fees": 0.024090000000000004,
+   "net": 0.29590999999999995,
+   "capital": 0.7040900000000001,
+   "roi": 0.42027297646607664,
+   "url": "https://polymarket.com/event/the-fix-rotten-tomatoes-score-20260914",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "50+",
+     "ask": 0.4,
+     "fee": 0.05,
+     "token": "14930957168596303672034287945354819467263319300379624908651916466374626799272"
+    },
+    {
+     "label": "60+",
+     "ask": 0.18,
+     "fee": 0.05,
+     "token": "108149162394498146120036694618949143372477102658860010079966406569871390933030"
+    },
+    {
+     "label": "70+",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "74888470700816868088597001756618783985227832323483018870596942531503000951519"
+    },
+    {
+     "label": "80+",
+     "ask": 0.03,
+     "fee": 0.05,
+     "token": "22203517675365138791947177845776991873990124130919521019455837690136602604937"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "the-fix-rotten-tomatoes-score-20260914"
+  },
+  {
+   "venue": "polymarket",
    "event": "Will any AI model reach ___ Coding Arena Score by December 31?",
    "n_legs": 3,
-   "gross": 0.29400000000000004,
-   "fees": 0.02084016,
-   "net": 0.27315984000000004,
-   "capital": 0.72684016,
-   "roi": 0.37581830921395437,
+   "gross": 0.30399999999999994,
+   "fees": 0.02062816,
+   "net": 0.28337183999999993,
+   "capital": 0.7166281600000001,
+   "roi": 0.3954238136553271,
    "url": "https://polymarket.com/event/will-any-ai-model-reach-coding-arena-score-by-december-31",
    "neg_risk": false,
    "coverage": "3/3",
@@ -458,7 +500,7 @@
    "legs": [
     {
      "label": "1580",
-     "ask": 0.24,
+     "ask": 0.23,
      "fee": 0.04,
      "token": "78288582157994306934508674396206099772775859795899820495422208721473710134686"
     },
@@ -482,11 +524,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.2829999999999999,
-   "fees": 0.04485985000000001,
-   "net": 0.2381401499999999,
-   "capital": 0.7618598500000001,
-   "roi": 0.31257737233429467,
+   "gross": 0.2889999999999999,
+   "fees": 0.04450229000000001,
+   "net": 0.24449770999999992,
+   "capital": 0.7555022900000001,
+   "roi": 0.32362272522032975,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -512,13 +554,13 @@
     },
     {
      "label": "$500M",
-     "ask": 0.08,
+     "ask": 0.078,
      "fee": 0.07,
      "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
     },
     {
      "label": "$800M",
-     "ask": 0.074,
+     "ask": 0.07,
      "fee": 0.07,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -620,11 +662,11 @@
    "venue": "polymarket",
    "event": "Probable FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.271,
-   "fees": 0.045451210000000006,
-   "net": 0.22554879,
-   "capital": 0.77445121,
-   "roi": 0.2912369263391041,
+   "gross": 0.259,
+   "fees": 0.04603655,
+   "net": 0.21296345,
+   "capital": 0.78703655,
+   "roi": 0.27058902156450043,
    "url": "https://polymarket.com/event/probable-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -632,19 +674,19 @@
    "legs": [
     {
      "label": "$50M",
-     "ask": 0.14,
+     "ask": 0.15,
      "fee": 0.07,
      "token": "82580039849822476522020389147140949223823804044715383635486396645630358451634"
     },
     {
      "label": "$100M",
-     "ask": 0.129,
+     "ask": 0.134,
      "fee": 0.07,
      "token": "40595723252945917870644448990189919568359472938938787801895738133697029804400"
     },
     {
      "label": "$200M",
-     "ask": 0.131,
+     "ask": 0.13,
      "fee": 0.07,
      "token": "54488373505420118416087969406595547793088996134932442852337899620644405949337"
     },
@@ -656,7 +698,7 @@
     },
     {
      "label": "$400M",
-     "ask": 0.08,
+     "ask": 0.078,
      "fee": 0.07,
      "token": "112499424250842648253213270898238819989124439426527820909383827591993132600015"
     },
@@ -681,48 +723,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "probable-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "\"The Fix\" Rotten Tomatoes Score?",
-   "n_legs": 4,
-   "gross": 0.25,
-   "fees": 0.026085000000000004,
-   "net": 0.223915,
-   "capital": 0.776085,
-   "roi": 0.2885186545288209,
-   "url": "https://polymarket.com/event/the-fix-rotten-tomatoes-score-20260914",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "50+",
-     "ask": 0.4,
-     "fee": 0.05,
-     "token": "14930957168596303672034287945354819467263319300379624908651916466374626799272"
-    },
-    {
-     "label": "60+",
-     "ask": 0.25,
-     "fee": 0.05,
-     "token": "108149162394498146120036694618949143372477102658860010079966406569871390933030"
-    },
-    {
-     "label": "70+",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "74888470700816868088597001756618783985227832323483018870596942531503000951519"
-    },
-    {
-     "label": "80+",
-     "ask": 0.03,
-     "fee": 0.05,
-     "token": "22203517675365138791947177845776991873990124130919521019455837690136602604937"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "the-fix-rotten-tomatoes-score-20260914"
   },
   {
    "venue": "polymarket",
@@ -1253,96 +1253,6 @@
    "event_slug": "highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805"
   },
   {
-   "venue": "polymarket",
-   "event": "Which country will join Abraham Accords before 2027?",
-   "n_legs": 12,
-   "gross": 0.04800000000000004,
-   "fees": 0.0,
-   "net": 0.04800000000000004,
-   "capital": 0.952,
-   "roi": 0.05042016806722694,
-   "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
-   "neg_risk": false,
-   "coverage": "12/12",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Pakistan",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
-    },
-    {
-     "label": "Qatar",
-     "ask": 0.087,
-     "fee": 0.0,
-     "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
-    },
-    {
-     "label": "Turkey",
-     "ask": 0.03,
-     "fee": 0.0,
-     "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
-    },
-    {
-     "label": "Egypt",
-     "ask": 0.101,
-     "fee": 0.0,
-     "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
-    },
-    {
-     "label": "Jordan",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "101435651903522065386761154847886894419498035898754590795274051495263217259522"
-    },
-    {
-     "label": "Oman",
-     "ask": 0.045,
-     "fee": 0.0,
-     "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
-    },
-    {
-     "label": "Kuwait",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "17145696747096623159702150222487527036704201283101191852338717001493457135691"
-    },
-    {
-     "label": "Syria",
-     "ask": 0.078,
-     "fee": 0.0,
-     "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
-    },
-    {
-     "label": "Lebanon",
-     "ask": 0.09,
-     "fee": 0.0,
-     "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
-    },
-    {
-     "label": "Saudi Arabia",
-     "ask": 0.08,
-     "fee": 0.0,
-     "token": "44330303251518041570433466737679109932061477358497939773558457869950245007155"
-    },
-    {
-     "label": "Azerbaijan",
-     "ask": 0.101,
-     "fee": 0.0,
-     "token": "35342168199661863269250061925826079259874819768796067478400947796757494719137"
-    },
-    {
-     "label": "Somaliland",
-     "ask": 0.16,
-     "fee": 0.0,
-     "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-country-will-join-abraham-accords-before-2027"
-  },
-  {
    "venue": "kalshi",
    "event": "Gambian presidential election winner?",
    "n_legs": 4,
@@ -1571,6 +1481,96 @@
    "event_slug": "SENATENY-28"
   },
   {
+   "venue": "polymarket",
+   "event": "Which country will join Abraham Accords before 2027?",
+   "n_legs": 12,
+   "gross": 0.0020000000000000018,
+   "fees": 0.0,
+   "net": 0.0020000000000000018,
+   "capital": 0.998,
+   "roi": 0.0020040080160320657,
+   "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
+   "neg_risk": false,
+   "coverage": "12/12",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Pakistan",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
+    },
+    {
+     "label": "Qatar",
+     "ask": 0.085,
+     "fee": 0.0,
+     "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
+    },
+    {
+     "label": "Turkey",
+     "ask": 0.03,
+     "fee": 0.0,
+     "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
+    },
+    {
+     "label": "Egypt",
+     "ask": 0.15,
+     "fee": 0.0,
+     "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
+    },
+    {
+     "label": "Jordan",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "101435651903522065386761154847886894419498035898754590795274051495263217259522"
+    },
+    {
+     "label": "Oman",
+     "ask": 0.045,
+     "fee": 0.0,
+     "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
+    },
+    {
+     "label": "Kuwait",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "17145696747096623159702150222487527036704201283101191852338717001493457135691"
+    },
+    {
+     "label": "Syria",
+     "ask": 0.078,
+     "fee": 0.0,
+     "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
+    },
+    {
+     "label": "Lebanon",
+     "ask": 0.09,
+     "fee": 0.0,
+     "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
+    },
+    {
+     "label": "Saudi Arabia",
+     "ask": 0.08,
+     "fee": 0.0,
+     "token": "44330303251518041570433466737679109932061477358497939773558457869950245007155"
+    },
+    {
+     "label": "Azerbaijan",
+     "ask": 0.1,
+     "fee": 0.0,
+     "token": "35342168199661863269250061925826079259874819768796067478400947796757494719137"
+    },
+    {
+     "label": "Somaliland",
+     "ask": 0.16,
+     "fee": 0.0,
+     "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "which-country-will-join-abraham-accords-before-2027"
+  },
+  {
    "venue": "kalshi",
    "event": "PA-11 House winner?",
    "n_legs": 2,
@@ -1599,42 +1599,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-PA11-26"
-  },
-  {
-   "venue": "polymarket",
-   "event": "FC Barcelona vs. Rayo Vallecano de Madrid",
-   "n_legs": 3,
-   "gross": 0.0010000000000000009,
-   "fees": 0.004464150000000002,
-   "net": -0.003464150000000001,
-   "capital": 1.00346415,
-   "roi": -0.0034521910922278593,
-   "url": "https://polymarket.com/event/lal-bar-ray-2026-08-31",
-   "neg_risk": true,
-   "coverage": "3/3",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "FC Barcelona",
-     "ask": 0.953,
-     "fee": 0.05,
-     "token": "50865440972292049641132024153131215907110598817148151418941843416630318616439"
-    },
-    {
-     "label": "Draw (FC Barcelona vs. Rayo Vallecano de Madrid)",
-     "ask": 0.038,
-     "fee": 0.05,
-     "token": "15286206066744253344457320653067250346143231828713107201616829509365199553690"
-    },
-    {
-     "label": "Rayo Vallecano de Madrid",
-     "ask": 0.008,
-     "fee": 0.05,
-     "token": "59536028323147723303897388121315420183203895907444754311624772087931106682500"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "lal-bar-ray-2026-08-31"
   },
   {
    "venue": "kalshi",
@@ -2282,11 +2246,11 @@
    "venue": "polymarket",
    "event": "Emmys 2026: Outstanding lead actress in a limited or anthology series or movie",
    "n_legs": 5,
-   "gross": 0.0050000000000000044,
-   "fees": 0.035800450000000004,
-   "net": -0.03080045,
-   "capital": 1.03080045,
-   "roi": -0.029880128593269432,
+   "gross": 0.0040000000000000036,
+   "fees": 0.035834300000000006,
+   "net": -0.0318343,
+   "capital": 1.0318343,
+   "roi": -0.03085214360484043,
    "url": "https://polymarket.com/event/emmys-2026-outstanding-lead-actress-in-a-limited-or-anthology-series-or-movie-20260710152217843",
    "neg_risk": true,
    "coverage": "5/5",
@@ -2300,7 +2264,7 @@
     },
     {
      "label": "Sally Field \u2013 \u201cRemarkably Bright Creatures\u201d",
-     "ask": 0.161,
+     "ask": 0.162,
      "fee": 0.05,
      "token": "81856039291941169797893589332439673825151296426106749026670292341199472229866"
     },
@@ -2424,60 +2388,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "Chicago: Stage of Elimination",
-   "n_legs": 6,
-   "gross": 0.020000000000000018,
-   "fees": 0.08,
-   "net": -0.059999999999999984,
-   "capital": 1.06,
-   "roi": -0.05660377358490564,
-   "url": "https://kalshi.com/events/KXNFLSTAGEOFELIM-27CHI",
-   "neg_risk": null,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Regular Season",
-     "ask": 0.47,
-     "fee": 0.07,
-     "ticker": "KXNFLSTAGEOFELIM-27CHI-REG"
-    },
-    {
-     "label": "Wildcard Round",
-     "ask": 0.24,
-     "fee": 0.07,
-     "ticker": "KXNFLSTAGEOFELIM-27CHI-WC"
-    },
-    {
-     "label": "Divisional Round",
-     "ask": 0.1,
-     "fee": 0.07,
-     "ticker": "KXNFLSTAGEOFELIM-27CHI-DIV"
-    },
-    {
-     "label": "Conference Championship",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXNFLSTAGEOFELIM-27CHI-CONF"
-    },
-    {
-     "label": "Runner-Up",
-     "ask": 0.03,
-     "fee": 0.07,
-     "ticker": "KXNFLSTAGEOFELIM-27CHI-FL"
-    },
-    {
-     "label": "Championship Winner",
-     "ask": 0.08,
-     "fee": 0.07,
-     "ticker": "KXNFLSTAGEOFELIM-27CHI-FW"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXNFLSTAGEOFELIM-27CHI"
-  },
-  {
-   "venue": "kalshi",
    "event": "New York J: To Break Playoff Drought",
    "n_legs": 5,
    "gross": 0.010000000000000009,
@@ -2523,6 +2433,60 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXNFLENDSTREAK-40NYJ"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Chicago: Stage of Elimination",
+   "n_legs": 6,
+   "gross": 0.010000000000000009,
+   "fees": 0.08,
+   "net": -0.06999999999999999,
+   "capital": 1.07,
+   "roi": -0.06542056074766354,
+   "url": "https://kalshi.com/events/KXNFLSTAGEOFELIM-27CHI",
+   "neg_risk": null,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Regular Season",
+     "ask": 0.47,
+     "fee": 0.07,
+     "ticker": "KXNFLSTAGEOFELIM-27CHI-REG"
+    },
+    {
+     "label": "Wildcard Round",
+     "ask": 0.24,
+     "fee": 0.07,
+     "ticker": "KXNFLSTAGEOFELIM-27CHI-WC"
+    },
+    {
+     "label": "Divisional Round",
+     "ask": 0.1,
+     "fee": 0.07,
+     "ticker": "KXNFLSTAGEOFELIM-27CHI-DIV"
+    },
+    {
+     "label": "Conference Championship",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXNFLSTAGEOFELIM-27CHI-CONF"
+    },
+    {
+     "label": "Runner-Up",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXNFLSTAGEOFELIM-27CHI-FL"
+    },
+    {
+     "label": "Championship Winner",
+     "ask": 0.09,
+     "fee": 0.07,
+     "ticker": "KXNFLSTAGEOFELIM-27CHI-FW"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXNFLSTAGEOFELIM-27CHI"
   },
   {
    "venue": "kalshi",
