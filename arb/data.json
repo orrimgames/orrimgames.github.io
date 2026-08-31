@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-31T19:07:56Z",
-  "ts": 1788203276.2207284,
-  "scan_seconds": 12.5,
+  "generated_at": "2026-08-31T19:18:31Z",
+  "ts": 1788203911.356383,
+  "scan_seconds": 8.9,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 238 binary + 1660 multi | kalshi: 5000 events -> 782 binary + 1410 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 235 binary + 1662 multi | kalshi: 5000 events -> 788 binary + 1403 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,36 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "Switzerland\u2019s September Referendum: What will pass?",
+   "n_legs": 2,
+   "gross": 0.9279999999999999,
+   "fees": 0.0027750400000000003,
+   "net": 0.92522496,
+   "capital": 0.07477504000000001,
+   "roi": 12.373446540449859,
+   "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Neutrality initiative",
+     "ask": 0.04,
+     "fee": 0.04,
+     "token": "29930395488773801857622260293304694658356268641863382575001425275546818052153"
+    },
+    {
+     "label": "Food initiative",
+     "ask": 0.032,
+     "fee": 0.04,
+     "token": "23797619466496830824327729794059922941928506828173754246963736799336377251150"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "switzerlands-september-referendum-what-will-pass-20260713144919276"
+  },
   {
    "venue": "kalshi",
    "event": "What will be the 51st state in Trump's term?",
@@ -86,11 +116,11 @@
    "venue": "polymarket",
    "event": "How high will US unemployment go in 2026?",
    "n_legs": 5,
-   "gross": 0.6659999999999999,
-   "fees": 0.015566900000000002,
-   "net": 0.6504330999999999,
-   "capital": 0.3495669,
-   "roi": 1.8606827477086643,
+   "gross": 0.667,
+   "fees": 0.015523450000000001,
+   "net": 0.65147655,
+   "capital": 0.34852345,
+   "roi": 1.8692473921051798,
    "url": "https://polymarket.com/event/how-high-will-us-unemployment-go-in-2026",
    "neg_risk": false,
    "coverage": "5/5",
@@ -122,7 +152,7 @@
     },
     {
      "label": "10.0%",
-     "ask": 0.066,
+     "ask": 0.065,
      "fee": 0.05,
      "token": "110104517594305701703368847857137645764627692040793896777571821383476400421969"
     }
@@ -261,66 +291,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXDCCCCHAIR-27MAR02"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Hyperbeat FDV above ___ one day after launch?",
-   "n_legs": 7,
-   "gross": 0.526,
-   "fees": 0.02971276,
-   "net": 0.49628724,
-   "capital": 0.50371276,
-   "roi": 0.9852584238683968,
-   "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "7/7",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$10M",
-     "ask": 0.13,
-     "fee": 0.07,
-     "token": "65772851380363633379843416003553027491065910788009103002723487076614331531636"
-    },
-    {
-     "label": "$25M",
-     "ask": 0.15,
-     "fee": 0.07,
-     "token": "44037677528734997694595756236271521523823950190281601825184634217232352709386"
-    },
-    {
-     "label": "$50M",
-     "ask": 0.079,
-     "fee": 0.07,
-     "token": "69626151402846862779475550621233927524301107136544704332168040527442555586381"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.049,
-     "fee": 0.07,
-     "token": "44218778953311166567287576054706650870870860822782747210216967205350297025914"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.025,
-     "fee": 0.07,
-     "token": "12147714868577836886827219552791323325997760841002341170284163045474593490040"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.017,
-     "fee": 0.07,
-     "token": "105229225195694729109884261853015401461641813901578857476254639437552892601636"
-    },
-    {
-     "label": "$400M",
-     "ask": 0.024,
-     "fee": 0.07,
-     "token": "103684453972705941469792804949063651735729099530727127928334326095782955282758"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "hyperbeat-fdv-above-one-day-after-launch"
   },
   {
    "venue": "polymarket",
@@ -512,11 +482,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.273,
-   "fees": 0.04618887000000001,
-   "net": 0.22681113000000003,
-   "capital": 0.77318887,
-   "roi": 0.29334505293641905,
+   "gross": 0.272,
+   "fees": 0.04624886,
+   "net": 0.22575114000000002,
+   "capital": 0.7742488599999999,
+   "roi": 0.2915743912105987,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -548,7 +518,7 @@
     },
     {
      "label": "$2B",
-     "ask": 0.071,
+     "ask": 0.072,
      "fee": 0.07,
      "token": "94120399411978925018563650270691769293212315658863591054992105782706185155787"
     },
@@ -578,11 +548,11 @@
    "venue": "polymarket",
    "event": "Probable FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.255,
-   "fees": 0.046254390000000006,
-   "net": 0.20874561,
-   "capital": 0.79125439,
-   "roi": 0.26381605288787086,
+   "gross": 0.265,
+   "fees": 0.04575739000000001,
+   "net": 0.21924261,
+   "capital": 0.78075739,
+   "roi": 0.28080760144966416,
    "url": "https://polymarket.com/event/probable-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -590,7 +560,7 @@
    "legs": [
     {
      "label": "$50M",
-     "ask": 0.15,
+     "ask": 0.14,
      "fee": 0.07,
      "token": "82580039849822476522020389147140949223823804044715383635486396645630358451634"
     },
@@ -644,11 +614,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.21799999999999997,
-   "fees": 0.04830140000000001,
-   "net": 0.16969859999999998,
-   "capital": 0.8303014000000001,
-   "roi": 0.2043819268521045,
+   "gross": 0.249,
+   "fees": 0.04675391,
+   "net": 0.20224609,
+   "capital": 0.79775391,
+   "roi": 0.2535193967272439,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -668,13 +638,13 @@
     },
     {
      "label": "$200M",
-     "ask": 0.16,
+     "ask": 0.13,
      "fee": 0.07,
      "token": "115285402015517899188745869878711529694328803279592884118332821477257604660390"
     },
     {
      "label": "$500M",
-     "ask": 0.095,
+     "ask": 0.094,
      "fee": 0.07,
      "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
     },
@@ -686,13 +656,13 @@
     },
     {
      "label": "$1B",
-     "ask": 0.029,
+     "ask": 0.03,
      "fee": 0.07,
      "token": "67849147834977248117510384775411225824950308388140345110360581181039651169382"
     },
     {
      "label": "$2B",
-     "ask": 0.032,
+     "ask": 0.031,
      "fee": 0.07,
      "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
     },
@@ -752,11 +722,11 @@
    "venue": "polymarket",
    "event": "\"The Fix\" Rotten Tomatoes Score?",
    "n_legs": 4,
-   "gross": 0.14,
-   "fees": 0.030430000000000002,
-   "net": 0.10957000000000001,
-   "capital": 0.8904299999999999,
-   "roi": 0.12305290702244985,
+   "gross": 0.15000000000000002,
+   "fees": 0.030005000000000004,
+   "net": 0.11999500000000002,
+   "capital": 0.8800049999999999,
+   "roi": 0.13635717978875123,
    "url": "https://polymarket.com/event/the-fix-rotten-tomatoes-score-20260914",
    "neg_risk": false,
    "coverage": "4/4",
@@ -782,7 +752,7 @@
     },
     {
      "label": "80+",
-     "ask": 0.08,
+     "ask": 0.07,
      "fee": 0.05,
      "token": "22203517675365138791947177845776991873990124130919521019455837690136602604937"
     }
@@ -962,11 +932,11 @@
    "venue": "polymarket",
    "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
    "n_legs": 4,
-   "gross": 0.09299999999999997,
-   "fees": 0.025467640000000003,
-   "net": 0.06753235999999997,
-   "capital": 0.93246764,
-   "roi": 0.07242327465648027,
+   "gross": 0.09499999999999997,
+   "fees": 0.025403000000000002,
+   "net": 0.06959699999999996,
+   "capital": 0.930403,
+   "roi": 0.07480306920764439,
    "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
    "neg_risk": false,
    "coverage": "4/4",
@@ -992,7 +962,7 @@
     },
     {
      "label": "70%+",
-     "ask": 0.097,
+     "ask": 0.095,
      "fee": 0.04,
      "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
     }
@@ -1160,11 +1130,11 @@
    "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.030000000000000027,
+   "gross": 0.026000000000000023,
    "fees": 0.0,
-   "net": 0.030000000000000027,
-   "capital": 0.97,
-   "roi": 0.03092783505154642,
+   "net": 0.026000000000000023,
+   "capital": 0.974,
+   "roi": 0.026694045174538012,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -1178,7 +1148,7 @@
     },
     {
      "label": "Qatar",
-     "ask": 0.087,
+     "ask": 0.085,
      "fee": 0.0,
      "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
     },
@@ -1190,7 +1160,7 @@
     },
     {
      "label": "Egypt",
-     "ask": 0.119,
+     "ask": 0.126,
      "fee": 0.0,
      "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
     },
@@ -1214,7 +1184,7 @@
     },
     {
      "label": "Syria",
-     "ask": 0.078,
+     "ask": 0.077,
      "fee": 0.0,
      "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
     },
@@ -2279,6 +2249,54 @@
    "event_slug": "KXNEXTSTATE-29"
   },
   {
+   "venue": "polymarket",
+   "event": "Emmys 2026: Outstanding lead actress in a limited or anthology series or movie",
+   "n_legs": 5,
+   "gross": 0.0040000000000000036,
+   "fees": 0.035840300000000005,
+   "net": -0.0318403,
+   "capital": 1.0318403,
+   "roi": -0.03085777905747624,
+   "url": "https://polymarket.com/event/emmys-2026-outstanding-lead-actress-in-a-limited-or-anthology-series-or-movie-20260710152217843",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Claire Danes \u2013 \u201cThe Beast In Me\u201d",
+     "ask": 0.063,
+     "fee": 0.05,
+     "token": "52480615894808145451241554149458133973701340216519143154510269246747798677859"
+    },
+    {
+     "label": "Sally Field \u2013 \u201cRemarkably Bright Creatures\u201d",
+     "ask": 0.161,
+     "fee": 0.05,
+     "token": "81856039291941169797893589332439673825151296426106749026670292341199472229866"
+    },
+    {
+     "label": "Carey Mulligan \u2013 \u201cBeef\u201d",
+     "ask": 0.42,
+     "fee": 0.05,
+     "token": "39239083599811878793313299016703151133750762044206599590175795143637473580998"
+    },
+    {
+     "label": "Sarah Pidgeon \u2013 \u201cLove Story: John F. Kennedy Jr. and Carolyn Bessette\u201d",
+     "ask": 0.102,
+     "fee": 0.05,
+     "token": "78592814183955486282378854908445570985465390668720620614244176229053329523107"
+    },
+    {
+     "label": "Sarah Snook \u2013 \u201cAll Her Fault\u201d",
+     "ask": 0.25,
+     "fee": 0.05,
+     "token": "66059249687509694231460315173429322486333961499111864531345488217941251422992"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "emmys-2026-outstanding-lead-actress-in-a-limited-or-anthology-series-or-movie-20260710152217843"
+  },
+  {
    "venue": "kalshi",
    "event": "Turkish general election winner?",
    "n_legs": 4,
@@ -2810,11 +2828,11 @@
    "venue": "kalshi",
    "event": "Closest Governor race in 2026?",
    "n_legs": 14,
-   "gross": 0.040000000000000036,
+   "gross": 0.039000000000000035,
    "fees": 0.14,
-   "net": -0.09999999999999998,
-   "capital": 1.1,
-   "roi": -0.09090909090909088,
+   "net": -0.10099999999999998,
+   "capital": 1.101,
+   "roi": -0.09173478655767482,
    "url": "https://kalshi.com/events/KXCLOSESTGOVERNOR-27JAN20",
    "neg_risk": null,
    "coverage": "14/14",
@@ -2864,7 +2882,7 @@
     },
     {
      "label": "Wisconsin",
-     "ask": 0.091,
+     "ask": 0.092,
      "fee": 0.07,
      "ticker": "KXCLOSESTGOVERNOR-27JAN20-WI"
     },
