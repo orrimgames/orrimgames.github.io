@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-08-31T00:50:05Z",
-  "ts": 1788137405.5604951,
-  "scan_seconds": 16.9,
+  "generated_at": "2026-08-31T01:00:42Z",
+  "ts": 1788138042.471384,
+  "scan_seconds": 15.1,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 217 binary + 1714 multi | kalshi: 5000 events -> 782 binary + 1401 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 216 binary + 1717 multi | kalshi: 5000 events -> 782 binary + 1402 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1388,11 +1388,11 @@
    "venue": "kalshi",
    "event": "2028 Presidential matchup",
    "n_legs": 16,
-   "gross": 0.19799999999999995,
+   "gross": 0.19899999999999995,
    "fees": 0.16,
-   "net": 0.03799999999999995,
-   "capital": 0.9620000000000001,
-   "roi": 0.03950103950103945,
+   "net": 0.03899999999999995,
+   "capital": 0.9610000000000001,
+   "roi": 0.040582726326742924,
    "url": "https://kalshi.com/events/KXPRESMATCHUP-28NOV07",
    "neg_risk": null,
    "coverage": "16/16",
@@ -1418,7 +1418,7 @@
     },
     {
      "label": "AOC v. Marco Rubio",
-     "ask": 0.07,
+     "ask": 0.069,
      "fee": 0.07,
      "ticker": "KXPRESMATCHUP-28NOV07-AOCMRUB"
     },
@@ -2142,13 +2142,43 @@
   },
   {
    "venue": "kalshi",
+   "event": "FL-20 House winner?",
+   "n_legs": 2,
+   "gross": 0.007000000000000006,
+   "fees": 0.02,
+   "net": -0.012999999999999994,
+   "capital": 1.013,
+   "roi": -0.01283316880552813,
+   "url": "https://kalshi.com/events/KXHOUSERACE-FL20-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Debbie Wasserman Schultz",
+     "ask": 0.96,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-FL20-26-D"
+    },
+    {
+     "label": "Brent Andersen",
+     "ask": 0.033,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-FL20-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSERACE-FL20-26"
+  },
+  {
+   "venue": "kalshi",
    "event": "2028 Republican VP nominee",
    "n_legs": 22,
-   "gross": 0.21899999999999997,
+   "gross": 0.21699999999999997,
    "fees": 0.23,
-   "net": -0.011000000000000038,
-   "capital": 1.0110000000000001,
-   "roi": -0.01088031651829875,
+   "net": -0.01300000000000004,
+   "capital": 1.0130000000000001,
+   "roi": -0.012833168805528171,
    "url": "https://kalshi.com/events/KXVPRESNOMR-28",
    "neg_risk": null,
    "coverage": "22/22",
@@ -2174,7 +2204,7 @@
     },
     {
      "label": "Ron DeSantis",
-     "ask": 0.01,
+     "ask": 0.012,
      "fee": 0.07,
      "ticker": "KXVPRESNOMR-28-RDS"
     },
@@ -2289,36 +2319,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXVPRESNOMR-28"
-  },
-  {
-   "venue": "kalshi",
-   "event": "FL-20 House winner?",
-   "n_legs": 2,
-   "gross": 0.007000000000000006,
-   "fees": 0.02,
-   "net": -0.012999999999999994,
-   "capital": 1.013,
-   "roi": -0.01283316880552813,
-   "url": "https://kalshi.com/events/KXHOUSERACE-FL20-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Debbie Wasserman Schultz",
-     "ask": 0.96,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-FL20-26-D"
-    },
-    {
-     "label": "Brent Andersen",
-     "ask": 0.033,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-FL20-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-FL20-26"
   },
   {
    "venue": "polymarket",
@@ -2499,36 +2499,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "SENATENJ-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "PA-17 House winner?",
-   "n_legs": 2,
-   "gross": 0.0009999999999998899,
-   "fees": 0.02,
-   "net": -0.01900000000000011,
-   "capital": 1.0190000000000001,
-   "roi": -0.01864573110893043,
-   "url": "https://kalshi.com/events/HOUSEPA17-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Chris Deluzio",
-     "ask": 0.93,
-     "fee": 0.07,
-     "ticker": "HOUSEPA17-26-D"
-    },
-    {
-     "label": "Tony Guy",
-     "ask": 0.069,
-     "fee": 0.07,
-     "ticker": "HOUSEPA17-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "HOUSEPA17-26"
   },
   {
    "venue": "kalshi",
@@ -3556,14 +3526,14 @@
    "kind": "cross-venue",
    "direction": "YES@kalshi+NO@poly",
    "sim": 0.714,
-   "gross": 0.51,
+   "gross": 0.5,
    "fees": 0.018976,
-   "net": 0.491024,
-   "capital": 0.508976,
-   "roi": 0.9647291817295904,
+   "net": 0.481024,
+   "capital": 0.518976,
+   "roi": 0.9268713774818104,
    "yes_leg": {
     "venue": "kalshi",
-    "ask": 0.15,
+    "ask": 0.16,
     "fee": 0.07,
     "ticker": "KXTRUMPREMOVE"
    },
