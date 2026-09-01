@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-01T23:20:27Z",
-  "ts": 1788304827.779585,
-  "scan_seconds": 14.9,
+  "generated_at": "2026-09-01T23:30:49Z",
+  "ts": 1788305449.5123086,
+  "scan_seconds": 12.4,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 244 binary + 1732 multi | kalshi: 5000 events -> 791 binary + 1411 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 248 binary + 1763 multi | kalshi: 5000 events -> 791 binary + 1411 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,36 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "Switzerland\u2019s September Referendum: What will pass?",
+   "n_legs": 2,
+   "gross": 0.921,
+   "fees": 0.0030294,
+   "net": 0.9179706000000001,
+   "capital": 0.0820294,
+   "roi": 11.190751120939566,
+   "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Neutrality initiative",
+     "ask": 0.048,
+     "fee": 0.04,
+     "token": "29930395488773801857622260293304694658356268641863382575001425275546818052153"
+    },
+    {
+     "label": "Food initiative",
+     "ask": 0.031,
+     "fee": 0.04,
+     "token": "23797619466496830824327729794059922941928506828173754246963736799336377251150"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "switzerlands-september-referendum-what-will-pass-20260713144919276"
+  },
   {
    "venue": "kalshi",
    "event": "What will be the 51st state in Trump's term?",
@@ -834,61 +864,13 @@
   },
   {
    "venue": "kalshi",
-   "event": "Fed decision in Apr 2027?",
-   "n_legs": 5,
-   "gross": 0.15000000000000002,
-   "fees": 0.06,
-   "net": 0.09000000000000002,
-   "capital": 0.9099999999999999,
-   "roi": 0.09890109890109894,
-   "url": "https://kalshi.com/events/KXFEDDECISION-27APR",
-   "neg_risk": null,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Cut >25bps",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-C26"
-    },
-    {
-     "label": "Cut 25bps",
-     "ask": 0.12,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-C25"
-    },
-    {
-     "label": "Fed maintains rate",
-     "ask": 0.58,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-H0"
-    },
-    {
-     "label": "Hike 25bps",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-H25"
-    },
-    {
-     "label": "Hike >25bps",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXFEDDECISION-27APR-H26"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXFEDDECISION-27APR"
-  },
-  {
-   "venue": "kalshi",
    "event": "Next President of Kosovo?",
    "n_legs": 10,
-   "gross": 0.19999999999999996,
+   "gross": 0.21999999999999997,
    "fees": 0.11,
-   "net": 0.08999999999999996,
-   "capital": 0.91,
-   "roi": 0.09890109890109886,
+   "net": 0.10999999999999997,
+   "capital": 0.89,
+   "roi": 0.1235955056179775,
    "url": "https://kalshi.com/events/KXKOSOVOPRES-27JAN01",
    "neg_risk": null,
    "coverage": "10/10",
@@ -902,7 +884,7 @@
     },
     {
      "label": "Bekim Sejdiu",
-     "ask": 0.61,
+     "ask": 0.59,
      "fee": 0.07,
      "ticker": "KXKOSOVOPRES-27JAN01-BSEJ"
     },
@@ -957,6 +939,96 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXKOSOVOPRES-27JAN01"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Fed decision in Apr 2027?",
+   "n_legs": 5,
+   "gross": 0.15000000000000002,
+   "fees": 0.06,
+   "net": 0.09000000000000002,
+   "capital": 0.9099999999999999,
+   "roi": 0.09890109890109894,
+   "url": "https://kalshi.com/events/KXFEDDECISION-27APR",
+   "neg_risk": null,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Cut >25bps",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-C26"
+    },
+    {
+     "label": "Cut 25bps",
+     "ask": 0.12,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-C25"
+    },
+    {
+     "label": "Fed maintains rate",
+     "ask": 0.58,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-H0"
+    },
+    {
+     "label": "Hike 25bps",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-H25"
+    },
+    {
+     "label": "Hike >25bps",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXFEDDECISION-27APR-H26"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXFEDDECISION-27APR"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
+   "n_legs": 4,
+   "gross": 0.11199999999999999,
+   "fees": 0.02535584,
+   "net": 0.08664415999999998,
+   "capital": 0.91335584,
+   "roi": 0.09486353095415691,
+   "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "55%+",
+     "ask": 0.4,
+     "fee": 0.04,
+     "token": "47351350191021860030940473611465578498086619828510123029070548466066776837953"
+    },
+    {
+     "label": "60%+",
+     "ask": 0.26,
+     "fee": 0.04,
+     "token": "21017494660016865152500751943930281918229945188485381363967741191934675869485"
+    },
+    {
+     "label": "65%+",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "45227214931477866761288056130619702453291156789807013572598590317054802177759"
+    },
+    {
+     "label": "70%+",
+     "ask": 0.098,
+     "fee": 0.04,
+     "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805"
   },
   {
    "venue": "polymarket",
@@ -2325,6 +2397,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXNEXTDEPUTYAG-28JAN01"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Turkish general election winner?",
+   "n_legs": 4,
+   "gross": 0.010000000000000009,
+   "fees": 0.05,
+   "net": -0.039999999999999994,
+   "capital": 1.04,
+   "roi": -0.03846153846153846,
+   "url": "https://kalshi.com/events/KXPARLITURKEY-28",
+   "neg_risk": null,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "AKP",
+     "ask": 0.74,
+     "fee": 0.07,
+     "ticker": "KXPARLITURKEY-28-AKP"
+    },
+    {
+     "label": "CHP",
+     "ask": 0.17,
+     "fee": 0.07,
+     "ticker": "KXPARLITURKEY-28-CHP"
+    },
+    {
+     "label": "DEM",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXPARLITURKEY-28-DEM"
+    },
+    {
+     "label": "MHP",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXPARLITURKEY-28-MHP"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXPARLITURKEY-28"
   },
   {
    "venue": "kalshi",
