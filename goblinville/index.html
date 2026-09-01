@@ -4592,7 +4592,7 @@ function drawShare(){
   const a=clamp(S._shareT/10,0,1);
   ctx.strokeStyle='rgba(255,211,77,0.6)'; ctx.lineWidth=2.5; ctx.beginPath();
   ctx.arc(r.x-12,r.y+r.h/2,6,-Math.PI/2,-Math.PI/2+a*TAU); ctx.stroke();   // v101: the pill hugs its text now, so the timer ring sits outside it instead of on the first letter
-  if(S._shareWhy) txt3(S._shareWhy,r.x+r.w/2,r.y+r.h+16,9.5,'#d8c49a','center',800);
+  if(S._shareWhy){ const _w=txtW3(S._shareWhy,9.5,800); txt3(S._shareWhy,clamp(r.x+r.w/2,_w/2+6,W-_w/2-6),r.y+r.h+16,9.5,'#d8c49a','center',800); }   // v121: the reason line clamps on-screen too, same rule as its pill
 }
 
 /* ================= v43: THE LANDS OF ORRIM =================
