@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-01T21:40:28Z",
-  "ts": 1788298828.6231875,
-  "scan_seconds": 12.0,
+  "generated_at": "2026-09-01T21:51:07Z",
+  "ts": 1788299467.481067,
+  "scan_seconds": 10.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 240 binary + 1622 multi | kalshi: 5000 events -> 783 binary + 1409 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 240 binary + 1630 multi | kalshi: 5000 events -> 784 binary + 1409 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -116,11 +116,11 @@
    "venue": "polymarket",
    "event": "Which airlines will announce bankruptcy by December 31?",
    "n_legs": 5,
-   "gross": 0.755,
-   "fees": 0.00912092,
-   "net": 0.74587908,
-   "capital": 0.25412092,
-   "roi": 2.9351345021102557,
+   "gross": 0.753,
+   "fees": 0.009191959999999999,
+   "net": 0.74380804,
+   "capital": 0.25619196,
+   "roi": 2.90332311755607,
    "url": "https://polymarket.com/event/which-airlines-will-announce-bankruptcy-by-december-31",
    "neg_risk": false,
    "coverage": "5/5",
@@ -128,7 +128,7 @@
    "legs": [
     {
      "label": "JetBlue",
-     "ask": 0.085,
+     "ask": 0.086,
      "fee": 0.04,
      "token": "43189525341286428006037829166805362430553448919739594544321456027456468090013"
     },
@@ -146,7 +146,7 @@
     },
     {
      "label": "American Airlines",
-     "ask": 0.026,
+     "ask": 0.027,
      "fee": 0.04,
      "token": "4389578737854318272860354599326450105358402190561789680537804211598990621504"
     },
@@ -224,11 +224,11 @@
    "venue": "polymarket",
    "event": "Who will Xi Jinping purge in 2026?",
    "n_legs": 9,
-   "gross": 0.5640000000000001,
-   "fees": 0.0164004,
-   "net": 0.5475996000000001,
-   "capital": 0.4524004,
-   "roi": 1.2104312905116796,
+   "gross": 0.563,
+   "fees": 0.01643276,
+   "net": 0.5465672399999999,
+   "capital": 0.45343276,
+   "roi": 1.205398657123936,
    "url": "https://polymarket.com/event/who-will-xi-jinping-purge-in-2026",
    "neg_risk": false,
    "coverage": "9/9",
@@ -284,7 +284,7 @@
     },
     {
      "label": "Dong Jun",
-     "ask": 0.095,
+     "ask": 0.096,
      "fee": 0.04,
      "token": "94682101068932958799725513761285751302283930658061696701163765971507016646808"
     }
@@ -420,13 +420,79 @@
   },
   {
    "venue": "polymarket",
+   "event": "Hurupay FDV above ___ one day after launch?",
+   "n_legs": 8,
+   "gross": 0.46499999999999997,
+   "fees": 0.03453975000000001,
+   "net": 0.43046025,
+   "capital": 0.56953975,
+   "roi": 0.7558036993906044,
+   "url": "https://polymarket.com/event/hurupay-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "8/8",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$5M",
+     "ask": 0.1,
+     "fee": 0.07,
+     "token": "16599187121284136740752326849973523621163743807435837422941428253988470387309"
+    },
+    {
+     "label": "$10M",
+     "ask": 0.1,
+     "fee": 0.07,
+     "token": "66484766820837470159754379877343354330005353945139291509675787838430341849475"
+    },
+    {
+     "label": "$20M",
+     "ask": 0.099,
+     "fee": 0.07,
+     "token": "23589625940862671573330929616154798479561271792724234598176128814366309142913"
+    },
+    {
+     "label": "$30M",
+     "ask": 0.056,
+     "fee": 0.07,
+     "token": "7466913300108188172966309158268426515809182974000783476833037730324135936451"
+    },
+    {
+     "label": "$40M",
+     "ask": 0.065,
+     "fee": 0.07,
+     "token": "89673811110871904695582221606485502711611940893580906524580637313142004928384"
+    },
+    {
+     "label": "$50M",
+     "ask": 0.037,
+     "fee": 0.07,
+     "token": "24917292093036781609879335753852664973370123777241536508770731816544693288895"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.04,
+     "fee": 0.07,
+     "token": "45419668619434973303287327115569817647678137579706315453234296463896028847907"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.038,
+     "fee": 0.07,
+     "token": "20738660466274730448835897130047127869702849117739804720433926408461534206536"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "hurupay-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.383,
-   "fees": 0.03946803000000001,
-   "net": 0.34353197,
-   "capital": 0.65646803,
-   "roi": 0.5233034272819044,
+   "gross": 0.399,
+   "fees": 0.038541370000000005,
+   "net": 0.36045863,
+   "capital": 0.63954137,
+   "roi": 0.5636205051129062,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -440,7 +506,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.1,
+     "ask": 0.09,
      "fee": 0.07,
      "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
     },
@@ -452,13 +518,13 @@
     },
     {
      "label": "$500M",
-     "ask": 0.069,
+     "ask": 0.067,
      "fee": 0.07,
      "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
     },
     {
      "label": "$800M",
-     "ask": 0.04,
+     "ask": 0.039,
      "fee": 0.07,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -470,19 +536,19 @@
     },
     {
      "label": "$2B",
-     "ask": 0.04,
+     "ask": 0.039,
      "fee": 0.07,
      "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
     },
     {
      "label": "$3B",
-     "ask": 0.025,
+     "ask": 0.026,
      "fee": 0.07,
      "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
     },
     {
      "label": "$300M",
-     "ask": 0.082,
+     "ask": 0.079,
      "fee": 0.07,
      "token": "29038954839483761326156091612813755283483527889927269685441096217717416698382"
     }
@@ -548,11 +614,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.31799999999999995,
-   "fees": 0.043611960000000005,
-   "net": 0.27438803999999994,
-   "capital": 0.7256119600000001,
-   "roi": 0.3781470746430364,
+   "gross": 0.31699999999999995,
+   "fees": 0.04367013000000001,
+   "net": 0.2733298699999999,
+   "capital": 0.72667013,
+   "roi": 0.37614023023073745,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -578,7 +644,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.084,
+     "ask": 0.085,
      "fee": 0.07,
      "token": "81341495887322709056930219084641487717235305340983601089306536463617089758769"
     },
@@ -614,11 +680,11 @@
    "venue": "polymarket",
    "event": "Will any AI model reach ___ Coding Arena Score by December 31?",
    "n_legs": 3,
-   "gross": 0.29000000000000004,
-   "fees": 0.020348,
-   "net": 0.26965200000000006,
-   "capital": 0.730348,
-   "roi": 0.36921029427067653,
+   "gross": 0.2829999999999999,
+   "fees": 0.02055324,
+   "net": 0.2624467599999999,
+   "capital": 0.7375532400000001,
+   "roi": 0.35583432593964315,
    "url": "https://polymarket.com/event/will-any-ai-model-reach-coding-arena-score-by-december-31",
    "neg_risk": false,
    "coverage": "3/3",
@@ -632,7 +698,7 @@
     },
     {
      "label": "1600",
-     "ask": 0.13,
+     "ask": 0.137,
      "fee": 0.04,
      "token": "89703377978074597398333052613443600056357024414795977077561678800793896428038"
     },
@@ -650,11 +716,11 @@
    "venue": "polymarket",
    "event": "Noble FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.17100000000000004,
-   "fees": 0.04970833,
-   "net": 0.12129167000000005,
-   "capital": 0.8787083299999999,
-   "roi": 0.13803405050228676,
+   "gross": 0.18100000000000005,
+   "fees": 0.049267330000000005,
+   "net": 0.13173267000000005,
+   "capital": 0.86826733,
+   "roi": 0.15171902183628175,
    "url": "https://polymarket.com/event/noble-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -668,7 +734,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.19,
+     "ask": 0.18,
      "fee": 0.07,
      "token": "73974209915570908459683874823110585328411946643152890577529960983415245848063"
     },
@@ -1127,120 +1193,6 @@
    "event_slug": "puffpaw-fdv-above-one-day-after-launch"
   },
   {
-   "venue": "polymarket",
-   "event": "Which countries will recognize Israel by December 31?",
-   "n_legs": 16,
-   "gross": 0.04799999999999993,
-   "fees": 0.0,
-   "net": 0.04799999999999993,
-   "capital": 0.9520000000000001,
-   "roi": 0.050420168067226816,
-   "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
-   "neg_risk": false,
-   "coverage": "16/16",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "North Korea",
-     "ask": 0.046,
-     "fee": 0.0,
-     "token": "66401440271983765981896111720390968685794445602688073258766280964806180948741"
-    },
-    {
-     "label": "Cuba",
-     "ask": 0.043,
-     "fee": 0.0,
-     "token": "112648925356443758946940369866892568424699165236725029786686196105765202287771"
-    },
-    {
-     "label": "Saudi Arabia",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "105021230936912984680931678122814125668784031756100999048923377620987522853502"
-    },
-    {
-     "label": "Lebanon",
-     "ask": 0.09,
-     "fee": 0.0,
-     "token": "57296275132860207464910469086912664176153776071835315700063526910474840238866"
-    },
-    {
-     "label": "Afghanistan",
-     "ask": 0.038,
-     "fee": 0.0,
-     "token": "98615804070815763769968147329639484175548428357642357460081874034057958631973"
-    },
-    {
-     "label": "Iraq",
-     "ask": 0.033,
-     "fee": 0.0,
-     "token": "39178088573096847322455495237438390847582626689242446542209071712658328318785"
-    },
-    {
-     "label": "Pakistan",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "61782437453393455873421902608347180052608940662115680015572295454535780744936"
-    },
-    {
-     "label": "Syria",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "95557412500999805076472893611192107025033551734600316765572331873300312062279"
-    },
-    {
-     "label": "Venezuela",
-     "ask": 0.13,
-     "fee": 0.0,
-     "token": "46678549643025579481434878349219096040657504404574548129471310417977794255568"
-    },
-    {
-     "label": "Tunisia",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "110119458246195866392279748195795405667270272048482672378597646319468481393456"
-    },
-    {
-     "label": "Kuwait",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "6597567716906659210734412187060302708545871029155693646874836858425710157506"
-    },
-    {
-     "label": "Qatar",
-     "ask": 0.049,
-     "fee": 0.0,
-     "token": "25127138385919514206272578282716394996449590382299508752461143644236965716313"
-    },
-    {
-     "label": "Indonesia",
-     "ask": 0.1,
-     "fee": 0.0,
-     "token": "46467850666586016891017914548299567275100357929816009318356054834604477300488"
-    },
-    {
-     "label": "Malaysia",
-     "ask": 0.039,
-     "fee": 0.0,
-     "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
-    },
-    {
-     "label": "Bangladesh",
-     "ask": 0.041,
-     "fee": 0.0,
-     "token": "40688094653686125161851139319199302543780839137475354735981151285183116400686"
-    },
-    {
-     "label": "Iran",
-     "ask": 0.043,
-     "fee": 0.0,
-     "token": "35575529907914456377934861485987059685769709278922938684692921159579159923096"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-countries-will-recognize-israel-by-december-31"
-  },
-  {
    "venue": "kalshi",
    "event": "2028 Presidential matchup",
    "n_legs": 16,
@@ -1548,6 +1500,48 @@
   },
   {
    "venue": "polymarket",
+   "event": "Who will be the top-selling artist by total auction sales in 2026?",
+   "n_legs": 4,
+   "gross": 0.0020000000000000018,
+   "fees": 0.013255400000000002,
+   "net": -0.0112554,
+   "capital": 1.0112554,
+   "roi": -0.01113012598004421,
+   "url": "https://polymarket.com/event/who-will-be-the-top-selling-artist-by-total-auction-sales-in-2026-20260605235158033",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Andy Warhol",
+     "ask": 0.004,
+     "fee": 0.05,
+     "token": "44294452809601525864811694981034319540935365570382447714826353333740092792738"
+    },
+    {
+     "label": "Pablo Picasso",
+     "ask": 0.85,
+     "fee": 0.05,
+     "token": "28756812729642115670487598753423423266769215683688279855469684279999083837960"
+    },
+    {
+     "label": "Jean-Michel Basquiat",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "77603908784316686484594619760847047658804395478167536041163633869135058175666"
+    },
+    {
+     "label": "Other",
+     "ask": 0.074,
+     "fee": 0.05,
+     "token": "29502475080121676735121691237354859329490507501162391598675395773156802186762"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "who-will-be-the-top-selling-artist-by-total-auction-sales-in-2026-20260605235158033"
+  },
+  {
+   "venue": "polymarket",
    "event": "Balance of Power: 2026 Midterms",
    "n_legs": 5,
    "gross": 0.008000000000000007,
@@ -1745,6 +1739,60 @@
    "event_slug": "KXVPRESNOMR-28"
   },
   {
+   "venue": "polymarket",
+   "event": "Emmys 2026: Outstanding guest actor in a drama series",
+   "n_legs": 6,
+   "gross": 0.019000000000000017,
+   "fees": 0.036479950000000004,
+   "net": -0.017479949999999987,
+   "capital": 1.01747995,
+   "roi": -0.017179650567070128,
+   "url": "https://polymarket.com/event/emmys-2026-outstanding-guest-actor-in-a-drama-series",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Colman Domingo \u2013 \u201cEuphoria\u201d",
+     "ask": 0.41,
+     "fee": 0.05,
+     "token": "5604183002628263374617635774475916211612875033876990332253804205825467698256"
+    },
+    {
+     "label": "Ernest Harden Jr. \u2013 \u201cThe Pitt\u201d",
+     "ask": 0.144,
+     "fee": 0.05,
+     "token": "41252330930305827178592966825585320543836233675852726451399894976635164858540"
+    },
+    {
+     "label": "Jeff Hiller \u2013 \u201cPluribus\u201d",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "94966733025616817467963331772024601515760232112067147363347782914709673035537"
+    },
+    {
+     "label": "Jeff Kober \u2013 \u201cThe Pitt\u201d",
+     "ask": 0.128,
+     "fee": 0.05,
+     "token": "51128493857587891590452783603119694486730103976335396288301135098302603390146"
+    },
+    {
+     "label": "Jonathan Pryce \u2013 \u201cSlow Horses\u201d",
+     "ask": 0.009,
+     "fee": 0.05,
+     "token": "30382453867432256681905619731699777302838907684129784455354534917681356246703"
+    },
+    {
+     "label": "Bradley Whitford \u2013 \u201cThe Diplomat\u201d",
+     "ask": 0.19,
+     "fee": 0.05,
+     "token": "33273096604612424251932002301363277752208156810015842853796688488646480136449"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "emmys-2026-outstanding-guest-actor-in-a-drama-series"
+  },
+  {
    "venue": "kalshi",
    "event": "New York Senate winner? (2028)",
    "n_legs": 2,
@@ -1863,60 +1911,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXMOLDOVAPRES-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Emmys 2026: Outstanding guest actor in a drama series",
-   "n_legs": 6,
-   "gross": 0.016000000000000014,
-   "fees": 0.0365911,
-   "net": -0.020591099999999987,
-   "capital": 1.0205911,
-   "roi": -0.020175660947856576,
-   "url": "https://polymarket.com/event/emmys-2026-outstanding-guest-actor-in-a-drama-series",
-   "neg_risk": true,
-   "coverage": "6/6",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "Colman Domingo \u2013 \u201cEuphoria\u201d",
-     "ask": 0.41,
-     "fee": 0.05,
-     "token": "5604183002628263374617635774475916211612875033876990332253804205825467698256"
-    },
-    {
-     "label": "Ernest Harden Jr. \u2013 \u201cThe Pitt\u201d",
-     "ask": 0.144,
-     "fee": 0.05,
-     "token": "41252330930305827178592966825585320543836233675852726451399894976635164858540"
-    },
-    {
-     "label": "Jeff Hiller \u2013 \u201cPluribus\u201d",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "94966733025616817467963331772024601515760232112067147363347782914709673035537"
-    },
-    {
-     "label": "Jeff Kober \u2013 \u201cThe Pitt\u201d",
-     "ask": 0.131,
-     "fee": 0.05,
-     "token": "51128493857587891590452783603119694486730103976335396288301135098302603390146"
-    },
-    {
-     "label": "Jonathan Pryce \u2013 \u201cSlow Horses\u201d",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "30382453867432256681905619731699777302838907684129784455354534917681356246703"
-    },
-    {
-     "label": "Bradley Whitford \u2013 \u201cThe Diplomat\u201d",
-     "ask": 0.19,
-     "fee": 0.05,
-     "token": "33273096604612424251932002301363277752208156810015842853796688488646480136449"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "emmys-2026-outstanding-guest-actor-in-a-drama-series"
   },
   {
    "venue": "kalshi",
@@ -2091,48 +2085,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXNEXTDEPUTYAG-28JAN01"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Turkish general election winner?",
-   "n_legs": 4,
-   "gross": 0.010000000000000009,
-   "fees": 0.05,
-   "net": -0.039999999999999994,
-   "capital": 1.04,
-   "roi": -0.03846153846153846,
-   "url": "https://kalshi.com/events/KXPARLITURKEY-28",
-   "neg_risk": null,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "AKP",
-     "ask": 0.74,
-     "fee": 0.07,
-     "ticker": "KXPARLITURKEY-28-AKP"
-    },
-    {
-     "label": "CHP",
-     "ask": 0.17,
-     "fee": 0.07,
-     "ticker": "KXPARLITURKEY-28-CHP"
-    },
-    {
-     "label": "DEM",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXPARLITURKEY-28-DEM"
-    },
-    {
-     "label": "MHP",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXPARLITURKEY-28-MHP"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXPARLITURKEY-28"
   },
   {
    "venue": "kalshi",
