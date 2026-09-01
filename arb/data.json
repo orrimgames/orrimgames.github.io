@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-01T16:32:02Z",
-  "ts": 1788280322.8652227,
-  "scan_seconds": 11.4,
+  "generated_at": "2026-09-01T16:32:46Z",
+  "ts": 1788280366.6487243,
+  "scan_seconds": 9.7,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 260 binary + 1710 multi | kalshi: 5000 events -> 777 binary + 1407 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 260 binary + 1713 multi | kalshi: 5000 events -> 777 binary + 1407 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -414,6 +414,54 @@
   },
   {
    "venue": "polymarket",
+   "event": "Amazon (AMZN) closes above ___ on September 1?",
+   "n_legs": 5,
+   "gross": 0.45500000000000007,
+   "fees": 0.01489228,
+   "net": 0.4401077200000001,
+   "capital": 0.5598922799999999,
+   "roi": 0.7860578466986545,
+   "url": "https://polymarket.com/event/amzn-close-above-on-september-1-2026",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$255",
+     "ask": 0.41,
+     "fee": 0.04,
+     "token": "103307707370125925998146721082366424121894944718365277221520278500184382146820"
+    },
+    {
+     "label": "$260",
+     "ask": 0.039,
+     "fee": 0.04,
+     "token": "21742336625750817534590166099864952227989000790210022933198682891949059342014"
+    },
+    {
+     "label": "$265",
+     "ask": 0.032,
+     "fee": 0.04,
+     "token": "20976342076311750804824921314661337573196743981700258940429502046029012894321"
+    },
+    {
+     "label": "$270",
+     "ask": 0.032,
+     "fee": 0.04,
+     "token": "26356285489617872251183718565921635819668215214186796621406301255234698294724"
+    },
+    {
+     "label": "$275",
+     "ask": 0.032,
+     "fee": 0.04,
+     "token": "2659433681373152806118792208493898503430111040229560042012639576163713612817"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "amzn-close-above-on-september-1-2026"
+  },
+  {
+   "venue": "polymarket",
    "event": "What will be in a US-Iran deal in 2026?",
    "n_legs": 6,
    "gross": 0.43999999999999995,
@@ -465,54 +513,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Amazon (AMZN) closes above ___ on September 1?",
-   "n_legs": 5,
-   "gross": 0.44100000000000006,
-   "fees": 0.01510932,
-   "net": 0.4258906800000001,
-   "capital": 0.5741093199999999,
-   "roi": 0.7418285423410304,
-   "url": "https://polymarket.com/event/amzn-close-above-on-september-1-2026",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$255",
-     "ask": 0.42,
-     "fee": 0.04,
-     "token": "103307707370125925998146721082366424121894944718365277221520278500184382146820"
-    },
-    {
-     "label": "$260",
-     "ask": 0.04,
-     "fee": 0.04,
-     "token": "21742336625750817534590166099864952227989000790210022933198682891949059342014"
-    },
-    {
-     "label": "$265",
-     "ask": 0.033,
-     "fee": 0.04,
-     "token": "20976342076311750804824921314661337573196743981700258940429502046029012894321"
-    },
-    {
-     "label": "$270",
-     "ask": 0.033,
-     "fee": 0.04,
-     "token": "26356285489617872251183718565921635819668215214186796621406301255234698294724"
-    },
-    {
-     "label": "$275",
-     "ask": 0.033,
-     "fee": 0.04,
-     "token": "2659433681373152806118792208493898503430111040229560042012639576163713612817"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "amzn-close-above-on-september-1-2026"
   },
   {
    "venue": "kalshi",
@@ -3098,11 +3098,11 @@
    "venue": "kalshi",
    "event": "Closest Governor race in 2026?",
    "n_legs": 14,
-   "gross": 0.040000000000000036,
+   "gross": 0.041000000000000036,
    "fees": 0.14,
-   "net": -0.09999999999999998,
-   "capital": 1.1,
-   "roi": -0.09090909090909088,
+   "net": -0.09899999999999998,
+   "capital": 1.099,
+   "roi": -0.0900818926296633,
    "url": "https://kalshi.com/events/KXCLOSESTGOVERNOR-27JAN20",
    "neg_risk": null,
    "coverage": "14/14",
@@ -3152,7 +3152,7 @@
     },
     {
      "label": "Wisconsin",
-     "ask": 0.089,
+     "ask": 0.088,
      "fee": 0.07,
      "ticker": "KXCLOSESTGOVERNOR-27JAN20-WI"
     },
