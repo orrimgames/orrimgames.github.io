@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-02T03:41:20Z",
-  "ts": 1788320480.3219788,
-  "scan_seconds": 12.4,
+  "generated_at": "2026-09-02T03:52:16Z",
+  "ts": 1788321136.6938908,
+  "scan_seconds": 12.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 248 binary + 1762 multi | kalshi: 5000 events -> 797 binary + 1413 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 252 binary + 1761 multi | kalshi: 5000 events -> 796 binary + 1413 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -2442,6 +2442,36 @@
   },
   {
    "venue": "kalshi",
+   "event": "How many reconciliation bills will be passed in 2026?",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.04,
+   "net": -0.029999999999999992,
+   "capital": 1.03,
+   "roi": -0.029126213592233,
+   "url": "https://kalshi.com/events/KXRECCOUNT-27",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "1",
+     "ask": 0.72,
+     "fee": 0.07,
+     "ticker": "KXRECCOUNT-27-1"
+    },
+    {
+     "label": "2",
+     "ask": 0.27,
+     "fee": 0.07,
+     "ticker": "KXRECCOUNT-27-2"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXRECCOUNT-27"
+  },
+  {
+   "venue": "kalshi",
    "event": "Nevada Governor winner?",
    "n_legs": 2,
    "gross": 0.010000000000000009,
@@ -2625,6 +2655,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXNEXTSTATE-29"
+  },
+  {
+   "venue": "kalshi",
+   "event": "New York J: To Break Playoff Drought",
+   "n_legs": 5,
+   "gross": 0.010000000000000009,
+   "fees": 0.08,
+   "net": -0.06999999999999999,
+   "capital": 1.07,
+   "roi": -0.06542056074766354,
+   "url": "https://kalshi.com/events/KXNFLENDSTREAK-40NYJ",
+   "neg_risk": null,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "2026-27 season",
+     "ask": 0.18,
+     "fee": 0.07,
+     "ticker": "KXNFLENDSTREAK-40NYJ-2627"
+    },
+    {
+     "label": "2027-28 season",
+     "ask": 0.28,
+     "fee": 0.07,
+     "ticker": "KXNFLENDSTREAK-40NYJ-2728"
+    },
+    {
+     "label": "2028-29 season",
+     "ask": 0.2,
+     "fee": 0.07,
+     "ticker": "KXNFLENDSTREAK-40NYJ-2829"
+    },
+    {
+     "label": "2029-30 season",
+     "ask": 0.16,
+     "fee": 0.07,
+     "ticker": "KXNFLENDSTREAK-40NYJ-2930"
+    },
+    {
+     "label": "2030-31 season",
+     "ask": 0.17,
+     "fee": 0.07,
+     "ticker": "KXNFLENDSTREAK-40NYJ-3031"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXNFLENDSTREAK-40NYJ"
   },
   {
    "venue": "kalshi",
