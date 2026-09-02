@@ -2,59 +2,426 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WhyLoop - The strange truth behind everyday things</title>
-<meta name="description" content="WhyLoop: curiosity and psychology explainers, plus merch for people who can't stop asking why.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHYLOOP</title>
+<meta name="description" content="Short videos about how your brain actually works.">
 <style>
-  :root { color-scheme: dark; }
-  * { margin: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 64px; }
-  header { text-align: center; margin-bottom: 40px; }
-  h1 { font-size: 2.6rem; letter-spacing: -0.02em; }
-  h1 span { color: #7ee787; }
-  .tag { color: #9da7b3; font-size: 1.15rem; margin-top: 10px; }
-  .cta { display: inline-block; margin-top: 24px; background: #7ee787; color: #0d1117; font-weight: 700; padding: 12px 28px; border-radius: 999px; text-decoration: none; }
-  .cta:hover { background: #9df0a5; }
-  h2 { font-size: 1.3rem; margin: 44px 0 16px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
-  ul.products { list-style: none; padding: 0; }
-  ul.products li { margin: 12px 0; }
-  ul.products a { color: #79c0ff; text-decoration: none; font-size: 1.05rem; }
-  ul.products a:hover { text-decoration: underline; }
-  ul.products .price { color: #9da7b3; font-size: 0.95rem; }
-  p.about { color: #c9d1d9; }
-  .social a { color: #79c0ff; text-decoration: none; margin-right: 18px; }
-  .social a:hover { text-decoration: underline; }
-  footer { margin-top: 56px; color: #6e7681; font-size: 0.85rem; text-align: center; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0e0e14; color:#f0ead6; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; min-height:100vh; }
+  header { padding:28px 24px 8px; display:flex; align-items:baseline; gap:14px; }
+  header h1 { font-size:22px; letter-spacing:4px; font-weight:700; color:#8a8a96; }
+  header h1 span { color:#f2c421; }
+  header p { color:#5a5a66; font-size:13px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; padding:24px; max-width:1400px; margin:0 auto; }
+  .card { background:#16161f; border:1px solid #232330; border-radius:12px; overflow:hidden; }
+  .player { position:relative; aspect-ratio:9/16; background:#0a0a10; max-height:520px; }
+  .player video { width:100%; height:100%; object-fit:contain; display:block; background:#0a0a10; }
+  .badge { position:absolute; top:10px; left:10px; background:rgba(14,14,20,.8); color:#f2c421; font-size:12px; font-weight:700; padding:3px 8px; border-radius:6px; pointer-events:none; }
+  .title { padding:12px 14px 14px; font-size:14px; line-height:1.35; color:#f0ead6; }
+  footer { text-align:center; color:#5a5a66; font-size:12px; padding:24px; }
+  footer a { color:#f2c421; text-decoration:none; }
+  @media (max-width:480px){ .grid{grid-template-columns:1fr; padding:16px;} }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Why<span>Loop</span></h1>
-    <p class="tag">The strange truth behind everyday things.</p>
-    <a class="cta" href="https://whyloop-shop.fourthwall.com">Shop the store</a>
-  </header>
-
-  <h2>About</h2>
-  <p class="about">WhyLoop makes short explainers about the quirks of your own mind - why you walk into a room and forget why, why your brain reheats old arguments in the shower, why time feels faster as you get older. The shop turns those ideas into things you can wear, drink from, and stick on your laptop.</p>
-
-  <h2>Shop</h2>
-  <ul class="products">
-    <li><a href="https://whyloop-shop.fourthwall.com/products/the-doorway-effect-tee">The Doorway Effect Tee</a> <span class="price">- $29.99</span></li>
-    <li><a href="https://whyloop-shop.fourthwall.com/products/the-double-slit-tee">The Double-Slit Tee</a> <span class="price">- $29.99</span></li>
-    <li><a href="https://whyloop-shop.fourthwall.com/products/certified-overthinker-tee">Certified Overthinker Tee</a> <span class="price">- $29.99</span></li>
-    <li><a href="https://whyloop-shop.fourthwall.com/products/i-sleep-in-two-shifts-mug">I Sleep In Two Shifts Mug</a> <span class="price">- $14.99</span></li>
-    <li><a href="https://whyloop-shop.fourthwall.com/products/why-stay-curious-stickers">WHY? Stay Curious Stickers</a> <span class="price">- $5.99</span></li>
-  </ul>
-
-  <h2>Watch</h2>
-  <p class="social">
-    <a href="https://www.tiktok.com/@thewhyloop">TikTok - @thewhyloop</a>
-    <a href="https://whyloop-shop.fourthwall.com">Store</a>
-  </p>
-
-  <footer>A WhyLoop project - orrimgames</footer>
+<header>
+  <h1>WHY<span>LOOP</span></h1>
+  <p>short videos about how your brain actually works</p>
+</header>
+<div class="grid">
+    <div class="card" id="v061">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/061.png" src="videos/061.mp4"></video>
+        <span class="badge">#61</span>
+      </div>
+      <div class="title">The framing effect</div>
+    </div>
+    <div class="card" id="v060">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/060.png" src="videos/060.mp4"></video>
+        <span class="badge">#60</span>
+      </div>
+      <div class="title">The doorway effect</div>
+    </div>
+    <div class="card" id="v059">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/059.png" src="videos/059.mp4"></video>
+        <span class="badge">#59</span>
+      </div>
+      <div class="title">The three questions (cognitive reflection)</div>
+    </div>
+    <div class="card" id="v058">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/058.png" src="videos/058.mp4"></video>
+        <span class="badge">#58</span>
+      </div>
+      <div class="title">The hungry bench (decision fatigue)</div>
+    </div>
+    <div class="card" id="v057">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/057.png" src="videos/057.mp4"></video>
+        <span class="badge">#57</span>
+      </div>
+      <div class="title">The time trap (Parkinson's law)</div>
+    </div>
+    <div class="card" id="v056">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/056.png" src="videos/056.mp4"></video>
+        <span class="badge">#56</span>
+      </div>
+      <div class="title">The jam trap (choice overload)</div>
+    </div>
+    <div class="card" id="v055">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/055.png" src="videos/055.mp4"></video>
+        <span class="badge">#55</span>
+      </div>
+      <div class="title">Anchoring</div>
+    </div>
+    <div class="card" id="v054">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/054.png" src="videos/054.mp4"></video>
+        <span class="badge">#54</span>
+      </div>
+      <div class="title">The McGurk effect</div>
+    </div>
+    <div class="card" id="v053">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/053.png" src="videos/053.mp4"></video>
+        <span class="badge">#53</span>
+      </div>
+      <div class="title">Childhood amnesia</div>
+    </div>
+    <div class="card" id="v052">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/052.png" src="videos/052.mp4"></video>
+        <span class="badge">#52</span>
+      </div>
+      <div class="title">The Stroop effect</div>
+    </div>
+    <div class="card" id="v051">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/051.png" src="videos/051.mp4"></video>
+        <span class="badge">#51</span>
+      </div>
+      <div class="title">Inattentional blindness</div>
+    </div>
+    <div class="card" id="v050">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/050.png" src="videos/050.mp4"></video>
+        <span class="badge">#50</span>
+      </div>
+      <div class="title">Phantom traffic jams</div>
+    </div>
+    <div class="card" id="v049">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/049.png" src="videos/049.mp4"></video>
+        <span class="badge">#49</span>
+      </div>
+      <div class="title">The Barnum effect</div>
+    </div>
+    <div class="card" id="v048">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/048.png" src="videos/048.mp4"></video>
+        <span class="badge">#48</span>
+      </div>
+      <div class="title">The mere exposure effect</div>
+    </div>
+    <div class="card" id="v047">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/047.png" src="videos/047.mp4"></video>
+        <span class="badge">#47</span>
+      </div>
+      <div class="title">The misinformation effect</div>
+    </div>
+    <div class="card" id="v046">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/046.png" src="videos/046.mp4"></video>
+        <span class="badge">#46</span>
+      </div>
+      <div class="title">The illusion of explanatory depth</div>
+    </div>
+    <div class="card" id="v045">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/045.png" src="videos/045.mp4"></video>
+        <span class="badge">#45</span>
+      </div>
+      <div class="title">Impostor phenomenon</div>
+    </div>
+    <div class="card" id="v044">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/044.png" src="videos/044.mp4"></video>
+        <span class="badge">#44</span>
+      </div>
+      <div class="title">Sensory attenuation</div>
+    </div>
+    <div class="card" id="v043">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/043.png" src="videos/043.mp4"></video>
+        <span class="badge">#43</span>
+      </div>
+      <div class="title">The Tetris effect</div>
+    </div>
+    <div class="card" id="v042">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/042.png" src="videos/042.mp4"></video>
+        <span class="badge">#42</span>
+      </div>
+      <div class="title">Loss aversion</div>
+    </div>
+    <div class="card" id="v041">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/041.png" src="videos/041.mp4"></video>
+        <span class="badge">#41</span>
+      </div>
+      <div class="title">The bystander effect</div>
+    </div>
+    <div class="card" id="v040">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/040.png" src="videos/040.mp4"></video>
+        <span class="badge">#40</span>
+      </div>
+      <div class="title">The curse of knowledge</div>
+    </div>
+    <div class="card" id="v039">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/039.png" src="videos/039.mp4"></video>
+        <span class="badge">#39</span>
+      </div>
+      <div class="title">The planning fallacy</div>
+    </div>
+    <div class="card" id="v038">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/038.png" src="videos/038.mp4"></video>
+        <span class="badge">#38</span>
+      </div>
+      <div class="title">Negativity bias</div>
+    </div>
+    <div class="card" id="v037">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/037.png" src="videos/037.mp4"></video>
+        <span class="badge">#37</span>
+      </div>
+      <div class="title">The hot-hand fallacy</div>
+    </div>
+    <div class="card" id="v036">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/036.png" src="videos/036.mp4"></video>
+        <span class="badge">#36</span>
+      </div>
+      <div class="title">The sunk cost fallacy</div>
+    </div>
+    <div class="card" id="v035">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/035.png" src="videos/035.mp4"></video>
+        <span class="badge">#35</span>
+      </div>
+      <div class="title">The halo effect</div>
+    </div>
+    <div class="card" id="v034">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/034.png" src="videos/034.mp4"></video>
+        <span class="badge">#34</span>
+      </div>
+      <div class="title">The third-person effect</div>
+    </div>
+    <div class="card" id="v033">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/033.png" src="videos/033.mp4"></video>
+        <span class="badge">#33</span>
+      </div>
+      <div class="title">The illusory truth effect</div>
+    </div>
+    <div class="card" id="v032">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/032.png" src="videos/032.mp4"></video>
+        <span class="badge">#32</span>
+      </div>
+      <div class="title">Paid to lie (cognitive dissonance)</div>
+    </div>
+    <div class="card" id="v031">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/031.png" src="videos/031.mp4"></video>
+        <span class="badge">#31</span>
+      </div>
+      <div class="title">The upgrade trap (Diderot effect)</div>
+    </div>
+    <div class="card" id="v030">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/030.png" src="videos/030.mp4"></video>
+        <span class="badge">#30</span>
+      </div>
+      <div class="title">Ask for a favor (Ben Franklin effect)</div>
+    </div>
+    <div class="card" id="v029">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/029.png" src="videos/029.mp4"></video>
+        <span class="badge">#29</span>
+      </div>
+      <div class="title">The expert illusion (Tetlock forecasting)</div>
+    </div>
+    <div class="card" id="v028">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/028.png" src="videos/028.mp4"></video>
+        <span class="badge">#28</span>
+      </div>
+      <div class="title">The rigged number (anchoring)</div>
+    </div>
+    <div class="card" id="v027">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/027.png" src="videos/027.mp4"></video>
+        <span class="badge">#27</span>
+      </div>
+      <div class="title">More pain, please (peak-end rule)</div>
+    </div>
+    <div class="card" id="v026">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/026.png" src="videos/026.mp4"></video>
+        <span class="badge">#26</span>
+      </div>
+      <div class="title">The person swap (change blindness)</div>
+    </div>
+    <div class="card" id="v025">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/025.png" src="videos/025.mp4"></video>
+        <span class="badge">#25</span>
+      </div>
+      <div class="title">The victim-blame reflex (just-world)</div>
+    </div>
+    <div class="card" id="v024">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/024.png" src="videos/024.mp4"></video>
+        <span class="badge">#24</span>
+      </div>
+      <div class="title">You knew it all along (hindsight bias)</div>
+    </div>
+    <div class="card" id="v023">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/023.png" src="videos/023.mp4"></video>
+        <span class="badge">#23</span>
+      </div>
+      <div class="title">You love what you build (IKEA effect)</div>
+    </div>
+    <div class="card" id="v022">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/022.png" src="videos/022.mp4"></video>
+        <span class="badge">#22</span>
+      </div>
+      <div class="title">Everyone is not like you (false consensus)</div>
+    </div>
+    <div class="card" id="v021">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/021.png" src="videos/021.mp4"></video>
+        <span class="badge">#21</span>
+      </div>
+      <div class="title">Spill coffee, win people (pratfall effect)</div>
+    </div>
+    <div class="card" id="v020">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/020.png" src="videos/020.mp4"></video>
+        <span class="badge">#20</span>
+      </div>
+      <div class="title">Unfinished business owns your brain (Zeigarnik)</div>
+    </div>
+    <div class="card" id="v019">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/019.png" src="videos/019.mp4"></video>
+        <span class="badge">#19</span>
+      </div>
+      <div class="title">The confidence trap (Dunning-Kruger)</div>
+    </div>
+    <div class="card" id="v018">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/018.png" src="videos/018.mp4"></video>
+        <span class="badge">#18</span>
+      </div>
+      <div class="title">The experiment that proved itself wrong</div>
+    </div>
+    <div class="card" id="v017">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/017.png" src="videos/017.mp4"></video>
+        <span class="badge">#17</span>
+      </div>
+      <div class="title">The cocktail party effect</div>
+    </div>
+    <div class="card" id="v016">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/016.png" src="videos/016.mp4"></video>
+        <span class="badge">#16</span>
+      </div>
+      <div class="title">The spotlight effect</div>
+    </div>
+    <div class="card" id="v015">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/015.png" src="videos/015.mp4"></video>
+        <span class="badge">#15</span>
+      </div>
+      <div class="title">The McGurk effect</div>
+    </div>
+    <div class="card" id="v014">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/014.png" src="videos/014.mp4"></video>
+        <span class="badge">#14</span>
+      </div>
+      <div class="title">Phantom vibration syndrome</div>
+    </div>
+    <div class="card" id="v013">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/013.png" src="videos/013.mp4"></video>
+        <span class="badge">#13</span>
+      </div>
+      <div class="title">Mirrors do not flip you (your brain does)</div>
+    </div>
+    <div class="card" id="v012">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/012.png" src="videos/012.mp4"></video>
+        <span class="badge">#12</span>
+      </div>
+      <div class="title">Baader-Meinhof: the word that follows you around</div>
+    </div>
+    <div class="card" id="v011">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/011.png" src="videos/011.mp4"></video>
+        <span class="badge">#11</span>
+      </div>
+      <div class="title">Color does not exist (out there)</div>
+    </div>
+    <div class="card" id="v010">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/010.png" src="videos/010.mp4"></video>
+        <span class="badge">#10</span>
+      </div>
+      <div class="title">The marshmallow test was never about willpower</div>
+    </div>
+    <div class="card" id="v009">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/009.png" src="videos/009.mp4"></video>
+        <span class="badge">#9</span>
+      </div>
+      <div class="title">Your second brain is in your gut</div>
+    </div>
+    <div class="card" id="v008">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/008.png" src="videos/008.mp4"></video>
+        <span class="badge">#8</span>
+      </div>
+      <div class="title">The honest placebo</div>
+    </div>
+    <div class="card" id="v007">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/007.png" src="videos/007.mp4"></video>
+        <span class="badge">#7</span>
+      </div>
+      <div class="title">Why every year feels shorter than the last</div>
+    </div>
+    <div class="card" id="v006">
+      <div class="player">
+        <video controls preload="none" playsinline poster="thumbs/006.png" src="videos/006.mp4"></video>
+        <span class="badge">#6</span>
+      </div>
+      <div class="title">Rat Park: the experiment that rewrote addiction</div>
+    </div>
 </div>
+<footer>more on <a href="https://www.tiktok.com/@thewhyloop">@thewhyloop</a></footer>
 </body>
 </html>
