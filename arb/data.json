@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-05T08:46:08Z",
-  "ts": 1788597968.1843007,
-  "scan_seconds": 14.6,
+  "generated_at": "2026-09-05T08:56:23Z",
+  "ts": 1788598583.5879807,
+  "scan_seconds": 16.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 238 binary + 1833 multi | kalshi: 5000 events -> 801 binary + 1427 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 240 binary + 1831 multi | kalshi: 5000 events -> 801 binary + 1427 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "\"By Any Means\" Rotten Tomatoes Score?",
    "n_legs": 5,
-   "gross": 0.849,
-   "fees": 0.0072520499999999995,
-   "net": 0.84174795,
-   "capital": 0.15825205,
-   "roi": 5.319033465917187,
+   "gross": 0.884,
+   "fees": 0.0056277,
+   "net": 0.8783723,
+   "capital": 0.1216277,
+   "roi": 7.221811314363422,
    "url": "https://polymarket.com/event/by-any-means-rotten-tomatoes-score",
    "neg_risk": false,
    "coverage": "5/5",
@@ -32,7 +32,7 @@
    "legs": [
     {
      "label": "60+",
-     "ask": 0.053,
+     "ask": 0.04,
      "fee": 0.05,
      "token": "108940346621351741634434188843614378196862879122495955121061459790899996374277"
     },
@@ -50,19 +50,55 @@
     },
     {
      "label": "80+",
-     "ask": 0.021,
+     "ask": 0.035,
      "fee": 0.05,
      "token": "106869435624112254887137461745933987741282874710903975279993508772001548477238"
     },
     {
      "label": "85+",
-     "ask": 0.047,
+     "ask": 0.011,
      "fee": 0.05,
      "token": "60101005295248943335336519046162453319212719665499324940729472095172035782660"
     }
    ],
    "kind": "intra-event",
    "event_slug": "by-any-means-rotten-tomatoes-score"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Who will be cast on Dancing With the Stars: Season 35?",
+   "n_legs": 3,
+   "gross": 0.817,
+   "fees": 0.00848195,
+   "net": 0.80851805,
+   "capital": 0.19148194999999998,
+   "roi": 4.222424359058387,
+   "url": "https://polymarket.com/event/who-will-be-cast-on-dancing-with-the-stars-season-35",
+   "neg_risk": false,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Rob Rausch",
+     "ask": 0.023,
+     "fee": 0.05,
+     "token": "9784051327709969690290370296988347703733360085080566523004055323084203100121"
+    },
+    {
+     "label": "Ashtin Earle",
+     "ask": 0.084,
+     "fee": 0.05,
+     "token": "33102270449624974823375561970626921416243370029447931345853726985963066138866"
+    },
+    {
+     "label": "Miranda McWhorter",
+     "ask": 0.076,
+     "fee": 0.05,
+     "token": "2098693233009850041051027755557061500953158477296823462661626535958950412172"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "who-will-be-cast-on-dancing-with-the-stars-season-35"
   },
   {
    "venue": "kalshi",
@@ -129,42 +165,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXSTATE51-29"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Who will be cast on Dancing With the Stars: Season 35?",
-   "n_legs": 3,
-   "gross": 0.8029999999999999,
-   "fees": 0.009065750000000001,
-   "net": 0.79393425,
-   "capital": 0.20606575000000002,
-   "roi": 3.8528200343822294,
-   "url": "https://polymarket.com/event/who-will-be-cast-on-dancing-with-the-stars-season-35",
-   "neg_risk": false,
-   "coverage": "3/3",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Rob Rausch",
-     "ask": 0.024,
-     "fee": 0.05,
-     "token": "9784051327709969690290370296988347703733360085080566523004055323084203100121"
-    },
-    {
-     "label": "Ashtin Earle",
-     "ask": 0.095,
-     "fee": 0.05,
-     "token": "33102270449624974823375561970626921416243370029447931345853726985963066138866"
-    },
-    {
-     "label": "Miranda McWhorter",
-     "ask": 0.078,
-     "fee": 0.05,
-     "token": "2098693233009850041051027755557061500953158477296823462661626535958950412172"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "who-will-be-cast-on-dancing-with-the-stars-season-35"
   },
   {
    "venue": "polymarket",
@@ -723,72 +723,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "which-country-will-join-abraham-accords-before-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Metamask FDV above ___ one day after launch?",
-   "n_legs": 8,
-   "gross": 0.19199999999999995,
-   "fees": 0.05064080000000001,
-   "net": 0.14135919999999993,
-   "capital": 0.8586408000000001,
-   "roi": 0.16463135690733532,
-   "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "8/8",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$100M",
-     "ask": 0.14,
-     "fee": 0.07,
-     "token": "8365623232981366512587042681820608061465376098838177714383949374818051451333"
-    },
-    {
-     "label": "$700M",
-     "ask": 0.097,
-     "fee": 0.07,
-     "token": "27944626213701198119611689981836884300701096451168812471764168520890801988056"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.12,
-     "fee": 0.07,
-     "token": "32625782428938402255128136733519807459769332197090650257160146460579374232757"
-    },
-    {
-     "label": "$3B",
-     "ask": 0.085,
-     "fee": 0.07,
-     "token": "81341495887322709056930219084641487717235305340983601089306536463617089758769"
-    },
-    {
-     "label": "$2B",
-     "ask": 0.101,
-     "fee": 0.07,
-     "token": "94120399411978925018563650270691769293212315658863591054992105782706185155787"
-    },
-    {
-     "label": "$4B",
-     "ask": 0.075,
-     "fee": 0.07,
-     "token": "88676221230600953130642189921619099583358737701404992595512476614976486057308"
-    },
-    {
-     "label": "$500M",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "1032915009647628241884866833284486320220371161190916251420291592412326949871"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.1,
-     "fee": 0.07,
-     "token": "100463364281600463917162923535716593254627752680239892527128357625123655869336"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "metamask-fdv-above-one-day-after-launch"
   },
   {
    "venue": "polymarket",
@@ -1634,11 +1568,11 @@
    "venue": "polymarket",
    "event": "Emmys 2026: Outstanding variety series",
    "n_legs": 5,
-   "gross": 0.019000000000000017,
-   "fees": 0.02009275,
-   "net": -0.0010927499999999826,
-   "capital": 1.00109275,
-   "roi": -0.0010915572008687333,
+   "gross": 0.020000000000000018,
+   "fees": 0.0200485,
+   "net": -4.8499999999982585e-05,
+   "capital": 1.0000485,
+   "roi": -4.8497647864061186e-05,
    "url": "https://polymarket.com/event/emmys-2026-outstanding-variety-series",
    "neg_risk": true,
    "coverage": "5/5",
@@ -1652,7 +1586,7 @@
     },
     {
      "label": "\u201cJimmy Kimmel Live!\u201d",
-     "ask": 0.058,
+     "ask": 0.057,
      "fee": 0.05,
      "token": "36126346258455741128143948679342804935250281482992904433082236879378809634974"
     },
@@ -1739,6 +1673,48 @@
    "event_slug": "how-many-house-seats-will-the-democrats-win-in-michigan"
   },
   {
+   "venue": "polymarket",
+   "event": "Sweden Parliamentary Election: C Vote Share?",
+   "n_legs": 4,
+   "gross": 0.017000000000000015,
+   "fees": 0.02504764,
+   "net": -0.008047639999999984,
+   "capital": 1.00804764,
+   "roi": -0.007983392530932353,
+   "url": "https://polymarket.com/event/sweden-parliamentary-election-c-vote-share-20260812172636460",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<5%",
+     "ask": 0.103,
+     "fee": 0.04,
+     "token": "61451200201360546250842612692142213958628731778157690047971916988240810893919"
+    },
+    {
+     "label": "5-7%",
+     "ask": 0.22,
+     "fee": 0.04,
+     "token": "46115683334048230981114657357030029980040062611269244147775105325525686825408"
+    },
+    {
+     "label": "7-9%",
+     "ask": 0.53,
+     "fee": 0.04,
+     "token": "17953700445327584733489162383235081508172388230581445657532827224341988990564"
+    },
+    {
+     "label": "9%+",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "86295908025150022776298511661766388437817952099434400442360581635628681608457"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "sweden-parliamentary-election-c-vote-share-20260812172636460"
+  },
+  {
    "venue": "kalshi",
    "event": "PA-11 House winner?",
    "n_legs": 2,
@@ -1767,48 +1743,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-PA11-26"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Sweden Parliamentary Election: C Vote Share?",
-   "n_legs": 4,
-   "gross": 0.01200000000000001,
-   "fees": 0.0252036,
-   "net": -0.013203599999999989,
-   "capital": 1.0132036,
-   "roi": -0.013031536800698289,
-   "url": "https://polymarket.com/event/sweden-parliamentary-election-c-vote-share-20260812172636460",
-   "neg_risk": true,
-   "coverage": "4/4",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<5%",
-     "ask": 0.107,
-     "fee": 0.04,
-     "token": "61451200201360546250842612692142213958628731778157690047971916988240810893919"
-    },
-    {
-     "label": "5-7%",
-     "ask": 0.22,
-     "fee": 0.04,
-     "token": "46115683334048230981114657357030029980040062611269244147775105325525686825408"
-    },
-    {
-     "label": "7-9%",
-     "ask": 0.53,
-     "fee": 0.04,
-     "token": "17953700445327584733489162383235081508172388230581445657532827224341988990564"
-    },
-    {
-     "label": "9%+",
-     "ask": 0.131,
-     "fee": 0.04,
-     "token": "86295908025150022776298511661766388437817952099434400442360581635628681608457"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "sweden-parliamentary-election-c-vote-share-20260812172636460"
   },
   {
    "venue": "polymarket",
