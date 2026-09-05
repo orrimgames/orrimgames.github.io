@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-05T05:24:47Z",
-  "ts": 1788585887.3731496,
-  "scan_seconds": 12.7,
+  "generated_at": "2026-09-05T05:37:24Z",
+  "ts": 1788586644.7902377,
+  "scan_seconds": 12.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 242 binary + 1792 multi | kalshi: 5000 events -> 796 binary + 1431 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 244 binary + 1795 multi | kalshi: 5000 events -> 796 binary + 1431 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -18,39 +18,51 @@
  "intra_event": [
   {
    "venue": "polymarket",
-   "event": "Who will be cast on Dancing With the Stars: Season 35?",
-   "n_legs": 3,
-   "gross": 0.8140000000000001,
-   "fees": 0.0086037,
-   "net": 0.8053963000000001,
-   "capital": 0.1946037,
-   "roi": 4.138648442963829,
-   "url": "https://polymarket.com/event/who-will-be-cast-on-dancing-with-the-stars-season-35",
+   "event": "\"By Any Means\" Rotten Tomatoes Score?",
+   "n_legs": 5,
+   "gross": 0.845,
+   "fees": 0.00728635,
+   "net": 0.83771365,
+   "capital": 0.16228635,
+   "roi": 5.161947693074618,
+   "url": "https://polymarket.com/event/by-any-means-rotten-tomatoes-score",
    "neg_risk": false,
-   "coverage": "3/3",
+   "coverage": "5/5",
    "tier": 2,
    "legs": [
     {
-     "label": "Rob Rausch",
+     "label": "60+",
+     "ask": 0.09,
+     "fee": 0.05,
+     "token": "108940346621351741634434188843614378196862879122495955121061459790899996374277"
+    },
+    {
+     "label": "70+",
+     "ask": 0.02,
+     "fee": 0.05,
+     "token": "93356634270519582858737257600907849247487220749944572290548872621541275862923"
+    },
+    {
+     "label": "75+",
+     "ask": 0.01,
+     "fee": 0.05,
+     "token": "28461011544115023332583845196985543805878206074564584572800114145084702394595"
+    },
+    {
+     "label": "80+",
      "ask": 0.023,
      "fee": 0.05,
-     "token": "9784051327709969690290370296988347703733360085080566523004055323084203100121"
+     "token": "106869435624112254887137461745933987741282874710903975279993508772001548477238"
     },
     {
-     "label": "Ashtin Earle",
-     "ask": 0.089,
+     "label": "85+",
+     "ask": 0.012,
      "fee": 0.05,
-     "token": "33102270449624974823375561970626921416243370029447931345853726985963066138866"
-    },
-    {
-     "label": "Miranda McWhorter",
-     "ask": 0.074,
-     "fee": 0.05,
-     "token": "2098693233009850041051027755557061500953158477296823462661626535958950412172"
+     "token": "60101005295248943335336519046162453319212719665499324940729472095172035782660"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "who-will-be-cast-on-dancing-with-the-stars-season-35"
+   "event_slug": "by-any-means-rotten-tomatoes-score"
   },
   {
    "venue": "kalshi",
@@ -120,6 +132,42 @@
   },
   {
    "venue": "polymarket",
+   "event": "Who will be cast on Dancing With the Stars: Season 35?",
+   "n_legs": 3,
+   "gross": 0.804,
+   "fees": 0.009021600000000001,
+   "net": 0.7949784000000001,
+   "capital": 0.2050216,
+   "roi": 3.877534854864073,
+   "url": "https://polymarket.com/event/who-will-be-cast-on-dancing-with-the-stars-season-35",
+   "neg_risk": false,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Rob Rausch",
+     "ask": 0.024,
+     "fee": 0.05,
+     "token": "9784051327709969690290370296988347703733360085080566523004055323084203100121"
+    },
+    {
+     "label": "Ashtin Earle",
+     "ask": 0.096,
+     "fee": 0.05,
+     "token": "33102270449624974823375561970626921416243370029447931345853726985963066138866"
+    },
+    {
+     "label": "Miranda McWhorter",
+     "ask": 0.076,
+     "fee": 0.05,
+     "token": "2098693233009850041051027755557061500953158477296823462661626535958950412172"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "who-will-be-cast-on-dancing-with-the-stars-season-35"
+  },
+  {
+   "venue": "polymarket",
    "event": "Ventuals FDV above ___ one day after launch?",
    "n_legs": 7,
    "gross": 0.791,
@@ -177,54 +225,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "ventuals-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "\"By Any Means\" Rotten Tomatoes Score?",
-   "n_legs": 5,
-   "gross": 0.781,
-   "fees": 0.01021975,
-   "net": 0.7707802500000001,
-   "capital": 0.22921975,
-   "roi": 3.362625820855315,
-   "url": "https://polymarket.com/event/by-any-means-rotten-tomatoes-score",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "60+",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "108940346621351741634434188843614378196862879122495955121061459790899996374277"
-    },
-    {
-     "label": "70+",
-     "ask": 0.02,
-     "fee": 0.05,
-     "token": "93356634270519582858737257600907849247487220749944572290548872621541275862923"
-    },
-    {
-     "label": "75+",
-     "ask": 0.01,
-     "fee": 0.05,
-     "token": "28461011544115023332583845196985543805878206074564584572800114145084702394595"
-    },
-    {
-     "label": "80+",
-     "ask": 0.026,
-     "fee": 0.05,
-     "token": "106869435624112254887137461745933987741282874710903975279993508772001548477238"
-    },
-    {
-     "label": "85+",
-     "ask": 0.073,
-     "fee": 0.05,
-     "token": "60101005295248943335336519046162453319212719665499324940729472095172035782660"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "by-any-means-rotten-tomatoes-score"
   },
   {
    "venue": "polymarket",
@@ -392,11 +392,11 @@
    "venue": "polymarket",
    "event": "Kraken IPO closing market cap above ___ ?",
    "n_legs": 7,
-   "gross": 0.5489999999999999,
-   "fees": 0.016828520000000003,
-   "net": 0.5321714799999999,
-   "capital": 0.46782852,
-   "roi": 1.1375353516284126,
+   "gross": 0.5389999999999999,
+   "fees": 0.017168520000000003,
+   "net": 0.5218314799999999,
+   "capital": 0.47816852000000004,
+   "roi": 1.0913129120252414,
    "url": "https://polymarket.com/event/kraken-ipo-closing-market-cap-above",
    "neg_risk": false,
    "coverage": "7/7",
@@ -428,7 +428,7 @@
     },
     {
      "label": "$24B",
-     "ask": 0.07,
+     "ask": 0.08,
      "fee": 0.04,
      "token": "91027683713979671045745336397477298188194077466070308948719723741690140262890"
     },
@@ -1320,13 +1320,61 @@
   },
   {
    "venue": "polymarket",
+   "event": "First to hit $1B FDV: ANSEM, CASHCAT, AI, or NET?",
+   "n_legs": 5,
+   "gross": 0.08000000000000007,
+   "fees": 0.036596000000000004,
+   "net": 0.04340400000000007,
+   "capital": 0.9565959999999999,
+   "roi": 0.04537338646617806,
+   "url": "https://polymarket.com/event/first-to-hit-1b-fdv-ansem-cashcat-ai-or-net-20260902214135",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "The Black Bull (ANSEM)",
+     "ask": 0.08,
+     "fee": 0.07,
+     "token": "74100688721891144797638591337415652647556600588621270501864766794968076980536"
+    },
+    {
+     "label": "Artificial Inu (AI)",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "41881813710089727854405675208080554765410855994744600957959857571752815444932"
+    },
+    {
+     "label": "Cash Cat (CASHCAT)",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "100095308514866779595156619884970653343377747212523553131981677449886530723007"
+    },
+    {
+     "label": "NetNet (NET)",
+     "ask": 0.05,
+     "fee": 0.07,
+     "token": "90666984891650584743111418268256825271453217894165221700030811590802129305165"
+    },
+    {
+     "label": "None by December 25, 2026",
+     "ask": 0.61,
+     "fee": 0.07,
+     "token": "96679847080996265101141156903374746058336805809616090088730210726427675819741"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "first-to-hit-1b-fdv-ansem-cashcat-ai-or-net-20260902214135"
+  },
+  {
+   "venue": "polymarket",
    "event": "Puffpaw FDV above ___ one day after launch?",
    "n_legs": 5,
    "gross": 0.08999999999999997,
-   "fees": 0.04957596,
-   "net": 0.04042403999999997,
-   "capital": 0.95957596,
-   "roi": 0.04212698283937831,
+   "fees": 0.049577500000000004,
+   "net": 0.040422499999999965,
+   "capital": 0.9595775000000001,
+   "roi": 0.04212531035794395,
    "url": "https://polymarket.com/event/puffpaw-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1352,13 +1400,13 @@
     },
     {
      "label": "$300M",
-     "ask": 0.086,
+     "ask": 0.085,
      "fee": 0.07,
      "token": "75465806583802054124068142193447889201404918795525767496433120745554670765320"
     },
     {
      "label": "$400M",
-     "ask": 0.074,
+     "ask": 0.075,
      "fee": 0.07,
      "token": "76857952191349339483337909865017853437301818611492894864209571883435851483991"
     }
@@ -1541,54 +1589,6 @@
    "event_slug": "KXCLOSESTGOVERNOR-27JAN20"
   },
   {
-   "venue": "polymarket",
-   "event": "First to hit $1B FDV: ANSEM, CASHCAT, AI, or NET?",
-   "n_legs": 5,
-   "gross": 0.06000000000000005,
-   "fees": 0.03626,
-   "net": 0.023740000000000053,
-   "capital": 0.9762599999999999,
-   "roi": 0.024317292524532456,
-   "url": "https://polymarket.com/event/first-to-hit-1b-fdv-ansem-cashcat-ai-or-net-20260902214135",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "The Black Bull (ANSEM)",
-     "ask": 0.08,
-     "fee": 0.07,
-     "token": "74100688721891144797638591337415652647556600588621270501864766794968076980536"
-    },
-    {
-     "label": "Artificial Inu (AI)",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "41881813710089727854405675208080554765410855994744600957959857571752815444932"
-    },
-    {
-     "label": "Cash Cat (CASHCAT)",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "100095308514866779595156619884970653343377747212523553131981677449886530723007"
-    },
-    {
-     "label": "NetNet (NET)",
-     "ask": 0.05,
-     "fee": 0.07,
-     "token": "90666984891650584743111418268256825271453217894165221700030811590802129305165"
-    },
-    {
-     "label": "None by December 25, 2026",
-     "ask": 0.63,
-     "fee": 0.07,
-     "token": "96679847080996265101141156903374746058336805809616090088730210726427675819741"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "first-to-hit-1b-fdv-ansem-cashcat-ai-or-net-20260902214135"
-  },
-  {
    "venue": "kalshi",
    "event": "Fed decision in Dec 2027?",
    "n_legs": 5,
@@ -1677,6 +1677,84 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXTRUMPAGCOUNT-29"
+  },
+  {
+   "venue": "polymarket",
+   "event": "What kind of product will OpenAI announce in 2026?",
+   "n_legs": 10,
+   "gross": 0.038000000000000034,
+   "fees": 0.03327952,
+   "net": 0.004720480000000034,
+   "capital": 0.99527952,
+   "roi": 0.004742868616446598,
+   "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
+   "neg_risk": false,
+   "coverage": "10/10",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Earbuds/Headphones",
+     "ask": 0.24,
+     "fee": 0.04,
+     "token": "16040470176590332178266575986841073712697460370218768293287706373316090538021"
+    },
+    {
+     "label": "Clip-on device for clothing",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
+    },
+    {
+     "label": "Necklace",
+     "ask": 0.11,
+     "fee": 0.04,
+     "token": "20826236952766096458839542076301237144154160218855573686197597978501264662054"
+    },
+    {
+     "label": "Watch",
+     "ask": 0.1,
+     "fee": 0.04,
+     "token": "77120919023569550198628906932983149373349506964926056595149258435958662028903"
+    },
+    {
+     "label": "Glasses",
+     "ask": 0.12,
+     "fee": 0.04,
+     "token": "38445023851151660993666237267712981362686626593721378545175263940037718392453"
+    },
+    {
+     "label": "Ring",
+     "ask": 0.08,
+     "fee": 0.04,
+     "token": "105793471410600103279818302661836433120260173055196756819977205026613295786512"
+    },
+    {
+     "label": "Phone",
+     "ask": 0.031,
+     "fee": 0.04,
+     "token": "4967389004560237148087059097306936016483726557350463241288661442119258090198"
+    },
+    {
+     "label": "Tablet",
+     "ask": 0.049,
+     "fee": 0.04,
+     "token": "17404766932259944299339052130465690929883335900321910320466617668484369055750"
+    },
+    {
+     "label": "Head-mounted display",
+     "ask": 0.029,
+     "fee": 0.04,
+     "token": "24535511360909789070465577593343267401226583512825755634755701071660338255675"
+    },
+    {
+     "label": "Computer (Laptop/Desktop)",
+     "ask": 0.053,
+     "fee": 0.04,
+     "token": "15596881315836367767699003429490212721537835348949574643253042524587080151396"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "what-kind-of-product-will-openai-announce-in-2026"
   },
   {
    "venue": "polymarket",
@@ -1844,11 +1922,11 @@
    "venue": "polymarket",
    "event": "Emmys 2026: Outstanding variety series",
    "n_legs": 5,
-   "gross": 0.02300000000000002,
-   "fees": 0.01991515,
-   "net": 0.003084850000000021,
-   "capital": 0.99691515,
-   "roi": 0.003094395746719288,
+   "gross": 0.02200000000000002,
+   "fees": 0.0199597,
+   "net": 0.002040300000000019,
+   "capital": 0.9979597,
+   "roi": 0.002044471334864543,
    "url": "https://polymarket.com/event/emmys-2026-outstanding-variety-series",
    "neg_risk": true,
    "coverage": "5/5",
@@ -1862,7 +1940,7 @@
     },
     {
      "label": "\u201cJimmy Kimmel Live!\u201d",
-     "ask": 0.054,
+     "ask": 0.055,
      "fee": 0.05,
      "token": "36126346258455741128143948679342804935250281482992904433082236879378809634974"
     },
@@ -1887,84 +1965,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "emmys-2026-outstanding-variety-series"
-  },
-  {
-   "venue": "polymarket",
-   "event": "What kind of product will OpenAI announce in 2026?",
-   "n_legs": 10,
-   "gross": 0.03600000000000003,
-   "fees": 0.03335088,
-   "net": 0.0026491200000000326,
-   "capital": 0.9973508799999999,
-   "roi": 0.0026561564772470373,
-   "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
-   "neg_risk": false,
-   "coverage": "10/10",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Earbuds/Headphones",
-     "ask": 0.24,
-     "fee": 0.04,
-     "token": "16040470176590332178266575986841073712697460370218768293287706373316090538021"
-    },
-    {
-     "label": "Clip-on device for clothing",
-     "ask": 0.15,
-     "fee": 0.04,
-     "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
-    },
-    {
-     "label": "Necklace",
-     "ask": 0.11,
-     "fee": 0.04,
-     "token": "20826236952766096458839542076301237144154160218855573686197597978501264662054"
-    },
-    {
-     "label": "Watch",
-     "ask": 0.1,
-     "fee": 0.04,
-     "token": "77120919023569550198628906932983149373349506964926056595149258435958662028903"
-    },
-    {
-     "label": "Glasses",
-     "ask": 0.12,
-     "fee": 0.04,
-     "token": "38445023851151660993666237267712981362686626593721378545175263940037718392453"
-    },
-    {
-     "label": "Ring",
-     "ask": 0.08,
-     "fee": 0.04,
-     "token": "105793471410600103279818302661836433120260173055196756819977205026613295786512"
-    },
-    {
-     "label": "Phone",
-     "ask": 0.031,
-     "fee": 0.04,
-     "token": "4967389004560237148087059097306936016483726557350463241288661442119258090198"
-    },
-    {
-     "label": "Tablet",
-     "ask": 0.049,
-     "fee": 0.04,
-     "token": "17404766932259944299339052130465690929883335900321910320466617668484369055750"
-    },
-    {
-     "label": "Head-mounted display",
-     "ask": 0.029,
-     "fee": 0.04,
-     "token": "24535511360909789070465577593343267401226583512825755634755701071660338255675"
-    },
-    {
-     "label": "Computer (Laptop/Desktop)",
-     "ask": 0.055,
-     "fee": 0.04,
-     "token": "15596881315836367767699003429490212721537835348949574643253042524587080151396"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-kind-of-product-will-openai-announce-in-2026"
   },
   {
    "venue": "kalshi",
@@ -1995,6 +1995,66 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXSECSTATEWI-26"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How many House seats will the Democrats win in Michigan?",
+   "n_legs": 7,
+   "gross": 0.019000000000000017,
+   "fees": 0.023454520000000003,
+   "net": -0.004454519999999986,
+   "capital": 1.00445452,
+   "roi": -0.0044347652495007805,
+   "url": "https://polymarket.com/event/how-many-house-seats-will-the-democrats-win-in-michigan",
+   "neg_risk": true,
+   "coverage": "7/7",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<5",
+     "ask": 0.002,
+     "fee": 0.04,
+     "token": "67982187293376836536451130152252511056456663224321788143931560486404777854841"
+    },
+    {
+     "label": "5",
+     "ask": 0.002,
+     "fee": 0.04,
+     "token": "20981172394277036607902460154548182310472391035971352320085094848066072350827"
+    },
+    {
+     "label": "6",
+     "ask": 0.08,
+     "fee": 0.04,
+     "token": "4199992872722786534257273677009448201174961358738403618135388053109022441850"
+    },
+    {
+     "label": "7",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "27153387447235456415272067313563913567046532283908747384196605250563111823747"
+    },
+    {
+     "label": "8",
+     "ask": 0.59,
+     "fee": 0.04,
+     "token": "36636296187261172359881697912008462176255497818257806490959108846389555356905"
+    },
+    {
+     "label": "9",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "13077354876535199797279988529761875161108354445341936015494870819767503345703"
+    },
+    {
+     "label": "10+",
+     "ask": 0.027,
+     "fee": 0.04,
+     "token": "65683882251397146105595766006060867136220626299554374080176940365928772891667"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-house-seats-will-the-democrats-win-in-michigan"
   },
   {
    "venue": "kalshi",
@@ -2076,48 +2136,6 @@
   },
   {
    "venue": "polymarket",
-   "event": "How many House seats will the Democrats win in Alabama?",
-   "n_legs": 4,
-   "gross": 0.0050000000000000044,
-   "fees": 0.016787,
-   "net": -0.011786999999999995,
-   "capital": 1.011787,
-   "roi": -0.011649685161007204,
-   "url": "https://polymarket.com/event/how-many-house-seats-will-the-democrats-win-in-alabama",
-   "neg_risk": true,
-   "coverage": "4/4",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "0",
-     "ask": 0.045,
-     "fee": 0.04,
-     "token": "69848232591133464602183873819874455319648935719016297032654845590760812787033"
-    },
-    {
-     "label": "1",
-     "ask": 0.73,
-     "fee": 0.04,
-     "token": "20800227748139452641720941040784481070479697060521515222292762787863648720706"
-    },
-    {
-     "label": "2",
-     "ask": 0.2,
-     "fee": 0.04,
-     "token": "101049818215312909506667052696991857120549108075797948373364603819113975729895"
-    },
-    {
-     "label": "3+",
-     "ask": 0.02,
-     "fee": 0.04,
-     "token": "176672801942461760637803765066567491986092319624683134838455193592908313755"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-house-seats-will-the-democrats-win-in-alabama"
-  },
-  {
-   "venue": "polymarket",
    "event": "Bitcoin vs. Gold vs. S&P 500 in 2026",
    "n_legs": 3,
    "gross": 0.009999999999999898,
@@ -2151,66 +2169,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "bitcoin-vs-gold-vs-sp-500-in-2026"
-  },
-  {
-   "venue": "polymarket",
-   "event": "How many House seats will the Democrats win in Michigan?",
-   "n_legs": 7,
-   "gross": 0.009000000000000008,
-   "fees": 0.023746520000000004,
-   "net": -0.014746519999999996,
-   "capital": 1.01474652,
-   "roi": -0.014532220322371734,
-   "url": "https://polymarket.com/event/how-many-house-seats-will-the-democrats-win-in-michigan",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<5",
-     "ask": 0.002,
-     "fee": 0.04,
-     "token": "67982187293376836536451130152252511056456663224321788143931560486404777854841"
-    },
-    {
-     "label": "5",
-     "ask": 0.002,
-     "fee": 0.04,
-     "token": "20981172394277036607902460154548182310472391035971352320085094848066072350827"
-    },
-    {
-     "label": "6",
-     "ask": 0.08,
-     "fee": 0.04,
-     "token": "4199992872722786534257273677009448201174961358738403618135388053109022441850"
-    },
-    {
-     "label": "7",
-     "ask": 0.14,
-     "fee": 0.04,
-     "token": "27153387447235456415272067313563913567046532283908747384196605250563111823747"
-    },
-    {
-     "label": "8",
-     "ask": 0.59,
-     "fee": 0.04,
-     "token": "36636296187261172359881697912008462176255497818257806490959108846389555356905"
-    },
-    {
-     "label": "9",
-     "ask": 0.15,
-     "fee": 0.04,
-     "token": "13077354876535199797279988529761875161108354445341936015494870819767503345703"
-    },
-    {
-     "label": "10+",
-     "ask": 0.027,
-     "fee": 0.04,
-     "token": "65683882251397146105595766006060867136220626299554374080176940365928772891667"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-house-seats-will-the-democrats-win-in-michigan"
   },
   {
    "venue": "polymarket",
