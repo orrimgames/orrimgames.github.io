@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-06T15:25:19Z",
-  "ts": 1788708319.410335,
-  "scan_seconds": 13.2,
+  "generated_at": "2026-09-06T15:38:39Z",
+  "ts": 1788709119.3766253,
+  "scan_seconds": 14.8,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 216 binary + 1500 multi | kalshi: 5000 events -> 803 binary + 1421 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 218 binary + 1517 multi | kalshi: 5000 events -> 803 binary + 1421 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -18,13 +18,43 @@
  "intra_event": [
   {
    "venue": "polymarket",
+   "event": "Switzerland\u2019s September Referendum: What will pass?",
+   "n_legs": 2,
+   "gross": 0.925,
+   "fees": 0.00287692,
+   "net": 0.9221230800000001,
+   "capital": 0.07787692,
+   "roi": 11.840774904811337,
+   "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Neutrality initiative",
+     "ask": 0.049,
+     "fee": 0.04,
+     "token": "29930395488773801857622260293304694658356268641863382575001425275546818052153"
+    },
+    {
+     "label": "Food initiative",
+     "ask": 0.026,
+     "fee": 0.04,
+     "token": "23797619466496830824327729794059922941928506828173754246963736799336377251150"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "switzerlands-september-referendum-what-will-pass-20260713144919276"
+  },
+  {
+   "venue": "polymarket",
    "event": "Ventuals FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.819,
-   "fees": 0.012309150000000001,
-   "net": 0.80669085,
-   "capital": 0.19330914999999999,
-   "roi": 4.17306087166593,
+   "gross": 0.8200000000000001,
+   "fees": 0.012243,
+   "net": 0.8077570000000001,
+   "capital": 0.192243,
+   "roi": 4.201749868655816,
    "url": "https://polymarket.com/event/ventuals-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -56,7 +86,7 @@
     },
     {
      "label": "$1.5B",
-     "ask": 0.028,
+     "ask": 0.027,
      "fee": 0.07,
      "token": "79280394335339936222716719912763603671501781533175552180009960519666291766435"
     },
@@ -254,11 +284,11 @@
    "venue": "polymarket",
    "event": "HUDL FDV above ___ one day after launch?",
    "n_legs": 6,
-   "gross": 0.5740000000000001,
-   "fees": 0.02691094,
-   "net": 0.54708906,
-   "capital": 0.45291094,
-   "roi": 1.2079396006640952,
+   "gross": 0.575,
+   "fees": 0.026852070000000002,
+   "net": 0.54814793,
+   "capital": 0.45185207,
+   "roi": 1.2131136856360976,
    "url": "https://polymarket.com/event/huddle-fdv-above-one-day-after-launch-864",
    "neg_risk": false,
    "coverage": "6/6",
@@ -296,7 +326,7 @@
     },
     {
      "label": "$20M",
-     "ask": 0.08,
+     "ask": 0.079,
      "fee": 0.07,
      "token": "41329156631634764669678001693320711923513419631996180318846234986879741105874"
     }
@@ -308,11 +338,11 @@
    "venue": "polymarket",
    "event": "Hurupay FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.519,
-   "fees": 0.031064110000000002,
-   "net": 0.48793589000000004,
-   "capital": 0.51206411,
-   "roi": 0.9528804703770395,
+   "gross": 0.525,
+   "fees": 0.030716910000000004,
+   "net": 0.49428309000000004,
+   "capital": 0.50571691,
+   "roi": 0.9773908687372151,
    "url": "https://polymarket.com/event/hurupay-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -332,19 +362,19 @@
     },
     {
      "label": "$20M",
-     "ask": 0.108,
+     "ask": 0.104,
      "fee": 0.07,
      "token": "23589625940862671573330929616154798479561271792724234598176128814366309142913"
     },
     {
      "label": "$30M",
-     "ask": 0.057,
+     "ask": 0.056,
      "fee": 0.07,
      "token": "7466913300108188172966309158268426515809182974000783476833037730324135936451"
     },
     {
      "label": "$40M",
-     "ask": 0.04,
+     "ask": 0.039,
      "fee": 0.07,
      "token": "89673811110871904695582221606485502711611940893580906524580637313142004928384"
     },
@@ -428,11 +458,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.41300000000000003,
-   "fees": 0.03718827,
-   "net": 0.37581173,
-   "capital": 0.62418827,
-   "roi": 0.6020807311870824,
+   "gross": 0.41700000000000004,
+   "fees": 0.037000250000000005,
+   "net": 0.37999975,
+   "capital": 0.6200002499999999,
+   "roi": 0.61290257544251,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -458,13 +488,13 @@
     },
     {
      "label": "$500M",
-     "ask": 0.084,
+     "ask": 0.072,
      "fee": 0.07,
      "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
     },
     {
      "label": "$800M",
-     "ask": 0.039,
+     "ask": 0.038,
      "fee": 0.07,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -476,13 +506,13 @@
     },
     {
      "label": "$2B",
-     "ask": 0.032,
+     "ask": 0.03,
      "fee": 0.07,
      "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
     },
     {
      "label": "$3B",
-     "ask": 0.029,
+     "ask": 0.04,
      "fee": 0.07,
      "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
     },
@@ -554,11 +584,11 @@
    "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.17200000000000004,
+   "gross": 0.16300000000000003,
    "fees": 0.0,
-   "net": 0.17200000000000004,
-   "capital": 0.828,
-   "roi": 0.20772946859903388,
+   "net": 0.16300000000000003,
+   "capital": 0.837,
+   "roi": 0.19474313022700124,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -584,7 +614,7 @@
     },
     {
      "label": "Egypt",
-     "ask": 0.091,
+     "ask": 0.1,
      "fee": 0.0,
      "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
     },
@@ -807,48 +837,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXMONGOLIAPRES-27"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
-   "n_legs": 4,
-   "gross": 0.07499999999999996,
-   "fees": 0.025515000000000003,
-   "net": 0.04948499999999995,
-   "capital": 0.950515,
-   "roi": 0.052061251006033524,
-   "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "55%+",
-     "ask": 0.44,
-     "fee": 0.04,
-     "token": "47351350191021860030940473611465578498086619828510123029070548466066776837953"
-    },
-    {
-     "label": "60%+",
-     "ask": 0.26,
-     "fee": 0.04,
-     "token": "21017494660016865152500751943930281918229945188485381363967741191934675869485"
-    },
-    {
-     "label": "65%+",
-     "ask": 0.13,
-     "fee": 0.04,
-     "token": "45227214931477866761288056130619702453291156789807013572598590317054802177759"
-    },
-    {
-     "label": "70%+",
-     "ask": 0.095,
-     "fee": 0.04,
-     "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805"
   },
   {
    "venue": "kalshi",
@@ -1433,62 +1421,14 @@
    "event_slug": "KXSECSTATEWI-26"
   },
   {
-   "venue": "polymarket",
-   "event": "Emmys 2026: Outstanding variety series",
-   "n_legs": 5,
-   "gross": 0.018000000000000016,
-   "fees": 0.011910900000000002,
-   "net": 0.006089100000000014,
-   "capital": 0.9939108999999999,
-   "roi": 0.00612640428835222,
-   "url": "https://polymarket.com/event/emmys-2026-outstanding-variety-series",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "\u201cThe Daily Show\u201d",
-     "ask": 0.014,
-     "fee": 0.05,
-     "token": "8313836290461142223251469959952122133866341115052615529945618455681382678289"
-    },
-    {
-     "label": "\u201cJimmy Kimmel Live!\u201d",
-     "ask": 0.028,
-     "fee": 0.05,
-     "token": "36126346258455741128143948679342804935250281482992904433082236879378809634974"
-    },
-    {
-     "label": "\u201cLast Week Tonight With John Oliver\u201d",
-     "ask": 0.041,
-     "fee": 0.05,
-     "token": "112348330276747231760306301291069894937771875501493830025702968264826257459033"
-    },
-    {
-     "label": "\u201cThe Late Show With Stephen Colbert\u201d",
-     "ask": 0.86,
-     "fee": 0.05,
-     "token": "14415801740142235029471094199246668204594862702716740947927563277532113280200"
-    },
-    {
-     "label": "\u201cSaturday Night Live\u201d",
-     "ask": 0.039,
-     "fee": 0.05,
-     "token": "77358665185965051542503859440264711396952590927091042223925273113991209117250"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "emmys-2026-outstanding-variety-series"
-  },
-  {
    "venue": "kalshi",
    "event": "2028 Republican VP nominee",
    "n_legs": 22,
-   "gross": 0.236,
+   "gross": 0.237,
    "fees": 0.23,
-   "net": 0.005999999999999978,
-   "capital": 0.994,
-   "roi": 0.006036217303822915,
+   "net": 0.0069999999999999785,
+   "capital": 0.993,
+   "roi": 0.007049345417925457,
    "url": "https://kalshi.com/events/KXVPRESNOMR-28",
    "neg_risk": null,
    "coverage": "22/22",
@@ -1568,7 +1508,7 @@
     },
     {
      "label": "Ted Cruz",
-     "ask": 0.017,
+     "ask": 0.016,
      "fee": 0.07,
      "ticker": "KXVPRESNOMR-28-TC"
     },
@@ -1632,57 +1572,63 @@
   },
   {
    "venue": "polymarket",
-   "event": "Quebec General Election: PLQ # Seats?",
-   "n_legs": 6,
-   "gross": 0.030000000000000027,
-   "fees": 0.02998672,
-   "net": 1.3280000000025216e-05,
-   "capital": 0.99998672,
-   "roi": 1.3280176360767287e-05,
-   "url": "https://polymarket.com/event/of-seats-won-by-plq-in-the-2026-quebec-general-election",
+   "event": "Union Centriste Seat Count after French Senate Election?",
+   "n_legs": 7,
+   "gross": 0.03200000000000003,
+   "fees": 0.02905904,
+   "net": 0.002940960000000027,
+   "capital": 0.99705904,
+   "roi": 0.002949634757837437,
+   "url": "https://polymarket.com/event/union-centriste-seat-count-after-french-senate-election",
    "neg_risk": true,
-   "coverage": "6/6",
+   "coverage": "7/7",
    "tier": 1,
    "legs": [
     {
-     "label": "<28",
-     "ask": 0.27,
+     "label": "<53",
+     "ask": 0.021,
      "fee": 0.04,
-     "token": "37684588602077754230470865761269683820347449295018145399817087355521689138291"
+     "token": "86589027109589358340528706647214103573855526288707006544516831194869943449133"
     },
     {
-     "label": "28-31",
-     "ask": 0.3,
+     "label": "53-55",
+     "ask": 0.12,
      "fee": 0.04,
-     "token": "6627012413385605959206717282415751450674901347833413963718018760725444066002"
+     "token": "89935186192743699807788235610363349284184971241244329026267657784971953395032"
     },
     {
-     "label": "32-35",
-     "ask": 0.21,
+     "label": "56-58",
+     "ask": 0.26,
      "fee": 0.04,
-     "token": "88891590402644905057613535983329376886386153464369475015712021127716612583770"
+     "token": "88650934606583571572604559881130486442839132407624304714234483826556525203654"
     },
     {
-     "label": "36-39",
-     "ask": 0.08,
+     "label": "59-61",
+     "ask": 0.36,
      "fee": 0.04,
-     "token": "101879746435182812910916483205609596356373027224584720198688733794864706402893"
+     "token": "21543498436176472314457284962538908041202128178134231301728926944970163694504"
     },
     {
-     "label": "40-43",
-     "ask": 0.034,
+     "label": "62-64",
+     "ask": 0.169,
      "fee": 0.04,
-     "token": "21131208833096483124323706247227952008617901120551908252105980518484066604281"
+     "token": "94374707576958178019648133994792840589355074871421118895028517216342027339817"
     },
     {
-     "label": "44+",
-     "ask": 0.076,
+     "label": "65-67",
+     "ask": 0.029,
      "fee": 0.04,
-     "token": "89897161171585301080748615044447780632466846187366734459694642470462873348491"
+     "token": "41277476952250776965239101226395780604528784256859075592500650532925595580550"
+    },
+    {
+     "label": "68+",
+     "ask": 0.009,
+     "fee": 0.04,
+     "token": "101032175570734960734080851285047728724099676067406308898094944902956841871790"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "of-seats-won-by-plq-in-the-2026-quebec-general-election"
+   "event_slug": "union-centriste-seat-count-after-french-senate-election"
   },
   {
    "venue": "polymarket",
@@ -1772,11 +1718,11 @@
    "venue": "polymarket",
    "event": "Mecklenburg-Vorpommern Parliamentary Election: AfD Vote Share?",
    "n_legs": 4,
-   "gross": 0.016000000000000014,
-   "fees": 0.02490336,
-   "net": -0.008903359999999985,
-   "capital": 1.00890336,
-   "roi": -0.008824789720196775,
+   "gross": 0.020000000000000018,
+   "fees": 0.024952000000000002,
+   "net": -0.004951999999999984,
+   "capital": 1.004952,
+   "roi": -0.004927598532069177,
    "url": "https://polymarket.com/event/mecklenburg-vorpommern-parliamentary-election-afd-vote-share",
    "neg_risk": true,
    "coverage": "4/4",
@@ -1784,13 +1730,13 @@
    "legs": [
     {
      "label": "<32%",
-     "ask": 0.004,
+     "ask": 0.01,
      "fee": 0.04,
      "token": "95599180695759661190995292369730896584848407354600768798947928022921259090650"
     },
     {
      "label": "32-35%",
-     "ask": 0.27,
+     "ask": 0.26,
      "fee": 0.04,
      "token": "55173571814705340521681449950068596371373008937734591809313019647478020150367"
     },
@@ -1809,6 +1755,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "mecklenburg-vorpommern-parliamentary-election-afd-vote-share"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Emmys 2026: Outstanding variety series",
+   "n_legs": 5,
+   "gross": 0.0020000000000000018,
+   "fees": 0.011820200000000001,
+   "net": -0.0098202,
+   "capital": 1.0098202,
+   "roi": -0.009724701486462638,
+   "url": "https://polymarket.com/event/emmys-2026-outstanding-variety-series",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "\u201cThe Daily Show\u201d",
+     "ask": 0.014,
+     "fee": 0.05,
+     "token": "8313836290461142223251469959952122133866341115052615529945618455681382678289"
+    },
+    {
+     "label": "\u201cJimmy Kimmel Live!\u201d",
+     "ask": 0.028,
+     "fee": 0.05,
+     "token": "36126346258455741128143948679342804935250281482992904433082236879378809634974"
+    },
+    {
+     "label": "\u201cLast Week Tonight With John Oliver\u201d",
+     "ask": 0.046,
+     "fee": 0.05,
+     "token": "112348330276747231760306301291069894937771875501493830025702968264826257459033"
+    },
+    {
+     "label": "\u201cThe Late Show With Stephen Colbert\u201d",
+     "ask": 0.87,
+     "fee": 0.05,
+     "token": "14415801740142235029471094199246668204594862702716740947927563277532113280200"
+    },
+    {
+     "label": "\u201cSaturday Night Live\u201d",
+     "ask": 0.04,
+     "fee": 0.05,
+     "token": "77358665185965051542503859440264711396952590927091042223925273113991209117250"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "emmys-2026-outstanding-variety-series"
   },
   {
    "venue": "kalshi",
@@ -2042,11 +2036,11 @@
    "venue": "polymarket",
    "event": "How many cities will Waymo operate in by December 31?",
    "n_legs": 7,
-   "gross": 0.013000000000000012,
-   "fees": 0.027754920000000002,
-   "net": -0.01475491999999999,
-   "capital": 1.01475492,
-   "roi": -0.014540377887500159,
+   "gross": 0.016000000000000014,
+   "fees": 0.027715919999999998,
+   "net": -0.011715919999999984,
+   "capital": 1.0117159199999999,
+   "roi": -0.011580246755433073,
    "url": "https://polymarket.com/event/how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850",
    "neg_risk": true,
    "coverage": "7/7",
@@ -2060,7 +2054,7 @@
     },
     {
      "label": "12-15",
-     "ask": 0.339,
+     "ask": 0.336,
      "fee": 0.04,
      "token": "85222213162014926027626525266922835637324622664789715048923734161017940937991"
     },
@@ -2097,6 +2091,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Atlanta Braves vs. Philadelphia Phillies",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.024575000000000003,
+   "net": -0.014574999999999994,
+   "capital": 1.014575,
+   "roi": -0.014365621072863016,
+   "url": "https://polymarket.com/event/mlb-atl-phi-2026-09-07",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Atlanta Braves vs. Philadelphia Phillies",
+     "ask": 0.43,
+     "fee": 0.05,
+     "token": "20241743585501862051789499065104719810442314828880986843303418337809656255130"
+    },
+    {
+     "label": "NRFI",
+     "ask": 0.56,
+     "fee": 0.05,
+     "token": "49392690257345873840058844968097115433917013836421638881598191672999296178353"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "mlb-atl-phi-2026-09-07"
   },
   {
    "venue": "kalshi",
@@ -2193,6 +2217,96 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXGOVWINS-27JAN01"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Quebec General Election: PLQ # Seats?",
+   "n_legs": 6,
+   "gross": 0.008000000000000007,
+   "fees": 0.030616,
+   "net": -0.022615999999999994,
+   "capital": 1.022616,
+   "roi": -0.022115828424354788,
+   "url": "https://polymarket.com/event/of-seats-won-by-plq-in-the-2026-quebec-general-election",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<28",
+     "ask": 0.27,
+     "fee": 0.04,
+     "token": "37684588602077754230470865761269683820347449295018145399817087355521689138291"
+    },
+    {
+     "label": "28-31",
+     "ask": 0.3,
+     "fee": 0.04,
+     "token": "6627012413385605959206717282415751450674901347833413963718018760725444066002"
+    },
+    {
+     "label": "32-35",
+     "ask": 0.22,
+     "fee": 0.04,
+     "token": "88891590402644905057613535983329376886386153464369475015712021127716612583770"
+    },
+    {
+     "label": "36-39",
+     "ask": 0.08,
+     "fee": 0.04,
+     "token": "101879746435182812910916483205609596356373027224584720198688733794864706402893"
+    },
+    {
+     "label": "40-43",
+     "ask": 0.034,
+     "fee": 0.04,
+     "token": "21131208833096483124323706247227952008617901120551908252105980518484066604281"
+    },
+    {
+     "label": "44+",
+     "ask": 0.088,
+     "fee": 0.04,
+     "token": "89897161171585301080748615044447780632466846187366734459694642470462873348491"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "of-seats-won-by-plq-in-the-2026-quebec-general-election"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Bank of Russia decision in September?",
+   "n_legs": 3,
+   "gross": 0.0010000000000000009,
+   "fees": 0.02454495,
+   "net": -0.02354495,
+   "capital": 1.02354495,
+   "roi": -0.02300333756714837,
+   "url": "https://polymarket.com/event/bank-of-russia-decision-in-september-20260623013858993",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Decrease",
+     "ask": 0.31,
+     "fee": 0.05,
+     "token": "84600356364580996714627796883535757435686855421717776499297305073567636652930"
+    },
+    {
+     "label": "No Change",
+     "ask": 0.64,
+     "fee": 0.05,
+     "token": "101226646659160481931269342739035989075280131990130572924718801665839150667247"
+    },
+    {
+     "label": "Increase",
+     "ask": 0.049,
+     "fee": 0.05,
+     "token": "23792979839805191805050271351704792175531953374486105941272579807964320800106"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "bank-of-russia-decision-in-september-20260623013858993"
   },
   {
    "venue": "kalshi",
@@ -2324,11 +2438,11 @@
    "venue": "polymarket",
    "event": "GPU rental prices (B200) end of 2026?",
    "n_legs": 10,
-   "gross": 0.0030000000000000027,
-   "fees": 0.03527644,
-   "net": -0.032276439999999997,
-   "capital": 1.03227644,
-   "roi": -0.0312672446539611,
+   "gross": 0.0050000000000000044,
+   "fees": 0.0352118,
+   "net": -0.030211799999999997,
+   "capital": 1.0302118,
+   "roi": -0.029325814361668152,
    "url": "https://polymarket.com/event/gpu-rental-prices-b200-end-of-2026-20260709165336437",
    "neg_risk": true,
    "coverage": "10/10",
@@ -2348,7 +2462,7 @@
     },
     {
      "label": "$3.50-$4.00",
-     "ask": 0.097,
+     "ask": 0.095,
      "fee": 0.04,
      "token": "72372994345942165331872291254142580839408053365823742708799145196371117437510"
     },
