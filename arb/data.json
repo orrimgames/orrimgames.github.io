@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-06T02:28:12Z",
-  "ts": 1788661692.3396745,
-  "scan_seconds": 15.9,
+  "generated_at": "2026-09-06T02:42:04Z",
+  "ts": 1788662524.1417227,
+  "scan_seconds": 12.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 214 binary + 1601 multi | kalshi: 5000 events -> 801 binary + 1415 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 215 binary + 1592 multi | kalshi: 5000 events -> 801 binary + 1413 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,54 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "\"By Any Means\" Rotten Tomatoes Score?",
+   "n_legs": 5,
+   "gross": 0.841,
+   "fees": 0.007495450000000001,
+   "net": 0.83350455,
+   "capital": 0.16649545,
+   "roi": 5.006170138583367,
+   "url": "https://polymarket.com/event/by-any-means-rotten-tomatoes-score",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "60+",
+     "ask": 0.027,
+     "fee": 0.05,
+     "token": "108940346621351741634434188843614378196862879122495955121061459790899996374277"
+    },
+    {
+     "label": "70+",
+     "ask": 0.085,
+     "fee": 0.05,
+     "token": "93356634270519582858737257600907849247487220749944572290548872621541275862923"
+    },
+    {
+     "label": "75+",
+     "ask": 0.007,
+     "fee": 0.05,
+     "token": "28461011544115023332583845196985543805878206074564584572800114145084702394595"
+    },
+    {
+     "label": "80+",
+     "ask": 0.008,
+     "fee": 0.05,
+     "token": "106869435624112254887137461745933987741282874710903975279993508772001548477238"
+    },
+    {
+     "label": "85+",
+     "ask": 0.032,
+     "fee": 0.05,
+     "token": "60101005295248943335336519046162453319212719665499324940729472095172035782660"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "by-any-means-rotten-tomatoes-score"
+  },
   {
    "venue": "kalshi",
    "event": "What will be the 51st state in Trump's term?",
@@ -83,54 +131,6 @@
    "event_slug": "KXSTATE51-29"
   },
   {
-   "venue": "polymarket",
-   "event": "\"By Any Means\" Rotten Tomatoes Score?",
-   "n_legs": 5,
-   "gross": 0.81,
-   "fees": 0.0089022,
-   "net": 0.8010978000000001,
-   "capital": 0.1989022,
-   "roi": 4.027596477062597,
-   "url": "https://polymarket.com/event/by-any-means-rotten-tomatoes-score",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "60+",
-     "ask": 0.027,
-     "fee": 0.05,
-     "token": "108940346621351741634434188843614378196862879122495955121061459790899996374277"
-    },
-    {
-     "label": "70+",
-     "ask": 0.083,
-     "fee": 0.05,
-     "token": "93356634270519582858737257600907849247487220749944572290548872621541275862923"
-    },
-    {
-     "label": "75+",
-     "ask": 0.007,
-     "fee": 0.05,
-     "token": "28461011544115023332583845196985543805878206074564584572800114145084702394595"
-    },
-    {
-     "label": "80+",
-     "ask": 0.008,
-     "fee": 0.05,
-     "token": "106869435624112254887137461745933987741282874710903975279993508772001548477238"
-    },
-    {
-     "label": "85+",
-     "ask": 0.065,
-     "fee": 0.05,
-     "token": "60101005295248943335336519046162453319212719665499324940729472095172035782660"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "by-any-means-rotten-tomatoes-score"
-  },
-  {
    "venue": "kalshi",
    "event": "Who will the next Pope be?",
    "n_legs": 7,
@@ -194,11 +194,11 @@
    "venue": "polymarket",
    "event": "HUDL FDV above ___ one day after launch?",
    "n_legs": 6,
-   "gross": 0.5720000000000001,
-   "fees": 0.027149500000000003,
-   "net": 0.5448505,
-   "capital": 0.4551495,
-   "roi": 1.1970802999893442,
+   "gross": 0.5680000000000001,
+   "fees": 0.027401500000000002,
+   "net": 0.5405985000000001,
+   "capital": 0.4594015,
+   "roi": 1.1767451782373373,
    "url": "https://polymarket.com/event/huddle-fdv-above-one-day-after-launch-864",
    "neg_risk": false,
    "coverage": "6/6",
@@ -224,7 +224,7 @@
     },
     {
      "label": "$200M",
-     "ask": 0.048,
+     "ask": 0.052,
      "fee": 0.07,
      "token": "43454557364359451116537206502702215226295052065877309390013298258362112399153"
     },
@@ -246,73 +246,67 @@
   },
   {
    "venue": "polymarket",
-   "event": "Kraken IPO closing market cap above ___ ?",
-   "n_legs": 7,
-   "gross": 0.508,
-   "fees": 0.0182644,
-   "net": 0.4897356,
-   "capital": 0.5102644,
-   "roi": 0.9597683083515135,
-   "url": "https://polymarket.com/event/kraken-ipo-closing-market-cap-above",
+   "event": "What will be in a US-Iran deal in 2026?",
+   "n_legs": 6,
+   "gross": 0.43999999999999995,
+   "fees": 0.0,
+   "net": 0.43999999999999995,
+   "capital": 0.56,
+   "roi": 0.7857142857142856,
+   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
    "neg_risk": false,
-   "coverage": "7/7",
+   "coverage": "6/6",
    "tier": 2,
    "legs": [
     {
-     "label": "$16B",
-     "ask": 0.081,
-     "fee": 0.04,
-     "token": "11294919492177693956868625986737965084690211705849586128412492516830905392085"
+     "label": "1+ Year Enrichment Moratorium",
+     "ask": 0.11,
+     "fee": 0.0,
+     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
     },
     {
-     "label": "$18B",
-     "ask": 0.066,
-     "fee": 0.04,
-     "token": "100793661437270662345296113710745924474488921164312784980795887585850375214905"
+     "label": "Uranium Enrichment % Cap (1+ Year)",
+     "ask": 0.11,
+     "fee": 0.0,
+     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
     },
     {
-     "label": "$20B",
-     "ask": 0.068,
-     "fee": 0.04,
-     "token": "115105975393855984469276010917321434871302297218759589191448418779462105411998"
+     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
+     "ask": 0.08,
+     "fee": 0.0,
+     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
     },
     {
-     "label": "$22B",
-     "ask": 0.06,
-     "fee": 0.04,
-     "token": "72668334839025478329648046428816370143229036867080324138588091934443253366906"
+     "label": "Iran Reconstruction Funding",
+     "ask": 0.11,
+     "fee": 0.0,
+     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
     },
     {
-     "label": "$24B",
+     "label": "Dilution of Iran's Uranium",
      "ask": 0.09,
-     "fee": 0.04,
-     "token": "91027683713979671045745336397477298188194077466070308948719723741690140262890"
+     "fee": 0.0,
+     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
     },
     {
-     "label": "$26B",
-     "ask": 0.07,
-     "fee": 0.04,
-     "token": "92764803406599233737212525171851383164450836198775775873527523839222802477471"
-    },
-    {
-     "label": "$28B",
-     "ask": 0.057,
-     "fee": 0.04,
-     "token": "24493642852616005833747685040083820575708398364099011183039829026956567793445"
+     "label": "Enriched Uranium Surrender",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "kraken-ipo-closing-market-cap-above"
+   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
   },
   {
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
    "gross": 0.45499999999999996,
-   "fees": 0.03539515000000001,
-   "net": 0.41960485,
-   "capital": 0.5803951500000001,
-   "roi": 0.7229640874841906,
+   "fees": 0.03540747,
+   "net": 0.41959252999999996,
+   "capital": 0.58040747,
+   "roi": 0.7229275150438708,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -338,13 +332,13 @@
     },
     {
      "label": "$500M",
-     "ask": 0.089,
+     "ask": 0.088,
      "fee": 0.07,
      "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
     },
     {
      "label": "$800M",
-     "ask": 0.048,
+     "ask": 0.047,
      "fee": 0.07,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -362,7 +356,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.023,
+     "ask": 0.025,
      "fee": 0.07,
      "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
     },
@@ -380,11 +374,11 @@
    "venue": "kalshi",
    "event": "Google\u2019s Year in Search 2026 Global - Tv Shows: #1 search",
    "n_legs": 6,
-   "gross": 0.4,
+   "gross": 0.44999999999999996,
    "fees": 0.06,
-   "net": 0.34,
-   "capital": 0.6599999999999999,
-   "roi": 0.5151515151515152,
+   "net": 0.38999999999999996,
+   "capital": 0.6100000000000001,
+   "roi": 0.6393442622950818,
    "url": "https://kalshi.com/events/KXGOOGLESEARCH-TVS27",
    "neg_risk": null,
    "coverage": "6/6",
@@ -398,7 +392,7 @@
     },
     {
      "label": "Bridgerton",
-     "ask": 0.05,
+     "ask": 0.04,
      "fee": 0.07,
      "ticker": "KXGOOGLESEARCH-TVS27-BRID"
     },
@@ -410,13 +404,13 @@
     },
     {
      "label": "Stranger Things",
-     "ask": 0.15,
+     "ask": 0.14,
      "fee": 0.07,
      "ticker": "KXGOOGLESEARCH-TVS27-STR"
     },
     {
      "label": "The Pitt",
-     "ask": 0.16,
+     "ask": 0.13,
      "fee": 0.07,
      "ticker": "KXGOOGLESEARCH-TVS27-PIT"
     },
@@ -512,11 +506,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.22699999999999998,
-   "fees": 0.048702850000000006,
-   "net": 0.17829714999999996,
-   "capital": 0.82170285,
-   "roi": 0.21698494778252256,
+   "gross": 0.22599999999999998,
+   "fees": 0.04876060000000001,
+   "net": 0.17723939999999996,
+   "capital": 0.8227606000000001,
+   "roi": 0.21542037866178806,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -542,7 +536,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.087,
+     "ask": 0.088,
      "fee": 0.07,
      "token": "81341495887322709056930219084641487717235305340983601089306536463617089758769"
     },
@@ -578,11 +572,11 @@
    "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.17000000000000004,
+   "gross": 0.16800000000000004,
    "fees": 0.0,
-   "net": 0.17000000000000004,
-   "capital": 0.83,
-   "roi": 0.20481927710843378,
+   "net": 0.16800000000000004,
+   "capital": 0.832,
+   "roi": 0.20192307692307698,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -632,7 +626,7 @@
     },
     {
      "label": "Syria",
-     "ask": 0.071,
+     "ask": 0.073,
      "fee": 0.0,
      "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
     },
@@ -720,6 +714,42 @@
   },
   {
    "venue": "kalshi",
+   "event": "Winnipeg mayoral election winner?",
+   "n_legs": 3,
+   "gross": 0.14,
+   "fees": 0.04,
+   "net": 0.1,
+   "capital": 0.9,
+   "roi": 0.11111111111111112,
+   "url": "https://kalshi.com/events/KXWINNIPEGMAYOR-26OCT28",
+   "neg_risk": null,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Scott Gillingham",
+     "ask": 0.62,
+     "fee": 0.07,
+     "ticker": "KXWINNIPEGMAYOR-26OCT28-SGIL"
+    },
+    {
+     "label": "Kevin Klein",
+     "ask": 0.17,
+     "fee": 0.07,
+     "ticker": "KXWINNIPEGMAYOR-26OCT28-KKLE"
+    },
+    {
+     "label": "Don Woodstock",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXWINNIPEGMAYOR-26OCT28-DWOO"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXWINNIPEGMAYOR-26OCT28"
+  },
+  {
+   "venue": "kalshi",
    "event": "Philippine Senate election winner?",
    "n_legs": 2,
    "gross": 0.1200000000000001,
@@ -747,42 +777,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPHILIPPINESSENATE-28"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Winnipeg mayoral election winner?",
-   "n_legs": 3,
-   "gross": 0.13,
-   "fees": 0.05,
-   "net": 0.08,
-   "capital": 0.92,
-   "roi": 0.08695652173913043,
-   "url": "https://kalshi.com/events/KXWINNIPEGMAYOR-26OCT28",
-   "neg_risk": null,
-   "coverage": "3/3",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Scott Gillingham",
-     "ask": 0.62,
-     "fee": 0.07,
-     "ticker": "KXWINNIPEGMAYOR-26OCT28-SGIL"
-    },
-    {
-     "label": "Kevin Klein",
-     "ask": 0.18,
-     "fee": 0.07,
-     "ticker": "KXWINNIPEGMAYOR-26OCT28-KKLE"
-    },
-    {
-     "label": "Don Woodstock",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXWINNIPEGMAYOR-26OCT28-DWOO"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXWINNIPEGMAYOR-26OCT28"
   },
   {
    "venue": "kalshi",
@@ -998,11 +992,11 @@
    "venue": "polymarket",
    "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
    "n_legs": 4,
-   "gross": 0.07099999999999995,
-   "fees": 0.025643960000000004,
-   "net": 0.045356039999999945,
-   "capital": 0.9546439600000001,
-   "roi": 0.047510948479682354,
+   "gross": 0.07299999999999995,
+   "fees": 0.025579640000000004,
+   "net": 0.04742035999999995,
+   "capital": 0.9525796400000001,
+   "roi": 0.04978099258976389,
    "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
    "neg_risk": false,
    "coverage": "4/4",
@@ -1028,7 +1022,7 @@
     },
     {
      "label": "70%+",
-     "ask": 0.099,
+     "ask": 0.097,
      "fee": 0.04,
      "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
     }
@@ -1287,60 +1281,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXUSTESTSREADING-26"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Germany GDP growth in Q3 2026?",
-   "n_legs": 6,
-   "gross": 0.05499999999999994,
-   "fees": 0.03559335,
-   "net": 0.019406649999999935,
-   "capital": 0.98059335,
-   "roi": 0.01979072160748381,
-   "url": "https://polymarket.com/event/germany-gdp-growth-in-q3-2026",
-   "neg_risk": true,
-   "coverage": "6/6",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "\u22640.0%",
-     "ask": 0.11,
-     "fee": 0.05,
-     "token": "51341333309614784969632448867999540707742006338017323132742946934154441909487"
-    },
-    {
-     "label": "0.1-0.3%",
-     "ask": 0.008,
-     "fee": 0.05,
-     "token": "96367431939051755582610797033185003499513625531660325248899019306944162181062"
-    },
-    {
-     "label": "0.4-0.6%",
-     "ask": 0.087,
-     "fee": 0.05,
-     "token": "112556455996565882900983831612056173389750284541639165174028934479786830429180"
-    },
-    {
-     "label": "0.7-0.9%",
-     "ask": 0.18,
-     "fee": 0.05,
-     "token": "59293003763516043146850019052487590233903175038387614953804756749381462454710"
-    },
-    {
-     "label": "1.0-1.2%",
-     "ask": 0.39,
-     "fee": 0.05,
-     "token": "62148730315619798082110552302876708342620909361551602855614720259265971037777"
-    },
-    {
-     "label": "1.3%+",
-     "ask": 0.17,
-     "fee": 0.05,
-     "token": "51428380888558386954554804007495706447700006849650608685012940717390977530925"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "germany-gdp-growth-in-q3-2026"
   },
   {
    "venue": "kalshi",
@@ -1728,13 +1668,67 @@
   },
   {
    "venue": "polymarket",
+   "event": "Germany GDP growth in Q3 2026?",
+   "n_legs": 6,
+   "gross": 0.03700000000000003,
+   "fees": 0.03594515,
+   "net": 0.0010548500000000308,
+   "capital": 0.99894515,
+   "roi": 0.0010559638835025435,
+   "url": "https://polymarket.com/event/germany-gdp-growth-in-q3-2026",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "\u22640.0%",
+     "ask": 0.108,
+     "fee": 0.05,
+     "token": "51341333309614784969632448867999540707742006338017323132742946934154441909487"
+    },
+    {
+     "label": "0.1-0.3%",
+     "ask": 0.008,
+     "fee": 0.05,
+     "token": "96367431939051755582610797033185003499513625531660325248899019306944162181062"
+    },
+    {
+     "label": "0.4-0.6%",
+     "ask": 0.087,
+     "fee": 0.05,
+     "token": "112556455996565882900983831612056173389750284541639165174028934479786830429180"
+    },
+    {
+     "label": "0.7-0.9%",
+     "ask": 0.18,
+     "fee": 0.05,
+     "token": "59293003763516043146850019052487590233903175038387614953804756749381462454710"
+    },
+    {
+     "label": "1.0-1.2%",
+     "ask": 0.4,
+     "fee": 0.05,
+     "token": "62148730315619798082110552302876708342620909361551602855614720259265971037777"
+    },
+    {
+     "label": "1.3%+",
+     "ask": 0.18,
+     "fee": 0.05,
+     "token": "51428380888558386954554804007495706447700006849650608685012940717390977530925"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "germany-gdp-growth-in-q3-2026"
+  },
+  {
+   "venue": "polymarket",
    "event": "Mecklenburg-Vorpommern Parliamentary Election: SPD Vote Share?",
    "n_legs": 4,
-   "gross": 0.020000000000000018,
-   "fees": 0.026568,
-   "net": -0.006567999999999984,
-   "capital": 1.006568,
-   "roi": -0.006525142861684441,
+   "gross": 0.019000000000000017,
+   "fees": 0.02660236,
+   "net": -0.007602359999999982,
+   "capital": 1.00760236,
+   "roi": -0.007545000192337762,
    "url": "https://polymarket.com/event/mecklenburg-vorpommern-parliamentary-election-spd-vote-share",
    "neg_risk": true,
    "coverage": "4/4",
@@ -1742,7 +1736,7 @@
    "legs": [
     {
      "label": "<25%",
-     "ask": 0.07,
+     "ask": 0.071,
      "fee": 0.04,
      "token": "72008137698690638283278083760410972384010790884732925027267141407189607364093"
     },
@@ -1830,103 +1824,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Reserve Bank of New Zealand decision in October?",
-   "n_legs": 5,
-   "gross": 0.0030000000000000027,
-   "fees": 0.014124150000000002,
-   "net": -0.01112415,
-   "capital": 1.01112415,
-   "roi": -0.011001764719001121,
-   "url": "https://polymarket.com/event/reserve-bank-of-new-zealand-decision-in-october-20260729164521631",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "50+ bps decrease",
-     "ask": 0.003,
-     "fee": 0.05,
-     "token": "3100653308011586944471232313932902561844631222034647595368136454645530703214"
-    },
-    {
-     "label": "25 bps decrease",
-     "ask": 0.002,
-     "fee": 0.05,
-     "token": "94014450558851916899887083149968398592697375148381066044224894504757627299098"
-    },
-    {
-     "label": "No change",
-     "ask": 0.83,
-     "fee": 0.05,
-     "token": "22688212736850915673955550101502285312896818330702442897724628472944535337139"
-    },
-    {
-     "label": "25 bps increase",
-     "ask": 0.16,
-     "fee": 0.05,
-     "token": "99000399158542499480555629011783776521496135039052808485153902569506702800016"
-    },
-    {
-     "label": "50+ bps increase",
-     "ask": 0.002,
-     "fee": 0.05,
-     "token": "58981013435403031458784014522201596193593446103759952637301765902334228388465"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "reserve-bank-of-new-zealand-decision-in-october-20260729164521631"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Mecklenburg-Vorpommern Parliamentary Election: AfD Vote Share?",
-   "n_legs": 4,
-   "gross": 0.01200000000000001,
-   "fees": 0.02526944,
-   "net": -0.01326943999999999,
-   "capital": 1.01326944,
-   "roi": -0.013095667821581582,
-   "url": "https://polymarket.com/event/mecklenburg-vorpommern-parliamentary-election-afd-vote-share",
-   "neg_risk": true,
-   "coverage": "4/4",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<32%",
-     "ask": 0.008,
-     "fee": 0.04,
-     "token": "95599180695759661190995292369730896584848407354600768798947928022921259090650"
-    },
-    {
-     "label": "32-35%",
-     "ask": 0.27,
-     "fee": 0.04,
-     "token": "55173571814705340521681449950068596371373008937734591809313019647478020150367"
-    },
-    {
-     "label": "35-38%",
-     "ask": 0.48,
-     "fee": 0.04,
-     "token": "88311079398889553369621671619431132639752469833792426572329390899600789880887"
-    },
-    {
-     "label": "38%+",
-     "ask": 0.23,
-     "fee": 0.04,
-     "token": "19401205399667083787124857275142006436023082095106213316497027381451217927104"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "mecklenburg-vorpommern-parliamentary-election-afd-vote-share"
-  },
-  {
-   "venue": "polymarket",
    "event": "How many cities will Waymo operate in by December 31?",
    "n_legs": 7,
-   "gross": 0.014000000000000012,
-   "fees": 0.027802160000000003,
-   "net": -0.01380215999999999,
-   "capital": 1.01380216,
-   "roi": -0.013614253889535992,
+   "gross": 0.016000000000000014,
+   "fees": 0.027749440000000004,
+   "net": -0.01174943999999999,
+   "capital": 1.01174944,
+   "roi": -0.01161299382582311,
    "url": "https://polymarket.com/event/how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850",
    "neg_risk": true,
    "coverage": "7/7",
@@ -1934,13 +1838,13 @@
    "legs": [
     {
      "label": "<12",
-     "ask": 0.222,
+     "ask": 0.219,
      "fee": 0.04,
      "token": "63042014785762923406318164740350572796925540111820315252455486323392172129344"
     },
     {
      "label": "12-15",
-     "ask": 0.32,
+     "ask": 0.321,
      "fee": 0.04,
      "token": "85222213162014926027626525266922835637324622664789715048923734161017940937991"
     },
@@ -1977,6 +1881,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "how-many-cities-will-waymo-operate-in-by-december-31-20260626203648850"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Mecklenburg-Vorpommern Parliamentary Election: AfD Vote Share?",
+   "n_legs": 4,
+   "gross": 0.01100000000000001,
+   "fees": 0.02530876,
+   "net": -0.01430875999999999,
+   "capital": 1.01430876,
+   "roi": -0.014106907644177291,
+   "url": "https://polymarket.com/event/mecklenburg-vorpommern-parliamentary-election-afd-vote-share",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<32%",
+     "ask": 0.009,
+     "fee": 0.04,
+     "token": "95599180695759661190995292369730896584848407354600768798947928022921259090650"
+    },
+    {
+     "label": "32-35%",
+     "ask": 0.27,
+     "fee": 0.04,
+     "token": "55173571814705340521681449950068596371373008937734591809313019647478020150367"
+    },
+    {
+     "label": "35-38%",
+     "ask": 0.48,
+     "fee": 0.04,
+     "token": "88311079398889553369621671619431132639752469833792426572329390899600789880887"
+    },
+    {
+     "label": "38%+",
+     "ask": 0.23,
+     "fee": 0.04,
+     "token": "19401205399667083787124857275142006436023082095106213316497027381451217927104"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "mecklenburg-vorpommern-parliamentary-election-afd-vote-share"
   },
   {
    "venue": "kalshi",
@@ -2421,6 +2367,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXGOVWINS-27JAN01"
+  },
+  {
+   "venue": "kalshi",
+   "event": "VA-01 House winner?",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.04,
+   "net": -0.029999999999999992,
+   "capital": 1.03,
+   "roi": -0.029126213592233,
+   "url": "https://kalshi.com/events/HOUSEVA1-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Shannon Taylor",
+     "ask": 0.46,
+     "fee": 0.07,
+     "ticker": "HOUSEVA1-26-D"
+    },
+    {
+     "label": "Rob Wittman",
+     "ask": 0.53,
+     "fee": 0.07,
+     "ticker": "HOUSEVA1-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "HOUSEVA1-26"
   },
   {
    "venue": "kalshi",
