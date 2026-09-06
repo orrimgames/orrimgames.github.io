@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-06T19:41:41Z",
-  "ts": 1788723701.47978,
-  "scan_seconds": 14.3,
+  "generated_at": "2026-09-06T19:52:26Z",
+  "ts": 1788724346.8995097,
+  "scan_seconds": 15.5,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 214 binary + 1520 multi | kalshi: 5000 events -> 806 binary + 1419 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 206 binary + 1527 multi | kalshi: 5000 events -> 805 binary + 1420 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,36 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "Switzerland\u2019s September Referendum: What will pass?",
+   "n_legs": 2,
+   "gross": 0.924,
+   "fees": 0.00291296,
+   "net": 0.9210870400000001,
+   "capital": 0.07891296,
+   "roi": 11.672189713831543,
+   "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Neutrality initiative",
+     "ask": 0.05,
+     "fee": 0.04,
+     "token": "29930395488773801857622260293304694658356268641863382575001425275546818052153"
+    },
+    {
+     "label": "Food initiative",
+     "ask": 0.026,
+     "fee": 0.04,
+     "token": "23797619466496830824327729794059922941928506828173754246963736799336377251150"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "switzerlands-september-referendum-what-will-pass-20260713144919276"
+  },
   {
    "venue": "kalshi",
    "event": "What will be the 51st state in Trump's term?",
@@ -308,11 +338,11 @@
    "venue": "polymarket",
    "event": "HUDL FDV above ___ one day after launch?",
    "n_legs": 6,
-   "gross": 0.575,
-   "fees": 0.026785990000000003,
-   "net": 0.5482140099999999,
-   "capital": 0.45178598999999997,
-   "roi": 1.2134373843686475,
+   "gross": 0.5760000000000001,
+   "fees": 0.0267211,
+   "net": 0.5492789,
+   "capital": 0.4507211,
+   "roi": 1.2186669317234096,
    "url": "https://polymarket.com/event/huddle-fdv-above-one-day-after-launch-864",
    "neg_risk": false,
    "coverage": "6/6",
@@ -332,7 +362,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.037,
+     "ask": 0.036,
      "fee": 0.07,
      "token": "11694358912734831702732467462600820351600243906023098969691257293351154048482"
     },
@@ -362,11 +392,11 @@
    "venue": "polymarket",
    "event": "Hurupay FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.5289999999999999,
-   "fees": 0.030500470000000002,
-   "net": 0.4984995299999999,
-   "capital": 0.5015004700000001,
-   "roi": 0.9940160773927088,
+   "gross": 0.528,
+   "fees": 0.030533720000000004,
+   "net": 0.49746628000000004,
+   "capital": 0.5025337200000001,
+   "roi": 0.9899162189554165,
    "url": "https://polymarket.com/event/hurupay-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -386,7 +416,7 @@
     },
     {
      "label": "$20M",
-     "ask": 0.098,
+     "ask": 0.101,
      "fee": 0.07,
      "token": "23589625940862671573330929616154798479561271792724234598176128814366309142913"
     },
@@ -416,7 +446,7 @@
     },
     {
      "label": "$200M",
-     "ask": 0.019,
+     "ask": 0.017,
      "fee": 0.07,
      "token": "20738660466274730448835897130047127869702849117739804720433926408461534206536"
     }
@@ -482,11 +512,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.42000000000000004,
-   "fees": 0.03676078000000001,
-   "net": 0.38323922000000005,
-   "capital": 0.61676078,
-   "roi": 0.6213741736301716,
+   "gross": 0.41900000000000004,
+   "fees": 0.03682581,
+   "net": 0.38217419,
+   "capital": 0.6178258099999999,
+   "roi": 0.6185791914390888,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -518,7 +548,7 @@
     },
     {
      "label": "$800M",
-     "ask": 0.035,
+     "ask": 0.036,
      "fee": 0.07,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -551,14 +581,68 @@
    "event_slug": "pacifica-fdv-above-one-day-after-launch"
   },
   {
+   "venue": "kalshi",
+   "event": "Google\u2019s Year in Search 2026 Global - Tv Shows: #1 search",
+   "n_legs": 6,
+   "gross": 0.43999999999999995,
+   "fees": 0.06,
+   "net": 0.37999999999999995,
+   "capital": 0.6200000000000001,
+   "roi": 0.6129032258064514,
+   "url": "https://kalshi.com/events/KXGOOGLESEARCH-TVS27",
+   "neg_risk": null,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "His & Hers",
+     "ask": 0.12,
+     "fee": 0.07,
+     "ticker": "KXGOOGLESEARCH-TVS27-HIS"
+    },
+    {
+     "label": "Bridgerton",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGOOGLESEARCH-TVS27-BRID"
+    },
+    {
+     "label": "Landman & The Madison",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXGOOGLESEARCH-TVS27-LAN"
+    },
+    {
+     "label": "Stranger Things",
+     "ask": 0.15,
+     "fee": 0.07,
+     "ticker": "KXGOOGLESEARCH-TVS27-STR"
+    },
+    {
+     "label": "The Pitt",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXGOOGLESEARCH-TVS27-PIT"
+    },
+    {
+     "label": "Survivor",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXGOOGLESEARCH-TVS27-SUR"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXGOOGLESEARCH-TVS27"
+  },
+  {
    "venue": "polymarket",
    "event": "Ostium FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.405,
-   "fees": 0.03899441,
-   "net": 0.36600559000000005,
-   "capital": 0.63399441,
-   "roi": 0.5773009733634719,
+   "gross": 0.395,
+   "fees": 0.03954279,
+   "net": 0.35545721,
+   "capital": 0.64454279,
+   "roi": 0.5514873729329902,
    "url": "https://polymarket.com/event/ostium-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -578,7 +662,7 @@
     },
     {
      "label": "$50M",
-     "ask": 0.104,
+     "ask": 0.114,
      "fee": 0.07,
      "token": "53992420100435277392856566453062156937173735686022755966612892390150121733037"
     },
@@ -590,13 +674,13 @@
     },
     {
      "label": "$700M",
-     "ask": 0.037,
+     "ask": 0.038,
      "fee": 0.07,
      "token": "35129453318541121256752047793125409661628469584351486170287400640080920251765"
     },
     {
      "label": "$1B",
-     "ask": 0.045,
+     "ask": 0.044,
      "fee": 0.07,
      "token": "57700465037803989170000934365129334361828938120181707550570601755066853624528"
     },
@@ -635,58 +719,94 @@
    "event_slug": "ostium-fdv-above-one-day-after-launch"
   },
   {
-   "venue": "kalshi",
-   "event": "Google\u2019s Year in Search 2026 Global - Tv Shows: #1 search",
-   "n_legs": 6,
-   "gross": 0.4,
-   "fees": 0.06,
-   "net": 0.34,
-   "capital": 0.6599999999999999,
-   "roi": 0.5151515151515152,
-   "url": "https://kalshi.com/events/KXGOOGLESEARCH-TVS27",
-   "neg_risk": null,
-   "coverage": "6/6",
+   "venue": "polymarket",
+   "event": "Which country will join Abraham Accords before 2027?",
+   "n_legs": 12,
+   "gross": 0.17000000000000004,
+   "fees": 0.0,
+   "net": 0.17000000000000004,
+   "capital": 0.83,
+   "roi": 0.20481927710843378,
+   "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
+   "neg_risk": false,
+   "coverage": "12/12",
    "tier": 2,
    "legs": [
     {
-     "label": "His & Hers",
-     "ask": 0.12,
-     "fee": 0.07,
-     "ticker": "KXGOOGLESEARCH-TVS27-HIS"
+     "label": "Pakistan",
+     "ask": 0.048,
+     "fee": 0.0,
+     "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
     },
     {
-     "label": "Bridgerton",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGOOGLESEARCH-TVS27-BRID"
+     "label": "Qatar",
+     "ask": 0.069,
+     "fee": 0.0,
+     "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
     },
     {
-     "label": "Landman & The Madison",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGOOGLESEARCH-TVS27-LAN"
+     "label": "Turkey",
+     "ask": 0.03,
+     "fee": 0.0,
+     "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
     },
     {
-     "label": "Stranger Things",
-     "ask": 0.15,
-     "fee": 0.07,
-     "ticker": "KXGOOGLESEARCH-TVS27-STR"
+     "label": "Egypt",
+     "ask": 0.095,
+     "fee": 0.0,
+     "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
     },
     {
-     "label": "The Pitt",
-     "ask": 0.16,
-     "fee": 0.07,
-     "ticker": "KXGOOGLESEARCH-TVS27-PIT"
-    },
-    {
-     "label": "Survivor",
+     "label": "Jordan",
      "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXGOOGLESEARCH-TVS27-SUR"
+     "fee": 0.0,
+     "token": "101435651903522065386761154847886894419498035898754590795274051495263217259522"
+    },
+    {
+     "label": "Oman",
+     "ask": 0.045,
+     "fee": 0.0,
+     "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
+    },
+    {
+     "label": "Kuwait",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "17145696747096623159702150222487527036704201283101191852338717001493457135691"
+    },
+    {
+     "label": "Syria",
+     "ask": 0.072,
+     "fee": 0.0,
+     "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
+    },
+    {
+     "label": "Lebanon",
+     "ask": 0.09,
+     "fee": 0.0,
+     "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
+    },
+    {
+     "label": "Saudi Arabia",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "44330303251518041570433466737679109932061477358497939773558457869950245007155"
+    },
+    {
+     "label": "Azerbaijan",
+     "ask": 0.091,
+     "fee": 0.0,
+     "token": "35342168199661863269250061925826079259874819768796067478400947796757494719137"
+    },
+    {
+     "label": "Somaliland",
+     "ask": 0.09,
+     "fee": 0.0,
+     "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "KXGOOGLESEARCH-TVS27"
+   "event_slug": "which-country-will-join-abraham-accords-before-2027"
   },
   {
    "venue": "polymarket",
@@ -755,96 +875,6 @@
    "event_slug": "metamask-fdv-above-one-day-after-launch"
   },
   {
-   "venue": "polymarket",
-   "event": "Which country will join Abraham Accords before 2027?",
-   "n_legs": 12,
-   "gross": 0.16600000000000004,
-   "fees": 0.0,
-   "net": 0.16600000000000004,
-   "capital": 0.834,
-   "roi": 0.19904076738609117,
-   "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
-   "neg_risk": false,
-   "coverage": "12/12",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Pakistan",
-     "ask": 0.049,
-     "fee": 0.0,
-     "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
-    },
-    {
-     "label": "Qatar",
-     "ask": 0.069,
-     "fee": 0.0,
-     "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
-    },
-    {
-     "label": "Turkey",
-     "ask": 0.03,
-     "fee": 0.0,
-     "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
-    },
-    {
-     "label": "Egypt",
-     "ask": 0.098,
-     "fee": 0.0,
-     "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
-    },
-    {
-     "label": "Jordan",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "101435651903522065386761154847886894419498035898754590795274051495263217259522"
-    },
-    {
-     "label": "Oman",
-     "ask": 0.045,
-     "fee": 0.0,
-     "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
-    },
-    {
-     "label": "Kuwait",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "17145696747096623159702150222487527036704201283101191852338717001493457135691"
-    },
-    {
-     "label": "Syria",
-     "ask": 0.072,
-     "fee": 0.0,
-     "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
-    },
-    {
-     "label": "Lebanon",
-     "ask": 0.09,
-     "fee": 0.0,
-     "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
-    },
-    {
-     "label": "Saudi Arabia",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "44330303251518041570433466737679109932061477358497939773558457869950245007155"
-    },
-    {
-     "label": "Azerbaijan",
-     "ask": 0.091,
-     "fee": 0.0,
-     "token": "35342168199661863269250061925826079259874819768796067478400947796757494719137"
-    },
-    {
-     "label": "Somaliland",
-     "ask": 0.09,
-     "fee": 0.0,
-     "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-country-will-join-abraham-accords-before-2027"
-  },
-  {
    "venue": "kalshi",
    "event": "2028 Green Presidential nominee",
    "n_legs": 6,
@@ -902,11 +932,11 @@
    "venue": "kalshi",
    "event": "Winnipeg mayoral election winner?",
    "n_legs": 3,
-   "gross": 0.16000000000000003,
+   "gross": 0.16999999999999993,
    "fees": 0.04,
-   "net": 0.12000000000000002,
-   "capital": 0.88,
-   "roi": 0.13636363636363638,
+   "net": 0.12999999999999992,
+   "capital": 0.8700000000000001,
+   "roi": 0.14942528735632174,
    "url": "https://kalshi.com/events/KXWINNIPEGMAYOR-26OCT28",
    "neg_risk": null,
    "coverage": "3/3",
@@ -920,7 +950,7 @@
     },
     {
      "label": "Kevin Klein",
-     "ask": 0.15,
+     "ask": 0.14,
      "fee": 0.07,
      "ticker": "KXWINNIPEGMAYOR-26OCT28-KKLE"
     },
@@ -1094,11 +1124,11 @@
    "venue": "polymarket",
    "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
    "n_legs": 4,
-   "gross": 0.07699999999999996,
-   "fees": 0.025164440000000003,
-   "net": 0.051835559999999954,
-   "capital": 0.94816444,
-   "roi": 0.054669377813831486,
+   "gross": 0.07799999999999996,
+   "fees": 0.025131040000000004,
+   "net": 0.05286895999999995,
+   "capital": 0.94713104,
+   "roi": 0.05582011122769237,
    "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
    "neg_risk": false,
    "coverage": "4/4",
@@ -1124,7 +1154,7 @@
     },
     {
      "label": "70%+",
-     "ask": 0.083,
+     "ask": 0.082,
      "fee": 0.04,
      "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
     }
@@ -1245,6 +1275,120 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPRESMATCHUP-28NOV07"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Which countries will recognize Israel by December 31?",
+   "n_legs": 16,
+   "gross": 0.04299999999999993,
+   "fees": 0.0,
+   "net": 0.04299999999999993,
+   "capital": 0.9570000000000001,
+   "roi": 0.044932079414837955,
+   "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
+   "neg_risk": false,
+   "coverage": "16/16",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "North Korea",
+     "ask": 0.045,
+     "fee": 0.0,
+     "token": "66401440271983765981896111720390968685794445602688073258766280964806180948741"
+    },
+    {
+     "label": "Cuba",
+     "ask": 0.045,
+     "fee": 0.0,
+     "token": "112648925356443758946940369866892568424699165236725029786686196105765202287771"
+    },
+    {
+     "label": "Saudi Arabia",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "105021230936912984680931678122814125668784031756100999048923377620987522853502"
+    },
+    {
+     "label": "Lebanon",
+     "ask": 0.1,
+     "fee": 0.0,
+     "token": "57296275132860207464910469086912664176153776071835315700063526910474840238866"
+    },
+    {
+     "label": "Afghanistan",
+     "ask": 0.038,
+     "fee": 0.0,
+     "token": "98615804070815763769968147329639484175548428357642357460081874034057958631973"
+    },
+    {
+     "label": "Iraq",
+     "ask": 0.058,
+     "fee": 0.0,
+     "token": "39178088573096847322455495237438390847582626689242446542209071712658328318785"
+    },
+    {
+     "label": "Pakistan",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "61782437453393455873421902608347180052608940662115680015572295454535780744936"
+    },
+    {
+     "label": "Syria",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "95557412500999805076472893611192107025033551734600316765572331873300312062279"
+    },
+    {
+     "label": "Venezuela",
+     "ask": 0.1,
+     "fee": 0.0,
+     "token": "46678549643025579481434878349219096040657504404574548129471310417977794255568"
+    },
+    {
+     "label": "Tunisia",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "110119458246195866392279748195795405667270272048482672378597646319468481393456"
+    },
+    {
+     "label": "Kuwait",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "6597567716906659210734412187060302708545871029155693646874836858425710157506"
+    },
+    {
+     "label": "Qatar",
+     "ask": 0.049,
+     "fee": 0.0,
+     "token": "25127138385919514206272578282716394996449590382299508752461143644236965716313"
+    },
+    {
+     "label": "Indonesia",
+     "ask": 0.08,
+     "fee": 0.0,
+     "token": "46467850666586016891017914548299567275100357929816009318356054834604477300488"
+    },
+    {
+     "label": "Malaysia",
+     "ask": 0.039,
+     "fee": 0.0,
+     "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
+    },
+    {
+     "label": "Bangladesh",
+     "ask": 0.04,
+     "fee": 0.0,
+     "token": "40688094653686125161851139319199302543780839137475354735981151285183116400686"
+    },
+    {
+     "label": "Iran",
+     "ask": 0.043,
+     "fee": 0.0,
+     "token": "35575529907914456377934861485987059685769709278922938684692921159579159923096"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "which-countries-will-recognize-israel-by-december-31"
   },
   {
    "venue": "kalshi",
@@ -1505,120 +1649,6 @@
    "event_slug": "how-many-hurricanes-will-form-during-the-atlantic-hurricane-season-in-2026-20260728201848339"
   },
   {
-   "venue": "polymarket",
-   "event": "Which countries will recognize Israel by December 31?",
-   "n_legs": 16,
-   "gross": 0.02300000000000002,
-   "fees": 0.0,
-   "net": 0.02300000000000002,
-   "capital": 0.977,
-   "roi": 0.02354145342886389,
-   "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
-   "neg_risk": false,
-   "coverage": "16/16",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "North Korea",
-     "ask": 0.045,
-     "fee": 0.0,
-     "token": "66401440271983765981896111720390968685794445602688073258766280964806180948741"
-    },
-    {
-     "label": "Cuba",
-     "ask": 0.045,
-     "fee": 0.0,
-     "token": "112648925356443758946940369866892568424699165236725029786686196105765202287771"
-    },
-    {
-     "label": "Saudi Arabia",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "105021230936912984680931678122814125668784031756100999048923377620987522853502"
-    },
-    {
-     "label": "Lebanon",
-     "ask": 0.12,
-     "fee": 0.0,
-     "token": "57296275132860207464910469086912664176153776071835315700063526910474840238866"
-    },
-    {
-     "label": "Afghanistan",
-     "ask": 0.038,
-     "fee": 0.0,
-     "token": "98615804070815763769968147329639484175548428357642357460081874034057958631973"
-    },
-    {
-     "label": "Iraq",
-     "ask": 0.058,
-     "fee": 0.0,
-     "token": "39178088573096847322455495237438390847582626689242446542209071712658328318785"
-    },
-    {
-     "label": "Pakistan",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "61782437453393455873421902608347180052608940662115680015572295454535780744936"
-    },
-    {
-     "label": "Syria",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "95557412500999805076472893611192107025033551734600316765572331873300312062279"
-    },
-    {
-     "label": "Venezuela",
-     "ask": 0.1,
-     "fee": 0.0,
-     "token": "46678549643025579481434878349219096040657504404574548129471310417977794255568"
-    },
-    {
-     "label": "Tunisia",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "110119458246195866392279748195795405667270272048482672378597646319468481393456"
-    },
-    {
-     "label": "Kuwait",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "6597567716906659210734412187060302708545871029155693646874836858425710157506"
-    },
-    {
-     "label": "Qatar",
-     "ask": 0.049,
-     "fee": 0.0,
-     "token": "25127138385919514206272578282716394996449590382299508752461143644236965716313"
-    },
-    {
-     "label": "Indonesia",
-     "ask": 0.08,
-     "fee": 0.0,
-     "token": "46467850666586016891017914548299567275100357929816009318356054834604477300488"
-    },
-    {
-     "label": "Malaysia",
-     "ask": 0.039,
-     "fee": 0.0,
-     "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
-    },
-    {
-     "label": "Bangladesh",
-     "ask": 0.04,
-     "fee": 0.0,
-     "token": "40688094653686125161851139319199302543780839137475354735981151285183116400686"
-    },
-    {
-     "label": "Iran",
-     "ask": 0.043,
-     "fee": 0.0,
-     "token": "35575529907914456377934861485987059685769709278922938684692921159579159923096"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-countries-will-recognize-israel-by-december-31"
-  },
-  {
    "venue": "kalshi",
    "event": "Fed decision in Dec 2027?",
    "n_legs": 5,
@@ -1850,11 +1880,11 @@
    "venue": "polymarket",
    "event": "GPU rental prices (B200) end of 2026?",
    "n_legs": 10,
-   "gross": 0.03299999999999992,
-   "fees": 0.0342754,
-   "net": -0.0012754000000000792,
-   "capital": 1.0012754000000001,
-   "roi": -0.001273775426820712,
+   "gross": 0.038999999999999924,
+   "fees": 0.0340706,
+   "net": 0.004929399999999924,
+   "capital": 0.9950706,
+   "roi": 0.004953819357139005,
    "url": "https://polymarket.com/event/gpu-rental-prices-b200-end-of-2026-20260709165336437",
    "neg_risk": true,
    "coverage": "10/10",
@@ -1874,13 +1904,13 @@
     },
     {
      "label": "$3.50-$4.00",
-     "ask": 0.073,
+     "ask": 0.072,
      "fee": 0.04,
      "token": "72372994345942165331872291254142580839408053365823742708799145196371117437510"
     },
     {
      "label": "$4.00-$4.50",
-     "ask": 0.076,
+     "ask": 0.071,
      "fee": 0.04,
      "token": "36904306086092260409728456215377217461755390432795738011674431265825125126865"
     },
@@ -1928,11 +1958,11 @@
    "venue": "polymarket",
    "event": "UK Annual GDP Growth 2026",
    "n_legs": 7,
-   "gross": 0.016000000000000014,
-   "fees": 0.018484800000000003,
-   "net": -0.0024847999999999884,
-   "capital": 1.0024848,
-   "roi": -0.0024786410726626365,
+   "gross": 0.017000000000000015,
+   "fees": 0.018438850000000003,
+   "net": -0.001438849999999988,
+   "capital": 1.00143885,
+   "roi": -0.00143678268523334,
    "url": "https://polymarket.com/event/uk-annual-gdp-growth-2026",
    "neg_risk": true,
    "coverage": "7/7",
@@ -1958,7 +1988,7 @@
     },
     {
      "label": "2-3%",
-     "ask": 0.041,
+     "ask": 0.04,
      "fee": 0.05,
      "token": "67222255459014260527786328185866732617271182312137423511814639349276672846256"
     },
@@ -1986,13 +2016,49 @@
   },
   {
    "venue": "polymarket",
+   "event": "NK Slaven Belupo vs. NK Lokomotiva Zagreb",
+   "n_legs": 3,
+   "gross": 0.030000000000000027,
+   "fees": 0.032565,
+   "net": -0.00256499999999997,
+   "capital": 1.002565,
+   "roi": -0.002558437607536639,
+   "url": "https://polymarket.com/event/hr1-sla-lok-2026-09-06",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "NK Slaven Belupo",
+     "ask": 0.37,
+     "fee": 0.05,
+     "token": "114403384107873014971465042186704106826598780982544002500547495363614237337788"
+    },
+    {
+     "label": "Draw (NK Slaven Belupo vs. NK Lokomotiva Zagreb)",
+     "ask": 0.33,
+     "fee": 0.05,
+     "token": "85716725592858204788184867346415939609499423035402235510980827936467755922609"
+    },
+    {
+     "label": "NK Lokomotiva Zagreb",
+     "ask": 0.27,
+     "fee": 0.05,
+     "token": "104473904937660235328782571770845719529607247108764779644050983857103070764313"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "hr1-sla-lok-2026-09-06"
+  },
+  {
+   "venue": "polymarket",
    "event": "Pennsylvania Governor Election: Turnout",
    "n_legs": 7,
-   "gross": 0.02200000000000002,
-   "fees": 0.026972319999999998,
-   "net": -0.004972319999999978,
-   "capital": 1.00497232,
-   "roi": -0.004947718361039017,
+   "gross": 0.02100000000000002,
+   "fees": 0.02700956,
+   "net": -0.00600955999999998,
+   "capital": 1.00600956,
+   "roi": -0.00597366092624406,
    "url": "https://polymarket.com/event/pennsylvania-governor-election-turnout",
    "neg_risk": true,
    "coverage": "7/7",
@@ -2000,7 +2066,7 @@
    "legs": [
     {
      "label": "<4M",
-     "ask": 0.034,
+     "ask": 0.035,
      "fee": 0.04,
      "token": "78845181710078108505229007464685265052000101035791721440610508744004469916145"
     },
@@ -2181,6 +2247,42 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXMOLDOVAPRES-28"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Bank of Russia decision in September?",
+   "n_legs": 3,
+   "gross": 0.01200000000000001,
+   "fees": 0.023430799999999998,
+   "net": -0.011430799999999987,
+   "capital": 1.0114308,
+   "roi": -0.011301613516218794,
+   "url": "https://polymarket.com/event/bank-of-russia-decision-in-september-20260623013858993",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Decrease",
+     "ask": 0.31,
+     "fee": 0.05,
+     "token": "84600356364580996714627796883535757435686855421717776499297305073567636652930"
+    },
+    {
+     "label": "No Change",
+     "ask": 0.65,
+     "fee": 0.05,
+     "token": "101226646659160481931269342739035989075280131990130572924718801665839150667247"
+    },
+    {
+     "label": "Increase",
+     "ask": 0.028,
+     "fee": 0.05,
+     "token": "23792979839805191805050271351704792175531953374486105941272579807964320800106"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "bank-of-russia-decision-in-september-20260623013858993"
   },
   {
    "venue": "kalshi",
@@ -2415,6 +2517,60 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXNEXTDEPUTYAG-28JAN01"
+  },
+  {
+   "venue": "polymarket",
+   "event": "GPU rental prices (B200) end of September?",
+   "n_legs": 6,
+   "gross": 0.0010000000000000009,
+   "fees": 0.03258668,
+   "net": -0.03158668,
+   "capital": 1.03158668,
+   "roi": -0.030619511294969416,
+   "url": "https://polymarket.com/event/gpu-rental-prices-b200-end-of-september-1785423806691",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<$5.50",
+     "ask": 0.149,
+     "fee": 0.04,
+     "token": "80804334587936798701862436397097157033651821620323715300421335691624336859180"
+    },
+    {
+     "label": "$5.50-$6.00",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "6500892173601177064644161827496822897294611935668665615316836708450601694015"
+    },
+    {
+     "label": "$6.00-$6.50",
+     "ask": 0.23,
+     "fee": 0.04,
+     "token": "47221601986880821034414339395944998164107171615155483063043811816538669645349"
+    },
+    {
+     "label": "$6.50-$7.00",
+     "ask": 0.25,
+     "fee": 0.04,
+     "token": "76796667458710247265724636607421827616076575964608872241156338207842982721751"
+    },
+    {
+     "label": "$7.00-$7.50",
+     "ask": 0.114,
+     "fee": 0.04,
+     "token": "99132498067131244657537973583638083791584038955735202364383531804691228263190"
+    },
+    {
+     "label": "$7.50+",
+     "ask": 0.106,
+     "fee": 0.04,
+     "token": "13697707356142374133494541414909830340380578332815691018510580888153211373553"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "gpu-rental-prices-b200-end-of-september-1785423806691"
   },
   {
    "venue": "kalshi",
@@ -2900,11 +3056,11 @@
    "venue": "kalshi",
    "event": "Ethereum price at the end of 2026",
    "n_legs": 18,
-   "gross": 0.0010000000000000009,
+   "gross": 0.0020000000000000018,
    "fees": 0.18,
-   "net": -0.179,
-   "capital": 1.179,
-   "roi": -0.15182357930449533,
+   "net": -0.178,
+   "capital": 1.178,
+   "roi": -0.15110356536502548,
    "url": "https://kalshi.com/events/KXETHY-27JAN0100",
    "neg_risk": null,
    "coverage": "18/18",
@@ -2942,7 +3098,7 @@
     },
     {
      "label": "2,000 to 2,249.99",
-     "ask": 0.105,
+     "ask": 0.104,
      "fee": 0.07,
      "ticker": "KXETHY-27JAN0100-B2125"
     },
