@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaggriculture - Live</title>
+<style>
+  :root { --bg:#0b0e14; --panel:#131824; --line:#1e2636; --txt:#d7dee9; --dim:#7d8aa0; --acc:#4cc38a; --warn:#e5c07b; --bad:#e06c75; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--txt); font:14px/1.5 -apple-system, "SF Mono", "Cascadia Code", monospace; padding:24px; max-width:980px; margin:0 auto; }
+  h1 { font-size:18px; font-weight:600; letter-spacing:.5px; }
+  h1 span { color:var(--dim); font-weight:400; }
+  .sub { color:var(--dim); font-size:12px; margin-top:2px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px; margin-top:18px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .card h2 { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--dim); margin-bottom:12px; }
+  .big { font-size:28px; font-weight:600; }
+  .row { display:flex; justify-content:space-between; padding:3px 0; font-size:13px; }
+  .row .k { color:var(--dim); }
+  .ok { color:var(--acc); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:left; color:var(--dim); font-weight:400; padding:4px 6px; border-bottom:1px solid var(--line); font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+  td { padding:5px 6px; border-bottom:1px solid var(--line); }
+  ol { padding-left:20px; font-size:13px; }
+  ol li { padding:3px 0; }
+  .spark { margin-top:8px; }
+  #updated { color:var(--dim); font-size:11px; margin-top:20px; text-align:right; }
+</style>
+</head>
+<body>
+<h1>KAGGRICULTURE <span>// live training</span></h1>
+<div class="sub" id="tagline">loading...</div>
+<div class="grid">
+  <div class="card">
+    <h2>Current run</h2>
+    <div id="run-status" class="big">-</div>
+    <div class="row"><span class="k">kernel</span><span id="run-kernel">-</span></div>
+    <div class="row"><span class="k">accelerator</span><span id="run-accel">-</span></div>
+    <div class="row"><span class="k">iteration</span><span id="run-iter">-</span></div>
+    <div class="row"><span class="k">iter pace</span><span id="run-pace">-</span></div>
+    <div class="row"><span class="k">heartbeat</span><span id="run-hb">-</span></div>
+  </div>
+  <div class="card">
+    <h2>Latest iteration</h2>
+    <div class="big" id="it-money">-</div>
+    <div class="row"><span class="k">train money (self-play)</span><span id="it-tm">-</span></div>
+    <div class="row"><span class="k">opp money</span><span id="it-om">-</span></div>
+    <div class="row"><span class="k">win / loss / tie</span><span id="it-wlt">-</span></div>
+    <div class="row"><span class="k">policy ce</span><span id="it-ce">-</span></div>
+    <canvas class="spark" id="spark" width="280" height="44"></canvas>
+  </div>
+  <div class="card">
+    <h2>Scorecards (honest, both seats)</h2>
+    <table id="scores"><tr><th>agent</th><th>vs</th><th>W-L-T</th><th>banked</th></tr></table>
+  </div>
+  <div class="card">
+    <h2>Work queue</h2>
+    <ol id="queue"></ol>
+  </div>
+</div>
+<div class="card" style="margin-top:14px">
+  <h2>Run log</h2>
+  <table id="log"><tr><th>time</th><th>event</th></tr></table>
+</div>
+<div id="updated"></div>
+<script>
+async function load() {
+  try {
+    const d = await (await fetch('dashboard.json?t=' + Date.now())).json();
+    document.getElementById('tagline').textContent = d.tagline;
+    const r = d.run;
+    const st = document.getElementById('run-status');
+    st.textContent = r.status;
+    st.className = 'big ' + (r.status_class || '');
+    document.getElementById('run-kernel').textContent = r.kernel;
+    document.getElementById('run-accel').textContent = r.accel;
+    document.getElementById('run-iter').textContent = r.iter;
+    document.getElementById('run-pace').textContent = r.pace;
+    document.getElementById('run-hb').innerHTML = '<span class="dot" style="background:' + (r.hb_fresh ? 'var(--acc)' : 'var(--bad)') + '"></span>' + r.hb_age;
+    const it = d.latest_iter || {};
+    document.getElementById('it-money').textContent = it.train_money != null ? '$' + Number(it.train_money).toLocaleString() : '-';
+    document.getElementById('it-tm').textContent = it.train_money ?? '-';
+    document.getElementById('it-om').textContent = it.opp_money ?? '-';
+    document.getElementById('it-wlt').textContent = it.win != null ? (it.win*100).toFixed(0)+'% / '+(it.loss*100).toFixed(0)+'% / '+(it.tie*100).toFixed(0)+'%' : '-';
+    document.getElementById('it-ce').textContent = it.ce ?? '-';
+    const sc = document.getElementById('scores');
+    sc.innerHTML = '<tr><th>agent</th><th>vs</th><th>W-L-T</th><th>banked</th></tr>';
+    for (const s of d.scorecards) {
+      sc.innerHTML += '<tr><td>'+s.agent+'</td><td>'+s.vs+'</td><td class="'+(s.win_pct>=50?'ok':s.win_pct>0?'warn':'bad')+'">'+s.w+'-'+s.l+'-'+s.t+'</td><td>$'+Number(s.banked).toLocaleString()+'</td></tr>';
+    }
+    const q = document.getElementById('queue'); q.innerHTML = '';
+    for (const item of d.queue) q.innerHTML += '<li>'+item+'</li>';
+    const lg = document.getElementById('log');
+    lg.innerHTML = '<tr><th>time</th><th>event</th></tr>';
+    for (const e of d.log.slice(-12).reverse()) lg.innerHTML += '<tr><td>'+e.t+'</td><td>'+e.e+'</td></tr>';
+    document.getElementById('updated').textContent = 'updated ' + d.updated + ' - refreshes every 60s';
+    // sparkline of money history
+    const c = document.getElementById('spark').getContext('2d');
+    c.clearRect(0,0,280,44);
+    const h = d.money_history || [];
+    if (h.length > 1) {
+      const mx = Math.max(...h, 1);
+      c.strokeStyle = '#4cc38a'; c.lineWidth = 1.5; c.beginPath();
+      h.forEach((v,i)=>{ const x = i/(h.length-1)*276+2, y = 42 - (v/mx)*38; i?c.lineTo(x,y):c.moveTo(x,y); });
+      c.stroke();
+    }
+  } catch(e) { document.getElementById('tagline').textContent = 'dashboard.json not found yet'; }
+}
+load(); setInterval(load, 60000);
+</script>
+</body>
+</html>

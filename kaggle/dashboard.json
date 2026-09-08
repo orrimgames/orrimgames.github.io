@@ -1,0 +1,262 @@
+{
+ "tagline": "AlphaZero self-play on the exact ladder engine - target: top 10",
+ "updated": "2026-09-07 22:14 CDT",
+ "run": {
+  "status": "queued",
+  "status_class": "",
+  "kernel": "kaggriculture-ppo-train v21 (az-v2, tanh value fix)",
+  "accel": "TPU v3-8 (GPU weekly quota exhausted, frees ~Sept 12)",
+  "iter": 15,
+  "pace": "41.2 min/iter",
+  "hb_age": "97 min ago",
+  "hb_fresh": false
+ },
+ "latest_iter": {
+  "type": "iter",
+  "it": 15,
+  "eps_min": 6.2,
+  "train_money": 10.4,
+  "opp_money": 5.5,
+  "win": 0.594,
+  "loss": 0.066,
+  "tie": 0.34,
+  "opp": "self",
+  "league": 0,
+  "ce": 1.8352,
+  "vloss": 0.0928,
+  "buf_iters": 12,
+  "sims": 8,
+  "build": "az-v1",
+  "wall_min": 639.6,
+  "ts": 1788831532.0264263
+ },
+ "money_history": [
+  2874.1,
+  2920.5,
+  2941.2,
+  2962.5,
+  2961.2,
+  2963.2,
+  2971.6,
+  2973.8,
+  2978.2,
+  2980.0,
+  2982.6,
+  2982.1,
+  2985.0,
+  2985.1,
+  0.1,
+  0.4,
+  7.8,
+  0.0,
+  0.0,
+  0.2,
+  2.2,
+  0.1,
+  0.1,
+  0.1,
+  0.3,
+  0.2,
+  0.9,
+  2.0,
+  2.7,
+  10.4
+ ],
+ "scorecards": [
+  {
+   "agent": "rules basin-B",
+   "vs": "v16 (both seats, 32g)",
+   "w": 0,
+   "l": 32,
+   "t": 0,
+   "banked": 27877,
+   "win_pct": 0
+  },
+  {
+   "agent": "rules basin-B",
+   "vs": "trace (both seats, 32g)",
+   "w": 0,
+   "l": 32,
+   "t": 0,
+   "banked": 32932,
+   "win_pct": 0
+  },
+  {
+   "agent": "az v18 (15 iters)",
+   "vs": "starter",
+   "w": 0,
+   "l": 0,
+   "t": 0,
+   "banked": 10,
+   "win_pct": 0
+  }
+ ],
+ "queue": [
+  "az-v2 (v21) first telemetry on TPU - fix/repush loop until healthy",
+  "opening solver: beam search days 0-8 vs meta opening (starts when v2 healthy)",
+  "az-v3 conv encoder staged - flies on quota headroom",
+  "submission gate: nothing submittable until 70% round-robin vs v16"
+ ],
+ "log": [
+  {
+   "t": "09-07 01:17",
+   "e": "iter 15 (None): money 595.0, W/L/T 0.443/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 16 (None): money 17.4, W/L/T 0.437/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 17 (None): money 2342.4, W/L/T 0.493/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 18 (None): money 342.9, W/L/T 0.724/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 19 (None): money 951.0, W/L/T 0.851/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 20 (None): money 1590.4, W/L/T 0.921/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 21 (None): money 2918.6, W/L/T 0.488/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 22 (None): money 2924.2, W/L/T 0.471/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 23 (None): money 2698.3, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:17",
+   "e": "iter 24 (None): money 2824.5, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 25 (None): money 2874.1, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 26 (None): money 2920.5, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 27 (None): money 2941.2, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 28 (None): money 2962.5, W/L/T 0.482/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 29 (None): money 2961.2, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 30 (None): money 2963.2, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 31 (None): money 2971.6, W/L/T 0.486/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 32 (None): money 2973.8, W/L/T 0.821/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 33 (None): money 2978.2, W/L/T 0.754/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 34 (None): money 2980.0, W/L/T 0.471/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 35 (None): money 2982.6, W/L/T 0.967/None/None"
+  },
+  {
+   "t": "09-07 01:18",
+   "e": "iter 36 (None): money 2982.1, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:19",
+   "e": "iter 37 (None): money 2985.0, W/L/T 1.0/None/None"
+  },
+  {
+   "t": "09-07 01:19",
+   "e": "iter 38 (None): money 2985.1, W/L/T 0.945/None/None"
+  },
+  {
+   "t": "09-07 15:45",
+   "e": "iter 1 (az-v1): money 0.1, W/L/T 0.02/0.008/0.973"
+  },
+  {
+   "t": "09-07 16:29",
+   "e": "iter 2 (az-v1): money 0.4, W/L/T 0.164/0.0/0.836"
+  },
+  {
+   "t": "09-07 17:14",
+   "e": "iter 3 (az-v1): money 7.8, W/L/T 0.027/0.055/0.918"
+  },
+  {
+   "t": "09-07 18:00",
+   "e": "iter 4 (az-v1): money 0.0, W/L/T 0.004/0.18/0.816"
+  },
+  {
+   "t": "09-07 18:42",
+   "e": "iter 5 (az-v1): money 0.0, W/L/T 0.008/0.18/0.812"
+  },
+  {
+   "t": "09-07 19:24",
+   "e": "iter 6 (az-v1): money 0.2, W/L/T 0.043/0.055/0.902"
+  },
+  {
+   "t": "09-07 19:50",
+   "e": "iter 1 (az-v2-smoke): money 2.2, W/L/T 0.25/0.75/0.0"
+  },
+  {
+   "t": "09-07 20:06",
+   "e": "iter 7 (az-v1): money 0.1, W/L/T 0.02/0.066/0.914"
+  },
+  {
+   "t": "09-07 20:45",
+   "e": "iter 8 (az-v1): money 0.1, W/L/T 0.02/0.066/0.914"
+  },
+  {
+   "t": "09-07 21:25",
+   "e": "iter 9 (az-v1): money 0.1, W/L/T 0.02/0.047/0.934"
+  },
+  {
+   "t": "09-07 22:05",
+   "e": "iter 10 (az-v1): money 0.3, W/L/T 0.086/0.082/0.832"
+  },
+  {
+   "t": "09-07 22:46",
+   "e": "iter 11 (az-v1): money 0.2, W/L/T 0.066/0.062/0.871"
+  },
+  {
+   "t": "09-07 23:27",
+   "e": "iter 12 (az-v1): money 0.9, W/L/T 0.246/0.055/0.699"
+  },
+  {
+   "t": "09-08 00:14",
+   "e": "iter 13 (az-v1): money 2.0, W/L/T 0.211/0.039/0.75"
+  },
+  {
+   "t": "09-08 00:57",
+   "e": "iter 14 (az-v1): money 2.7, W/L/T 0.445/0.07/0.484"
+  },
+  {
+   "t": "09-08 01:38",
+   "e": "iter 15 (az-v1): money 10.4, W/L/T 0.594/0.066/0.34"
+  }
+ ]
+}
