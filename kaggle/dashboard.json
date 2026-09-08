@@ -1,38 +1,40 @@
 {
  "tagline": "AlphaZero self-play on the exact ladder engine - target: top 10",
- "updated": "2026-09-08 06:33 CDT",
+ "updated": "2026-09-08 07:23 CDT",
  "run": {
   "status": "RUNNING",
   "status_class": "ok",
   "kernel": "kaggriculture-az-v3bc v1 (BC warm start, int8 init)",
   "accel": "TPU v5e-8",
-  "iter": 2,
-  "pace": "24.5 min/iter",
-  "hb_age": "2 min ago",
+  "iter": 4,
+  "pace": "24.7 min/iter",
+  "hb_age": "1 min ago",
   "hb_fresh": true
  },
  "latest_iter": {
   "type": "iter",
-  "it": 2,
-  "eps_min": 10.5,
-  "train_money": 44.3,
-  "opp_money": 8.7,
-  "win": 0.422,
-  "loss": 0.09,
-  "tie": 0.488,
+  "it": 4,
+  "eps_min": 10.4,
+  "train_money": 1524.5,
+  "opp_money": 77.2,
+  "win": 0.855,
+  "loss": 0.086,
+  "tie": 0.059,
   "opp": "self",
   "league": 0,
-  "ce": 2.3306,
-  "vloss": 0.0138,
-  "buf_iters": 2,
+  "ce": 2.1709,
+  "vloss": 0.0523,
+  "buf_iters": 4,
   "sims": 8,
   "build": "az-v3bc",
-  "wall_min": 64.1,
-  "ts": 1788866866.3164468
+  "wall_min": 111.9,
+  "ts": 1788869736.1291103
  },
  "money_history": [
   198.7,
-  44.3
+  44.3,
+  207.4,
+  1524.5
  ],
  "scorecards": [
   {
@@ -69,14 +71,6 @@
   "morning scorecard 6:45 AM"
  ],
  "log": [
-  {
-   "t": "09-07 01:18",
-   "e": "iter 27 (None): money 2941.2, W/L/T 1.0/None/None"
-  },
-  {
-   "t": "09-07 01:18",
-   "e": "iter 28 (None): money 2962.5, W/L/T 0.482/None/None"
-  },
   {
    "t": "09-07 01:18",
    "e": "iter 29 (None): money 2961.2, W/L/T 1.0/None/None"
@@ -228,6 +222,14 @@
   {
    "t": "09-08 11:27",
    "e": "iter 2 (az-v3bc): money 44.3, W/L/T 0.422/0.09/0.488"
+  },
+  {
+   "t": "09-08 11:50",
+   "e": "iter 3 (az-v3bc): money 207.4, W/L/T 0.391/0.156/0.453"
+  },
+  {
+   "t": "09-08 12:15",
+   "e": "iter 4 (az-v3bc): money 1524.5, W/L/T 0.855/0.086/0.059"
   }
  ]
 }
