@@ -1,18 +1,42 @@
 {
  "tagline": "AlphaZero self-play on the exact ladder engine - target: top 10",
- "updated": "2026-09-07 23:28 CDT",
+ "updated": "2026-09-08 01:24 CDT",
  "run": {
   "status": "RUNNING",
   "status_class": "ok",
   "kernel": "kaggriculture-ppo-train v21 (az-v2, tanh value fix)",
   "accel": "TPU v3-8 (GPU weekly quota exhausted, frees ~Sept 12)",
-  "iter": "-",
-  "pace": "-",
-  "hb_age": "0 min ago",
+  "iter": 5,
+  "pace": "24.1 min/iter",
+  "hb_age": "2 min ago",
   "hb_fresh": true
  },
- "latest_iter": null,
- "money_history": [],
+ "latest_iter": {
+  "type": "iter",
+  "it": 5,
+  "eps_min": 10.6,
+  "train_money": 2.4,
+  "opp_money": 2.9,
+  "win": 0.113,
+  "loss": 0.094,
+  "tie": 0.793,
+  "opp": "self",
+  "league": 0,
+  "ce": 3.1752,
+  "vloss": 0.0043,
+  "buf_iters": 5,
+  "sims": 8,
+  "build": "az-v2",
+  "wall_min": 132.2,
+  "ts": 1788848378.273911
+ },
+ "money_history": [
+  0.0,
+  0.5,
+  0.6,
+  2.7,
+  2.4
+ ],
  "scorecards": [
   {
    "agent": "rules basin-B",
@@ -49,26 +73,6 @@
   "submission gate: nothing submittable until 70% round-robin vs v16"
  ],
  "log": [
-  {
-   "t": "09-07 01:17",
-   "e": "iter 15 (None): money 595.0, W/L/T 0.443/None/None"
-  },
-  {
-   "t": "09-07 01:17",
-   "e": "iter 16 (None): money 17.4, W/L/T 0.437/None/None"
-  },
-  {
-   "t": "09-07 01:17",
-   "e": "iter 17 (None): money 2342.4, W/L/T 0.493/None/None"
-  },
-  {
-   "t": "09-07 01:17",
-   "e": "iter 18 (None): money 342.9, W/L/T 0.724/None/None"
-  },
-  {
-   "t": "09-07 01:17",
-   "e": "iter 19 (None): money 951.0, W/L/T 0.851/None/None"
-  },
   {
    "t": "09-07 01:17",
    "e": "iter 20 (None): money 1590.4, W/L/T 0.921/None/None"
@@ -208,6 +212,26 @@
   {
    "t": "09-08 01:38",
    "e": "iter 15 (az-v1): money 10.4, W/L/T 0.594/0.066/0.34"
+  },
+  {
+   "t": "09-08 04:44",
+   "e": "iter 1 (az-v2): money 0.0, W/L/T 0.02/0.012/0.969"
+  },
+  {
+   "t": "09-08 05:08",
+   "e": "iter 2 (az-v2): money 0.5, W/L/T 0.141/0.0/0.859"
+  },
+  {
+   "t": "09-08 05:32",
+   "e": "iter 3 (az-v2): money 0.6, W/L/T 0.105/0.035/0.859"
+  },
+  {
+   "t": "09-08 05:55",
+   "e": "iter 4 (az-v2): money 2.7, W/L/T 0.113/0.16/0.727"
+  },
+  {
+   "t": "09-08 06:19",
+   "e": "iter 5 (az-v2): money 2.4, W/L/T 0.113/0.094/0.793"
   }
  ]
 }
