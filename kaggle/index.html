@@ -110,13 +110,18 @@ async function load() {
     // sparkline of loss curve (policy ce)
     const cl = document.getElementById('sparkloss').getContext('2d');
     cl.clearRect(0,0,280,44);
-    const lc = d.loss_curve || [];
-    if (lc.length > 1) {
-      const mn = Math.min(...lc), mx = Math.max(...lc), rg = (mx-mn)||1;
-      cl.strokeStyle = '#e5c07b'; cl.lineWidth = 1.5; cl.beginPath();
-      lc.forEach((v,i)=>{ const x = i/(lc.length-1)*276+2, y = 40 - ((v-mn)/rg)*36; i?cl.lineTo(x,y):cl.moveTo(x,y); });
-      cl.stroke();
-    }
+    const lc = d.loss_curve || {};
+    const builds = Object.keys(lc);
+    const cols = ['#e5c07b','#61afef','#c678dd'];
+    builds.forEach((b,bi)=>{
+      const pts = (lc[b]||[]).map(p=>p.ce).filter(v=>typeof v==='number');
+      if (pts.length > 1) {
+        const mn = Math.min(...pts), mx = Math.max(...pts), rg = (mx-mn)||1;
+        cl.strokeStyle = cols[bi%cols.length]; cl.lineWidth = 1.5; cl.beginPath();
+        pts.forEach((v,i)=>{ const x = i/(pts.length-1)*276+2, y = 40 - ((v-mn)/rg)*36; i?cl.lineTo(x,y):cl.moveTo(x,y); });
+        cl.stroke();
+      }
+    });
   } catch(e) { document.getElementById('tagline').textContent = 'dashboard.json not found yet'; }
 }
 load(); setInterval(load, 60000);
