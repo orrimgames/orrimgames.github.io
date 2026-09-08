@@ -49,6 +49,8 @@
     <div class="row"><span class="k">win / loss / tie</span><span id="it-wlt">-</span></div>
     <div class="row"><span class="k">policy ce</span><span id="it-ce">-</span></div>
     <canvas class="spark" id="spark" width="280" height="44"></canvas>
+    <div class="row"><span class="k">loss curve (policy ce)</span></div>
+    <canvas class="spark" id="sparkloss" width="280" height="44"></canvas>
   </div>
   <div class="card">
     <h2>Scorecards (honest, both seats)</h2>
@@ -104,6 +106,16 @@ async function load() {
       c.strokeStyle = '#4cc38a'; c.lineWidth = 1.5; c.beginPath();
       h.forEach((v,i)=>{ const x = i/(h.length-1)*276+2, y = 42 - (v/mx)*38; i?c.lineTo(x,y):c.moveTo(x,y); });
       c.stroke();
+    }
+    // sparkline of loss curve (policy ce)
+    const cl = document.getElementById('sparkloss').getContext('2d');
+    cl.clearRect(0,0,280,44);
+    const lc = d.loss_curve || [];
+    if (lc.length > 1) {
+      const mn = Math.min(...lc), mx = Math.max(...lc), rg = (mx-mn)||1;
+      cl.strokeStyle = '#e5c07b'; cl.lineWidth = 1.5; cl.beginPath();
+      lc.forEach((v,i)=>{ const x = i/(lc.length-1)*276+2, y = 40 - ((v-mn)/rg)*36; i?cl.lineTo(x,y):cl.moveTo(x,y); });
+      cl.stroke();
     }
   } catch(e) { document.getElementById('tagline').textContent = 'dashboard.json not found yet'; }
 }
