@@ -1,46 +1,37 @@
 {
  "tagline": "AlphaZero self-play on the exact ladder engine - target: top 10",
- "updated": "2026-09-08 06:23 CDT",
+ "updated": "2026-09-08 06:24 CDT",
  "run": {
-  "status": "CANCEL_ACKNOWLEDGED",
-  "status_class": "",
-  "kernel": "kaggriculture-ppo-train v21 (az-v2, tanh value fix)",
-  "accel": "TPU v3-8 (GPU weekly quota exhausted, frees ~Sept 12)",
-  "iter": 10,
-  "pace": "24.4 min/iter",
-  "hb_age": "164 min ago",
-  "hb_fresh": false
+  "status": "RUNNING",
+  "status_class": "ok",
+  "kernel": "kaggriculture-az-v3bc v1 (BC warm start, int8 init)",
+  "accel": "TPU v5e-8",
+  "iter": 1,
+  "pace": "-",
+  "hb_age": "0 min ago",
+  "hb_fresh": true
  },
  "latest_iter": {
   "type": "iter",
-  "it": 10,
-  "eps_min": 10.5,
-  "train_money": 6.6,
-  "opp_money": 3.5,
-  "win": 0.086,
-  "loss": 0.035,
-  "tie": 0.879,
+  "it": 1,
+  "eps_min": 6.5,
+  "train_money": 198.7,
+  "opp_money": 0.6,
+  "win": 0.324,
+  "loss": 0.016,
+  "tie": 0.66,
   "opp": "self",
   "league": 0,
-  "ce": 2.4138,
-  "vloss": 0.0009,
-  "buf_iters": 10,
+  "ce": 2.4976,
+  "vloss": 0.0663,
+  "buf_iters": 1,
   "sims": 8,
-  "build": "az-v2",
-  "wall_min": 257.9,
-  "ts": 1788855923.7420785
+  "build": "az-v3bc",
+  "wall_min": 39.6,
+  "ts": 1788865396.1766224
  },
  "money_history": [
-  0.0,
-  0.5,
-  0.6,
-  2.7,
-  2.4,
-  1.0,
-  0.8,
-  1.5,
-  2.9,
-  6.6
+  198.7
  ],
  "scorecards": [
   {
@@ -72,16 +63,11 @@
   }
  ],
  "queue": [
-  "az-v2 (v21) first telemetry on TPU - fix/repush loop until healthy",
-  "opening solver: beam search days 0-8 vs meta opening (starts when v2 healthy)",
-  "az-v3 conv encoder staged - flies on quota headroom",
-  "submission gate: nothing submittable until 70% round-robin vs v16"
+  "v3bc training - watch train_money trajectory vs v18/v21 trap lines",
+  "ckpt gate: pull az_ckpt/az_best when available, az_eval vs v16, submit if honest win",
+  "morning scorecard 6:45 AM"
  ],
  "log": [
-  {
-   "t": "09-07 01:18",
-   "e": "iter 25 (None): money 2874.1, W/L/T 1.0/None/None"
-  },
   {
    "t": "09-07 01:18",
    "e": "iter 26 (None): money 2920.5, W/L/T 1.0/None/None"
@@ -237,6 +223,10 @@
   {
    "t": "09-08 08:25",
    "e": "iter 10 (az-v2): money 6.6, W/L/T 0.086/0.035/0.879"
+  },
+  {
+   "t": "09-08 11:03",
+   "e": "iter 1 (az-v3bc): money 198.7, W/L/T 0.324/0.016/0.66"
   }
  ]
 }
