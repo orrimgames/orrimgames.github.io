@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="60">
 <title>Kaggriculture - Live</title>
 <style>
   :root { --bg:#0b0e14; --panel:#131824; --line:#1e2636; --txt:#d7dee9; --dim:#7d8aa0; --acc:#4cc38a; --warn:#e5c07b; --bad:#e06c75; }
@@ -49,12 +50,16 @@
     <div class="row"><span class="k">win / loss / tie</span><span id="it-wlt">-</span></div>
     <div class="row"><span class="k">policy ce</span><span id="it-ce">-</span></div>
     <canvas class="spark" id="spark" width="280" height="44"></canvas>
-    <div class="row"><span class="k">loss curve (policy ce)</span></div>
-    <canvas class="spark" id="sparkloss" width="280" height="44"></canvas>
   </div>
   <div class="card">
     <h2>Scorecards (honest, both seats)</h2>
     <table id="scores"><tr><th>agent</th><th>vs</th><th>W-L-T</th><th>banked</th></tr></table>
+  </div>
+  <div class="card">
+    <h2>Ladder (live)</h2>
+    <div class="big" id="ld-rank">-</div>
+    <table id="ld-bots"><tr><th>bot</th><th>record</th><th>mu</th><th>band</th><th>last ep</th></tr></table>
+    <div class="row"><span class="k">rank as of</span><span id="ld-rankasof">-</span></div>
   </div>
   <div class="card">
     <h2>Work queue</h2>
@@ -96,7 +101,19 @@ async function load() {
     const lg = document.getElementById('log');
     lg.innerHTML = '<tr><th>time</th><th>event</th></tr>';
     for (const e of d.log.slice(-12).reverse()) lg.innerHTML += '<tr><td>'+e.t+'</td><td>'+e.e+'</td></tr>';
-    document.getElementById('updated').textContent = 'updated ' + d.updated + ' - refreshes every 60s';
+  
+  if (d.ladder) {
+    const L = d.ladder;
+    document.getElementById('ld-rank').textContent = L.rank ? ('#' + L.rank + ' / ' + (L.rank_total||'?')) : '-';
+    document.getElementById('ld-rankasof').textContent = L.rank_asof || '-';
+    const t = document.getElementById('ld-bots');
+    t.innerHTML = '<tr><th>bot</th><th>record</th><th>mu</th><th>band(1000+)</th><th>last ep</th></tr>';
+    for (const b of (L.bots||[])) {
+      const r = t.insertRow();
+      r.innerHTML = '<td>'+b.name+'</td><td>'+(b.record||'-')+'</td><td class="ok">'+(b.mu??'-')+'</td><td>'+(b.band||'-')+'</td><td>'+(b.last_ep||'-')+'</td>';
+    }
+  }
+  document.getElementById('updated').textContent = 'updated ' + d.updated + ' - refreshes every 60s';
     // sparkline of money history
     const c = document.getElementById('spark').getContext('2d');
     c.clearRect(0,0,280,44);
@@ -107,21 +124,6 @@ async function load() {
       h.forEach((v,i)=>{ const x = i/(h.length-1)*276+2, y = 42 - (v/mx)*38; i?c.lineTo(x,y):c.moveTo(x,y); });
       c.stroke();
     }
-    // sparkline of loss curve (policy ce)
-    const cl = document.getElementById('sparkloss').getContext('2d');
-    cl.clearRect(0,0,280,44);
-    const lc = d.loss_curve || {};
-    const builds = Object.keys(lc);
-    const cols = ['#e5c07b','#61afef','#c678dd'];
-    builds.forEach((b,bi)=>{
-      const pts = (lc[b]||[]).map(p=>p.ce).filter(v=>typeof v==='number');
-      if (pts.length > 1) {
-        const mn = Math.min(...pts), mx = Math.max(...pts), rg = (mx-mn)||1;
-        cl.strokeStyle = cols[bi%cols.length]; cl.lineWidth = 1.5; cl.beginPath();
-        pts.forEach((v,i)=>{ const x = i/(pts.length-1)*276+2, y = 40 - ((v-mn)/rg)*36; i?cl.lineTo(x,y):cl.moveTo(x,y); });
-        cl.stroke();
-      }
-    });
   } catch(e) { document.getElementById('tagline').textContent = 'dashboard.json not found yet'; }
 }
 load(); setInterval(load, 60000);
