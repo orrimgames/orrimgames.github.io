@@ -1,34 +1,34 @@
 {
  "tagline": "AlphaZero self-play on the exact ladder engine - target: top 10",
- "updated": "2026-09-08 18:21 CDT",
+ "updated": "2026-09-08 19:52 CDT",
  "run": {
-  "status": "RUNNING",
-  "status_class": "ok",
+  "status": "CANCEL_ACKNOWLEDGED",
+  "status_class": "",
   "kernel": "kaggriculture-az-v3bc v2 (resume from iter5 + ckpt exfil)",
   "accel": "TPU v5e-8",
-  "iter": 17,
-  "pace": "25.6 min/iter",
-  "hb_age": "2 min ago",
-  "hb_fresh": true
+  "iter": 20,
+  "pace": "26.6 min/iter",
+  "hb_age": "14 min ago",
+  "hb_fresh": false
  },
  "latest_iter": {
   "type": "iter",
-  "it": 17,
-  "eps_min": 10.0,
-  "train_money": 2989.9,
-  "opp_money": 2939.6,
-  "win": 0.461,
-  "loss": 0.465,
-  "tie": 0.074,
+  "it": 20,
+  "eps_min": 9.6,
+  "train_money": 2999.8,
+  "opp_money": 2999.0,
+  "win": 0.5,
+  "loss": 0.082,
+  "tie": 0.418,
   "opp": "self",
   "league": 0,
-  "ce": 1.5208,
-  "vloss": 0.0026,
+  "ce": 1.4964,
+  "vloss": 0.0017,
   "buf_iters": 12,
   "sims": 8,
   "build": "az-v3bc-r2",
-  "wall_min": 442.0,
-  "ts": 1788908731.7797985
+  "wall_min": 520.1,
+  "ts": 1788913422.306048
  },
  "money_history": [
   2784.1,
@@ -47,7 +47,10 @@
   2983.5,
   2986.1,
   2987.0,
-  2989.9
+  2989.9,
+  2991.7,
+  2999.2,
+  2999.8
  ],
  "loss_curve": {
   "az-v3bc-r2": [
@@ -220,6 +223,36 @@
     "win": 0.461,
     "opp": "self",
     "t": "09-08 23:05"
+   },
+   {
+    "build": "az-v3bc-r2",
+    "it": 18,
+    "ce": 1.5079,
+    "vloss": 0.0021,
+    "train_money": 2991.7,
+    "win": 0.758,
+    "opp": "self",
+    "t": "09-08 23:30"
+   },
+   {
+    "build": "az-v3bc-r2",
+    "it": 19,
+    "ce": 1.4939,
+    "vloss": 0.0018,
+    "train_money": 2999.2,
+    "win": 0.688,
+    "opp": "self",
+    "t": "09-08 23:57"
+   },
+   {
+    "build": "az-v3bc-r2",
+    "it": 20,
+    "ce": 1.4964,
+    "vloss": 0.0017,
+    "train_money": 2999.8,
+    "win": 0.5,
+    "opp": "self",
+    "t": "09-09 00:23"
    }
   ]
  },
@@ -258,18 +291,6 @@
   "morning scorecard 6:45 AM"
  ],
  "log": [
-  {
-   "t": "09-07 20:06",
-   "e": "iter 7 (az-v1): money 0.1, W/L/T 0.02/0.066/0.914"
-  },
-  {
-   "t": "09-07 20:45",
-   "e": "iter 8 (az-v1): money 0.1, W/L/T 0.02/0.066/0.914"
-  },
-  {
-   "t": "09-07 21:25",
-   "e": "iter 9 (az-v1): money 0.1, W/L/T 0.02/0.047/0.934"
-  },
   {
    "t": "09-07 22:05",
    "e": "iter 10 (az-v1): money 0.3, W/L/T 0.086/0.082/0.832"
@@ -417,6 +438,18 @@
   {
    "t": "09-08 23:05",
    "e": "iter 17 (az-v3bc-r2): money 2989.9, W/L/T 0.461/0.465/0.074 ce 1.5208"
+  },
+  {
+   "t": "09-08 23:30",
+   "e": "iter 18 (az-v3bc-r2): money 2991.7, W/L/T 0.758/0.195/0.047 ce 1.5079"
+  },
+  {
+   "t": "09-08 23:57",
+   "e": "iter 19 (az-v3bc-r2): money 2999.2, W/L/T 0.688/0.141/0.172 ce 1.4939"
+  },
+  {
+   "t": "09-09 00:23",
+   "e": "iter 20 (az-v3bc-r2): money 2999.8, W/L/T 0.5/0.082/0.418 ce 1.4964"
   }
  ]
 }
