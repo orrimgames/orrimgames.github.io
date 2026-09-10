@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-10T06:41:42Z",
-  "ts": 1789022502.2516959,
-  "scan_seconds": 13.7,
+  "generated_at": "2026-09-10T06:58:10Z",
+  "ts": 1789023490.2285757,
+  "scan_seconds": 11.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 235 binary + 1775 multi | kalshi: 5000 events -> 802 binary + 1408 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 237 binary + 1789 multi | kalshi: 5000 events -> 805 binary + 1407 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -116,11 +116,11 @@
    "venue": "polymarket",
    "event": "Consensys IPO closing market cap above ___ ?",
    "n_legs": 3,
-   "gross": 0.75,
-   "fees": 0.016037000000000003,
-   "net": 0.733963,
-   "capital": 0.266037,
-   "roi": 2.7588756451170324,
+   "gross": 0.76,
+   "fees": 0.015442,
+   "net": 0.744558,
+   "capital": 0.255442,
+   "roi": 2.914783003578112,
    "url": "https://polymarket.com/event/consensys-ipo-closing-market-cap-above",
    "neg_risk": false,
    "coverage": "3/3",
@@ -128,7 +128,7 @@
    "legs": [
     {
      "label": "$1B",
-     "ask": 0.08,
+     "ask": 0.07,
      "fee": 0.07,
      "token": "73186602572996399039512908758032713401027509740424057747695798608438369774367"
     },
@@ -210,6 +210,78 @@
   },
   {
    "venue": "polymarket",
+   "event": "Pacifica FDV above ___ one day after launch?",
+   "n_legs": 9,
+   "gross": 0.477,
+   "fees": 0.033518450000000005,
+   "net": 0.44348155,
+   "capital": 0.55651845,
+   "roi": 0.7968856198747768,
+   "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$50M",
+     "ask": 0.16,
+     "fee": 0.07,
+     "token": "16795957534988501215235347348644372320002983627408040830654583226326934050970"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.049,
+     "fee": 0.07,
+     "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.074,
+     "fee": 0.07,
+     "token": "115285402015517899188745869878711529694328803279592884118332821477257604660390"
+    },
+    {
+     "label": "$500M",
+     "ask": 0.061,
+     "fee": 0.07,
+     "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
+    },
+    {
+     "label": "$800M",
+     "ask": 0.037,
+     "fee": 0.07,
+     "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.039,
+     "fee": 0.07,
+     "token": "67849147834977248117510384775411225824950308388140345110360581181039651169382"
+    },
+    {
+     "label": "$2B",
+     "ask": 0.028,
+     "fee": 0.07,
+     "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
+    },
+    {
+     "label": "$3B",
+     "ask": 0.022,
+     "fee": 0.07,
+     "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.053,
+     "fee": 0.07,
+     "token": "29038954839483761326156091612813755283483527889927269685441096217717416698382"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "pacifica-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "What will be in a US-Iran deal in 2026?",
    "n_legs": 6,
    "gross": 0.43999999999999995,
@@ -264,85 +336,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Pacifica FDV above ___ one day after launch?",
-   "n_legs": 9,
-   "gross": 0.46099999999999997,
-   "fees": 0.03454311,
-   "net": 0.42645689,
-   "capital": 0.57354311,
-   "roi": 0.7435481005080855,
-   "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$50M",
-     "ask": 0.16,
-     "fee": 0.07,
-     "token": "16795957534988501215235347348644372320002983627408040830654583226326934050970"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.049,
-     "fee": 0.07,
-     "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.078,
-     "fee": 0.07,
-     "token": "115285402015517899188745869878711529694328803279592884118332821477257604660390"
-    },
-    {
-     "label": "$500M",
-     "ask": 0.062,
-     "fee": 0.07,
-     "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
-    },
-    {
-     "label": "$800M",
-     "ask": 0.036,
-     "fee": 0.07,
-     "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.039,
-     "fee": 0.07,
-     "token": "67849147834977248117510384775411225824950308388140345110360581181039651169382"
-    },
-    {
-     "label": "$2B",
-     "ask": 0.032,
-     "fee": 0.07,
-     "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
-    },
-    {
-     "label": "$3B",
-     "ask": 0.029,
-     "fee": 0.07,
-     "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.054,
-     "fee": 0.07,
-     "token": "29038954839483761326156091612813755283483527889927269685441096217717416698382"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "pacifica-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
    "event": "Will __ ships transit the Strait of Hormuz on any day by September 30?",
    "n_legs": 5,
-   "gross": 0.36,
+   "gross": 0.37,
    "fees": 0.0,
-   "net": 0.36,
-   "capital": 0.64,
-   "roi": 0.5625,
+   "net": 0.37,
+   "capital": 0.63,
+   "roi": 0.5873015873015873,
    "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-september-30",
    "neg_risk": false,
    "coverage": "5/5",
@@ -356,7 +356,7 @@
     },
     {
      "label": "20+",
-     "ask": 0.14,
+     "ask": 0.13,
      "fee": 0.0,
      "token": "58513336669199877944842472954987520622942317438539849037027494075335086602408"
     },
@@ -386,11 +386,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.389,
-   "fees": 0.036566390000000004,
-   "net": 0.35243361,
-   "capital": 0.6475663899999999,
-   "roi": 0.5442432087928468,
+   "gross": 0.393,
+   "fees": 0.036388870000000004,
+   "net": 0.35661113,
+   "capital": 0.64338887,
+   "roi": 0.5542699705078827,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -410,7 +410,7 @@
     },
     {
      "label": "$50M",
-     "ask": 0.185,
+     "ask": 0.181,
      "fee": 0.07,
      "token": "69626151402846862779475550621233927524301107136544704332168040527442555586381"
     },
@@ -446,11 +446,11 @@
    "venue": "polymarket",
    "event": "Ostium FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.357,
-   "fees": 0.04212943,
-   "net": 0.31487056999999996,
-   "capital": 0.68512943,
-   "roi": 0.4595782288902696,
+   "gross": 0.359,
+   "fees": 0.042009170000000005,
+   "net": 0.31699083,
+   "capital": 0.68300917,
+   "roi": 0.46410918611824786,
    "url": "https://polymarket.com/event/ostium-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -470,7 +470,7 @@
     },
     {
      "label": "$50M",
-     "ask": 0.08,
+     "ask": 0.079,
      "fee": 0.07,
      "token": "53992420100435277392856566453062156937173735686022755966612892390150121733037"
     },
@@ -512,7 +512,7 @@
     },
     {
      "label": "$500M ",
-     "ask": 0.062,
+     "ask": 0.061,
      "fee": 0.07,
      "token": "110899108313812961415681560453228181567230636983049923691596868612912451610122"
     },
@@ -530,11 +530,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.344,
-   "fees": 0.042137900000000006,
-   "net": 0.30186209999999997,
-   "capital": 0.6981379000000001,
-   "roi": 0.4323817687021431,
+   "gross": 0.345,
+   "fees": 0.04207847000000001,
+   "net": 0.30292153,
+   "capital": 0.69707847,
+   "roi": 0.4345587233529103,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -548,7 +548,7 @@
     },
     {
      "label": "$700M",
-     "ask": 0.076,
+     "ask": 0.075,
      "fee": 0.07,
      "token": "27944626213701198119611689981836884300701096451168812471764168520890801988056"
     },
@@ -627,66 +627,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "will-any-ai-model-reach-coding-arena-score-by-december-31"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Noble FDV above ___ one day after launch?",
-   "n_legs": 7,
-   "gross": 0.21099999999999997,
-   "fees": 0.047911850000000006,
-   "net": 0.16308814999999996,
-   "capital": 0.83691185,
-   "roi": 0.19486896977262297,
-   "url": "https://polymarket.com/event/noble-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "7/7",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$50M",
-     "ask": 0.16,
-     "fee": 0.07,
-     "token": "100557256290468068351183361557108246106085640021493016683916649139722331660887"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.17,
-     "fee": 0.07,
-     "token": "73974209915570908459683874823110585328411946643152890577529960983415245848063"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.14,
-     "fee": 0.07,
-     "token": "38662505178624992583511683416760386152028978372270717407480733259877364335609"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.13,
-     "fee": 0.07,
-     "token": "100225320603478274676568530566587681958175298023647072441812820162800275473867"
-    },
-    {
-     "label": "$500M",
-     "ask": 0.093,
-     "fee": 0.07,
-     "token": "22253756090458443559828932901769802991304370669999182058651031635331216453151"
-    },
-    {
-     "label": "$700M",
-     "ask": 0.06,
-     "fee": 0.07,
-     "token": "113896019730787825630798637122870897398639135657769340699631679560925478698744"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.036,
-     "fee": 0.07,
-     "token": "97973565988734999603039342380890455532081978946312543873260825535251685839418"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "noble-fdv-above-one-day-after-launch"
   },
   {
    "venue": "kalshi",
@@ -792,13 +732,115 @@
   },
   {
    "venue": "polymarket",
+   "event": "Noble FDV above ___ one day after launch?",
+   "n_legs": 7,
+   "gross": 0.20199999999999996,
+   "fees": 0.04835782000000001,
+   "net": 0.15364217999999996,
+   "capital": 0.84635782,
+   "roi": 0.18153336138608603,
+   "url": "https://polymarket.com/event/noble-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "7/7",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$50M",
+     "ask": 0.16,
+     "fee": 0.07,
+     "token": "100557256290468068351183361557108246106085640021493016683916649139722331660887"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.17,
+     "fee": 0.07,
+     "token": "73974209915570908459683874823110585328411946643152890577529960983415245848063"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.14,
+     "fee": 0.07,
+     "token": "38662505178624992583511683416760386152028978372270717407480733259877364335609"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.14,
+     "fee": 0.07,
+     "token": "100225320603478274676568530566587681958175298023647072441812820162800275473867"
+    },
+    {
+     "label": "$500M",
+     "ask": 0.093,
+     "fee": 0.07,
+     "token": "22253756090458443559828932901769802991304370669999182058651031635331216453151"
+    },
+    {
+     "label": "$700M",
+     "ask": 0.06,
+     "fee": 0.07,
+     "token": "113896019730787825630798637122870897398639135657769340699631679560925478698744"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.035,
+     "fee": 0.07,
+     "token": "97973565988734999603039342380890455532081978946312543873260825535251685839418"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "noble-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Theo FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.17700000000000005,
+   "fees": 0.035827050000000006,
+   "net": 0.14117295000000005,
+   "capital": 0.8588270499999999,
+   "roi": 0.1643787884883226,
+   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$100M",
+     "ask": 0.5,
+     "fee": 0.07,
+     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.23,
+     "fee": 0.07,
+     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
+    },
+    {
+     "label": "$700M",
+     "ask": 0.091,
+     "fee": 0.07,
+     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.002,
+     "fee": 0.07,
+     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "theo-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which countries will recognize Israel by December 31?",
    "n_legs": 16,
-   "gross": 0.136,
+   "gross": 0.139,
    "fees": 0.0,
-   "net": 0.136,
-   "capital": 0.864,
-   "roi": 0.1574074074074074,
+   "net": 0.139,
+   "capital": 0.861,
+   "roi": 0.16144018583042974,
    "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
    "neg_risk": false,
    "coverage": "16/16",
@@ -818,7 +860,7 @@
     },
     {
      "label": "Saudi Arabia",
-     "ask": 0.04,
+     "ask": 0.038,
      "fee": 0.0,
      "token": "105021230936912984680931678122814125668784031756100999048923377620987522853502"
     },
@@ -884,7 +926,7 @@
     },
     {
      "label": "Malaysia",
-     "ask": 0.034,
+     "ask": 0.033,
      "fee": 0.0,
      "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
     },
@@ -959,48 +1001,6 @@
    "event_slug": "KXPRESNOMG-28"
   },
   {
-   "venue": "polymarket",
-   "event": "Theo FDV above ___ one day after launch?",
-   "n_legs": 4,
-   "gross": 0.14500000000000002,
-   "fees": 0.037045890000000005,
-   "net": 0.10795411000000002,
-   "capital": 0.89204589,
-   "roi": 0.1210185610518311,
-   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$100M",
-     "ask": 0.51,
-     "fee": 0.07,
-     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.23,
-     "fee": 0.07,
-     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
-    },
-    {
-     "label": "$700M",
-     "ask": 0.113,
-     "fee": 0.07,
-     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.002,
-     "fee": 0.07,
-     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "theo-fdv-above-one-day-after-launch"
-  },
-  {
    "venue": "kalshi",
    "event": "Winnipeg mayoral election winner?",
    "n_legs": 3,
@@ -1037,6 +1037,144 @@
    "event_slug": "KXWINNIPEGMAYOR-26OCT28"
   },
   {
+   "venue": "polymarket",
+   "event": "Which country will join Abraham Accords before 2027?",
+   "n_legs": 12,
+   "gross": 0.09799999999999998,
+   "fees": 0.0,
+   "net": 0.09799999999999998,
+   "capital": 0.902,
+   "roi": 0.10864745011086471,
+   "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
+   "neg_risk": false,
+   "coverage": "12/12",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Pakistan",
+     "ask": 0.049,
+     "fee": 0.0,
+     "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
+    },
+    {
+     "label": "Qatar",
+     "ask": 0.067,
+     "fee": 0.0,
+     "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
+    },
+    {
+     "label": "Turkey",
+     "ask": 0.03,
+     "fee": 0.0,
+     "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
+    },
+    {
+     "label": "Egypt",
+     "ask": 0.146,
+     "fee": 0.0,
+     "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
+    },
+    {
+     "label": "Jordan",
+     "ask": 0.13,
+     "fee": 0.0,
+     "token": "101435651903522065386761154847886894419498035898754590795274051495263217259522"
+    },
+    {
+     "label": "Oman",
+     "ask": 0.053,
+     "fee": 0.0,
+     "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
+    },
+    {
+     "label": "Kuwait",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "17145696747096623159702150222487527036704201283101191852338717001493457135691"
+    },
+    {
+     "label": "Syria",
+     "ask": 0.071,
+     "fee": 0.0,
+     "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
+    },
+    {
+     "label": "Lebanon",
+     "ask": 0.09,
+     "fee": 0.0,
+     "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
+    },
+    {
+     "label": "Saudi Arabia",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "44330303251518041570433466737679109932061477358497939773558457869950245007155"
+    },
+    {
+     "label": "Azerbaijan",
+     "ask": 0.066,
+     "fee": 0.0,
+     "token": "35342168199661863269250061925826079259874819768796067478400947796757494719137"
+    },
+    {
+     "label": "Somaliland",
+     "ask": 0.07,
+     "fee": 0.0,
+     "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "which-country-will-join-abraham-accords-before-2027"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Puffpaw FDV above ___ one day after launch?",
+   "n_legs": 5,
+   "gross": 0.139,
+   "fees": 0.04798745000000001,
+   "net": 0.09101255,
+   "capital": 0.90898745,
+   "roi": 0.10012519974835736,
+   "url": "https://polymarket.com/event/puffpaw-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$50M",
+     "ask": 0.26,
+     "fee": 0.07,
+     "token": "510034681274411516291754863482343062051712641324940501686223446447563026393"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.25,
+     "fee": 0.07,
+     "token": "5793707379729500818284272227553588908492513776424889835572995739672504840973"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.17,
+     "fee": 0.07,
+     "token": "42348210194000793656879816654977737197741719386554345184776805604525622774692"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.084,
+     "fee": 0.07,
+     "token": "75465806583802054124068142193447889201404918795525767496433120745554670765320"
+    },
+    {
+     "label": "$400M",
+     "ask": 0.097,
+     "fee": 0.07,
+     "token": "76857952191349339483337909865017853437301818611492894864209571883435851483991"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "puffpaw-fdv-above-one-day-after-launch"
+  },
+  {
    "venue": "kalshi",
    "event": "New York Democratic Senate nominee in 2028?",
    "n_legs": 3,
@@ -1071,54 +1209,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXSENATENYD-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Puffpaw FDV above ___ one day after launch?",
-   "n_legs": 5,
-   "gross": 0.137,
-   "fees": 0.04810197000000001,
-   "net": 0.08889803,
-   "capital": 0.91110197,
-   "roi": 0.09757198746919624,
-   "url": "https://polymarket.com/event/puffpaw-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$50M",
-     "ask": 0.26,
-     "fee": 0.07,
-     "token": "510034681274411516291754863482343062051712641324940501686223446447563026393"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.25,
-     "fee": 0.07,
-     "token": "5793707379729500818284272227553588908492513776424889835572995739672504840973"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.17,
-     "fee": 0.07,
-     "token": "42348210194000793656879816654977737197741719386554345184776805604525622774692"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.085,
-     "fee": 0.07,
-     "token": "75465806583802054124068142193447889201404918795525767496433120745554670765320"
-    },
-    {
-     "label": "$400M",
-     "ask": 0.098,
-     "fee": 0.07,
-     "token": "76857952191349339483337909865017853437301818611492894864209571883435851483991"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "puffpaw-fdv-above-one-day-after-launch"
   },
   {
    "venue": "kalshi",
@@ -1173,10 +1263,10 @@
    "event": "Umia listed on ___ within 30 days of TGE?",
    "n_legs": 6,
    "gross": 0.11499999999999999,
-   "fees": 0.04280353,
-   "net": 0.07219646999999998,
-   "capital": 0.92780353,
-   "roi": 0.07781439460572001,
+   "fees": 0.04279821,
+   "net": 0.07220178999999999,
+   "capital": 0.92779821,
+   "roi": 0.07782057479934133,
    "url": "https://polymarket.com/event/umia-listed-on-within-30-days-of-tge",
    "neg_risk": false,
    "coverage": "6/6",
@@ -1184,7 +1274,7 @@
    "legs": [
     {
      "label": "Binance",
-     "ask": 0.017,
+     "ask": 0.016,
      "fee": 0.07,
      "token": "49558536559171493502291433973555802860188651649330238307383626983840028441529"
     },
@@ -1214,7 +1304,7 @@
     },
     {
      "label": "Upbit",
-     "ask": 0.054,
+     "ask": 0.055,
      "fee": 0.07,
      "token": "110413802822076073018369720392940705038077004732235765042806890942894846456798"
     }
@@ -1251,96 +1341,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPHILIPPINESSENATE-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Which country will join Abraham Accords before 2027?",
-   "n_legs": 12,
-   "gross": 0.05899999999999994,
-   "fees": 0.0,
-   "net": 0.05899999999999994,
-   "capital": 0.9410000000000001,
-   "roi": 0.06269925611052066,
-   "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
-   "neg_risk": false,
-   "coverage": "12/12",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Pakistan",
-     "ask": 0.049,
-     "fee": 0.0,
-     "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
-    },
-    {
-     "label": "Qatar",
-     "ask": 0.067,
-     "fee": 0.0,
-     "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
-    },
-    {
-     "label": "Turkey",
-     "ask": 0.03,
-     "fee": 0.0,
-     "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
-    },
-    {
-     "label": "Egypt",
-     "ask": 0.145,
-     "fee": 0.0,
-     "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
-    },
-    {
-     "label": "Jordan",
-     "ask": 0.17,
-     "fee": 0.0,
-     "token": "101435651903522065386761154847886894419498035898754590795274051495263217259522"
-    },
-    {
-     "label": "Oman",
-     "ask": 0.053,
-     "fee": 0.0,
-     "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
-    },
-    {
-     "label": "Kuwait",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "17145696747096623159702150222487527036704201283101191852338717001493457135691"
-    },
-    {
-     "label": "Syria",
-     "ask": 0.071,
-     "fee": 0.0,
-     "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
-    },
-    {
-     "label": "Lebanon",
-     "ask": 0.09,
-     "fee": 0.0,
-     "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
-    },
-    {
-     "label": "Saudi Arabia",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "44330303251518041570433466737679109932061477358497939773558457869950245007155"
-    },
-    {
-     "label": "Azerbaijan",
-     "ask": 0.066,
-     "fee": 0.0,
-     "token": "35342168199661863269250061925826079259874819768796067478400947796757494719137"
-    },
-    {
-     "label": "Somaliland",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-country-will-join-abraham-accords-before-2027"
   },
   {
    "venue": "kalshi",
@@ -1602,66 +1602,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "Shedeur Sanders: First Start This Season",
-   "n_legs": 7,
-   "gross": 0.12,
-   "fees": 0.09,
-   "net": 0.03,
-   "capital": 0.97,
-   "roi": 0.030927835051546393,
-   "url": "https://kalshi.com/events/KXNFLFIRSTSTART-27SSANDERS2",
-   "neg_risk": null,
-   "coverage": "7/7",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Week 1 to Week 2",
-     "ask": 0.09,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W1W2"
-    },
-    {
-     "label": "Week 3 to Week 4",
-     "ask": 0.28,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W3W4"
-    },
-    {
-     "label": "Week 5 to Week 6",
-     "ask": 0.1,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W5W6"
-    },
-    {
-     "label": "Week 7 to Week 10",
-     "ask": 0.12,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W7W10"
-    },
-    {
-     "label": "Week 11 to Week 14",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W11W14"
-    },
-    {
-     "label": "Week 15 to Week 18",
-     "ask": 0.03,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W15W18"
-    },
-    {
-     "label": "Does not start in the regular season",
-     "ask": 0.2,
-     "fee": 0.07,
-     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-NONE"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXNFLFIRSTSTART-27SSANDERS2"
-  },
-  {
-   "venue": "kalshi",
    "event": "2028 Presidential matchup",
    "n_legs": 16,
    "gross": 0.18599999999999994,
@@ -1773,6 +1713,66 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPRESMATCHUP-28NOV07"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Shedeur Sanders: First Start This Season",
+   "n_legs": 7,
+   "gross": 0.10999999999999999,
+   "fees": 0.09,
+   "net": 0.01999999999999999,
+   "capital": 0.98,
+   "roi": 0.020408163265306114,
+   "url": "https://kalshi.com/events/KXNFLFIRSTSTART-27SSANDERS2",
+   "neg_risk": null,
+   "coverage": "7/7",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Week 1 to Week 2",
+     "ask": 0.09,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W1W2"
+    },
+    {
+     "label": "Week 3 to Week 4",
+     "ask": 0.29,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W3W4"
+    },
+    {
+     "label": "Week 5 to Week 6",
+     "ask": 0.1,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W5W6"
+    },
+    {
+     "label": "Week 7 to Week 10",
+     "ask": 0.12,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W7W10"
+    },
+    {
+     "label": "Week 11 to Week 14",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W11W14"
+    },
+    {
+     "label": "Week 15 to Week 18",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-W15W18"
+    },
+    {
+     "label": "Does not start in the regular season",
+     "ask": 0.2,
+     "fee": 0.07,
+     "ticker": "KXNFLFIRSTSTART-27SSANDERS2-NONE"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXNFLFIRSTSTART-27SSANDERS2"
   },
   {
    "venue": "kalshi",
@@ -2004,6 +2004,102 @@
   },
   {
    "venue": "polymarket",
+   "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
+   "n_legs": 4,
+   "gross": 0.016000000000000014,
+   "fees": 0.026608960000000004,
+   "net": -0.01060895999999999,
+   "capital": 1.01060896,
+   "roi": -0.010497591471977442,
+   "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "55%+",
+     "ask": 0.45,
+     "fee": 0.04,
+     "token": "47351350191021860030940473611465578498086619828510123029070548466066776837953"
+    },
+    {
+     "label": "60%+",
+     "ask": 0.28,
+     "fee": 0.04,
+     "token": "21017494660016865152500751943930281918229945188485381363967741191934675869485"
+    },
+    {
+     "label": "65%+",
+     "ask": 0.18,
+     "fee": 0.04,
+     "token": "45227214931477866761288056130619702453291156789807013572598590317054802177759"
+    },
+    {
+     "label": "70%+",
+     "ask": 0.074,
+     "fee": 0.04,
+     "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How many Emmys will \u201cHacks\u201d win?",
+   "n_legs": 6,
+   "gross": 0.010000000000000009,
+   "fees": 0.027496800000000002,
+   "net": -0.017496799999999993,
+   "capital": 1.0174968,
+   "roi": -0.01719592631642674,
+   "url": "https://polymarket.com/event/how-many-emmys-will-hacks-win-20260720191814491",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "0-1",
+     "ask": 0.289,
+     "fee": 0.05,
+     "token": "33784239313751349775042476964898591806971013300690598263981693671967895393514"
+    },
+    {
+     "label": "2-3",
+     "ask": 0.59,
+     "fee": 0.05,
+     "token": "87268984074949235454516423820016774980998762869214282955518769837227850089548"
+    },
+    {
+     "label": "4-5",
+     "ask": 0.091,
+     "fee": 0.05,
+     "token": "70741340175741953211129921388812258805334006191039055307070711183570496520241"
+    },
+    {
+     "label": "6-7",
+     "ask": 0.011,
+     "fee": 0.05,
+     "token": "99980406377242843166192284829898154704171416151742213581353621633989483323443"
+    },
+    {
+     "label": "8-9",
+     "ask": 0.004,
+     "fee": 0.05,
+     "token": "66227709033255506589517160430230197556618564205717591884431396664893356696703"
+    },
+    {
+     "label": "10+",
+     "ask": 0.005,
+     "fee": 0.05,
+     "token": "99772065190252106601126319707588748125843709215508685596045547724028317597660"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-emmys-will-hacks-win-20260720191814491"
+  },
+  {
+   "venue": "polymarket",
    "event": "USD x Iranian rials End of September? (Higher Strikes)",
    "n_legs": 5,
    "gross": 0.016000000000000014,
@@ -2049,48 +2145,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "usd-x-iranian-rials-end-of-september-higher-strikes"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
-   "n_legs": 4,
-   "gross": 0.009000000000000008,
-   "fees": 0.026845560000000004,
-   "net": -0.017845559999999996,
-   "capital": 1.01784556,
-   "roi": -0.017532679515741067,
-   "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "55%+",
-     "ask": 0.45,
-     "fee": 0.04,
-     "token": "47351350191021860030940473611465578498086619828510123029070548466066776837953"
-    },
-    {
-     "label": "60%+",
-     "ask": 0.28,
-     "fee": 0.04,
-     "token": "21017494660016865152500751943930281918229945188485381363967741191934675869485"
-    },
-    {
-     "label": "65%+",
-     "ask": 0.18,
-     "fee": 0.04,
-     "token": "45227214931477866761288056130619702453291156789807013572598590317054802177759"
-    },
-    {
-     "label": "70%+",
-     "ask": 0.081,
-     "fee": 0.04,
-     "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805"
   },
   {
    "venue": "kalshi",
@@ -2241,60 +2295,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXVPRESNOMR-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "How many Emmys will \u201cHacks\u201d win?",
-   "n_legs": 6,
-   "gross": 0.009000000000000008,
-   "fees": 0.02751785,
-   "net": -0.018517849999999992,
-   "capital": 1.01851785,
-   "roi": -0.018181173751643125,
-   "url": "https://polymarket.com/event/how-many-emmys-will-hacks-win-20260720191814491",
-   "neg_risk": true,
-   "coverage": "6/6",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "0-1",
-     "ask": 0.29,
-     "fee": 0.05,
-     "token": "33784239313751349775042476964898591806971013300690598263981693671967895393514"
-    },
-    {
-     "label": "2-3",
-     "ask": 0.59,
-     "fee": 0.05,
-     "token": "87268984074949235454516423820016774980998762869214282955518769837227850089548"
-    },
-    {
-     "label": "4-5",
-     "ask": 0.091,
-     "fee": 0.05,
-     "token": "70741340175741953211129921388812258805334006191039055307070711183570496520241"
-    },
-    {
-     "label": "6-7",
-     "ask": 0.011,
-     "fee": 0.05,
-     "token": "99980406377242843166192284829898154704171416151742213581353621633989483323443"
-    },
-    {
-     "label": "8-9",
-     "ask": 0.004,
-     "fee": 0.05,
-     "token": "66227709033255506589517160430230197556618564205717591884431396664893356696703"
-    },
-    {
-     "label": "10+",
-     "ask": 0.005,
-     "fee": 0.05,
-     "token": "99772065190252106601126319707588748125843709215508685596045547724028317597660"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-emmys-will-hacks-win-20260720191814491"
   },
   {
    "venue": "kalshi",
