@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-13T02:48:46Z",
-  "ts": 1789267726.8474445,
-  "scan_seconds": 15.0,
+  "generated_at": "2026-09-13T02:59:16Z",
+  "ts": 1789268356.8871002,
+  "scan_seconds": 14.8,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 193 binary + 1656 multi | kalshi: 5000 events -> 509 binary + 1212 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 198 binary + 1655 multi | kalshi: 5000 events -> 508 binary + 1212 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -290,11 +290,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.5569999999999999,
-   "fees": 0.029249430000000003,
-   "net": 0.5277505699999999,
-   "capital": 0.47224943,
-   "roi": 1.1175250545035065,
+   "gross": 0.571,
+   "fees": 0.028324310000000002,
+   "net": 0.5426756899999999,
+   "capital": 0.45732431,
+   "roi": 1.1866320642346784,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -344,7 +344,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.035,
+     "ask": 0.021,
      "fee": 0.07,
      "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
     },
@@ -536,11 +536,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.346,
-   "fees": 0.041955620000000006,
-   "net": 0.30404437999999995,
-   "capital": 0.69595562,
-   "roi": 0.43687323050857746,
+   "gross": 0.347,
+   "fees": 0.04189633,
+   "net": 0.30510367,
+   "capital": 0.6948963300000001,
+   "roi": 0.4390635794550821,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -572,7 +572,7 @@
     },
     {
      "label": "$2B",
-     "ask": 0.077,
+     "ask": 0.076,
      "fee": 0.07,
      "token": "94120399411978925018563650270691769293212315658863591054992105782706185155787"
     },
@@ -1134,6 +1134,42 @@
   },
   {
    "venue": "kalshi",
+   "event": "Winnipeg mayoral election winner?",
+   "n_legs": 3,
+   "gross": 0.13,
+   "fees": 0.05,
+   "net": 0.08,
+   "capital": 0.92,
+   "roi": 0.08695652173913043,
+   "url": "https://kalshi.com/events/KXWINNIPEGMAYOR-26OCT28",
+   "neg_risk": null,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Scott Gillingham",
+     "ask": 0.59,
+     "fee": 0.07,
+     "ticker": "KXWINNIPEGMAYOR-26OCT28-SGIL"
+    },
+    {
+     "label": "Kevin Klein",
+     "ask": 0.21,
+     "fee": 0.07,
+     "ticker": "KXWINNIPEGMAYOR-26OCT28-KKLE"
+    },
+    {
+     "label": "Don Woodstock",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXWINNIPEGMAYOR-26OCT28-DWOO"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXWINNIPEGMAYOR-26OCT28"
+  },
+  {
+   "venue": "kalshi",
    "event": "Mongolian presidential election winner?",
    "n_legs": 5,
    "gross": 0.14300000000000002,
@@ -1359,42 +1395,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPRESMATCHUP-28NOV07"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Winnipeg mayoral election winner?",
-   "n_legs": 3,
-   "gross": 0.10999999999999999,
-   "fees": 0.05,
-   "net": 0.059999999999999984,
-   "capital": 0.9400000000000001,
-   "roi": 0.06382978723404253,
-   "url": "https://kalshi.com/events/KXWINNIPEGMAYOR-26OCT28",
-   "neg_risk": null,
-   "coverage": "3/3",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Scott Gillingham",
-     "ask": 0.59,
-     "fee": 0.07,
-     "ticker": "KXWINNIPEGMAYOR-26OCT28-SGIL"
-    },
-    {
-     "label": "Kevin Klein",
-     "ask": 0.23,
-     "fee": 0.07,
-     "ticker": "KXWINNIPEGMAYOR-26OCT28-KKLE"
-    },
-    {
-     "label": "Don Woodstock",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXWINNIPEGMAYOR-26OCT28-DWOO"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXWINNIPEGMAYOR-26OCT28"
   },
   {
    "venue": "kalshi",
@@ -2103,6 +2103,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "mecklenburg-vorpommern-parliamentary-elections-afd-of-seats-20260805192827457"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How many hurricanes will form during the Atlantic Hurricane Season in 2026?",
+   "n_legs": 4,
+   "gross": 0.006000000000000005,
+   "fees": 0.0310902,
+   "net": -0.025090199999999993,
+   "capital": 1.0250902,
+   "roi": -0.024476090006518444,
+   "url": "https://polymarket.com/event/how-many-hurricanes-will-form-during-the-atlantic-hurricane-season-in-2026-20260728201848339",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "0",
+     "ask": 0.36,
+     "fee": 0.05,
+     "token": "16428531495767266202929007556373378703978133357666474639436448501621481644745"
+    },
+    {
+     "label": "1-3",
+     "ask": 0.48,
+     "fee": 0.05,
+     "token": "84809618324983130172334511563070565398042438418855369552637458162220747028327"
+    },
+    {
+     "label": "4-6",
+     "ask": 0.09,
+     "fee": 0.05,
+     "token": "37219567096332961083715680918499657407092183329662391744404224999937423551503"
+    },
+    {
+     "label": "7+",
+     "ask": 0.064,
+     "fee": 0.05,
+     "token": "65736582138796707785986252116479480865924022303975082433319409450452530207931"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-hurricanes-will-form-during-the-atlantic-hurricane-season-in-2026-20260728201848339"
   },
   {
    "venue": "kalshi",
