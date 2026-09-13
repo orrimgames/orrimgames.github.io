@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-13T11:19:38Z",
-  "ts": 1789298378.306274,
-  "scan_seconds": 20.1,
+  "generated_at": "2026-09-13T11:21:24Z",
+  "ts": 1789298484.4739056,
+  "scan_seconds": 11.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 203 binary + 1676 multi | kalshi: 5000 events -> 509 binary + 1216 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 200 binary + 1679 multi | kalshi: 5000 events -> 509 binary + 1216 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -446,11 +446,11 @@
    "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.22499999999999998,
+   "gross": 0.22599999999999998,
    "fees": 0.0,
-   "net": 0.22499999999999998,
-   "capital": 0.775,
-   "roi": 0.29032258064516125,
+   "net": 0.22599999999999998,
+   "capital": 0.774,
+   "roi": 0.2919896640826873,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -476,7 +476,7 @@
     },
     {
      "label": "Egypt",
-     "ask": 0.075,
+     "ask": 0.073,
      "fee": 0.0,
      "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
     },
@@ -500,7 +500,7 @@
     },
     {
      "label": "Syria",
-     "ask": 0.076,
+     "ask": 0.077,
      "fee": 0.0,
      "token": "787170291302302153997884307668830963927797223952711045136721008061721679993"
     },
@@ -536,11 +536,11 @@
    "venue": "polymarket",
    "event": "Which countries will recognize Israel by December 31?",
    "n_legs": 16,
-   "gross": 0.15500000000000003,
+   "gross": 0.16300000000000003,
    "fees": 0.0,
-   "net": 0.15500000000000003,
-   "capital": 0.845,
-   "roi": 0.18343195266272194,
+   "net": 0.16300000000000003,
+   "capital": 0.837,
+   "roi": 0.19474313022700124,
    "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
    "neg_risk": false,
    "coverage": "16/16",
@@ -626,13 +626,13 @@
     },
     {
      "label": "Malaysia",
-     "ask": 0.03,
+     "ask": 0.029,
      "fee": 0.0,
      "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
     },
     {
      "label": "Bangladesh",
-     "ask": 0.045,
+     "ask": 0.038,
      "fee": 0.0,
      "token": "40688094653686125161851139319199302543780839137475354735981151285183116400686"
     },
@@ -1895,6 +1895,48 @@
    "event_slug": "KXHOUSERACE-RI02-26"
   },
   {
+   "venue": "polymarket",
+   "event": "Mecklenburg-Vorpommern Parliamentary Election: Gr\u00fcne Vote Share?",
+   "n_legs": 4,
+   "gross": 0.007000000000000006,
+   "fees": 0.02426284,
+   "net": -0.017262839999999995,
+   "capital": 1.01726284,
+   "roi": -0.01696989147858777,
+   "url": "https://polymarket.com/event/mecklenburg-vorpommern-parliamentary-election-grune-vote-share",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<3%",
+     "ask": 0.023,
+     "fee": 0.04,
+     "token": "100293426134741165866672444157406178933127865289559293296312199892171806798216"
+    },
+    {
+     "label": "3-5%",
+     "ask": 0.33,
+     "fee": 0.04,
+     "token": "109573822153835358579732253153704632782907451316494043280273769852178906226681"
+    },
+    {
+     "label": "5-7%",
+     "ask": 0.51,
+     "fee": 0.04,
+     "token": "78567162677788571283635377703362339586014003489057829037093103413928949182927"
+    },
+    {
+     "label": "7%+",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "9969320378142479587444781319813699110761951843551649712932324519673065871767"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "mecklenburg-vorpommern-parliamentary-election-grune-vote-share"
+  },
+  {
    "venue": "kalshi",
    "event": "Wisconsin Secretary of State winner?",
    "n_legs": 2,
@@ -2037,48 +2079,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "gpu-rental-prices-h200-end-of-september-1785423806491"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Mecklenburg-Vorpommern Parliamentary Election: Gr\u00fcne Vote Share?",
-   "n_legs": 4,
-   "gross": 0.0010000000000000009,
-   "fees": 0.024456759999999998,
-   "net": -0.023456759999999997,
-   "capital": 1.02345676,
-   "roi": -0.02291915097614871,
-   "url": "https://polymarket.com/event/mecklenburg-vorpommern-parliamentary-election-grune-vote-share",
-   "neg_risk": true,
-   "coverage": "4/4",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<3%",
-     "ask": 0.025,
-     "fee": 0.04,
-     "token": "100293426134741165866672444157406178933127865289559293296312199892171806798216"
-    },
-    {
-     "label": "3-5%",
-     "ask": 0.33,
-     "fee": 0.04,
-     "token": "109573822153835358579732253153704632782907451316494043280273769852178906226681"
-    },
-    {
-     "label": "5-7%",
-     "ask": 0.51,
-     "fee": 0.04,
-     "token": "78567162677788571283635377703362339586014003489057829037093103413928949182927"
-    },
-    {
-     "label": "7%+",
-     "ask": 0.134,
-     "fee": 0.04,
-     "token": "9969320378142479587444781319813699110761951843551649712932324519673065871767"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "mecklenburg-vorpommern-parliamentary-election-grune-vote-share"
   },
   {
    "venue": "polymarket",
