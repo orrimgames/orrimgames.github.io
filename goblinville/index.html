@@ -4601,15 +4601,63 @@ function drawShare(){
 
 /* ---------------- landmark meshes (baked props, zero per-frame cost) ------------- */
 function buildBoneSpire(){
-  const m=MB(),T=M4.id(); const bone=hex('#d9d4c6'), bone2=hex('#b8b2a2'), glow=hex('#9fd4ff'), dark=hex('#4a4a55');
-  for(let i=0;i<3;i++){ const off=(i-1)*0.9, hh=2.7-i*0.55, offz=Math.abs(off)*0.5;
-    M4.trs(T,off,0,offz,0,0,0,1,1,1); tube(m,0.30,0.17,hh,6,i===1?bone:bone2,T,0,true,true);
-    M4.trs(T,off,hh+0.12,offz,0,0,0,1,1,1); ball(m,0.24,8,bone2,T,0,0.9); }
-  for(const sx of[-1.6,1.6]){ M4.trs(T,sx,0.85,0.35,0.55,sx>0?-0.5:0.5,0,1,1,1); tube(m,0.06,0.045,1.9,5,bone,T,0,true,true); }
-  M4.trs(T,0,2.95,0,0,0,0,1,1,1); ball(m,0.15,8,glow,T,0,1);   // the Choir's one blue light
-  M4.trs(T,0,0.06,0,0,0,0,3.4,0.12,2.6); box(m,1,1,1,dark,T,0,0.55);
-  for(const sx of[-1.2,-0.4,0.4,1.2]){ M4.trs(T,sx,0.22,1.22,0,0,0,1,1,1); pyramid(m,0.09,0.26,0.09,bone,T,0); }   // jawbone sill
-  for(const sx of[-1.1,1.1]){ M4.trs(T,sx,0.42,-0.55,0,0,0,1,1,1); ball(m,0.09,7,glow,T,0,1); }                  // low candle-lights
+  /* v122: THE OSSUARY CROWN - the Bone Kingdom finally has a castle, not a marker.
+     One baked mesh: keep, four towers, raised crown, rib-buttresses, skull gate,
+     battlements, bridge and choir-light. The surrounding v63 graveyard remains its ward. */
+  const m=MB(),T=M4.id();
+  const basalt=hex('#34313f'), basalt2=hex('#24212d'), stone=hex('#575463'), stone2=hex('#74717f');
+  const bone=hex('#efe6cc'), bone2=hex('#cfc6b2'), oldbone=hex('#a99f8e'), dark=hex('#15121c'), glow=hex('#9fd4ff'), ice=hex('#c9efff');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  const spire=(x,y,z,w,h,c)=>{ M4.trs(T,x,y,z,0,0,0,1,1,1); pyramid(m,w,h,w,c,T,0); };
+  // Black stepped plinth and processional stair: a castle grown from the burial mound.
+  bx(0,0,0,6.8,0.34,5.8,basalt2,0.48); bx(0,0.34,-0.15,5.9,0.34,4.9,basalt,0.52);
+  for(let i=0;i<4;i++) bx(0,0.02+i*0.11,3.15-i*0.28,2.15-i*0.18,0.11,0.58,stone2,0.7);
+  // Central keep, deep gatehouse and raised throne apse.
+  bx(0,0.68,-0.30,3.7,3.65,3.25,stone,0.58);
+  bx(0,0.68,1.62,3.05,2.55,1.15,basalt,0.58);
+  bx(0,4.15,-0.48,2.65,0.48,2.45,basalt2,0.58);
+  bx(0,4.63,-0.48,1.65,0.42,1.65,stone2,0.62);
+  // Four corner towers. Their bone caps read as one crown from orbit and as tusks on approach.
+  for(const sx of[-1,1]) for(const sz of[-1,1]){
+    const x=sx*2.43,z=sz*1.95, front=sz>0;
+    M4.trs(T,x,0.62,z,0,0,0,1,1,1); tube(m,0.78,0.72,3.45,8,sz>0?stone2:stone,T,0,true,true);
+    M4.trs(T,x,4.06,z,0,0,0,1,1,1); tube(m,0.91,0.80,0.32,8,basalt2,T,0,true,true);
+    spire(x,4.38,z,1.18,1.62,bone2);
+    orb(x,5.36,z,0.13,glow,1.25);
+    // slit windows and ivory brow
+    for(const yy of[1.55,2.35,3.12]){ bx(x,yy,z+(front?0.73:-0.73),0.16,0.40,0.06,dark,0.95); bx(x,yy+0.39,z+(front?0.76:-0.76),0.30,0.08,0.08,bone2,0.9); }
+  }
+  // Crenellations across all visible walls - regular military rhythm, all one rule.
+  for(const z of[-1.84,1.98]) for(let i=-3;i<=3;i++) bx(i*0.47,4.13,z,0.25,0.54,0.28,i%2?bone2:oldbone,0.72);
+  for(const x of[-1.72,1.72]) for(let i=-2;i<=2;i++) bx(x,4.13,-0.95+i*0.48,0.28,0.54,0.25,i%2?oldbone:bone2,0.72);
+  // The Ossuary Crown: six inward-leaning colossal ribs cradle the blue funeral star.
+  for(let i=0;i<6;i++){
+    const a=i/6*TAU+Math.PI/6, x=Math.cos(a)*1.28,z=-0.48+Math.sin(a)*1.05;
+    M4.trs(T,x,5.04,z,Math.cos(a)*0.42,a,-Math.sin(a)*0.42,1,1,1); tube(m,0.115,0.045,2.15,6,i%2?bone:bone2,T,0,true,true);
+    orb(x,5.02,z,0.18,oldbone,0.9);
+  }
+  orb(0,6.48,-0.48,0.44,glow,1.18); orb(0,6.48,-0.48,0.20,ice,1.18);
+  spire(0,6.85,-0.48,0.32,0.82,bone);
+  // Skull gate: huge sockets, individual teeth and a cold light behind the open jaw.
+  bx(0,0.66,2.235,1.52,1.70,0.12,dark,0.96);
+  orb(0,2.50,2.29,0.78,bone,0.96); bx(0,1.67,2.31,1.20,0.72,0.18,bone2,0.88);
+  for(const sx of[-0.31,0.31]){ orb(sx,2.61,2.93,0.235,dark,1.22); orb(sx,2.60,3.09,0.072,glow,1.0); }
+  spire(0,2.25,3.01,0.26,0.35,dark);
+  for(let i=-3;i<=3;i++) bx(i*0.15,1.70,3.01,0.075,0.24,0.10,i%2?bone:bone2,0.94);
+  for(let i=-2;i<=2;i++) bx(i*0.18,1.47,3.00,0.085,0.20,0.10,i%2?oldbone:bone,0.94);
+  // Rib buttresses root the fortress to Orrim instead of leaving a floating box silhouette.
+  for(const sx of[-1,1]) for(const z of[-1.15,0.15,1.23]){
+    M4.trs(T,sx*2.04,1.62,z,0,sx>0?-0.08:0.08,sx>0?-0.83:0.83,1,1,1); tube(m,0.15,0.07,2.55,6,bone2,T,0,true,true);
+    orb(sx*2.82,0.47,z,0.23,oldbone,0.85);
+  }
+  // Hanging bone standards and the narrow bridge of the Choir.
+  for(const sx of[-1,1]){ bx(sx*1.18,2.95,2.27,0.10,0.88,0.08,glow,0.92); spire(sx*1.18,2.55,2.31,0.34,0.48,bone2); }
+  bx(0,0.34,3.74,1.28,0.16,1.55,stone2,0.64);
+  for(const sx of[-0.62,0.62]) bx(sx,0.50,3.74,0.10,0.42,1.55,bone2,0.72);
+  // Outer ward lanterns answer the crown without competing with it.
+  for(let i=0;i<8;i++){ const a=i/8*TAU,rr=3.45,x=Math.cos(a)*rr,z=Math.sin(a)*rr;
+    bx(x,0.30,z,0.17,0.72,0.17,oldbone,0.72); orb(x,1.10,z,0.10,glow,1.0); }
   return upload(m);
 }
 /* v63: THE BONE KINGDOM, built out - crypts, grave-rows, the Choir circle, the rib-gate, dead orchards */
