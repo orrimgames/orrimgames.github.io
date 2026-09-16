@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-16T02:34:52Z",
-  "ts": 1789526092.7345867,
+  "generated_at": "2026-09-16T02:48:38Z",
+  "ts": 1789526918.325482,
   "scan_seconds": 13.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 255 binary + 1734 multi | kalshi: 5000 events -> 530 binary + 1215 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 264 binary + 1721 multi | kalshi: 5000 events -> 529 binary + 1215 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -272,11 +272,11 @@
    "venue": "polymarket",
    "event": "Kraken IPO closing market cap above ___ ?",
    "n_legs": 7,
-   "gross": 0.5640000000000001,
-   "fees": 0.01628896,
-   "net": 0.54771104,
-   "capital": 0.45228896,
-   "roi": 1.2109759212340714,
+   "gross": 0.565,
+   "fees": 0.016255000000000002,
+   "net": 0.5487449999999999,
+   "capital": 0.451255,
+   "roi": 1.2160419275132683,
    "url": "https://polymarket.com/event/kraken-ipo-closing-market-cap-above",
    "neg_risk": false,
    "coverage": "7/7",
@@ -296,7 +296,7 @@
     },
     {
      "label": "$20B",
-     "ask": 0.076,
+     "ask": 0.075,
      "fee": 0.04,
      "token": "115105975393855984469276010917321434871302297218759589191448418779462105411998"
     },
@@ -578,11 +578,11 @@
    "venue": "polymarket",
    "event": "Probable FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.30299999999999994,
-   "fees": 0.043657390000000004,
-   "net": 0.2593426099999999,
-   "capital": 0.7406573900000001,
-   "roi": 0.3501519238199998,
+   "gross": 0.30399999999999994,
+   "fees": 0.043600900000000005,
+   "net": 0.26039909999999994,
+   "capital": 0.7396009000000001,
+   "roi": 0.3520805612864991,
    "url": "https://polymarket.com/event/probable-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -614,7 +614,7 @@
     },
     {
      "label": "$400M",
-     "ask": 0.097,
+     "ask": 0.096,
      "fee": 0.07,
      "token": "112499424250842648253213270898238819989124439426527820909383827591993132600015"
     },
@@ -644,11 +644,11 @@
    "venue": "polymarket",
    "event": "Will __ ships transit the Strait of Hormuz on any day by September 30?",
    "n_legs": 5,
-   "gross": 0.19699999999999995,
+   "gross": 0.19899999999999995,
    "fees": 0.0,
-   "net": 0.19699999999999995,
-   "capital": 0.803,
-   "roi": 0.24533001245330005,
+   "net": 0.19899999999999995,
+   "capital": 0.801,
+   "roi": 0.24843945068664164,
    "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-september-30",
    "neg_risk": false,
    "coverage": "5/5",
@@ -674,7 +674,7 @@
     },
     {
      "label": "40+",
-     "ask": 0.056,
+     "ask": 0.054,
      "fee": 0.0,
      "token": "38156466768164033141369481035987621193548653332377010280845298714357503627639"
     },
@@ -782,11 +782,11 @@
    "venue": "polymarket",
    "event": "How many Senators will vote for the Clarity Act?",
    "n_legs": 8,
-   "gross": 0.18799999999999994,
-   "fees": 0.028611920000000002,
-   "net": 0.15938807999999993,
-   "capital": 0.8406119200000001,
-   "roi": 0.1896095882152134,
+   "gross": 0.19899999999999995,
+   "fees": 0.028272440000000003,
+   "net": 0.17072755999999994,
+   "capital": 0.82927244,
+   "roi": 0.20587632214088766,
    "url": "https://polymarket.com/event/how-many-senators-will-vote-for-the-clarity-act-20260729193533306",
    "neg_risk": false,
    "coverage": "8/8",
@@ -818,25 +818,25 @@
     },
     {
      "label": "Above 62",
-     "ask": 0.117,
+     "ask": 0.1,
      "fee": 0.04,
      "token": "41629896775597041641868185717073714309160692941526219636827692541788088789052"
     },
     {
      "label": "Above 64",
-     "ask": 0.085,
+     "ask": 0.087,
      "fee": 0.04,
      "token": "104570855687547150122020228192377729156779053024066885172563447361898853773237"
     },
     {
      "label": "Above 66",
-     "ask": 0.048,
+     "ask": 0.058,
      "fee": 0.04,
      "token": "46741038616696556432191022829867927697377961231432791900315707162582398908771"
     },
     {
      "label": "Above 68",
-     "ask": 0.022,
+     "ask": 0.016,
      "fee": 0.04,
      "token": "110571861640685170417717268132414604148625730956161115752635185296762979748538"
     }
@@ -1451,14 +1451,68 @@
    "event_slug": "KXWINNIPEGMAYOR-26OCT28"
   },
   {
+   "venue": "kalshi",
+   "event": "Who will be the next Deputy Attorney General?",
+   "n_legs": 6,
+   "gross": 0.08999999999999997,
+   "fees": 0.07,
+   "net": 0.019999999999999962,
+   "capital": 0.98,
+   "roi": 0.020408163265306083,
+   "url": "https://kalshi.com/events/KXNEXTDEPUTYAG-28JAN01",
+   "neg_risk": null,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "R. Trent McCotter",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXNEXTDEPUTYAG-28JAN01-RMCC"
+    },
+    {
+     "label": "Colin M. McDonald",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXNEXTDEPUTYAG-28JAN01-CMCD"
+    },
+    {
+     "label": "Stanley E. Woodward Jr.",
+     "ask": 0.25,
+     "fee": 0.07,
+     "ticker": "KXNEXTDEPUTYAG-28JAN01-SWOO"
+    },
+    {
+     "label": "Harmeet Dhillon",
+     "ask": 0.14,
+     "fee": 0.07,
+     "ticker": "KXNEXTDEPUTYAG-28JAN01-HDIL"
+    },
+    {
+     "label": "John A. Eisenberg",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXNEXTDEPUTYAG-28JAN01-JEIS"
+    },
+    {
+     "label": "A. Tysen Duva",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXNEXTDEPUTYAG-28JAN01-ADUV"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXNEXTDEPUTYAG-28JAN01"
+  },
+  {
    "venue": "polymarket",
    "event": "MLB: Player to Hit 50+ Home Runs",
    "n_legs": 30,
-   "gross": 0.051999999999999935,
-   "fees": 0.0141477,
-   "net": 0.037852299999999936,
-   "capital": 0.9621477,
-   "roi": 0.03934146493308661,
+   "gross": 0.031000000000000028,
+   "fees": 0.01433487,
+   "net": 0.016665130000000028,
+   "capital": 0.98333487,
+   "roi": 0.01694756334635019,
    "url": "https://polymarket.com/event/mlb-player-to-hit-50-home-runs-20260702210914308",
    "neg_risk": false,
    "coverage": "30/30",
@@ -1472,13 +1526,13 @@
     },
     {
      "label": "Junior Caminero",
-     "ask": 0.088,
+     "ask": 0.086,
      "fee": 0.03,
      "token": "23300207868998878060865275520528179751690368454200607395871697304390907111080"
     },
     {
      "label": "Yordan Alvarez",
-     "ask": 0.01,
+     "ask": 0.013,
      "fee": 0.03,
      "token": "67584453635536250712652770776887116601190378522525288169619480337921459996987"
     },
@@ -1496,7 +1550,7 @@
     },
     {
      "label": "Kyle Schwarber",
-     "ask": 0.68,
+     "ask": 0.69,
      "fee": 0.03,
      "token": "43380907991191198901573519764783704099616387718566040726679066692533522104039"
     },
@@ -1550,7 +1604,7 @@
     },
     {
      "label": "Matt Olson",
-     "ask": 0.062,
+     "ask": 0.072,
      "fee": 0.03,
      "token": "41460078730484185623099685732404354329478282908027981611547167438467196458506"
     },
@@ -1647,60 +1701,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "mlb-player-to-hit-50-home-runs-20260702210914308"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Who will be the next Deputy Attorney General?",
-   "n_legs": 6,
-   "gross": 0.08999999999999997,
-   "fees": 0.07,
-   "net": 0.019999999999999962,
-   "capital": 0.98,
-   "roi": 0.020408163265306083,
-   "url": "https://kalshi.com/events/KXNEXTDEPUTYAG-28JAN01",
-   "neg_risk": null,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "R. Trent McCotter",
-     "ask": 0.13,
-     "fee": 0.07,
-     "ticker": "KXNEXTDEPUTYAG-28JAN01-RMCC"
-    },
-    {
-     "label": "Colin M. McDonald",
-     "ask": 0.13,
-     "fee": 0.07,
-     "ticker": "KXNEXTDEPUTYAG-28JAN01-CMCD"
-    },
-    {
-     "label": "Stanley E. Woodward Jr.",
-     "ask": 0.25,
-     "fee": 0.07,
-     "ticker": "KXNEXTDEPUTYAG-28JAN01-SWOO"
-    },
-    {
-     "label": "Harmeet Dhillon",
-     "ask": 0.14,
-     "fee": 0.07,
-     "ticker": "KXNEXTDEPUTYAG-28JAN01-HDIL"
-    },
-    {
-     "label": "John A. Eisenberg",
-     "ask": 0.13,
-     "fee": 0.07,
-     "ticker": "KXNEXTDEPUTYAG-28JAN01-JEIS"
-    },
-    {
-     "label": "A. Tysen Duva",
-     "ask": 0.13,
-     "fee": 0.07,
-     "ticker": "KXNEXTDEPUTYAG-28JAN01-ADUV"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXNEXTDEPUTYAG-28JAN01"
   },
   {
    "venue": "polymarket",
@@ -1898,11 +1898,11 @@
    "venue": "polymarket",
    "event": "Eurozone Annual Inflation 2026",
    "n_legs": 9,
-   "gross": 0.01100000000000001,
-   "fees": 0.016037250000000003,
-   "net": -0.005037249999999993,
-   "capital": 1.00503725,
-   "roi": -0.005012003286445347,
+   "gross": 0.01200000000000001,
+   "fees": 0.015987600000000005,
+   "net": -0.003987599999999994,
+   "capital": 1.0039876,
+   "roi": -0.0039717622010470984,
    "url": "https://polymarket.com/event/eurozone-2026-annual-inflation",
    "neg_risk": true,
    "coverage": "9/9",
@@ -1910,7 +1910,7 @@
    "legs": [
     {
      "label": "<1.0%",
-     "ask": 0.004,
+     "ask": 0.003,
      "fee": 0.05,
      "token": "36547151791471767792557978047668306497682264127635715132063193991549138933742"
     },
