@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-26T19:42:31Z",
-  "ts": 1790451751.5219188,
-  "scan_seconds": 13.3,
+  "generated_at": "2026-09-26T20:26:35Z",
+  "ts": 1790454395.7152176,
+  "scan_seconds": 15.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 170 binary + 1752 multi | kalshi: 5000 events -> 508 binary + 1277 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 169 binary + 1743 multi | kalshi: 5000 events -> 507 binary + 1277 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "Switzerland\u2019s September Referendum: What will pass?",
    "n_legs": 2,
-   "gross": 0.95,
-   "fees": 0.00194488,
-   "net": 0.9480551199999999,
-   "capital": 0.051944880000000006,
-   "roi": 18.25117547677461,
+   "gross": 0.951,
+   "fees": 0.00190748,
+   "net": 0.94909252,
+   "capital": 0.050907480000000005,
+   "roi": 18.643478718648023,
    "url": "https://polymarket.com/event/switzerlands-september-referendum-what-will-pass-20260713144919276",
    "neg_risk": false,
    "coverage": "2/2",
@@ -32,7 +32,7 @@
    "legs": [
     {
      "label": "Neutrality initiative",
-     "ask": 0.033,
+     "ask": 0.032,
      "fee": 0.04,
      "token": "29930395488773801857622260293304694658356268641863382575001425275546818052153"
     },
@@ -50,11 +50,11 @@
    "venue": "polymarket",
    "event": "How high will US unemployment go in 2026?",
    "n_legs": 5,
-   "gross": 0.827,
-   "fees": 0.00832925,
-   "net": 0.81867075,
-   "capital": 0.18132925000000003,
-   "roi": 4.5148300674050095,
+   "gross": 0.815,
+   "fees": 0.008894450000000002,
+   "net": 0.80610555,
+   "capital": 0.19389445,
+   "roi": 4.15744519763201,
    "url": "https://polymarket.com/event/how-high-will-us-unemployment-go-in-2026",
    "neg_risk": false,
    "coverage": "5/5",
@@ -74,7 +74,7 @@
     },
     {
      "label": "6.0%",
-     "ask": 0.023,
+     "ask": 0.035,
      "fee": 0.05,
      "token": "108018091346802760465812775595296174303353396224301843350580443613286618815662"
     },
@@ -98,11 +98,11 @@
    "venue": "kalshi",
    "event": "What will be the 51st state in Trump's term?",
    "n_legs": 8,
-   "gross": 0.843,
+   "gross": 0.853,
    "fees": 0.08,
-   "net": 0.763,
-   "capital": 0.237,
-   "roi": 3.219409282700422,
+   "net": 0.773,
+   "capital": 0.22699999999999998,
+   "roi": 3.4052863436123353,
    "url": "https://kalshi.com/events/KXSTATE51-29",
    "neg_risk": null,
    "coverage": "8/8",
@@ -152,7 +152,7 @@
     },
     {
      "label": "Cuba",
-     "ask": 0.05,
+     "ask": 0.04,
      "fee": 0.07,
      "ticker": "KXSTATE51-29-CU"
     }
@@ -222,13 +222,73 @@
   },
   {
    "venue": "polymarket",
+   "event": "How many views will the #1 Movie on Netflix have this week?",
+   "n_legs": 7,
+   "gross": 0.618,
+   "fees": 0.0178372,
+   "net": 0.6001628,
+   "capital": 0.3998372,
+   "roi": 1.5010179142911164,
+   "url": "https://polymarket.com/event/how-many-views-will-the-1-movie-on-netflix-have-this-week-20260929",
+   "neg_risk": false,
+   "coverage": "7/7",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "15M+",
+     "ask": 0.11,
+     "fee": 0.05,
+     "token": "19277954931875173624140682363461736254197702433438695098450053774640436517790"
+    },
+    {
+     "label": "18M+",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "81446881962294625489962031235964717401875661853095632593993041321876935466758"
+    },
+    {
+     "label": "21M+",
+     "ask": 0.049,
+     "fee": 0.05,
+     "token": "57742386684971498287122260577316714554457796749013903573579347843023527838478"
+    },
+    {
+     "label": "24M+",
+     "ask": 0.038,
+     "fee": 0.05,
+     "token": "13553839271569891221482013672972657736382536289351742021255850016742742831697"
+    },
+    {
+     "label": "27M+",
+     "ask": 0.037,
+     "fee": 0.05,
+     "token": "89647493750707775360540834198337181947659907795910982029520519745209338415426"
+    },
+    {
+     "label": "30M+",
+     "ask": 0.039,
+     "fee": 0.05,
+     "token": "99215800324525031101916408248714787907440051515122189285291228870916360708169"
+    },
+    {
+     "label": "34M+",
+     "ask": 0.039,
+     "fee": 0.05,
+     "token": "31134976003422726994528198595934056177163138238466134043549550974972408684456"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-views-will-the-1-movie-on-netflix-have-this-week-20260929"
+  },
+  {
+   "venue": "polymarket",
    "event": "Who will Xi Jinping purge in 2026?",
    "n_legs": 9,
-   "gross": 0.571,
-   "fees": 0.016155239999999998,
-   "net": 0.5548447599999999,
-   "capital": 0.44515524,
-   "roi": 1.2464073432000933,
+   "gross": 0.5740000000000001,
+   "fees": 0.0160476,
+   "net": 0.5579524,
+   "capital": 0.4420476,
+   "roi": 1.262199817395231,
    "url": "https://polymarket.com/event/who-will-xi-jinping-purge-in-2026",
    "neg_risk": false,
    "coverage": "9/9",
@@ -260,7 +320,7 @@
     },
     {
      "label": "Zhao Leji",
-     "ask": 0.053,
+     "ask": 0.05,
      "fee": 0.04,
      "token": "106875471588027045663266864810874951957444000815550177911920097445753767636372"
     },
@@ -368,11 +428,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.28300000000000003,
-   "fees": 0.042654290000000004,
-   "net": 0.24034571000000002,
-   "capital": 0.75965429,
-   "roi": 0.3163882744610052,
+   "gross": 0.30600000000000005,
+   "fees": 0.04124568,
+   "net": 0.26475432000000004,
+   "capital": 0.7352456799999999,
+   "roi": 0.360089596174166,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -386,7 +446,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.179,
+     "ask": 0.173,
      "fee": 0.07,
      "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
     },
@@ -422,7 +482,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.031,
+     "ask": 0.014,
      "fee": 0.07,
      "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
     },
@@ -636,63 +696,57 @@
   },
   {
    "venue": "polymarket",
-   "event": "How many views will the #1 Movie on Netflix have this week?",
-   "n_legs": 7,
-   "gross": 0.21799999999999997,
-   "fees": 0.0254372,
-   "net": 0.19256279999999998,
-   "capital": 0.8074372000000001,
-   "roi": 0.2384864110794003,
-   "url": "https://polymarket.com/event/how-many-views-will-the-1-movie-on-netflix-have-this-week-20260929",
+   "event": "What will be in a US-Iran deal in 2026?",
+   "n_legs": 6,
+   "gross": 0.18999999999999995,
+   "fees": 0.0,
+   "net": 0.18999999999999995,
+   "capital": 0.81,
+   "roi": 0.23456790123456783,
+   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
    "neg_risk": false,
-   "coverage": "7/7",
+   "coverage": "6/6",
    "tier": 2,
    "legs": [
     {
-     "label": "15M+",
-     "ask": 0.51,
-     "fee": 0.05,
-     "token": "19277954931875173624140682363461736254197702433438695098450053774640436517790"
+     "label": "1+ Year Enrichment Moratorium",
+     "ask": 0.15,
+     "fee": 0.0,
+     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
     },
     {
-     "label": "18M+",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "81446881962294625489962031235964717401875661853095632593993041321876935466758"
+     "label": "Uranium Enrichment % Cap (1+ Year)",
+     "ask": 0.16,
+     "fee": 0.0,
+     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
     },
     {
-     "label": "21M+",
-     "ask": 0.049,
-     "fee": 0.05,
-     "token": "57742386684971498287122260577316714554457796749013903573579347843023527838478"
+     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
+     "ask": 0.16,
+     "fee": 0.0,
+     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
     },
     {
-     "label": "24M+",
-     "ask": 0.038,
-     "fee": 0.05,
-     "token": "13553839271569891221482013672972657736382536289351742021255850016742742831697"
+     "label": "Iran Reconstruction Funding",
+     "ask": 0.12,
+     "fee": 0.0,
+     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
     },
     {
-     "label": "27M+",
-     "ask": 0.037,
-     "fee": 0.05,
-     "token": "89647493750707775360540834198337181947659907795910982029520519745209338415426"
+     "label": "Dilution of Iran's Uranium",
+     "ask": 0.16,
+     "fee": 0.0,
+     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
     },
     {
-     "label": "30M+",
-     "ask": 0.039,
-     "fee": 0.05,
-     "token": "99215800324525031101916408248714787907440051515122189285291228870916360708169"
-    },
-    {
-     "label": "34M+",
-     "ask": 0.039,
-     "fee": 0.05,
-     "token": "31134976003422726994528198595934056177163138238466134043549550974972408684456"
+     "label": "Enriched Uranium Surrender",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "how-many-views-will-the-1-movie-on-netflix-have-this-week-20260929"
+   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
   },
   {
    "venue": "polymarket",
@@ -738,67 +792,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "What will be in a US-Iran deal in 2026?",
-   "n_legs": 6,
-   "gross": 0.17999999999999994,
-   "fees": 0.0,
-   "net": 0.17999999999999994,
-   "capital": 0.8200000000000001,
-   "roi": 0.21951219512195114,
-   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "1+ Year Enrichment Moratorium",
-     "ask": 0.15,
-     "fee": 0.0,
-     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
-    },
-    {
-     "label": "Uranium Enrichment % Cap (1+ Year)",
-     "ask": 0.16,
-     "fee": 0.0,
-     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
-    },
-    {
-     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
-     "ask": 0.17,
-     "fee": 0.0,
-     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
-    },
-    {
-     "label": "Iran Reconstruction Funding",
-     "ask": 0.12,
-     "fee": 0.0,
-     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
-    },
-    {
-     "label": "Dilution of Iran's Uranium",
-     "ask": 0.16,
-     "fee": 0.0,
-     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
-    },
-    {
-     "label": "Enriched Uranium Surrender",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
-  },
-  {
-   "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.17800000000000005,
+   "gross": 0.18299999999999994,
    "fees": 0.0,
-   "net": 0.17800000000000005,
-   "capital": 0.822,
-   "roi": 0.2165450121654502,
+   "net": 0.18299999999999994,
+   "capital": 0.8170000000000001,
+   "roi": 0.22399020807833528,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -812,7 +812,7 @@
     },
     {
      "label": "Qatar",
-     "ask": 0.063,
+     "ask": 0.065,
      "fee": 0.0,
      "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
     },
@@ -824,7 +824,7 @@
     },
     {
      "label": "Egypt",
-     "ask": 0.076,
+     "ask": 0.07,
      "fee": 0.0,
      "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
     },
@@ -836,7 +836,7 @@
     },
     {
      "label": "Oman",
-     "ask": 0.054,
+     "ask": 0.053,
      "fee": 0.0,
      "token": "81412907518192884366379590436942009767031334394225601169212327292541329493584"
     },
@@ -935,42 +935,6 @@
    "event_slug": "KXPRESNOMG-28"
   },
   {
-   "venue": "polymarket",
-   "event": "Will any AI model reach ___ Coding Arena Score by December 31?",
-   "n_legs": 3,
-   "gross": 0.16599999999999993,
-   "fees": 0.02154736,
-   "net": 0.1444526399999999,
-   "capital": 0.8555473600000001,
-   "roi": 0.16884236543024328,
-   "url": "https://polymarket.com/event/will-any-ai-model-reach-coding-arena-score-by-december-31",
-   "neg_risk": false,
-   "coverage": "3/3",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "1580",
-     "ask": 0.27,
-     "fee": 0.04,
-     "token": "78288582157994306934508674396206099772775859795899820495422208721473710134686"
-    },
-    {
-     "label": "1600",
-     "ask": 0.104,
-     "fee": 0.04,
-     "token": "89703377978074597398333052613443600056357024414795977077561678800793896428038"
-    },
-    {
-     "label": "1560",
-     "ask": 0.46,
-     "fee": 0.04,
-     "token": "105680218117075138401571382654526387308645112933494890253537724262500863032862"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-any-ai-model-reach-coding-arena-score-by-december-31"
-  },
-  {
    "venue": "kalshi",
    "event": "Grammy Winner: Best Dance/Electronic Recording",
    "n_legs": 11,
@@ -1058,11 +1022,11 @@
    "venue": "polymarket",
    "event": "Puffpaw FDV above ___ one day after launch?",
    "n_legs": 5,
-   "gross": 0.14800000000000002,
-   "fees": 0.04580240000000001,
-   "net": 0.10219760000000001,
-   "capital": 0.8978024,
-   "roi": 0.11383083850076589,
+   "gross": 0.15500000000000003,
+   "fees": 0.045365810000000006,
+   "net": 0.10963419000000002,
+   "capital": 0.89036581,
+   "roi": 0.1231338723574752,
    "url": "https://polymarket.com/event/puffpaw-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1088,7 +1052,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.058,
+     "ask": 0.051,
      "fee": 0.07,
      "token": "75465806583802054124068142193447889201404918795525767496433120745554670765320"
     },
@@ -1101,36 +1065,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "puffpaw-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Baltimore Orioles vs. New York Yankees",
-   "n_legs": 2,
-   "gross": 0.1200000000000001,
-   "fees": 0.024550000000000002,
-   "net": 0.0954500000000001,
-   "capital": 0.9045499999999999,
-   "roi": 0.10552208280360413,
-   "url": "https://polymarket.com/event/mlb-bal-nyy-2026-09-27",
-   "neg_risk": false,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Baltimore Orioles vs. New York Yankees",
-     "ask": 0.41,
-     "fee": 0.05,
-     "token": "103624549133754657165087930632012221661485990785044236162644269897302919229301"
-    },
-    {
-     "label": "NRFI",
-     "ask": 0.47,
-     "fee": 0.05,
-     "token": "50496027210067608264562923573522162351642443966430071004484661549809279018298"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "mlb-bal-nyy-2026-09-27"
   },
   {
    "venue": "kalshi",
@@ -1295,14 +1229,80 @@
    "event_slug": "KXTRUMPAGCOUNT-29"
   },
   {
+   "venue": "kalshi",
+   "event": "Where will Putin and Zelenskyy next meet?",
+   "n_legs": 8,
+   "gross": 0.1499999999999999,
+   "fees": 0.09,
+   "net": 0.059999999999999915,
+   "capital": 0.9400000000000001,
+   "roi": 0.06382978723404246,
+   "url": "https://kalshi.com/events/KXPUTINZELENSKYYLOCATION-28",
+   "neg_risk": null,
+   "coverage": "8/8",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Hungary",
+     "ask": 0.11,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-HUNG"
+    },
+    {
+     "label": "Switzerland",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-SWZ"
+    },
+    {
+     "label": "Turkey",
+     "ask": 0.33,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-TUR"
+    },
+    {
+     "label": "China",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-CHI"
+    },
+    {
+     "label": "Germany",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-GER"
+    },
+    {
+     "label": "United States",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-UNI"
+    },
+    {
+     "label": "Ukraine",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-UKR"
+    },
+    {
+     "label": "Russia",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXPUTINZELENSKYYLOCATION-28-RUS"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXPUTINZELENSKYYLOCATION-28"
+  },
+  {
    "venue": "polymarket",
    "event": "Ink FDV above ___ one day after launch?",
    "n_legs": 6,
-   "gross": 0.11699999999999999,
-   "fees": 0.050168370000000004,
-   "net": 0.06683162999999999,
-   "capital": 0.93316837,
-   "roi": 0.07161797607863626,
+   "gross": 0.10699999999999998,
+   "fees": 0.05053937000000001,
+   "net": 0.05646062999999998,
+   "capital": 0.94353937,
+   "roi": 0.05983918826831781,
    "url": "https://polymarket.com/event/ink-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "6/6",
@@ -1340,13 +1340,91 @@
     },
     {
      "label": "$250M",
-     "ask": 0.23,
+     "ask": 0.24,
      "fee": 0.07,
      "token": "49751776725733588244395184486412039518296526355814856771895286561834282437757"
     }
    ],
    "kind": "intra-event",
    "event_slug": "ink-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Baltimore Orioles vs. New York Yankees",
+   "n_legs": 2,
+   "gross": 0.08000000000000007,
+   "fees": 0.02475,
+   "net": 0.05525000000000007,
+   "capital": 0.94475,
+   "roi": 0.05848107965070132,
+   "url": "https://polymarket.com/event/mlb-bal-nyy-2026-09-27",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Baltimore Orioles vs. New York Yankees",
+     "ask": 0.43,
+     "fee": 0.05,
+     "token": "103624549133754657165087930632012221661485990785044236162644269897302919229301"
+    },
+    {
+     "label": "NRFI",
+     "ask": 0.49,
+     "fee": 0.05,
+     "token": "50496027210067608264562923573522162351642443966430071004484661549809279018298"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "mlb-bal-nyy-2026-09-27"
+  },
+  {
+   "venue": "polymarket",
+   "event": "NCAA Football: San Diego State 2026 Win Total",
+   "n_legs": 5,
+   "gross": 0.08499999999999996,
+   "fees": 0.032768750000000006,
+   "net": 0.05223124999999996,
+   "capital": 0.94776875,
+   "roi": 0.05510969843645927,
+   "url": "https://polymarket.com/event/ncaa-football-san-diego-state-2026-win-total",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "5.5+ Wins",
+     "ask": 0.42,
+     "fee": 0.05,
+     "token": "66247273887005938846092958188496664552505559452257071579598101028697908636414"
+    },
+    {
+     "label": "6.5+ Wins",
+     "ask": 0.22,
+     "fee": 0.05,
+     "token": "14787531701876725569117118562191499875434703694313754873605128675864152564913"
+    },
+    {
+     "label": "7.5+ Wins",
+     "ask": 0.15,
+     "fee": 0.05,
+     "token": "98554655092370353563280316789984820041590295344567669444160234714570780058630"
+    },
+    {
+     "label": "8.5+ Wins",
+     "ask": 0.11,
+     "fee": 0.05,
+     "token": "11358713831568056352908646390133117502814771420028299890415905358235569026738"
+    },
+    {
+     "label": "9.5+ Wins",
+     "ask": 0.015,
+     "fee": 0.05,
+     "token": "60181946691344525350215725081894089254745707573325528971480877976748557840842"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "ncaa-football-san-diego-state-2026-win-total"
   },
   {
    "venue": "kalshi",
@@ -1407,72 +1485,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "SENATEAZ-28"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Where will Putin and Zelenskyy next meet?",
-   "n_legs": 8,
-   "gross": 0.1399999999999999,
-   "fees": 0.09,
-   "net": 0.049999999999999906,
-   "capital": 0.9500000000000001,
-   "roi": 0.05263157894736832,
-   "url": "https://kalshi.com/events/KXPUTINZELENSKYYLOCATION-28",
-   "neg_risk": null,
-   "coverage": "8/8",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Hungary",
-     "ask": 0.11,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-HUNG"
-    },
-    {
-     "label": "Switzerland",
-     "ask": 0.13,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-SWZ"
-    },
-    {
-     "label": "Turkey",
-     "ask": 0.33,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-TUR"
-    },
-    {
-     "label": "China",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-CHI"
-    },
-    {
-     "label": "Germany",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-GER"
-    },
-    {
-     "label": "United States",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-UNI"
-    },
-    {
-     "label": "Ukraine",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-UKR"
-    },
-    {
-     "label": "Russia",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXPUTINZELENSKYYLOCATION-28-RUS"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXPUTINZELENSKYYLOCATION-28"
   },
   {
    "venue": "kalshi",
@@ -1940,11 +1952,11 @@
    "venue": "polymarket",
    "event": "Argentina Annual Inflation 2026",
    "n_legs": 7,
-   "gross": 0.04200000000000004,
-   "fees": 0.0250042,
-   "net": 0.016995800000000037,
-   "capital": 0.9830042,
-   "roi": 0.017289651458254233,
+   "gross": 0.04300000000000004,
+   "fees": 0.02495485,
+   "net": 0.018045150000000038,
+   "capital": 0.9819548499999999,
+   "roi": 0.01837676141627086,
    "url": "https://polymarket.com/event/argentina-annual-inflation-2026",
    "neg_risk": true,
    "coverage": "7/7",
@@ -1988,7 +2000,7 @@
     },
     {
      "label": "40-44.9%",
-     "ask": 0.007,
+     "ask": 0.006,
      "fee": 0.05,
      "token": "41255857914297874062605902932068969895655224594821154332765350859898223235523"
     }
@@ -2136,90 +2148,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "Grammy Winner: Best Country Duo/Group Performance",
-   "n_legs": 11,
-   "gross": 0.13,
-   "fees": 0.13,
-   "net": 0.0,
-   "capital": 1.0,
-   "roi": 0.0,
-   "url": "https://kalshi.com/events/KXGRAMMY-BCDGP69",
-   "neg_risk": null,
-   "coverage": "11/11",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Light of a Clear Blue Morning",
-     "ask": 0.19,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-LIGH"
-    },
-    {
-     "label": "Horses and Divorces",
-     "ask": 0.22,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-HOR"
-    },
-    {
-     "label": "Butterfly Season",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-BUT"
-    },
-    {
-     "label": "Bells & Whistles",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-BEL"
-    },
-    {
-     "label": "Butterfly",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-BUTT"
-    },
-    {
-     "label": "If I Don't Leave I'm Gonna Stay",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-IFI"
-    },
-    {
-     "label": "Say So",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-SAY"
-    },
-    {
-     "label": "Younger You",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-YOU"
-    },
-    {
-     "label": "Jaded",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-JAD"
-    },
-    {
-     "label": "On My Way to Heaven",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-ONM"
-    },
-    {
-     "label": "Tie",
-     "ask": 0.02,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BCDGP69-TIE"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXGRAMMY-BCDGP69"
-  },
-  {
-   "venue": "kalshi",
    "event": "2028 London mayoral election winner?",
    "n_legs": 8,
    "gross": 0.09899999999999998,
@@ -2288,11 +2216,11 @@
    "venue": "kalshi",
    "event": "WA-01 House winner?",
    "n_legs": 2,
-   "gross": 0.017000000000000015,
+   "gross": 0.018000000000000016,
    "fees": 0.02,
-   "net": -0.0029999999999999853,
-   "capital": 1.003,
-   "roi": -0.002991026919242259,
+   "net": -0.0019999999999999844,
+   "capital": 1.002,
+   "roi": -0.0019960079840319208,
    "url": "https://kalshi.com/events/KXHOUSERACE-WA01-26",
    "neg_risk": null,
    "coverage": "2/2",
@@ -2300,7 +2228,7 @@
    "legs": [
     {
      "label": "Suzan DelBene",
-     "ask": 0.953,
+     "ask": 0.952,
      "fee": 0.07,
      "ticker": "KXHOUSERACE-WA01-26-D"
     },
@@ -2318,11 +2246,11 @@
    "venue": "polymarket",
    "event": "India Annual Inflation 2026",
    "n_legs": 7,
-   "gross": 0.0010000000000000009,
-   "fees": 0.008461549999999998,
-   "net": -0.007461549999999997,
-   "capital": 1.00746155,
-   "roi": -0.007406287614648914,
+   "gross": 0.0030000000000000027,
+   "fees": 0.008364449999999999,
+   "net": -0.005364449999999996,
+   "capital": 1.00536445,
+   "roi": -0.005335826226996584,
    "url": "https://polymarket.com/event/india-annual-inflation-2026",
    "neg_risk": true,
    "coverage": "7/7",
@@ -2348,7 +2276,7 @@
     },
     {
      "label": "2.25% to 2.99%",
-     "ask": 0.01,
+     "ask": 0.009,
      "fee": 0.05,
      "token": "44443235501735027665735122741942606159764719806642789029088650118077813428653"
     },
@@ -2360,7 +2288,7 @@
     },
     {
      "label": "3.75% to 4.49%",
-     "ask": 0.02,
+     "ask": 0.019,
      "fee": 0.05,
      "token": "102843189532968658484124724384169145431096843522820249214951840934115898522013"
     },
@@ -2373,6 +2301,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "india-annual-inflation-2026"
+  },
+  {
+   "venue": "kalshi",
+   "event": "MO-05 House winner?",
+   "n_legs": 2,
+   "gross": 0.013000000000000012,
+   "fees": 0.02,
+   "net": -0.006999999999999989,
+   "capital": 1.007,
+   "roi": -0.006951340615690159,
+   "url": "https://kalshi.com/events/KXHOUSEMO5-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Democratic party",
+     "ask": 0.948,
+     "fee": 0.07,
+     "ticker": "KXHOUSEMO5-26-D"
+    },
+    {
+     "label": "Republican party",
+     "ask": 0.039,
+     "fee": 0.07,
+     "ticker": "KXHOUSEMO5-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSEMO5-26"
   },
   {
    "venue": "kalshi",
@@ -2487,6 +2445,174 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXGRAMMY-BRBSP69"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Grammy Winner: Best Melodic Rap Performance",
+   "n_legs": 11,
+   "gross": 0.10999999999999999,
+   "fees": 0.12,
+   "net": -0.010000000000000009,
+   "capital": 1.01,
+   "roi": -0.00990099009900991,
+   "url": "https://kalshi.com/events/KXGRAMMY-BMRP69",
+   "neg_risk": null,
+   "coverage": "11/11",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Safe",
+     "ask": 0.08,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-SAF"
+    },
+    {
+     "label": "Good Flirts",
+     "ask": 0.2,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-GOO"
+    },
+    {
+     "label": "Girl, Get Up",
+     "ask": 0.13,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-GIR"
+    },
+    {
+     "label": "Raindance",
+     "ask": 0.08,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-RAI"
+    },
+    {
+     "label": "I Can't Wait",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-ICA"
+    },
+    {
+     "label": "No I.D.",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-NOI"
+    },
+    {
+     "label": "Okayyy",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-OKA"
+    },
+    {
+     "label": "Gorgeous",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-GOR"
+    },
+    {
+     "label": "E85",
+     "ask": 0.14,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-E85"
+    },
+    {
+     "label": "Dead",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-DEA"
+    },
+    {
+     "label": "Tie",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BMRP69-TIE"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXGRAMMY-BMRP69"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Grammy Winner: Best Country Duo/Group Performance",
+   "n_legs": 11,
+   "gross": 0.12,
+   "fees": 0.13,
+   "net": -0.010000000000000009,
+   "capital": 1.01,
+   "roi": -0.00990099009900991,
+   "url": "https://kalshi.com/events/KXGRAMMY-BCDGP69",
+   "neg_risk": null,
+   "coverage": "11/11",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Light of a Clear Blue Morning",
+     "ask": 0.2,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-LIGH"
+    },
+    {
+     "label": "Horses and Divorces",
+     "ask": 0.22,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-HOR"
+    },
+    {
+     "label": "Butterfly Season",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-BUT"
+    },
+    {
+     "label": "Bells & Whistles",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-BEL"
+    },
+    {
+     "label": "Butterfly",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-BUTT"
+    },
+    {
+     "label": "If I Don't Leave I'm Gonna Stay",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-IFI"
+    },
+    {
+     "label": "Say So",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-SAY"
+    },
+    {
+     "label": "Younger You",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-YOU"
+    },
+    {
+     "label": "Jaded",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-JAD"
+    },
+    {
+     "label": "On My Way to Heaven",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-ONM"
+    },
+    {
+     "label": "Tie",
+     "ask": 0.02,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BCDGP69-TIE"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXGRAMMY-BCDGP69"
   },
   {
    "venue": "polymarket",
@@ -2712,90 +2838,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "Grammy Winner: Best Melodic Rap Performance",
-   "n_legs": 11,
-   "gross": 0.09999999999999998,
-   "fees": 0.12,
-   "net": -0.020000000000000018,
-   "capital": 1.02,
-   "roi": -0.01960784313725492,
-   "url": "https://kalshi.com/events/KXGRAMMY-BMRP69",
-   "neg_risk": null,
-   "coverage": "11/11",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Safe",
-     "ask": 0.08,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-SAF"
-    },
-    {
-     "label": "Good Flirts",
-     "ask": 0.2,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-GOO"
-    },
-    {
-     "label": "Girl, Get Up",
-     "ask": 0.13,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-GIR"
-    },
-    {
-     "label": "Raindance",
-     "ask": 0.08,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-RAI"
-    },
-    {
-     "label": "I Can't Wait",
-     "ask": 0.03,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-ICA"
-    },
-    {
-     "label": "No I.D.",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-NOI"
-    },
-    {
-     "label": "Okayyy",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-OKA"
-    },
-    {
-     "label": "Gorgeous",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-GOR"
-    },
-    {
-     "label": "E85",
-     "ask": 0.15,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-E85"
-    },
-    {
-     "label": "Dead",
-     "ask": 0.05,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-DEA"
-    },
-    {
-     "label": "Tie",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BMRP69-TIE"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXGRAMMY-BMRP69"
-  },
-  {
-   "venue": "kalshi",
    "event": "Grammy winner \u00b7 Best Progressive R&B Album",
    "n_legs": 11,
    "gross": 0.08999999999999997,
@@ -2937,78 +2979,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXMOLDOVAPRES-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "China Annual Inflation 2026",
-   "n_legs": 9,
-   "gross": 0.016000000000000014,
-   "fees": 0.0373609,
-   "net": -0.021360899999999988,
-   "capital": 1.0213609,
-   "roi": -0.02091415483008992,
-   "url": "https://polymarket.com/event/china-annual-inflation-2026",
-   "neg_risk": true,
-   "coverage": "9/9",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<-1.0%",
-     "ask": 0.012,
-     "fee": 0.05,
-     "token": "10051938461739824819998874043590565985037497666058946103952048294424924618780"
-    },
-    {
-     "label": "-0.9 \u2013 -0.5%",
-     "ask": 0.05,
-     "fee": 0.05,
-     "token": "6722603689945891004899753711563439393829998752192600069517894002568833974686"
-    },
-    {
-     "label": "-0.4 \u2013 0.0%",
-     "ask": 0.06,
-     "fee": 0.05,
-     "token": "8273735836947695961645846653245284535255573936419244573929514964051363259687"
-    },
-    {
-     "label": "0.1 \u2013 0.5%",
-     "ask": 0.154,
-     "fee": 0.05,
-     "token": "111793321531617118469731113323868515152966860664048041563681092315357712753992"
-    },
-    {
-     "label": "0.6 \u2013 1.0%",
-     "ask": 0.38,
-     "fee": 0.05,
-     "token": "49559148147591058604840389664734045472442253844719304143627020489005178083708"
-    },
-    {
-     "label": "1.1 \u2013 1.5%",
-     "ask": 0.24,
-     "fee": 0.05,
-     "token": "24068822425892014677273812195794927391380004762343953944052764606472380690421"
-    },
-    {
-     "label": "1.6 \u2013 2.0%",
-     "ask": 0.067,
-     "fee": 0.05,
-     "token": "104771319366981429485700415120577243295443903901814809581466165680400541206538"
-    },
-    {
-     "label": "2.5%+",
-     "ask": 0.003,
-     "fee": 0.05,
-     "token": "81988826341491243870198235322141312310928900677287781518910910931497765527450"
-    },
-    {
-     "label": "2.0-2.4%",
-     "ask": 0.018,
-     "fee": 0.05,
-     "token": "87618105504174484119459242398815572527955843029402507833338758078221282778555"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "china-annual-inflation-2026"
   },
   {
    "venue": "polymarket",
@@ -3294,6 +3264,90 @@
   },
   {
    "venue": "kalshi",
+   "event": "Grammy Winner: Best R&B Song",
+   "n_legs": 11,
+   "gross": 0.06999999999999995,
+   "fees": 0.12,
+   "net": -0.050000000000000044,
+   "capital": 1.05,
+   "roi": -0.04761904761904766,
+   "url": "https://kalshi.com/events/KXGRAMMY-BRBS69",
+   "neg_risk": null,
+   "coverage": "11/11",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Out The Window",
+     "ask": 0.09,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-OUT"
+    },
+    {
+     "label": "What You Need",
+     "ask": 0.14,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-WYN"
+    },
+    {
+     "label": "Let Me",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-LET"
+    },
+    {
+     "label": "Risk It All",
+     "ask": 0.28,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-RIS"
+    },
+    {
+     "label": "Pressha",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-PRE"
+    },
+    {
+     "label": "The Feeling",
+     "ask": 0.06,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-FEE"
+    },
+    {
+     "label": "Nowhere Fast",
+     "ask": 0.07,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-NOW"
+    },
+    {
+     "label": "Vacancy",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-VAC"
+    },
+    {
+     "label": "Play This Song",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-PLA"
+    },
+    {
+     "label": "A Couple Minutes",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-ACO"
+    },
+    {
+     "label": "Tie",
+     "ask": 0.04,
+     "fee": 0.07,
+     "ticker": "KXGRAMMY-BRBS69-TIE"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXGRAMMY-BRBS69"
+  },
+  {
+   "venue": "kalshi",
    "event": "Grammy Winner: Best Latin Song",
    "n_legs": 11,
    "gross": 0.06999999999999995,
@@ -3507,90 +3561,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXGRAMMY-BRS69"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Grammy Winner: Best R&B Song",
-   "n_legs": 11,
-   "gross": 0.050000000000000044,
-   "fees": 0.12,
-   "net": -0.06999999999999995,
-   "capital": 1.0699999999999998,
-   "roi": -0.06542056074766352,
-   "url": "https://kalshi.com/events/KXGRAMMY-BRBS69",
-   "neg_risk": null,
-   "coverage": "11/11",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Out The Window",
-     "ask": 0.09,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-OUT"
-    },
-    {
-     "label": "What You Need",
-     "ask": 0.15,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-WYN"
-    },
-    {
-     "label": "Let Me",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-LET"
-    },
-    {
-     "label": "Risk It All",
-     "ask": 0.29,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-RIS"
-    },
-    {
-     "label": "Pressha",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-PRE"
-    },
-    {
-     "label": "The Feeling",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-FEE"
-    },
-    {
-     "label": "Nowhere Fast",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-NOW"
-    },
-    {
-     "label": "Vacancy",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-VAC"
-    },
-    {
-     "label": "Play This Song",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-PLA"
-    },
-    {
-     "label": "A Couple Minutes",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-ACO"
-    },
-    {
-     "label": "Tie",
-     "ask": 0.04,
-     "fee": 0.07,
-     "ticker": "KXGRAMMY-BRBS69-TIE"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXGRAMMY-BRBS69"
   },
   {
    "venue": "kalshi",
@@ -4010,11 +3980,11 @@
    "venue": "kalshi",
    "event": "Who will be the first Democrat listed to announce a presidential run?",
    "n_legs": 10,
-   "gross": 0.03400000000000003,
+   "gross": 0.038000000000000034,
    "fees": 0.13,
-   "net": -0.09599999999999997,
-   "capital": 1.096,
-   "roi": -0.08759124087591239,
+   "net": -0.09199999999999997,
+   "capital": 1.092,
+   "roi": -0.08424908424908421,
    "url": "https://kalshi.com/events/KXDECLAREPRESFIRSTD-28NOV07",
    "neg_risk": null,
    "coverage": "10/10",
@@ -4028,7 +3998,7 @@
     },
     {
      "label": "Alexandria Ocasio-Cortez",
-     "ask": 0.043,
+     "ask": 0.042,
      "fee": 0.07,
      "ticker": "KXDECLAREPRESFIRSTD-28NOV07-AOCA"
     },
@@ -4046,13 +4016,13 @@
     },
     {
      "label": "Josh Shapiro",
-     "ask": 0.052,
+     "ask": 0.051,
      "fee": 0.07,
      "ticker": "KXDECLAREPRESFIRSTD-28NOV07-JSHA"
     },
     {
      "label": "Kamala Harris",
-     "ask": 0.045,
+     "ask": 0.044,
      "fee": 0.07,
      "ticker": "KXDECLAREPRESFIRSTD-28NOV07-KHAR"
     },
@@ -4070,7 +4040,7 @@
     },
     {
      "label": "Jon Ossoff",
-     "ask": 0.056,
+     "ask": 0.055,
      "fee": 0.07,
      "ticker": "KXDECLAREPRESFIRSTD-28NOV07-JOSS"
     },
