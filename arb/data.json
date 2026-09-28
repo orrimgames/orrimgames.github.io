@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-09-28T11:58:03Z",
-  "ts": 1790596683.5799866,
-  "scan_seconds": 12.0,
+  "generated_at": "2026-09-28T12:31:53Z",
+  "ts": 1790598713.1192348,
+  "scan_seconds": 14.8,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 223 binary + 1774 multi | kalshi: 5000 events -> 509 binary + 1287 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 230 binary + 1762 multi | kalshi: 5000 events -> 511 binary + 1285 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -18,13 +18,61 @@
  "intra_event": [
   {
    "venue": "polymarket",
+   "event": "Will US crude oil reserves fall to __ by September 25?",
+   "n_legs": 5,
+   "gross": 0.889,
+   "fees": 0.00533055,
+   "net": 0.88366945,
+   "capital": 0.11633055,
+   "roi": 7.596194206938762,
+   "url": "https://polymarket.com/event/will-us-crude-oil-reserves-fall-to-by-september-25",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "280M",
+     "ask": 0.053,
+     "fee": 0.05,
+     "token": "90427935511391038626872122295660453738377529361337731598907465102187327217661"
+    },
+    {
+     "label": "270M",
+     "ask": 0.038,
+     "fee": 0.05,
+     "token": "90765774834015454764117061300182087424572134077371158828073209432584904491959"
+    },
+    {
+     "label": "260M",
+     "ask": 0.006,
+     "fee": 0.05,
+     "token": "35185228520713364010634470735179735327248647791686256418339349513794826711935"
+    },
+    {
+     "label": "250M",
+     "ask": 0.006,
+     "fee": 0.05,
+     "token": "103953445044631018035197366590750188535683611132782893123893178835932207490794"
+    },
+    {
+     "label": "200M",
+     "ask": 0.008,
+     "fee": 0.05,
+     "token": "48941570414110881282034769970190029248603694853204056087464363895625400338180"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-us-crude-oil-reserves-fall-to-by-september-25"
+  },
+  {
+   "venue": "polymarket",
    "event": "How low will 10-year Treasury yield get in September?",
    "n_legs": 9,
-   "gross": 0.865,
-   "fees": 0.00661935,
-   "net": 0.85838065,
-   "capital": 0.14161935,
-   "roi": 6.061181964187803,
+   "gross": 0.873,
+   "fees": 0.00623735,
+   "net": 0.86676265,
+   "capital": 0.13323735,
+   "roi": 6.5054029519500345,
    "url": "https://polymarket.com/event/how-low-will-10-year-treasury-yield-get-in-september",
    "neg_risk": false,
    "coverage": "9/9",
@@ -38,7 +86,7 @@
     },
     {
      "label": "Below 4.51%",
-     "ask": 0.029,
+     "ask": 0.023,
      "fee": 0.05,
      "token": "66737592309486720995563870861135723967613392940897139391738644780738298508722"
     },
@@ -62,7 +110,7 @@
     },
     {
      "label": "Below 4.67%",
-     "ask": 0.013,
+     "ask": 0.011,
      "fee": 0.05,
      "token": "7101818655757366918866347423681739755069201499425059463576866836443782606429"
     },
@@ -278,7 +326,7 @@
    "legs": [
     {
      "label": "10+",
-     "ask": 0.2,
+     "ask": 0.199,
      "fee": 0.0,
      "token": "61981891409730707505288258860950121729069512381104967873688618851258692594711"
     },
@@ -290,73 +338,25 @@
     },
     {
      "label": "30+",
-     "ask": 0.016,
+     "ask": 0.01,
      "fee": 0.0,
      "token": "81935767782308760276913258323181196124949649382857042621731900683066191757980"
     },
     {
      "label": "40+",
-     "ask": 0.016,
+     "ask": 0.012,
      "fee": 0.0,
      "token": "38156466768164033141369481035987621193548653332377010280845298714357503627639"
     },
     {
      "label": "50+",
-     "ask": 0.016,
+     "ask": 0.027,
      "fee": 0.0,
      "token": "49401853935696645574490242283262556865763298617941775858792040965434750397289"
     }
    ],
    "kind": "intra-event",
    "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-september-30"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Meta (META) closes above ___ on September 28?",
-   "n_legs": 5,
-   "gross": 0.663,
-   "fees": 0.012163080000000001,
-   "net": 0.65083692,
-   "capital": 0.34916308,
-   "roi": 1.863991232979157,
-   "url": "https://polymarket.com/event/meta-close-above-on-september-28-2026",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$750",
-     "ask": 0.15,
-     "fee": 0.04,
-     "token": "3373003416089609080606138462473907716606947847494380034867392953472942976783"
-    },
-    {
-     "label": "$760",
-     "ask": 0.079,
-     "fee": 0.04,
-     "token": "6082426325943779847702622083695808193500120467133012611152886642900792086026"
-    },
-    {
-     "label": "$770",
-     "ask": 0.05,
-     "fee": 0.04,
-     "token": "83233162404456024276350701084114651552555676204243454028164647763170981094328"
-    },
-    {
-     "label": "$780",
-     "ask": 0.029,
-     "fee": 0.04,
-     "token": "108343189530250127118891953003820213815187332330653654963228148969374257572976"
-    },
-    {
-     "label": "$790",
-     "ask": 0.029,
-     "fee": 0.04,
-     "token": "93003069459639282060075680286661028982352357450356739546499259534397616171018"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "meta-close-above-on-september-28-2026"
   },
   {
    "venue": "kalshi",
@@ -423,10 +423,10 @@
    "event": "Who will Xi Jinping purge in 2026?",
    "n_legs": 9,
    "gross": 0.579,
-   "fees": 0.01589716,
-   "net": 0.56310284,
-   "capital": 0.43689716,
-   "roi": 1.2888681629333547,
+   "fees": 0.01589268,
+   "net": 0.56310732,
+   "capital": 0.43689268000000003,
+   "roi": 1.2888916335242786,
    "url": "https://polymarket.com/event/who-will-xi-jinping-purge-in-2026",
    "neg_risk": false,
    "coverage": "9/9",
@@ -458,7 +458,7 @@
     },
     {
      "label": "Zhao Leji",
-     "ask": 0.043,
+     "ask": 0.042,
      "fee": 0.04,
      "token": "106875471588027045663266864810874951957444000815550177911920097445753767636372"
     },
@@ -482,7 +482,7 @@
     },
     {
      "label": "Dong Jun",
-     "ask": 0.098,
+     "ask": 0.099,
      "fee": 0.04,
      "token": "94682101068932958799725513761285751302283930658061696701163765971507016646808"
     }
@@ -630,13 +630,61 @@
   },
   {
    "venue": "polymarket",
+   "event": "Meta (META) closes above ___ on September 28?",
+   "n_legs": 5,
+   "gross": 0.473,
+   "fees": 0.01876116,
+   "net": 0.45423884,
+   "capital": 0.5457611600000001,
+   "roi": 0.8323033467606964,
+   "url": "https://polymarket.com/event/meta-close-above-on-september-28-2026",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$750",
+     "ask": 0.12,
+     "fee": 0.04,
+     "token": "3373003416089609080606138462473907716606947847494380034867392953472942976783"
+    },
+    {
+     "label": "$760",
+     "ask": 0.112,
+     "fee": 0.04,
+     "token": "6082426325943779847702622083695808193500120467133012611152886642900792086026"
+    },
+    {
+     "label": "$770",
+     "ask": 0.135,
+     "fee": 0.04,
+     "token": "83233162404456024276350701084114651552555676204243454028164647763170981094328"
+    },
+    {
+     "label": "$780",
+     "ask": 0.079,
+     "fee": 0.04,
+     "token": "108343189530250127118891953003820213815187332330653654963228148969374257572976"
+    },
+    {
+     "label": "$790",
+     "ask": 0.081,
+     "fee": 0.04,
+     "token": "93003069459639282060075680286661028982352357450356739546499259534397616171018"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "meta-close-above-on-september-28-2026"
+  },
+  {
+   "venue": "polymarket",
    "event": "Will ByteDance's valuation hit __ by September 30?",
    "n_legs": 9,
-   "gross": 0.41200000000000003,
-   "fees": 0.01882952,
-   "net": 0.39317048000000004,
-   "capital": 0.60682952,
-   "roi": 0.6479092843077245,
+   "gross": 0.403,
+   "fees": 0.0191586,
+   "net": 0.3838414,
+   "capital": 0.6161586,
+   "roi": 0.6229587641883113,
    "url": "https://polymarket.com/event/will-bytedances-valuation-hit-by-september-30-20260829014000001",
    "neg_risk": false,
    "coverage": "9/9",
@@ -656,7 +704,7 @@
     },
     {
      "label": "\u2191$750B",
-     "ask": 0.026,
+     "ask": 0.032,
      "fee": 0.04,
      "token": "6935212000162795889843381069306502293637772245070569953828375753993183036176"
     },
@@ -686,19 +734,151 @@
     },
     {
      "label": "\u2193$525B",
-     "ask": 0.084,
+     "ask": 0.083,
      "fee": 0.04,
      "token": "81039468153842945859252694383861209992482795557428993630093488155426289385216"
     },
     {
      "label": "\u2193$475B",
-     "ask": 0.072,
+     "ask": 0.076,
      "fee": 0.04,
      "token": "65812633901950991288348468185378739043133767837776401214574607883306543825396"
     }
    ],
    "kind": "intra-event",
    "event_slug": "will-bytedances-valuation-hit-by-september-30-20260829014000001"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Which banks will fail by end of 2026?",
+   "n_legs": 19,
+   "gross": 0.351,
+   "fees": 0.0,
+   "net": 0.351,
+   "capital": 0.649,
+   "roi": 0.5408320493066255,
+   "url": "https://polymarket.com/event/which-banks-will-fail-by-end-of-2026",
+   "neg_risk": false,
+   "coverage": "19/19",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "JPMorgan Chase",
+     "ask": 0.028,
+     "fee": 0.0,
+     "token": "86789833656880886030122591096076539446928773145196110240644251736963095366209"
+    },
+    {
+     "label": "HSBC",
+     "ask": 0.034,
+     "fee": 0.0,
+     "token": "3809053938175981391730233976076774280773635764363652814926006502488340628353"
+    },
+    {
+     "label": "Scotiabank",
+     "ask": 0.03,
+     "fee": 0.0,
+     "token": "66267316818610558003269132927716055349662768955730250209812702392852821312104"
+    },
+    {
+     "label": "BNP Paribas",
+     "ask": 0.047,
+     "fee": 0.0,
+     "token": "30163045746103310845077903968382798137954178132803984892081058651428688489244"
+    },
+    {
+     "label": "UBS",
+     "ask": 0.018,
+     "fee": 0.0,
+     "token": "29317263452367796051069159957544284150229777129193184919501336806743853732884"
+    },
+    {
+     "label": "Deutsche Bank",
+     "ask": 0.017,
+     "fee": 0.0,
+     "token": "95548025397872318036423854335016366233071226225128892283588172586776199775464"
+    },
+    {
+     "label": "Citigroup",
+     "ask": 0.044,
+     "fee": 0.0,
+     "token": "97082764744820193970908555941548617340023142863648021662901141100792357391179"
+    },
+    {
+     "label": "Goldman Sachs",
+     "ask": 0.015,
+     "fee": 0.0,
+     "token": "88570082629160852116187380384137888408516121957233634458467071419530094788405"
+    },
+    {
+     "label": "Morgan Stanley",
+     "ask": 0.038,
+     "fee": 0.0,
+     "token": "99685273033326230383559045163614563211853272551675671483978640604242103207643"
+    },
+    {
+     "label": "Bank of America",
+     "ask": 0.036,
+     "fee": 0.0,
+     "token": "57699263910819265987613071949513830248117221181961974643288480713463454185165"
+    },
+    {
+     "label": "Wells Fargo",
+     "ask": 0.042,
+     "fee": 0.0,
+     "token": "16552341278523891393903584483701619760153150151342440743417758312575587856636"
+    },
+    {
+     "label": "US Bank",
+     "ask": 0.058,
+     "fee": 0.0,
+     "token": "13478520167186189130059449089028565168673478522536933098281519361126108727538"
+    },
+    {
+     "label": "Truist",
+     "ask": 0.041,
+     "fee": 0.0,
+     "token": "99870350362586593164905592191913329199725806038825682420764959046273026844197"
+    },
+    {
+     "label": "BNY",
+     "ask": 0.038,
+     "fee": 0.0,
+     "token": "13812555616675601939269224526796444427521400990045363433787099193001274187756"
+    },
+    {
+     "label": "RBC",
+     "ask": 0.042,
+     "fee": 0.0,
+     "token": "85384204443590110170258002427858719690524938930544117566759768490100631263962"
+    },
+    {
+     "label": "Santander",
+     "ask": 0.033,
+     "fee": 0.0,
+     "token": "36332330073360917835706949383132715655520644923173434741775769169210329408934"
+    },
+    {
+     "label": "Lloyds",
+     "ask": 0.022,
+     "fee": 0.0,
+     "token": "93951640006004545114747906321790762616026434289530238715245617552466377275167"
+    },
+    {
+     "label": "BMO",
+     "ask": 0.038,
+     "fee": 0.0,
+     "token": "59596027787048340831404902580965508429356912591806873277634572873919158636902"
+    },
+    {
+     "label": "KeyBank",
+     "ask": 0.028,
+     "fee": 0.0,
+     "token": "16363901932573192645628408306802515394458179158308485603697748824074042751955"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "which-banks-will-fail-by-end-of-2026"
   },
   {
    "venue": "polymarket",
@@ -780,145 +960,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Which banks will fail by end of 2026?",
-   "n_legs": 19,
-   "gross": 0.32199999999999995,
-   "fees": 0.0,
-   "net": 0.32199999999999995,
-   "capital": 0.678,
-   "roi": 0.47492625368731556,
-   "url": "https://polymarket.com/event/which-banks-will-fail-by-end-of-2026",
-   "neg_risk": false,
-   "coverage": "19/19",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "JPMorgan Chase",
-     "ask": 0.028,
-     "fee": 0.0,
-     "token": "86789833656880886030122591096076539446928773145196110240644251736963095366209"
-    },
-    {
-     "label": "HSBC",
-     "ask": 0.034,
-     "fee": 0.0,
-     "token": "3809053938175981391730233976076774280773635764363652814926006502488340628353"
-    },
-    {
-     "label": "Scotiabank",
-     "ask": 0.03,
-     "fee": 0.0,
-     "token": "66267316818610558003269132927716055349662768955730250209812702392852821312104"
-    },
-    {
-     "label": "BNP Paribas",
-     "ask": 0.047,
-     "fee": 0.0,
-     "token": "30163045746103310845077903968382798137954178132803984892081058651428688489244"
-    },
-    {
-     "label": "UBS",
-     "ask": 0.018,
-     "fee": 0.0,
-     "token": "29317263452367796051069159957544284150229777129193184919501336806743853732884"
-    },
-    {
-     "label": "Deutsche Bank",
-     "ask": 0.019,
-     "fee": 0.0,
-     "token": "95548025397872318036423854335016366233071226225128892283588172586776199775464"
-    },
-    {
-     "label": "Citigroup",
-     "ask": 0.044,
-     "fee": 0.0,
-     "token": "97082764744820193970908555941548617340023142863648021662901141100792357391179"
-    },
-    {
-     "label": "Goldman Sachs",
-     "ask": 0.015,
-     "fee": 0.0,
-     "token": "88570082629160852116187380384137888408516121957233634458467071419530094788405"
-    },
-    {
-     "label": "Morgan Stanley",
-     "ask": 0.038,
-     "fee": 0.0,
-     "token": "99685273033326230383559045163614563211853272551675671483978640604242103207643"
-    },
-    {
-     "label": "Bank of America",
-     "ask": 0.036,
-     "fee": 0.0,
-     "token": "57699263910819265987613071949513830248117221181961974643288480713463454185165"
-    },
-    {
-     "label": "Wells Fargo",
-     "ask": 0.042,
-     "fee": 0.0,
-     "token": "16552341278523891393903584483701619760153150151342440743417758312575587856636"
-    },
-    {
-     "label": "US Bank",
-     "ask": 0.063,
-     "fee": 0.0,
-     "token": "13478520167186189130059449089028565168673478522536933098281519361126108727538"
-    },
-    {
-     "label": "Truist",
-     "ask": 0.042,
-     "fee": 0.0,
-     "token": "99870350362586593164905592191913329199725806038825682420764959046273026844197"
-    },
-    {
-     "label": "BNY",
-     "ask": 0.038,
-     "fee": 0.0,
-     "token": "13812555616675601939269224526796444427521400990045363433787099193001274187756"
-    },
-    {
-     "label": "RBC",
-     "ask": 0.042,
-     "fee": 0.0,
-     "token": "85384204443590110170258002427858719690524938930544117566759768490100631263962"
-    },
-    {
-     "label": "Santander",
-     "ask": 0.033,
-     "fee": 0.0,
-     "token": "36332330073360917835706949383132715655520644923173434741775769169210329408934"
-    },
-    {
-     "label": "Lloyds",
-     "ask": 0.043,
-     "fee": 0.0,
-     "token": "93951640006004545114747906321790762616026434289530238715245617552466377275167"
-    },
-    {
-     "label": "BMO",
-     "ask": 0.037,
-     "fee": 0.0,
-     "token": "59596027787048340831404902580965508429356912591806873277634572873919158636902"
-    },
-    {
-     "label": "KeyBank",
-     "ask": 0.029,
-     "fee": 0.0,
-     "token": "16363901932573192645628408306802515394458179158308485603697748824074042751955"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-banks-will-fail-by-end-of-2026"
-  },
-  {
-   "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.30100000000000005,
-   "fees": 0.042304150000000006,
-   "net": 0.25869585000000006,
-   "capital": 0.7413041499999999,
-   "roi": 0.3489739670282435,
+   "gross": 0.31099999999999994,
+   "fees": 0.04193315,
+   "net": 0.26906684999999997,
+   "capital": 0.73093315,
+   "roi": 0.36811417022199633,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -926,7 +974,7 @@
    "legs": [
     {
      "label": "$50M",
-     "ask": 0.24,
+     "ask": 0.23,
      "fee": 0.07,
      "token": "16795957534988501215235347348644372320002983627408040830654583226326934050970"
     },
@@ -1020,13 +1068,67 @@
   },
   {
    "venue": "polymarket",
+   "event": "What will be in a US-Iran deal in 2026?",
+   "n_legs": 6,
+   "gross": 0.22999999999999998,
+   "fees": 0.0,
+   "net": 0.22999999999999998,
+   "capital": 0.77,
+   "roi": 0.2987012987012987,
+   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "1+ Year Enrichment Moratorium",
+     "ask": 0.11,
+     "fee": 0.0,
+     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
+    },
+    {
+     "label": "Uranium Enrichment % Cap (1+ Year)",
+     "ask": 0.16,
+     "fee": 0.0,
+     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
+    },
+    {
+     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
+     "ask": 0.15,
+     "fee": 0.0,
+     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
+    },
+    {
+     "label": "Iran Reconstruction Funding",
+     "ask": 0.12,
+     "fee": 0.0,
+     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
+    },
+    {
+     "label": "Dilution of Iran's Uranium",
+     "ask": 0.17,
+     "fee": 0.0,
+     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
+    },
+    {
+     "label": "Enriched Uranium Surrender",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.22599999999999998,
+   "gross": 0.21899999999999997,
    "fees": 0.0,
-   "net": 0.22599999999999998,
-   "capital": 0.774,
-   "roi": 0.2919896640826873,
+   "net": 0.21899999999999997,
+   "capital": 0.781,
+   "roi": 0.2804097311139564,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -1040,7 +1142,7 @@
     },
     {
      "label": "Qatar",
-     "ask": 0.063,
+     "ask": 0.065,
      "fee": 0.0,
      "token": "112753042719848007644508077500534095971883130343551972984539965903665127717219"
     },
@@ -1052,7 +1154,7 @@
     },
     {
      "label": "Egypt",
-     "ask": 0.071,
+     "ask": 0.076,
      "fee": 0.0,
      "token": "95035904685502229474230145044754169170899191654302411023443721753923567968175"
     },
@@ -1107,60 +1209,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "which-country-will-join-abraham-accords-before-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "What will be in a US-Iran deal in 2026?",
-   "n_legs": 6,
-   "gross": 0.21999999999999997,
-   "fees": 0.0,
-   "net": 0.21999999999999997,
-   "capital": 0.78,
-   "roi": 0.282051282051282,
-   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "1+ Year Enrichment Moratorium",
-     "ask": 0.12,
-     "fee": 0.0,
-     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
-    },
-    {
-     "label": "Uranium Enrichment % Cap (1+ Year)",
-     "ask": 0.16,
-     "fee": 0.0,
-     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
-    },
-    {
-     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
-     "ask": 0.15,
-     "fee": 0.0,
-     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
-    },
-    {
-     "label": "Iran Reconstruction Funding",
-     "ask": 0.12,
-     "fee": 0.0,
-     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
-    },
-    {
-     "label": "Dilution of Iran's Uranium",
-     "ask": 0.17,
-     "fee": 0.0,
-     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
-    },
-    {
-     "label": "Enriched Uranium Surrender",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
   },
   {
    "venue": "polymarket",
@@ -1502,11 +1550,11 @@
    "venue": "kalshi",
    "event": "Winnipeg mayoral election winner?",
    "n_legs": 3,
-   "gross": 0.13,
+   "gross": 0.14,
    "fees": 0.05,
-   "net": 0.08,
-   "capital": 0.92,
-   "roi": 0.08695652173913043,
+   "net": 0.09000000000000001,
+   "capital": 0.91,
+   "roi": 0.09890109890109891,
    "url": "https://kalshi.com/events/KXWINNIPEGMAYOR-26OCT28",
    "neg_risk": null,
    "coverage": "3/3",
@@ -1520,7 +1568,7 @@
     },
     {
      "label": "Kevin Klein",
-     "ask": 0.26,
+     "ask": 0.25,
      "fee": 0.07,
      "ticker": "KXWINNIPEGMAYOR-26OCT28-KKLE"
     },
@@ -1764,51 +1812,117 @@
   },
   {
    "venue": "kalshi",
-   "event": "Fed decision in Oct 2027?",
-   "n_legs": 5,
-   "gross": 0.12,
-   "fees": 0.06,
-   "net": 0.06,
-   "capital": 0.94,
-   "roi": 0.06382978723404255,
-   "url": "https://kalshi.com/events/KXFEDDECISION-27OCT",
+   "event": "2028 Presidential matchup",
+   "n_legs": 16,
+   "gross": 0.22799999999999998,
+   "fees": 0.17,
+   "net": 0.05799999999999997,
+   "capital": 0.9420000000000001,
+   "roi": 0.06157112526539275,
+   "url": "https://kalshi.com/events/KXPRESMATCHUP-28NOV07",
    "neg_risk": null,
-   "coverage": "5/5",
+   "coverage": "16/16",
    "tier": 2,
    "legs": [
     {
-     "label": "Cut >25bps",
-     "ask": 0.03,
+     "label": "Gavin Newsom v. JD Vance",
+     "ask": 0.18,
      "fee": 0.07,
-     "ticker": "KXFEDDECISION-27OCT-C26"
+     "ticker": "KXPRESMATCHUP-28NOV07-GNEWJVAN"
     },
     {
-     "label": "Cut 25bps",
-     "ask": 0.03,
+     "label": "Gavin Newsom v. Marco Rubio",
+     "ask": 0.039,
      "fee": 0.07,
-     "ticker": "KXFEDDECISION-27OCT-C25"
+     "ticker": "KXPRESMATCHUP-28NOV07-GNEWMRUB"
     },
     {
-     "label": "Fed maintains rate",
-     "ask": 0.75,
+     "label": "AOC v. JD Vance",
+     "ask": 0.12,
      "fee": 0.07,
-     "ticker": "KXFEDDECISION-27OCT-H0"
+     "ticker": "KXPRESMATCHUP-28NOV07-AOCJVAN"
     },
     {
-     "label": "Hike 25bps",
-     "ask": 0.04,
+     "label": "AOC v. Marco Rubio",
+     "ask": 0.056,
      "fee": 0.07,
-     "ticker": "KXFEDDECISION-27OCT-H25"
+     "ticker": "KXPRESMATCHUP-28NOV07-AOCMRUB"
     },
     {
-     "label": "Hike >25bps",
-     "ask": 0.03,
+     "label": "Jon Ossoff v. JD Vance",
+     "ask": 0.081,
      "fee": 0.07,
-     "ticker": "KXFEDDECISION-27OCT-H26"
+     "ticker": "KXPRESMATCHUP-28NOV07-JOSSJVAN"
+    },
+    {
+     "label": "Jon Ossoff v. Marco Rubio",
+     "ask": 0.099,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-JOSSMRUB"
+    },
+    {
+     "label": "Josh Shapiro v. JD Vance",
+     "ask": 0.023,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-JSHAJVAN"
+    },
+    {
+     "label": "Josh Shapiro v. Marco Rubio",
+     "ask": 0.01,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-JSHAMRUB"
+    },
+    {
+     "label": "Kamala Harris v. JD Vance",
+     "ask": 0.071,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-KHARJVAN"
+    },
+    {
+     "label": "Kamala Harris v. Marco Rubio",
+     "ask": 0.026,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-KHARMRUB"
+    },
+    {
+     "label": "Pete Buttigieg v. JD Vance",
+     "ask": 0.015,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-PBUTJVAN"
+    },
+    {
+     "label": "Pete Buttigieg v. Marco Rubio",
+     "ask": 0.01,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-PBUTMRUB"
+    },
+    {
+     "label": "Andy Beshear v. JD Vance",
+     "ask": 0.012,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-ABESJVAN"
+    },
+    {
+     "label": "Andy Beshear v. Marco Rubio",
+     "ask": 0.014,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-ABESMRUB"
+    },
+    {
+     "label": "James Talarico v. JD Vance",
+     "ask": 0.007,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-JTALJVAN"
+    },
+    {
+     "label": "James Talarico v. Marco Rubio",
+     "ask": 0.009,
+     "fee": 0.07,
+     "ticker": "KXPRESMATCHUP-28NOV07-JTALMRUB"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "KXFEDDECISION-27OCT"
+   "event_slug": "KXPRESMATCHUP-28NOV07"
   },
   {
    "venue": "kalshi",
@@ -1959,120 +2073,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXVPRESNOMR-28"
-  },
-  {
-   "venue": "kalshi",
-   "event": "2028 Presidential matchup",
-   "n_legs": 16,
-   "gross": 0.21699999999999997,
-   "fees": 0.17,
-   "net": 0.04699999999999996,
-   "capital": 0.9530000000000001,
-   "roi": 0.04931794333683101,
-   "url": "https://kalshi.com/events/KXPRESMATCHUP-28NOV07",
-   "neg_risk": null,
-   "coverage": "16/16",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Gavin Newsom v. JD Vance",
-     "ask": 0.19,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-GNEWJVAN"
-    },
-    {
-     "label": "Gavin Newsom v. Marco Rubio",
-     "ask": 0.039,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-GNEWMRUB"
-    },
-    {
-     "label": "AOC v. JD Vance",
-     "ask": 0.12,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-AOCJVAN"
-    },
-    {
-     "label": "AOC v. Marco Rubio",
-     "ask": 0.056,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-AOCMRUB"
-    },
-    {
-     "label": "Jon Ossoff v. JD Vance",
-     "ask": 0.081,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-JOSSJVAN"
-    },
-    {
-     "label": "Jon Ossoff v. Marco Rubio",
-     "ask": 0.099,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-JOSSMRUB"
-    },
-    {
-     "label": "Josh Shapiro v. JD Vance",
-     "ask": 0.023,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-JSHAJVAN"
-    },
-    {
-     "label": "Josh Shapiro v. Marco Rubio",
-     "ask": 0.01,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-JSHAMRUB"
-    },
-    {
-     "label": "Kamala Harris v. JD Vance",
-     "ask": 0.071,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-KHARJVAN"
-    },
-    {
-     "label": "Kamala Harris v. Marco Rubio",
-     "ask": 0.026,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-KHARMRUB"
-    },
-    {
-     "label": "Pete Buttigieg v. JD Vance",
-     "ask": 0.015,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-PBUTJVAN"
-    },
-    {
-     "label": "Pete Buttigieg v. Marco Rubio",
-     "ask": 0.01,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-PBUTMRUB"
-    },
-    {
-     "label": "Andy Beshear v. JD Vance",
-     "ask": 0.013,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-ABESJVAN"
-    },
-    {
-     "label": "Andy Beshear v. Marco Rubio",
-     "ask": 0.014,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-ABESMRUB"
-    },
-    {
-     "label": "James Talarico v. JD Vance",
-     "ask": 0.007,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-JTALJVAN"
-    },
-    {
-     "label": "James Talarico v. Marco Rubio",
-     "ask": 0.009,
-     "fee": 0.07,
-     "ticker": "KXPRESMATCHUP-28NOV07-JTALMRUB"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXPRESMATCHUP-28NOV07"
   },
   {
    "venue": "polymarket",
@@ -2387,6 +2387,54 @@
    "event_slug": "KXLONDONMAYOR-28MAY01"
   },
   {
+   "venue": "polymarket",
+   "event": "Fed Decision in January?",
+   "n_legs": 5,
+   "gross": 0.029999999999999916,
+   "fees": 0.029704900000000006,
+   "net": 0.0002950999999999093,
+   "capital": 0.9997049000000001,
+   "roi": 0.0002951871097159865,
+   "url": "https://polymarket.com/event/fed-decision-in-january-20260729233815502",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "50+ bps decrease",
+     "ask": 0.031,
+     "fee": 0.05,
+     "token": "45053521911672808043600263178798111402897730682087979734684574823004307023433"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.05,
+     "fee": 0.05,
+     "token": "55531205670373260499988385930313327116586167390725681551489621136380793885916"
+    },
+    {
+     "label": "No change",
+     "ask": 0.4,
+     "fee": 0.05,
+     "token": "63563009510989471204377539732457086916124654411092982704760023438039220215330"
+    },
+    {
+     "label": "25 bps increase",
+     "ask": 0.46,
+     "fee": 0.05,
+     "token": "58421987972100586826330616250690474504359298033602990223828098109695719571344"
+    },
+    {
+     "label": "50+ bps increase",
+     "ask": 0.029,
+     "fee": 0.05,
+     "token": "42452047366442275682382090045397807109079755041679563479952649068752467853296"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "fed-decision-in-january-20260729233815502"
+  },
+  {
    "venue": "kalshi",
    "event": "Kansas City vs New England: Head-to-Head Win Total",
    "n_legs": 2,
@@ -2420,11 +2468,11 @@
    "venue": "polymarket",
    "event": "Reserve Bank of Australia Decision in November",
    "n_legs": 5,
-   "gross": 0.016000000000000014,
-   "fees": 0.0198549,
-   "net": -0.0038548999999999875,
-   "capital": 1.0038548999999999,
-   "roi": -0.0038400968108040197,
+   "gross": 0.017000000000000015,
+   "fees": 0.01982805,
+   "net": -0.0028280499999999847,
+   "capital": 1.00282805,
+   "roi": -0.002820074687779211,
    "url": "https://polymarket.com/event/reserve-bank-of-australia-decision-in-november",
    "neg_risk": true,
    "coverage": "5/5",
@@ -2450,7 +2498,7 @@
     },
     {
      "label": "25 bps increase",
-     "ask": 0.232,
+     "ask": 0.231,
      "fee": 0.05,
      "token": "104266918293222855521793046357307821515714886346545207316467665058118412274070"
     },
@@ -2499,6 +2547,60 @@
    ],
    "kind": "intra-event",
    "event_slug": "bank-of-israel-decision-in-october"
+  },
+  {
+   "venue": "polymarket",
+   "event": "GPU rental prices (H100) end of October?",
+   "n_legs": 6,
+   "gross": 0.02400000000000002,
+   "fees": 0.03068968,
+   "net": -0.006689679999999979,
+   "capital": 1.00668968,
+   "roi": -0.00664522556742608,
+   "url": "https://polymarket.com/event/gpu-rental-prices-h100-end-of-october",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<$2.00",
+     "ask": 0.081,
+     "fee": 0.04,
+     "token": "12349962325890332941281335082848950722905584546116426297712304806223329698015"
+    },
+    {
+     "label": "$2.00-$2.25",
+     "ask": 0.106,
+     "fee": 0.04,
+     "token": "96787541491353757168637591767380785566917313291845551890076608014734666860188"
+    },
+    {
+     "label": "$2.25-$2.50",
+     "ask": 0.069,
+     "fee": 0.04,
+     "token": "53281762727993863245655301814083953681828433896384249252768650028619300754589"
+    },
+    {
+     "label": "$2.50-$2.75",
+     "ask": 0.22,
+     "fee": 0.04,
+     "token": "34824505442387644607913922909696772076116352885513898663598382122162147693901"
+    },
+    {
+     "label": "$2.75-$3.00",
+     "ask": 0.17,
+     "fee": 0.04,
+     "token": "266007069556623715790963528852989848557333089743603329261322463025605381815"
+    },
+    {
+     "label": "$3.00+",
+     "ask": 0.33,
+     "fee": 0.04,
+     "token": "97006198670144379137611837521064371278099894869324127703413013656431527701446"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "gpu-rental-prices-h100-end-of-october"
   },
   {
    "venue": "kalshi",
@@ -2562,67 +2664,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "GPU rental prices (H100) end of October?",
-   "n_legs": 6,
-   "gross": 0.020000000000000018,
-   "fees": 0.03081944,
-   "net": -0.010819439999999982,
-   "capital": 1.01081944,
-   "roi": -0.010703632688346381,
-   "url": "https://polymarket.com/event/gpu-rental-prices-h100-end-of-october",
-   "neg_risk": true,
-   "coverage": "6/6",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<$2.00",
-     "ask": 0.083,
-     "fee": 0.04,
-     "token": "12349962325890332941281335082848950722905584546116426297712304806223329698015"
-    },
-    {
-     "label": "$2.00-$2.25",
-     "ask": 0.108,
-     "fee": 0.04,
-     "token": "96787541491353757168637591767380785566917313291845551890076608014734666860188"
-    },
-    {
-     "label": "$2.25-$2.50",
-     "ask": 0.069,
-     "fee": 0.04,
-     "token": "53281762727993863245655301814083953681828433896384249252768650028619300754589"
-    },
-    {
-     "label": "$2.50-$2.75",
-     "ask": 0.22,
-     "fee": 0.04,
-     "token": "34824505442387644607913922909696772076116352885513898663598382122162147693901"
-    },
-    {
-     "label": "$2.75-$3.00",
-     "ask": 0.17,
-     "fee": 0.04,
-     "token": "266007069556623715790963528852989848557333089743603329261322463025605381815"
-    },
-    {
-     "label": "$3.00+",
-     "ask": 0.33,
-     "fee": 0.04,
-     "token": "97006198670144379137611837521064371278099894869324127703413013656431527701446"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "gpu-rental-prices-h100-end-of-october"
-  },
-  {
-   "venue": "polymarket",
    "event": "Israel Election: Likud # of seats?",
    "n_legs": 5,
-   "gross": 0.016000000000000014,
-   "fees": 0.02850136,
-   "net": -0.012501359999999986,
-   "capital": 1.01250136,
-   "roi": -0.012347005637602292,
+   "gross": 0.018000000000000016,
+   "fees": 0.0284268,
+   "net": -0.010426799999999983,
+   "capital": 1.0104268,
+   "roi": -0.01031920372658364,
    "url": "https://polymarket.com/event/israel-election-likud-of-seats",
    "neg_risk": true,
    "coverage": "5/5",
@@ -2654,13 +2702,61 @@
     },
     {
      "label": "35+",
-     "ask": 0.035,
+     "ask": 0.033,
      "fee": 0.04,
      "token": "60606617344503240835351427277911212364624625909548592079777259944602378541587"
     }
    ],
    "kind": "intra-event",
    "event_slug": "israel-election-likud-of-seats"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Fed Decision in December?",
+   "n_legs": 5,
+   "gross": 0.006000000000000005,
+   "fees": 0.018974500000000002,
+   "net": -0.012974499999999996,
+   "capital": 1.0129744999999999,
+   "roi": -0.012808318471985226,
+   "url": "https://polymarket.com/event/fed-decision-in-december-20260729232808632",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "50+ bps decrease",
+     "ask": 0.005,
+     "fee": 0.05,
+     "token": "17640596861394454242836532536014033416733783473450136742726948856144855149507"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.016,
+     "fee": 0.05,
+     "token": "77367448845023382525249480243608609306658725883285195065573683809293972009019"
+    },
+    {
+     "label": "No change",
+     "ask": 0.19,
+     "fee": 0.05,
+     "token": "42865728742506860386768556888821101266630139112044622335353850919229585308601"
+    },
+    {
+     "label": "25 bps increase",
+     "ask": 0.76,
+     "fee": 0.05,
+     "token": "111662129652828266889360374468657435151479595863413519836161861837506140152890"
+    },
+    {
+     "label": "50+ bps increase",
+     "ask": 0.023,
+     "fee": 0.05,
+     "token": "35090254409399344650860070211816464534198960801264823587796928404808383727584"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "fed-decision-in-december-20260729232808632"
   },
   {
    "venue": "kalshi",
@@ -2787,96 +2883,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-WA01-26"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Core PCE YoY - August 2026",
-   "n_legs": 7,
-   "gross": 0.019000000000000017,
-   "fees": 0.03626195,
-   "net": -0.017261949999999984,
-   "capital": 1.01726195,
-   "roi": -0.016969031427942413,
-   "url": "https://polymarket.com/event/core-pce-yoy-august-2026-20260826182127",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "\u22643.0%",
-     "ask": 0.081,
-     "fee": 0.05,
-     "token": "104005503527740728922799510409550804182861836937753692962350305920506179704526"
-    },
-    {
-     "label": "3.1%",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "50033905717427341681862483641573249055841535810539912493435714238002601880063"
-    },
-    {
-     "label": "3.2%",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "39974663064472168142113182651250037199976284169587173965599958826457648663403"
-    },
-    {
-     "label": "3.3%",
-     "ask": 0.32,
-     "fee": 0.05,
-     "token": "78785432261278211538013040838672012662089243303695525461857125412217893991359"
-    },
-    {
-     "label": "3.4%",
-     "ask": 0.36,
-     "fee": 0.05,
-     "token": "100039111305301205016552512979300244290805509645445606847873386552833650235133"
-    },
-    {
-     "label": "3.5%",
-     "ask": 0.03,
-     "fee": 0.05,
-     "token": "114293196514895950663125210566298314153734138005809342325541439689100465317908"
-    },
-    {
-     "label": "3.6%+",
-     "ask": 0.01,
-     "fee": 0.05,
-     "token": "1220912530460389103922510114396189913409366781350582725543714881959390916009"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "core-pce-yoy-august-2026-20260826182127"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Nebraska Attorney General winner?",
-   "n_legs": 2,
-   "gross": 0.001000000000000112,
-   "fees": 0.02,
-   "net": -0.01899999999999989,
-   "capital": 1.019,
-   "roi": -0.018645731108930218,
-   "url": "https://kalshi.com/events/KXATTYGENNE-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Jocelyn Brasher",
-     "ask": 0.061,
-     "fee": 0.07,
-     "ticker": "KXATTYGENNE-26-D"
-    },
-    {
-     "label": "Mike Hilgers",
-     "ask": 0.938,
-     "fee": 0.07,
-     "ticker": "KXATTYGENNE-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXATTYGENNE-26"
   },
   {
    "venue": "kalshi",
@@ -3065,64 +3071,40 @@
    "event_slug": "KXMOLDOVAPRES-28"
   },
   {
-   "venue": "polymarket",
-   "event": "Argentina Annual Inflation 2026",
-   "n_legs": 7,
-   "gross": 0.0020000000000000018,
-   "fees": 0.026691500000000003,
-   "net": -0.0246915,
-   "capital": 1.0246915,
-   "roi": -0.02409652075771098,
-   "url": "https://polymarket.com/event/argentina-annual-inflation-2026",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
+   "venue": "kalshi",
+   "event": "Alaska House winner?",
+   "n_legs": 3,
+   "gross": 0.007000000000000006,
+   "fees": 0.03,
+   "net": -0.022999999999999993,
+   "capital": 1.023,
+   "roi": -0.02248289345063538,
+   "url": "https://kalshi.com/events/HOUSEAKAL-26",
+   "neg_risk": null,
+   "coverage": "3/3",
+   "tier": 2,
    "legs": [
     {
-     "label": "<20%",
-     "ask": 0.005,
-     "fee": 0.05,
-     "token": "2494277003359175544407730760047273948329597510886810804513168990523948526902"
+     "label": "Democratic party",
+     "ask": 0.043,
+     "fee": 0.07,
+     "ticker": "HOUSEAKAL-26-D"
     },
     {
-     "label": "20-24.9%",
-     "ask": 0.008,
-     "fee": 0.05,
-     "token": "79610875651119910552934355474988821778841137812923069154130050270119679536414"
+     "label": "Republican party",
+     "ask": 0.85,
+     "fee": 0.07,
+     "ticker": "HOUSEAKAL-26-R"
     },
     {
-     "label": "30.0-34.9%",
-     "ask": 0.536,
-     "fee": 0.05,
-     "token": "90408096646442651790319969575710616736932694935139844434528079589898429308330"
-    },
-    {
-     "label": "25-29.9%",
-     "ask": 0.42,
-     "fee": 0.05,
-     "token": "13206712375238972408912136353802063392233251414906299471669729869565614242335"
-    },
-    {
-     "label": "35\u201339.9%",
-     "ask": 0.005,
-     "fee": 0.05,
-     "token": "30452678616924740646666933014797909137492190698858358494896000028130582406738"
-    },
-    {
-     "label": "45%+",
-     "ask": 0.018,
-     "fee": 0.05,
-     "token": "43715712149922118337640746098287269121363699270657380693875344588389291046129"
-    },
-    {
-     "label": "40-44.9%",
-     "ask": 0.006,
-     "fee": 0.05,
-     "token": "41255857914297874062605902932068969895655224594821154332765350859898223235523"
+     "label": "Bill Hill",
+     "ask": 0.1,
+     "fee": 0.07,
+     "ticker": "HOUSEAKAL-26-BHIL"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "argentina-annual-inflation-2026"
+   "event_slug": "HOUSEAKAL-26"
   },
   {
    "venue": "kalshi",
@@ -3293,6 +3275,66 @@
    "event_slug": "KXNEXTDEPUTYAG-28JAN01"
   },
   {
+   "venue": "polymarket",
+   "event": "GPU rental prices (H100) end of 2026?",
+   "n_legs": 7,
+   "gross": 0.0020000000000000018,
+   "fees": 0.033919120000000004,
+   "net": -0.03191912,
+   "capital": 1.03191912,
+   "roi": -0.030931804035184467,
+   "url": "https://polymarket.com/event/gpu-rental-prices-h100-end-of-2026-20260709164334623",
+   "neg_risk": true,
+   "coverage": "7/7",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<$1.50",
+     "ask": 0.148,
+     "fee": 0.04,
+     "token": "88510328536220292754443946671752695423835120444705708054975546310369151096263"
+    },
+    {
+     "label": "$1.50-$2.00",
+     "ask": 0.166,
+     "fee": 0.04,
+     "token": "26191693025123972233433099853583287749048365371166519527864476303745697994582"
+    },
+    {
+     "label": "$2.00-$2.50",
+     "ask": 0.183,
+     "fee": 0.04,
+     "token": "43632604043764390420653501256428399457101589752296223292223286546578668025540"
+    },
+    {
+     "label": "$2.50-$3.00",
+     "ask": 0.126,
+     "fee": 0.04,
+     "token": "94811468549764313704548004708218695765641403114657237101700112089375529033169"
+    },
+    {
+     "label": "$3.00-$3.50",
+     "ask": 0.165,
+     "fee": 0.04,
+     "token": "34072393149438614047675182057717190527668832857749512428594068575496766900021"
+    },
+    {
+     "label": "$3.50-$4.00",
+     "ask": 0.136,
+     "fee": 0.04,
+     "token": "27510893069200406643888486067118542886719553894630196374641358008459042649601"
+    },
+    {
+     "label": "$4.00+",
+     "ask": 0.074,
+     "fee": 0.04,
+     "token": "18111232124091699238186681703040333677089235261769362230616013443781904176129"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "gpu-rental-prices-h100-end-of-2026-20260709164334623"
+  },
+  {
    "venue": "kalshi",
    "event": "Arizona Superintendent of Public Instruction winner?",
    "n_legs": 4,
@@ -3336,45 +3378,45 @@
   },
   {
    "venue": "kalshi",
-   "event": "NFC West Division Winner",
+   "event": "AFC North Division Winner",
    "n_legs": 4,
    "gross": 0.010000000000000009,
-   "fees": 0.07,
-   "net": -0.06,
-   "capital": 1.06,
-   "roi": -0.056603773584905655,
-   "url": "https://kalshi.com/events/KXNFLNFCWEST-27",
+   "fees": 0.06,
+   "net": -0.04999999999999999,
+   "capital": 1.05,
+   "roi": -0.04761904761904761,
+   "url": "https://kalshi.com/events/KXNFLAFCNORTH-27",
    "neg_risk": null,
    "coverage": "4/4",
    "tier": 2,
    "legs": [
     {
-     "label": "Los Angeles R",
-     "ask": 0.21,
+     "label": "Baltimore",
+     "ask": 0.48,
      "fee": 0.07,
-     "ticker": "KXNFLNFCWEST-27-LAR"
+     "ticker": "KXNFLAFCNORTH-27-BAL"
     },
     {
-     "label": "Arizona",
-     "ask": 0.03,
+     "label": "Cincinnati",
+     "ask": 0.33,
      "fee": 0.07,
-     "ticker": "KXNFLNFCWEST-27-ARI"
+     "ticker": "KXNFLAFCNORTH-27-CIN"
     },
     {
-     "label": "San Francisco",
-     "ask": 0.44,
+     "label": "Cleveland",
+     "ask": 0.05,
      "fee": 0.07,
-     "ticker": "KXNFLNFCWEST-27-SF"
+     "ticker": "KXNFLAFCNORTH-27-CLE"
     },
     {
-     "label": "Seattle",
-     "ask": 0.31,
+     "label": "Pittsburgh",
+     "ask": 0.13,
      "fee": 0.07,
-     "ticker": "KXNFLNFCWEST-27-SEA"
+     "ticker": "KXNFLAFCNORTH-27-PIT"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "KXNFLNFCWEST-27"
+   "event_slug": "KXNFLAFCNORTH-27"
   },
   {
    "venue": "kalshi",
@@ -3755,5 +3797,35 @@
    "event_slug": "KXDTICKET-28NOV07"
   }
  ],
- "cross": []
+ "cross": [
+  {
+   "kind": "cross-venue",
+   "direction": "YES@kalshi+NO@poly",
+   "sim": 0.833,
+   "gross": 0.020000000000000018,
+   "fees": 0.01,
+   "net": 0.010000000000000018,
+   "capital": 0.99,
+   "roi": 0.01010101010101012,
+   "yes_leg": {
+    "venue": "kalshi",
+    "ask": 0.14,
+    "fee": 0.07,
+    "ticker": "KXLEAVEOPEC-27"
+   },
+   "no_leg": {
+    "venue": "polymarket",
+    "ask": 0.84,
+    "fee": 0.0,
+    "token_yes": "51521497779380154558858664227546451933112892150984250255096573026768867177192",
+    "token_no": "84641922064827552827253311981339741860829640000680909725575149181637431473946"
+   },
+   "poly": "Will another country leave OPEC in 2026?",
+   "kalshi": "Will another country leave OPEC in 2026?",
+   "poly_url": "https://polymarket.com/event/will-another-country-leave-opec-in-2026",
+   "kalshi_url": "https://kalshi.com/markets/KXLEAVEOPEC-27",
+   "poly_end": "2026-12-31T19:59:00Z",
+   "kalshi_end": "2027-01-01T04:59:00Z"
+  }
+ ]
 }
