@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-10-11T18:57:36Z",
-  "ts": 1791745056.228962,
-  "scan_seconds": 15.0,
+  "generated_at": "2026-10-11T20:13:56Z",
+  "ts": 1791749636.7391253,
+  "scan_seconds": 15.3,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 182 binary + 1653 multi | kalshi: 5000 events -> 533 binary + 1311 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 182 binary + 1659 multi | kalshi: 5000 events -> 534 binary + 1311 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Ricky Pearsall 2026-27 Regular Season Receiving Yards",
    "n_legs": 5,
-   "gross": 0.845,
-   "fees": 0.00749275,
-   "net": 0.8375072499999999,
-   "capital": 0.16249275,
-   "roi": 5.154120722309149,
+   "gross": 0.842,
+   "fees": 0.0076306,
+   "net": 0.8343693999999999,
+   "capital": 0.1656306,
+   "roi": 5.037531712135318,
    "url": "https://polymarket.com/event/ricky-pearsall-receiving-yards-2026-27",
    "neg_risk": false,
    "coverage": "5/5",
@@ -50,7 +50,7 @@
     },
     {
      "label": "874.5+ receiving yards",
-     "ask": 0.039,
+     "ask": 0.042,
      "fee": 0.05,
      "token": "111895494342242698019702377174221753108331780101638057205630593594327623698503"
     },
@@ -131,6 +131,66 @@
    "event_slug": "KXSTATE51-29"
   },
   {
+   "venue": "polymarket",
+   "event": "Republicans win the Senate pending Hormuz Agreement?",
+   "n_legs": 2,
+   "gross": 0.634,
+   "fees": 0.0103704,
+   "net": 0.6236296,
+   "capital": 0.3763704,
+   "roi": 1.6569570827036346,
+   "url": "https://polymarket.com/event/republicans-win-the-senate-pending-hormuz-agreement",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Hormuz Agreement; R Senate",
+     "ask": 0.042,
+     "fee": 0.04,
+     "token": "7881863996687339509860834026087428481636973568574384350013877513504889019396"
+    },
+    {
+     "label": "No Hormuz Agreement; R Senate",
+     "ask": 0.324,
+     "fee": 0.04,
+     "token": "61046440263616215941342265637412744237441794782442637141336580990714712141009"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "republicans-win-the-senate-pending-hormuz-agreement"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Republicans win the Senate pending oil above or below $80?",
+   "n_legs": 2,
+   "gross": 0.63,
+   "fees": 0.01102232,
+   "net": 0.61897768,
+   "capital": 0.38102231999999997,
+   "roi": 1.624518164710141,
+   "url": "https://polymarket.com/event/republicans-win-the-senate-pending-oil-above-or-below-80",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Oil \u2265 $80; R Senate",
+     "ask": 0.299,
+     "fee": 0.04,
+     "token": "112916747837587429778579971496416941131541765339750156428124470736271804177426"
+    },
+    {
+     "label": "Oil < $80; R Senate",
+     "ask": 0.071,
+     "fee": 0.04,
+     "token": "106300419210539533370396776085801116445761881700269044062974622616597616715279"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "republicans-win-the-senate-pending-oil-above-or-below-80"
+  },
+  {
    "venue": "kalshi",
    "event": "Who will the next Pope be?",
    "n_legs": 7,
@@ -192,43 +252,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Republicans win the Senate pending oil above or below $80?",
-   "n_legs": 2,
-   "gross": 0.622,
-   "fees": 0.01131184,
-   "net": 0.61068816,
-   "capital": 0.38931184,
-   "roi": 1.5686349534090718,
-   "url": "https://polymarket.com/event/republicans-win-the-senate-pending-oil-above-or-below-80",
-   "neg_risk": false,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Oil \u2265 $80; R Senate",
-     "ask": 0.298,
-     "fee": 0.04,
-     "token": "112916747837587429778579971496416941131541765339750156428124470736271804177426"
-    },
-    {
-     "label": "Oil < $80; R Senate",
-     "ask": 0.08,
-     "fee": 0.04,
-     "token": "106300419210539533370396776085801116445761881700269044062974622616597616715279"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "republicans-win-the-senate-pending-oil-above-or-below-80"
-  },
-  {
-   "venue": "polymarket",
    "event": "Abstract FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.5980000000000001,
-   "fees": 0.026782700000000003,
-   "net": 0.5712173,
-   "capital": 0.42878269999999996,
-   "roi": 1.332183644536032,
+   "gross": 0.597,
+   "fees": 0.026841010000000002,
+   "net": 0.5701589899999999,
+   "capital": 0.42984100999999997,
+   "roi": 1.3264415835985495,
    "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -236,13 +266,13 @@
    "legs": [
     {
      "label": "$200M",
-     "ask": 0.061,
+     "ask": 0.06,
      "fee": 0.07,
      "token": "84358917457786118111350061347880730021105314335676049736086740763081010842066"
     },
     {
      "label": "$400M",
-     "ask": 0.071,
+     "ask": 0.073,
      "fee": 0.07,
      "token": "14969137041406568482998226174886244413458670324702681555747452734368526655610"
     },
@@ -368,11 +398,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.406,
-   "fees": 0.034779220000000007,
-   "net": 0.37122078000000003,
-   "capital": 0.62877922,
-   "roi": 0.5903833463198737,
+   "gross": 0.41600000000000004,
+   "fees": 0.03438022,
+   "net": 0.38161978,
+   "capital": 0.6183802199999999,
+   "roi": 0.6171280510880508,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -380,7 +410,7 @@
    "legs": [
     {
      "label": "$10M",
-     "ask": 0.22,
+     "ask": 0.21,
      "fee": 0.07,
      "token": "65772851380363633379843416003553027491065910788009103002723487076614331531636"
     },
@@ -641,6 +671,54 @@
    "event_slug": "KXMONGOLIAPRES-27"
   },
   {
+   "venue": "polymarket",
+   "event": "NCAA Football: Washington State 2026 Win Total",
+   "n_legs": 5,
+   "gross": 0.238,
+   "fees": 0.030209800000000002,
+   "net": 0.20779019999999998,
+   "capital": 0.7922098,
+   "roi": 0.2622918827815561,
+   "url": "https://polymarket.com/event/ncaa-football-washington-state-2026-win-total",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "3.5+ Wins",
+     "ask": 0.26,
+     "fee": 0.05,
+     "token": "98205324598280477794192913359198990701584033856152230973772644834289857652602"
+    },
+    {
+     "label": "4.5+ Wins",
+     "ask": 0.21,
+     "fee": 0.05,
+     "token": "83209995389689910538514763803718826708266321131131946730767951452816590038003"
+    },
+    {
+     "label": "5.5+ Wins",
+     "ask": 0.19,
+     "fee": 0.05,
+     "token": "15417223815200049597205177812428507771629908028196257950407269014563969030257"
+    },
+    {
+     "label": "6.5+ Wins",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "69747282584628636736058627201380549006705184612334691158925899094938939192651"
+    },
+    {
+     "label": "7.5+ Wins",
+     "ask": 0.002,
+     "fee": 0.05,
+     "token": "67777211380737729408328874617139634179221195589877461950074143513170423734717"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "ncaa-football-washington-state-2026-win-total"
+  },
+  {
    "venue": "kalshi",
    "event": "Where will Putin and Zelenskyy next meet?",
    "n_legs": 8,
@@ -708,61 +786,55 @@
   },
   {
    "venue": "polymarket",
-   "event": "NCAA Football: Washington State 2026 Win Total",
-   "n_legs": 5,
-   "gross": 0.22099999999999997,
-   "fees": 0.030800950000000004,
-   "net": 0.19019904999999998,
-   "capital": 0.8098009500000001,
-   "roi": 0.23487135943715548,
-   "url": "https://polymarket.com/event/ncaa-football-washington-state-2026-win-total",
+   "event": "Who will launch a Muse-like personal agent before 2027?",
+   "n_legs": 4,
+   "gross": 0.20999999999999996,
+   "fees": 0.023508,
+   "net": 0.18649199999999996,
+   "capital": 0.813508,
+   "roi": 0.22924421148900806,
+   "url": "https://polymarket.com/event/who-will-launch-a-muse-like-personal-agent-before-2027",
    "neg_risk": false,
-   "coverage": "5/5",
+   "coverage": "4/4",
    "tier": 2,
    "legs": [
     {
-     "label": "3.5+ Wins",
-     "ask": 0.26,
-     "fee": 0.05,
-     "token": "98205324598280477794192913359198990701584033856152230973772644834289857652602"
+     "label": "Anthropic",
+     "ask": 0.06,
+     "fee": 0.04,
+     "token": "111439834054654387888103402163664186984610811282631828297774591262351190573652"
     },
     {
-     "label": "4.5+ Wins",
-     "ask": 0.23,
-     "fee": 0.05,
-     "token": "83209995389689910538514763803718826708266321131131946730767951452816590038003"
+     "label": "Microsoft",
+     "ask": 0.33,
+     "fee": 0.04,
+     "token": "41589751526116520493587003424425409316224397399365514322688572697501462139976"
     },
     {
-     "label": "5.5+ Wins",
-     "ask": 0.18,
-     "fee": 0.05,
-     "token": "15417223815200049597205177812428507771629908028196257950407269014563969030257"
+     "label": "Perplexity",
+     "ask": 0.27,
+     "fee": 0.04,
+     "token": "43659502772185997089048224285491540379213029616892498735313428692694433249344"
     },
     {
-     "label": "6.5+ Wins",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "69747282584628636736058627201380549006705184612334691158925899094938939192651"
-    },
-    {
-     "label": "7.5+ Wins",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "67777211380737729408328874617139634179221195589877461950074143513170423734717"
+     "label": "Amazon",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "20454068977761992314222534781098664684738271526659113934477366518019379177381"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "ncaa-football-washington-state-2026-win-total"
+   "event_slug": "who-will-launch-a-muse-like-personal-agent-before-2027"
   },
   {
    "venue": "polymarket",
    "event": "Highest Meta score on Humanity\u2019s Last Exam in 2026?",
    "n_legs": 4,
-   "gross": 0.20899999999999996,
-   "fees": 0.0217478,
-   "net": 0.18725219999999995,
-   "capital": 0.8127478,
-   "roi": 0.2303939795346108,
+   "gross": 0.20500000000000007,
+   "fees": 0.02066412,
+   "net": 0.18433588000000006,
+   "capital": 0.8156641199999999,
+   "roi": 0.22599483718862132,
    "url": "https://polymarket.com/event/highest-meta-score-on-humanitys-last-exam-in-2026-20260723192006805",
    "neg_risk": false,
    "coverage": "4/4",
@@ -770,7 +842,7 @@
    "legs": [
     {
      "label": "55%+",
-     "ask": 0.43,
+     "ask": 0.47,
      "fee": 0.04,
      "token": "47351350191021860030940473611465578498086619828510123029070548466066776837953"
     },
@@ -782,13 +854,13 @@
     },
     {
      "label": "65%+",
-     "ask": 0.087,
+     "ask": 0.054,
      "fee": 0.04,
      "token": "45227214931477866761288056130619702453291156789807013572598590317054802177759"
     },
     {
      "label": "70%+",
-     "ask": 0.044,
+     "ask": 0.041,
      "fee": 0.04,
      "token": "45563020231349445513855283356408255998076919234996600330122389989880292818500"
     }
@@ -800,11 +872,11 @@
    "venue": "kalshi",
    "event": "2028 Presidential matchup",
    "n_legs": 16,
-   "gross": 0.33599999999999997,
+   "gross": 0.33699999999999997,
    "fees": 0.16,
-   "net": 0.17599999999999996,
-   "capital": 0.8240000000000001,
-   "roi": 0.21359223300970867,
+   "net": 0.17699999999999996,
+   "capital": 0.8230000000000001,
+   "roi": 0.21506682867557708,
    "url": "https://kalshi.com/events/KXPRESMATCHUP-28NOV07",
    "neg_risk": null,
    "coverage": "16/16",
@@ -842,7 +914,7 @@
     },
     {
      "label": "Jon Ossoff v. Marco Rubio",
-     "ask": 0.059,
+     "ask": 0.058,
      "fee": 0.07,
      "ticker": "KXPRESMATCHUP-28NOV07-JOSSMRUB"
     },
@@ -954,127 +1026,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Which countries will recognize Israel by December 31?",
-   "n_legs": 16,
-   "gross": 0.16700000000000004,
-   "fees": 0.0,
-   "net": 0.16700000000000004,
-   "capital": 0.833,
-   "roi": 0.2004801920768308,
-   "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
-   "neg_risk": false,
-   "coverage": "16/16",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "North Korea",
-     "ask": 0.032,
-     "fee": 0.0,
-     "token": "66401440271983765981896111720390968685794445602688073258766280964806180948741"
-    },
-    {
-     "label": "Cuba",
-     "ask": 0.034,
-     "fee": 0.0,
-     "token": "112648925356443758946940369866892568424699165236725029786686196105765202287771"
-    },
-    {
-     "label": "Saudi Arabia",
-     "ask": 0.053,
-     "fee": 0.0,
-     "token": "105021230936912984680931678122814125668784031756100999048923377620987522853502"
-    },
-    {
-     "label": "Lebanon",
-     "ask": 0.08,
-     "fee": 0.0,
-     "token": "57296275132860207464910469086912664176153776071835315700063526910474840238866"
-    },
-    {
-     "label": "Afghanistan",
-     "ask": 0.042,
-     "fee": 0.0,
-     "token": "98615804070815763769968147329639484175548428357642357460081874034057958631973"
-    },
-    {
-     "label": "Iraq",
-     "ask": 0.045,
-     "fee": 0.0,
-     "token": "39178088573096847322455495237438390847582626689242446542209071712658328318785"
-    },
-    {
-     "label": "Pakistan",
-     "ask": 0.039,
-     "fee": 0.0,
-     "token": "61782437453393455873421902608347180052608940662115680015572295454535780744936"
-    },
-    {
-     "label": "Syria",
-     "ask": 0.04,
-     "fee": 0.0,
-     "token": "95557412500999805076472893611192107025033551734600316765572331873300312062279"
-    },
-    {
-     "label": "Venezuela",
-     "ask": 0.16,
-     "fee": 0.0,
-     "token": "46678549643025579481434878349219096040657504404574548129471310417977794255568"
-    },
-    {
-     "label": "Tunisia",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "110119458246195866392279748195795405667270272048482672378597646319468481393456"
-    },
-    {
-     "label": "Kuwait",
-     "ask": 0.112,
-     "fee": 0.0,
-     "token": "6597567716906659210734412187060302708545871029155693646874836858425710157506"
-    },
-    {
-     "label": "Qatar",
-     "ask": 0.028,
-     "fee": 0.0,
-     "token": "25127138385919514206272578282716394996449590382299508752461143644236965716313"
-    },
-    {
-     "label": "Indonesia",
-     "ask": 0.039,
-     "fee": 0.0,
-     "token": "46467850666586016891017914548299567275100357929816009318356054834604477300488"
-    },
-    {
-     "label": "Malaysia",
-     "ask": 0.025,
-     "fee": 0.0,
-     "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
-    },
-    {
-     "label": "Bangladesh",
-     "ask": 0.013,
-     "fee": 0.0,
-     "token": "40688094653686125161851139319199302543780839137475354735981151285183116400686"
-    },
-    {
-     "label": "Iran",
-     "ask": 0.031,
-     "fee": 0.0,
-     "token": "35575529907914456377934861485987059685769709278922938684692921159579159923096"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-countries-will-recognize-israel-by-december-31"
-  },
-  {
-   "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.20199999999999996,
-   "fees": 0.049139020000000005,
-   "net": 0.15286097999999995,
-   "capital": 0.8471390200000001,
-   "roi": 0.18044379539972075,
+   "gross": 0.20599999999999996,
+   "fees": 0.048935740000000005,
+   "net": 0.15706425999999996,
+   "capital": 0.84293574,
+   "roi": 0.1863300516834177,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -1082,7 +1040,7 @@
    "legs": [
     {
      "label": "$500M ",
-     "ask": 0.139,
+     "ask": 0.135,
      "fee": 0.07,
      "token": "42645635688384173938505005153732536262139883933750646945028210271328873690888"
     },
@@ -1134,13 +1092,175 @@
   },
   {
    "venue": "polymarket",
+   "event": "Which countries will recognize Israel by December 31?",
+   "n_legs": 16,
+   "gross": 0.14500000000000002,
+   "fees": 0.0,
+   "net": 0.14500000000000002,
+   "capital": 0.855,
+   "roi": 0.16959064327485382,
+   "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
+   "neg_risk": false,
+   "coverage": "16/16",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "North Korea",
+     "ask": 0.033,
+     "fee": 0.0,
+     "token": "66401440271983765981896111720390968685794445602688073258766280964806180948741"
+    },
+    {
+     "label": "Cuba",
+     "ask": 0.034,
+     "fee": 0.0,
+     "token": "112648925356443758946940369866892568424699165236725029786686196105765202287771"
+    },
+    {
+     "label": "Saudi Arabia",
+     "ask": 0.053,
+     "fee": 0.0,
+     "token": "105021230936912984680931678122814125668784031756100999048923377620987522853502"
+    },
+    {
+     "label": "Lebanon",
+     "ask": 0.08,
+     "fee": 0.0,
+     "token": "57296275132860207464910469086912664176153776071835315700063526910474840238866"
+    },
+    {
+     "label": "Afghanistan",
+     "ask": 0.032,
+     "fee": 0.0,
+     "token": "98615804070815763769968147329639484175548428357642357460081874034057958631973"
+    },
+    {
+     "label": "Iraq",
+     "ask": 0.045,
+     "fee": 0.0,
+     "token": "39178088573096847322455495237438390847582626689242446542209071712658328318785"
+    },
+    {
+     "label": "Pakistan",
+     "ask": 0.039,
+     "fee": 0.0,
+     "token": "61782437453393455873421902608347180052608940662115680015572295454535780744936"
+    },
+    {
+     "label": "Syria",
+     "ask": 0.04,
+     "fee": 0.0,
+     "token": "95557412500999805076472893611192107025033551734600316765572331873300312062279"
+    },
+    {
+     "label": "Venezuela",
+     "ask": 0.17,
+     "fee": 0.0,
+     "token": "46678549643025579481434878349219096040657504404574548129471310417977794255568"
+    },
+    {
+     "label": "Tunisia",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "110119458246195866392279748195795405667270272048482672378597646319468481393456"
+    },
+    {
+     "label": "Kuwait",
+     "ask": 0.133,
+     "fee": 0.0,
+     "token": "6597567716906659210734412187060302708545871029155693646874836858425710157506"
+    },
+    {
+     "label": "Qatar",
+     "ask": 0.028,
+     "fee": 0.0,
+     "token": "25127138385919514206272578282716394996449590382299508752461143644236965716313"
+    },
+    {
+     "label": "Indonesia",
+     "ask": 0.039,
+     "fee": 0.0,
+     "token": "46467850666586016891017914548299567275100357929816009318356054834604477300488"
+    },
+    {
+     "label": "Malaysia",
+     "ask": 0.025,
+     "fee": 0.0,
+     "token": "67199733178530454806535518776248808538616631860104065052977137772797710887403"
+    },
+    {
+     "label": "Bangladesh",
+     "ask": 0.013,
+     "fee": 0.0,
+     "token": "40688094653686125161851139319199302543780839137475354735981151285183116400686"
+    },
+    {
+     "label": "Iran",
+     "ask": 0.031,
+     "fee": 0.0,
+     "token": "35575529907914456377934861485987059685769709278922938684692921159579159923096"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "which-countries-will-recognize-israel-by-december-31"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Will US crude oil reserves fall to __ by October 30?",
+   "n_legs": 5,
+   "gross": 0.16400000000000003,
+   "fees": 0.0224279,
+   "net": 0.14157210000000003,
+   "capital": 0.8584278999999999,
+   "roi": 0.16492019888915546,
+   "url": "https://polymarket.com/event/will-us-crude-oil-reserves-fall-to-by-october-30",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "280M",
+     "ask": 0.61,
+     "fee": 0.05,
+     "token": "110198432797470464224839508103997793234267144746479924878089048422631305388857"
+    },
+    {
+     "label": "270M",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "108406218110047977443593183429801782724564196642299421979590319523283940702958"
+    },
+    {
+     "label": "260M",
+     "ask": 0.047,
+     "fee": 0.05,
+     "token": "79186276894907886302627088724175990498516312537500417765513750880313905466418"
+    },
+    {
+     "label": "250M",
+     "ask": 0.042,
+     "fee": 0.05,
+     "token": "58479726034423401932220029698310534485144294202179549076317802689050881762841"
+    },
+    {
+     "label": "240M",
+     "ask": 0.037,
+     "fee": 0.05,
+     "token": "18423323763313567328740511662732616791377442463465320413616361334870042994269"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-us-crude-oil-reserves-fall-to-by-october-30"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.15100000000000002,
+   "gross": 0.14,
    "fees": 0.0,
-   "net": 0.15100000000000002,
-   "capital": 0.849,
-   "roi": 0.17785630153121323,
+   "net": 0.14,
+   "capital": 0.86,
+   "roi": 0.16279069767441862,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -1160,7 +1280,7 @@
     },
     {
      "label": "Turkey",
-     "ask": 0.046,
+     "ask": 0.047,
      "fee": 0.0,
      "token": "20017929812718986920685798265534319399741603957697884496871670009663199441276"
     },
@@ -1214,97 +1334,13 @@
     },
     {
      "label": "Somaliland",
-     "ask": 0.21,
+     "ask": 0.22,
      "fee": 0.0,
      "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
     }
    ],
    "kind": "intra-event",
    "event_slug": "which-country-will-join-abraham-accords-before-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Theo FDV above ___ one day after launch?",
-   "n_legs": 4,
-   "gross": 0.16500000000000004,
-   "fees": 0.035825090000000004,
-   "net": 0.12917491000000003,
-   "capital": 0.87082509,
-   "roi": 0.14833622903538532,
-   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$100M",
-     "ask": 0.48,
-     "fee": 0.07,
-     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.3,
-     "fee": 0.07,
-     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
-    },
-    {
-     "label": "$700M",
-     "ask": 0.053,
-     "fee": 0.07,
-     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.002,
-     "fee": 0.07,
-     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "theo-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Who will launch a Muse-like personal agent before 2027?",
-   "n_legs": 4,
-   "gross": 0.1499999999999999,
-   "fees": 0.025476,
-   "net": 0.12452399999999991,
-   "capital": 0.8754760000000001,
-   "roi": 0.14223576660011228,
-   "url": "https://polymarket.com/event/who-will-launch-a-muse-like-personal-agent-before-2027",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Anthropic",
-     "ask": 0.12,
-     "fee": 0.04,
-     "token": "111439834054654387888103402163664186984610811282631828297774591262351190573652"
-    },
-    {
-     "label": "Microsoft",
-     "ask": 0.33,
-     "fee": 0.04,
-     "token": "41589751526116520493587003424425409316224397399365514322688572697501462139976"
-    },
-    {
-     "label": "Perplexity",
-     "ask": 0.27,
-     "fee": 0.04,
-     "token": "43659502772185997089048224285491540379213029616892498735313428692694433249344"
-    },
-    {
-     "label": "Amazon",
-     "ask": 0.13,
-     "fee": 0.04,
-     "token": "20454068977761992314222534781098664684738271526659113934477366518019379177381"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "who-will-launch-a-muse-like-personal-agent-before-2027"
   },
   {
    "venue": "kalshi",
@@ -1347,6 +1383,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXTRUMPAGCOUNT-29"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Theo FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.15500000000000003,
+   "fees": 0.03609809,
+   "net": 0.11890191000000003,
+   "capital": 0.88109809,
+   "roi": 0.13494741544610547,
+   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$100M",
+     "ask": 0.48,
+     "fee": 0.07,
+     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.31,
+     "fee": 0.07,
+     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
+    },
+    {
+     "label": "$700M",
+     "ask": 0.053,
+     "fee": 0.07,
+     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.002,
+     "fee": 0.07,
+     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "theo-fdv-above-one-day-after-launch"
   },
   {
    "venue": "kalshi",
@@ -1401,54 +1479,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPRESNOMG-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Will US crude oil reserves fall to __ by October 30?",
-   "n_legs": 5,
-   "gross": 0.131,
-   "fees": 0.02219055,
-   "net": 0.10880945,
-   "capital": 0.89119055,
-   "roi": 0.12209448360959393,
-   "url": "https://polymarket.com/event/will-us-crude-oil-reserves-fall-to-by-october-30",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "280M",
-     "ask": 0.64,
-     "fee": 0.05,
-     "token": "110198432797470464224839508103997793234267144746479924878089048422631305388857"
-    },
-    {
-     "label": "270M",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "108406218110047977443593183429801782724564196642299421979590319523283940702958"
-    },
-    {
-     "label": "260M",
-     "ask": 0.048,
-     "fee": 0.05,
-     "token": "79186276894907886302627088724175990498516312537500417765513750880313905466418"
-    },
-    {
-     "label": "250M",
-     "ask": 0.042,
-     "fee": 0.05,
-     "token": "58479726034423401932220029698310534485144294202179549076317802689050881762841"
-    },
-    {
-     "label": "240M",
-     "ask": 0.039,
-     "fee": 0.05,
-     "token": "18423323763313567328740511662732616791377442463465320413616361334870042994269"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-us-crude-oil-reserves-fall-to-by-october-30"
   },
   {
    "venue": "polymarket",
@@ -1526,11 +1556,11 @@
    "venue": "polymarket",
    "event": "Puffpaw FDV above ___ one day after launch?",
    "n_legs": 5,
-   "gross": 0.135,
-   "fees": 0.04770101000000001,
-   "net": 0.08729898999999999,
-   "capital": 0.91270101,
-   "roi": 0.09564905598165163,
+   "gross": 0.14600000000000002,
+   "fees": 0.047286680000000005,
+   "net": 0.09871332000000002,
+   "capital": 0.90128668,
+   "roi": 0.10952488502326477,
    "url": "https://polymarket.com/event/puffpaw-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1544,7 +1574,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.25,
+     "ask": 0.24,
      "fee": 0.07,
      "token": "5793707379729500818284272227553588908492513776424889835572995739672504840973"
     },
@@ -1556,7 +1586,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.091,
+     "ask": 0.09,
      "fee": 0.07,
      "token": "75465806583802054124068142193447889201404918795525767496433120745554670765320"
     },
@@ -1574,11 +1604,11 @@
    "venue": "polymarket",
    "event": "Los Angeles Dodgers vs. Milwaukee Brewers",
    "n_legs": 2,
-   "gross": 0.10999999999999999,
-   "fees": 0.024134999999999997,
-   "net": 0.085865,
-   "capital": 0.914135,
-   "roi": 0.09393032757743659,
+   "gross": 0.09999999999999998,
+   "fees": 0.024260000000000004,
+   "net": 0.07573999999999997,
+   "capital": 0.9242600000000001,
+   "roi": 0.08194663839179449,
    "url": "https://polymarket.com/event/mlb-lad-mil-2026-10-12",
    "neg_risk": false,
    "coverage": "2/2",
@@ -1592,7 +1622,7 @@
     },
     {
      "label": "NRFI",
-     "ask": 0.37,
+     "ask": 0.38,
      "fee": 0.05,
      "token": "32614463373219409739928362507676551817178448407459212082454350859669516171519"
     }
@@ -1634,11 +1664,11 @@
    "venue": "polymarket",
    "event": "NCAA Football: Georgia Tech 2026 Win Total",
    "n_legs": 5,
-   "gross": 0.07599999999999996,
-   "fees": 0.033157200000000005,
-   "net": 0.04284279999999995,
-   "capital": 0.9571572,
-   "roi": 0.04476046358947094,
+   "gross": 0.07699999999999996,
+   "fees": 0.03311515,
+   "net": 0.043884849999999954,
+   "capital": 0.95611515,
+   "roi": 0.04589912627155835,
    "url": "https://polymarket.com/event/ncaa-football-georgia-tech-2026-win-total",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1670,7 +1700,7 @@
     },
     {
      "label": "8.5+ Wins",
-     "ask": 0.08,
+     "ask": 0.079,
      "fee": 0.05,
      "token": "64793874501782020501097817124030161883111428269751171852458414178886764393299"
     }
@@ -1680,51 +1710,51 @@
   },
   {
    "venue": "polymarket",
-   "event": "Where will 2026 rank among the highest U.S. domestic box office years on record?",
+   "event": "First to list tokenized stocks in the US?",
    "n_legs": 5,
-   "gross": 0.06999999999999995,
-   "fees": 0.032505000000000006,
-   "net": 0.037494999999999945,
-   "capital": 0.962505,
-   "roi": 0.038955641788873764,
-   "url": "https://polymarket.com/event/where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401",
+   "gross": 0.07999999999999996,
+   "fees": 0.045086860000000006,
+   "net": 0.034913139999999954,
+   "capital": 0.96508686,
+   "roi": 0.03617616345952524,
+   "url": "https://polymarket.com/event/first-to-list-tokenized-stocks-in-the-us",
    "neg_risk": true,
    "coverage": "5/5",
    "tier": 1,
    "legs": [
     {
-     "label": "6th or higher",
+     "label": "Robinhood",
+     "ask": 0.46,
+     "fee": 0.07,
+     "token": "109653052070133709391948868361297569582692534902581687329093320934499501412821"
+    },
+    {
+     "label": "Coinbase",
      "ask": 0.07,
-     "fee": 0.05,
-     "token": "33055139480720928337544044671212347348212483177343462671670587359248982530067"
+     "fee": 0.07,
+     "token": "56288302073825065037856725242268819560054413448160249361062642276351573155270"
     },
     {
-     "label": "7th-9th",
-     "ask": 0.45,
-     "fee": 0.05,
-     "token": "100448413203442875274401674534714559927670821663383572180619458461064801056800"
+     "label": "Kraken",
+     "ask": 0.2,
+     "fee": 0.07,
+     "token": "18160239875298190409497751306394016428740710753681186100653844409625565865196"
     },
     {
-     "label": "10th-12th",
-     "ask": 0.24,
-     "fee": 0.05,
-     "token": "53111214950769819238639992036893106939679664663312031962518317404644731756301"
+     "label": "Gemini",
+     "ask": 0.069,
+     "fee": 0.07,
+     "token": "33332211778937988914176518315777948491276124246002573462531010522223861818632"
     },
     {
-     "label": "13th-15th",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "21272734602335873642604277783094090829203789108870266071519222628921767636694"
-    },
-    {
-     "label": "Below 15th",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "100399321692273620363412178960421989544525427382276114833916754400525015568180"
+     "label": "No listing by December 31, 2027",
+     "ask": 0.121,
+     "fee": 0.07,
+     "token": "66271378305212148404877501008744854544015975943125569848377919578671799091744"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401"
+   "event_slug": "first-to-list-tokenized-stocks-in-the-us"
   },
   {
    "venue": "kalshi",
@@ -1760,11 +1790,11 @@
    "venue": "kalshi",
    "event": "2028: Who will win the Presidency, House, and Senate?",
    "n_legs": 8,
-   "gross": 0.119,
+   "gross": 0.118,
    "fees": 0.09,
-   "net": 0.028999999999999998,
-   "capital": 0.971,
-   "roi": 0.029866117404737384,
+   "net": 0.027999999999999997,
+   "capital": 0.972,
+   "roi": 0.028806584362139915,
    "url": "https://kalshi.com/events/POWER-28",
    "neg_risk": null,
    "coverage": "8/8",
@@ -1778,7 +1808,7 @@
     },
     {
      "label": "D-House, D-Senate, R-President",
-     "ask": 0.024,
+     "ask": 0.025,
      "fee": 0.07,
      "ticker": "POWER-28-DH-DS-RP"
     },
@@ -1862,11 +1892,11 @@
    "venue": "kalshi",
    "event": "2028 Republican VP nominee",
    "n_legs": 23,
-   "gross": 0.257,
+   "gross": 0.256,
    "fees": 0.24,
-   "net": 0.017000000000000015,
-   "capital": 0.983,
-   "roi": 0.01729399796541202,
+   "net": 0.016000000000000014,
+   "capital": 0.984,
+   "roi": 0.016260162601626032,
    "url": "https://kalshi.com/events/KXVPRESNOMR-28",
    "neg_risk": null,
    "coverage": "23/23",
@@ -1994,7 +2024,7 @@
     },
     {
      "label": "Erika Kirk",
-     "ask": 0.024,
+     "ask": 0.025,
      "fee": 0.07,
      "ticker": "KXVPRESNOMR-28-EKIR"
     },
@@ -2013,54 +2043,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXVPRESNOMR-28"
-  },
-  {
-   "venue": "polymarket",
-   "event": "First to list tokenized stocks in the US?",
-   "n_legs": 5,
-   "gross": 0.06099999999999994,
-   "fees": 0.04618565000000001,
-   "net": 0.014814349999999935,
-   "capital": 0.98518565,
-   "roi": 0.015037115085872327,
-   "url": "https://polymarket.com/event/first-to-list-tokenized-stocks-in-the-us",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "Robinhood",
-     "ask": 0.46,
-     "fee": 0.07,
-     "token": "109653052070133709391948868361297569582692534902581687329093320934499501412821"
-    },
-    {
-     "label": "Coinbase",
-     "ask": 0.08,
-     "fee": 0.07,
-     "token": "56288302073825065037856725242268819560054413448160249361062642276351573155270"
-    },
-    {
-     "label": "Kraken",
-     "ask": 0.2,
-     "fee": 0.07,
-     "token": "18160239875298190409497751306394016428740710753681186100653844409625565865196"
-    },
-    {
-     "label": "Gemini",
-     "ask": 0.073,
-     "fee": 0.07,
-     "token": "33332211778937988914176518315777948491276124246002573462531010522223861818632"
-    },
-    {
-     "label": "No listing by December 31, 2027",
-     "ask": 0.126,
-     "fee": 0.07,
-     "token": "66271378305212148404877501008744854544015975943125569848377919578671799091744"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "first-to-list-tokenized-stocks-in-the-us"
   },
   {
    "venue": "polymarket",
@@ -2121,66 +2103,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "anthropic-ipo-closing-market-cap-979"
-  },
-  {
-   "venue": "polymarket",
-   "event": "OpenAI IPO Closing Market Cap",
-   "n_legs": 7,
-   "gross": 0.0040000000000000036,
-   "fees": 0.0033457600000000014,
-   "net": 0.0006542400000000021,
-   "capital": 0.99934576,
-   "roi": 0.0006546683101952643,
-   "url": "https://polymarket.com/event/openai-ipo-closing-market-cap",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<500B",
-     "ask": 0.006,
-     "fee": 0.04,
-     "token": "6122912536415539457721068960901205060237919057489564846781206253065694717085"
-    },
-    {
-     "label": "500\u2013750B",
-     "ask": 0.006,
-     "fee": 0.04,
-     "token": "36088399593046466421453063228085042771351246231742717370399696243183381174466"
-    },
-    {
-     "label": "750B\u20131T",
-     "ask": 0.007,
-     "fee": 0.04,
-     "token": "86904220753614324927759730619985568200215013704321476651673438801320577270597"
-    },
-    {
-     "label": "1T\u20131.25T",
-     "ask": 0.004,
-     "fee": 0.04,
-     "token": "88770632741686298370270294037614812817595949782311984579833554458717957886356"
-    },
-    {
-     "label": "1.25T\u20131.5T",
-     "ask": 0.005,
-     "fee": 0.04,
-     "token": "19470872781622450446330627562106312915240544924539183504885686468325701819521"
-    },
-    {
-     "label": "1.5T+",
-     "ask": 0.013,
-     "fee": 0.04,
-     "token": "42493289531592820306292191064557160874552640520793925047778017979799601355649"
-    },
-    {
-     "label": "No IPO by December 31, 2026",
-     "ask": 0.955,
-     "fee": 0.04,
-     "token": "56615676606297588259337956203332341775475048285080710344367729433788967812170"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "openai-ipo-closing-market-cap"
   },
   {
    "venue": "kalshi",
@@ -2247,6 +2169,96 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXSENATENYD-28"
+  },
+  {
+   "venue": "polymarket",
+   "event": "OpenAI IPO Closing Market Cap",
+   "n_legs": 7,
+   "gross": 0.0030000000000000027,
+   "fees": 0.0033853200000000016,
+   "net": -0.0003853199999999989,
+   "capital": 1.00038532,
+   "roi": -0.00038517158568460294,
+   "url": "https://polymarket.com/event/openai-ipo-closing-market-cap",
+   "neg_risk": true,
+   "coverage": "7/7",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<500B",
+     "ask": 0.006,
+     "fee": 0.04,
+     "token": "6122912536415539457721068960901205060237919057489564846781206253065694717085"
+    },
+    {
+     "label": "500\u2013750B",
+     "ask": 0.006,
+     "fee": 0.04,
+     "token": "36088399593046466421453063228085042771351246231742717370399696243183381174466"
+    },
+    {
+     "label": "750B\u20131T",
+     "ask": 0.007,
+     "fee": 0.04,
+     "token": "86904220753614324927759730619985568200215013704321476651673438801320577270597"
+    },
+    {
+     "label": "1T\u20131.25T",
+     "ask": 0.004,
+     "fee": 0.04,
+     "token": "88770632741686298370270294037614812817595949782311984579833554458717957886356"
+    },
+    {
+     "label": "1.25T\u20131.5T",
+     "ask": 0.006,
+     "fee": 0.04,
+     "token": "19470872781622450446330627562106312915240544924539183504885686468325701819521"
+    },
+    {
+     "label": "1.5T+",
+     "ask": 0.013,
+     "fee": 0.04,
+     "token": "42493289531592820306292191064557160874552640520793925047778017979799601355649"
+    },
+    {
+     "label": "No IPO by December 31, 2026",
+     "ask": 0.955,
+     "fee": 0.04,
+     "token": "56615676606297588259337956203332341775475048285080710344367729433788967812170"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "openai-ipo-closing-market-cap"
+  },
+  {
+   "venue": "kalshi",
+   "event": "OR-03 House winner?",
+   "n_legs": 2,
+   "gross": 0.013000000000000012,
+   "fees": 0.02,
+   "net": -0.006999999999999989,
+   "capital": 1.007,
+   "roi": -0.006951340615690159,
+   "url": "https://kalshi.com/events/KXHOUSERACE-OR03-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Maxine Dexter",
+     "ask": 0.969,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-OR03-26-D"
+    },
+    {
+     "label": "Loran Ayles",
+     "ask": 0.018,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-OR03-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSERACE-OR03-26"
   },
   {
    "venue": "kalshi",
@@ -2364,6 +2376,36 @@
   },
   {
    "venue": "kalshi",
+   "event": "NV-04 House winner?",
+   "n_legs": 2,
+   "gross": 0.009000000000000008,
+   "fees": 0.02,
+   "net": -0.010999999999999992,
+   "capital": 1.011,
+   "roi": -0.010880316518298707,
+   "url": "https://kalshi.com/events/HOUSENV4-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Steven Horsford",
+     "ask": 0.969,
+     "fee": 0.07,
+     "ticker": "HOUSENV4-26-D"
+    },
+    {
+     "label": "Cody Whipple",
+     "ask": 0.022,
+     "fee": 0.07,
+     "ticker": "HOUSENV4-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "HOUSENV4-26"
+  },
+  {
+   "venue": "kalshi",
    "event": "South Carolina Attorney General winner?",
    "n_legs": 2,
    "gross": 0.008999999999999897,
@@ -2421,66 +2463,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "HOUSEOH13-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "NV-04 House winner?",
-   "n_legs": 2,
-   "gross": 0.008000000000000007,
-   "fees": 0.02,
-   "net": -0.011999999999999993,
-   "capital": 1.012,
-   "roi": -0.011857707509881417,
-   "url": "https://kalshi.com/events/HOUSENV4-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Steven Horsford",
-     "ask": 0.969,
-     "fee": 0.07,
-     "ticker": "HOUSENV4-26-D"
-    },
-    {
-     "label": "Cody Whipple",
-     "ask": 0.023,
-     "fee": 0.07,
-     "ticker": "HOUSENV4-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "HOUSENV4-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "WI-05 House winner?",
-   "n_legs": 2,
-   "gross": 0.007000000000000006,
-   "fees": 0.02,
-   "net": -0.012999999999999994,
-   "capital": 1.013,
-   "roi": -0.01283316880552813,
-   "url": "https://kalshi.com/events/KXHOUSERACE-WI05-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Andrew Beck",
-     "ask": 0.022,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-WI05-26-D"
-    },
-    {
-     "label": "Scott Fitzgerald",
-     "ask": 0.971,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-WI05-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-WI05-26"
   },
   {
    "venue": "kalshi",
@@ -2544,36 +2526,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "NM-01 House winner?",
-   "n_legs": 2,
-   "gross": 0.006000000000000005,
-   "fees": 0.02,
-   "net": -0.013999999999999995,
-   "capital": 1.014,
-   "roi": -0.013806706114398416,
-   "url": "https://kalshi.com/events/KXHOUSERACE-NM01-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Melanie Stansbury",
-     "ask": 0.979,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-NM01-26-D"
-    },
-    {
-     "label": "Didi Okpareke",
-     "ask": 0.015,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-NM01-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-NM01-26"
-  },
-  {
-   "venue": "kalshi",
    "event": "GA-09 House winner?",
    "n_legs": 2,
    "gross": 0.006000000000000005,
@@ -2603,52 +2555,64 @@
    "event_slug": "KXHOUSERACE-GA09-26"
   },
   {
-   "venue": "polymarket",
-   "event": "Israel Election: Likud # of seats?",
-   "n_legs": 5,
-   "gross": 0.013000000000000012,
-   "fees": 0.0282542,
-   "net": -0.015254199999999989,
-   "capital": 1.0152542,
-   "roi": -0.015025005560183833,
-   "url": "https://polymarket.com/event/israel-election-likud-of-seats",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
+   "venue": "kalshi",
+   "event": "NM-01 House winner?",
+   "n_legs": 2,
+   "gross": 0.0050000000000000044,
+   "fees": 0.02,
+   "net": -0.014999999999999996,
+   "capital": 1.015,
+   "roi": -0.014778325123152707,
+   "url": "https://kalshi.com/events/KXHOUSERACE-NM01-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
    "legs": [
     {
-     "label": "<20",
-     "ask": 0.148,
-     "fee": 0.04,
-     "token": "43933925453172274492141877287654518668346343973234472530950455719945928796681"
+     "label": "Melanie Stansbury",
+     "ask": 0.979,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-NM01-26-D"
     },
     {
-     "label": "20-24",
-     "ask": 0.41,
-     "fee": 0.04,
-     "token": "48560811763958966949427836985261310673228051233722196622761044916688062540356"
-    },
-    {
-     "label": "25-29",
-     "ask": 0.27,
-     "fee": 0.04,
-     "token": "35426463782545874068474526119520321582933339958366001423364580004443309941419"
-    },
-    {
-     "label": "30-34",
-     "ask": 0.13,
-     "fee": 0.04,
-     "token": "47617027649104766887294669232031918628837692334181076286693699298360483181002"
-    },
-    {
-     "label": "35+",
-     "ask": 0.029,
-     "fee": 0.04,
-     "token": "60606617344503240835351427277911212364624625909548592079777259944602378541587"
+     "label": "Didi Okpareke",
+     "ask": 0.016,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-NM01-26-R"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "israel-election-likud-of-seats"
+   "event_slug": "KXHOUSERACE-NM01-26"
+  },
+  {
+   "venue": "kalshi",
+   "event": "CA-09 House winner?",
+   "n_legs": 2,
+   "gross": 0.0050000000000000044,
+   "fees": 0.02,
+   "net": -0.014999999999999996,
+   "capital": 1.015,
+   "roi": -0.014778325123152707,
+   "url": "https://kalshi.com/events/HOUSECA9-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Josh Harder",
+     "ask": 0.989,
+     "fee": 0.07,
+     "ticker": "HOUSECA9-26-D"
+    },
+    {
+     "label": "John McBride",
+     "ask": 0.006,
+     "fee": 0.07,
+     "ticker": "HOUSECA9-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "HOUSECA9-26"
   },
   {
    "venue": "kalshi",
@@ -2712,96 +2676,6 @@
   },
   {
    "venue": "kalshi",
-   "event": "OH-02 House winner?",
-   "n_legs": 2,
-   "gross": 0.0040000000000000036,
-   "fees": 0.02,
-   "net": -0.015999999999999997,
-   "capital": 1.016,
-   "roi": -0.01574803149606299,
-   "url": "https://kalshi.com/events/KXHOUSERACE-OH02-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Jennifer Mazzuckelli",
-     "ask": 0.029,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-OH02-26-D"
-    },
-    {
-     "label": "David Taylor",
-     "ask": 0.967,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-OH02-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-OH02-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "GA-10 House winner?",
-   "n_legs": 2,
-   "gross": 0.0040000000000000036,
-   "fees": 0.02,
-   "net": -0.015999999999999997,
-   "capital": 1.016,
-   "roi": -0.01574803149606299,
-   "url": "https://kalshi.com/events/KXHOUSERACE-GA10-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Pamela DeLancy",
-     "ask": 0.029,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-GA10-26-D"
-    },
-    {
-     "label": "Houston Gaines",
-     "ask": 0.967,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-GA10-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-GA10-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "CA-09 House winner?",
-   "n_legs": 2,
-   "gross": 0.0040000000000000036,
-   "fees": 0.02,
-   "net": -0.015999999999999997,
-   "capital": 1.016,
-   "roi": -0.01574803149606299,
-   "url": "https://kalshi.com/events/HOUSECA9-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Josh Harder",
-     "ask": 0.989,
-     "fee": 0.07,
-     "ticker": "HOUSECA9-26-D"
-    },
-    {
-     "label": "John McBride",
-     "ask": 0.007,
-     "fee": 0.07,
-     "ticker": "HOUSECA9-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "HOUSECA9-26"
-  },
-  {
-   "venue": "kalshi",
    "event": "CA-03 House winner?",
    "n_legs": 2,
    "gross": 0.0040000000000000036,
@@ -2829,36 +2703,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "HOUSECA3-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Louisiana governor winner? (2027)",
-   "n_legs": 2,
-   "gross": 0.0030000000000000027,
-   "fees": 0.02,
-   "net": -0.016999999999999998,
-   "capital": 1.017,
-   "roi": -0.01671583087512291,
-   "url": "https://kalshi.com/events/GOVPARTYLA-27",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Republican",
-     "ask": 0.9,
-     "fee": 0.07,
-     "ticker": "GOVPARTYLA-27-R"
-    },
-    {
-     "label": "Democratic",
-     "ask": 0.097,
-     "fee": 0.07,
-     "ticker": "GOVPARTYLA-27-D"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "GOVPARTYLA-27"
   },
   {
    "venue": "kalshi",
@@ -2892,6 +2736,36 @@
   },
   {
    "venue": "kalshi",
+   "event": "OH-02 House winner?",
+   "n_legs": 2,
+   "gross": 0.0030000000000000027,
+   "fees": 0.02,
+   "net": -0.016999999999999998,
+   "capital": 1.017,
+   "roi": -0.01671583087512291,
+   "url": "https://kalshi.com/events/KXHOUSERACE-OH02-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Jennifer Mazzuckelli",
+     "ask": 0.029,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-OH02-26-D"
+    },
+    {
+     "label": "David Taylor",
+     "ask": 0.968,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-OH02-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSERACE-OH02-26"
+  },
+  {
+   "venue": "kalshi",
    "event": "KY-04 House winner?",
    "n_legs": 2,
    "gross": 0.0030000000000000027,
@@ -2919,6 +2793,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-KY04-26"
+  },
+  {
+   "venue": "kalshi",
+   "event": "GA-10 House winner?",
+   "n_legs": 2,
+   "gross": 0.0030000000000000027,
+   "fees": 0.02,
+   "net": -0.016999999999999998,
+   "capital": 1.017,
+   "roi": -0.01671583087512291,
+   "url": "https://kalshi.com/events/KXHOUSERACE-GA10-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Pamela DeLancy",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-GA10-26-D"
+    },
+    {
+     "label": "Houston Gaines",
+     "ask": 0.967,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-GA10-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSERACE-GA10-26"
   },
   {
    "venue": "kalshi",
@@ -2979,6 +2883,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-CA28-26"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Louisiana governor winner? (2027)",
+   "n_legs": 2,
+   "gross": 0.0020000000000000018,
+   "fees": 0.02,
+   "net": -0.018,
+   "capital": 1.018,
+   "roi": -0.01768172888015717,
+   "url": "https://kalshi.com/events/GOVPARTYLA-27",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Republican",
+     "ask": 0.9,
+     "fee": 0.07,
+     "ticker": "GOVPARTYLA-27-R"
+    },
+    {
+     "label": "Democratic",
+     "ask": 0.098,
+     "fee": 0.07,
+     "ticker": "GOVPARTYLA-27-D"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "GOVPARTYLA-27"
   },
   {
    "venue": "kalshi",
@@ -3069,66 +3003,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "HOUSENY22-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Nebraska Attorney General winner?",
-   "n_legs": 2,
-   "gross": 0.0010000000000000009,
-   "fees": 0.02,
-   "net": -0.019,
-   "capital": 1.019,
-   "roi": -0.018645731108930325,
-   "url": "https://kalshi.com/events/KXATTYGENNE-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Jocelyn Brasher",
-     "ask": 0.095,
-     "fee": 0.07,
-     "ticker": "KXATTYGENNE-26-D"
-    },
-    {
-     "label": "Mike Hilgers",
-     "ask": 0.904,
-     "fee": 0.07,
-     "ticker": "KXATTYGENNE-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXATTYGENNE-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "CA-48 House winner?",
-   "n_legs": 2,
-   "gross": 0.0010000000000000009,
-   "fees": 0.02,
-   "net": -0.019,
-   "capital": 1.019,
-   "roi": -0.018645731108930325,
-   "url": "https://kalshi.com/events/KXHOUSERACE-CA48-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Marni von Wilpert",
-     "ask": 0.919,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-CA48-26-D"
-    },
-    {
-     "label": "Jim Desmond",
-     "ask": 0.08,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-CA48-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-CA48-26"
   },
   {
    "venue": "kalshi",
@@ -3312,51 +3186,51 @@
   },
   {
    "venue": "polymarket",
-   "event": "How many House seats will the Democrats win in Iowa?",
+   "event": "Israel Election: Likud # of seats?",
    "n_legs": 5,
-   "gross": 0.008000000000000007,
-   "fees": 0.0280532,
-   "net": -0.020053199999999993,
-   "capital": 1.0200532,
-   "roi": -0.019658974649557487,
-   "url": "https://polymarket.com/event/how-many-house-seats-will-the-democrats-win-in-iowa",
+   "gross": 0.007000000000000006,
+   "fees": 0.02842172,
+   "net": -0.021421719999999995,
+   "capital": 1.02142172,
+   "roi": -0.020972453963481408,
+   "url": "https://polymarket.com/event/israel-election-likud-of-seats",
    "neg_risk": true,
    "coverage": "5/5",
    "tier": 1,
    "legs": [
     {
-     "label": "0",
-     "ask": 0.125,
+     "label": "<20",
+     "ask": 0.154,
      "fee": 0.04,
-     "token": "10950052071981271864177070262690719362950512797552325125515128917864246604805"
+     "token": "43933925453172274492141877287654518668346343973234472530950455719945928796681"
     },
     {
-     "label": "1",
-     "ask": 0.158,
+     "label": "20-24",
+     "ask": 0.41,
      "fee": 0.04,
-     "token": "33800625862547101599633208894464897863527046998069753426455401869910259698457"
+     "token": "48560811763958966949427836985261310673228051233722196622761044916688062540356"
     },
     {
-     "label": "2",
-     "ask": 0.3,
+     "label": "25-29",
+     "ask": 0.27,
      "fee": 0.04,
-     "token": "114011099918516804056889368648422306485937477397413570411839090048515071176255"
+     "token": "35426463782545874068474526119520321582933339958366001423364580004443309941419"
     },
     {
-     "label": "3",
-     "ask": 0.4,
+     "label": "30-34",
+     "ask": 0.13,
      "fee": 0.04,
-     "token": "20305382653712780607971436920019623472190326624414729372592901814595210314252"
+     "token": "47617027649104766887294669232031918628837692334181076286693699298360483181002"
     },
     {
-     "label": "4",
-     "ask": 0.009,
+     "label": "35+",
+     "ask": 0.029,
      "fee": 0.04,
-     "token": "85884982283872973017350326884643693269069757157214242729153186991884754110601"
+     "token": "60606617344503240835351427277911212364624625909548592079777259944602378541587"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "how-many-house-seats-will-the-democrats-win-in-iowa"
+   "event_slug": "israel-election-likud-of-seats"
   },
   {
    "venue": "kalshi",
@@ -3380,13 +3254,13 @@
     },
     {
      "label": "26-29 years old",
-     "ask": 0.34,
+     "ask": 0.33,
      "fee": 0.07,
      "ticker": "KXNFLMVPSPECIALS-27AGE-26TO29"
     },
     {
      "label": "30-33 years old",
-     "ask": 0.5,
+     "ask": 0.51,
      "fee": 0.07,
      "ticker": "KXNFLMVPSPECIALS-27AGE-30TO33"
     },
@@ -3570,6 +3444,36 @@
   },
   {
    "venue": "kalshi",
+   "event": "TX-35 House winner?",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.04,
+   "net": -0.029999999999999992,
+   "capital": 1.03,
+   "roi": -0.029126213592233,
+   "url": "https://kalshi.com/events/KXHOUSETX35-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Johnny C. Garcia",
+     "ask": 0.62,
+     "fee": 0.07,
+     "ticker": "KXHOUSETX35-26-D"
+    },
+    {
+     "label": "Carlos De La Cruz",
+     "ask": 0.37,
+     "fee": 0.07,
+     "ticker": "KXHOUSETX35-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSETX35-26"
+  },
+  {
+   "venue": "kalshi",
    "event": "Which of these African leaders will leave office next?",
    "n_legs": 10,
    "gross": 0.07899999999999996,
@@ -3729,48 +3633,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXPHILIPPINESPRES-28"
-  },
-  {
-   "venue": "kalshi",
-   "event": "NFC North Division Winner",
-   "n_legs": 4,
-   "gross": 0.010000000000000009,
-   "fees": 0.07,
-   "net": -0.06,
-   "capital": 1.06,
-   "roi": -0.056603773584905655,
-   "url": "https://kalshi.com/events/KXNFLNFCNORTH-27",
-   "neg_risk": null,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Detroit",
-     "ask": 0.27,
-     "fee": 0.07,
-     "ticker": "KXNFLNFCNORTH-27-DET"
-    },
-    {
-     "label": "Chicago",
-     "ask": 0.24,
-     "fee": 0.07,
-     "ticker": "KXNFLNFCNORTH-27-CHI"
-    },
-    {
-     "label": "Green Bay",
-     "ask": 0.1,
-     "fee": 0.07,
-     "ticker": "KXNFLNFCNORTH-27-GB"
-    },
-    {
-     "label": "Minnesota",
-     "ask": 0.38,
-     "fee": 0.07,
-     "ticker": "KXNFLNFCNORTH-27-MIN"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXNFLNFCNORTH-27"
   },
   {
    "venue": "kalshi",
@@ -3939,6 +3801,78 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXDTICKET-28NOV07"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Argentina presidential election: first round winner?",
+   "n_legs": 9,
+   "gross": 0.020000000000000018,
+   "fees": 0.1,
+   "net": -0.07999999999999999,
+   "capital": 1.08,
+   "roi": -0.07407407407407406,
+   "url": "https://kalshi.com/events/KXARGENTINAPRES1R-27OCT24",
+   "neg_risk": null,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Javier Milei",
+     "ask": 0.58,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-JMIL"
+    },
+    {
+     "label": "Axel Kicillof",
+     "ask": 0.17,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-AKIC"
+    },
+    {
+     "label": "Myriam Bregman",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-MBRE"
+    },
+    {
+     "label": "Juan Schiaretti",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-JSCH"
+    },
+    {
+     "label": "Patricia Bullrich",
+     "ask": 0.02,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-PBUL"
+    },
+    {
+     "label": "Victoria Villarruel",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-VVIL"
+    },
+    {
+     "label": "Mauricio Macri",
+     "ask": 0.02,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-MMAC"
+    },
+    {
+     "label": "Sergio Massa",
+     "ask": 0.05,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-SMAS"
+    },
+    {
+     "label": "Juan Grabois",
+     "ask": 0.03,
+     "fee": 0.07,
+     "ticker": "KXARGENTINAPRES1R-27OCT24-JGRA"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXARGENTINAPRES1R-27OCT24"
   },
   {
    "venue": "kalshi",
