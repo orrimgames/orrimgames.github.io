@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-10-25T14:39:39Z",
-  "ts": 1792939179.9169974,
-  "scan_seconds": 16.2,
+  "generated_at": "2026-10-25T15:40:29Z",
+  "ts": 1792942829.5037777,
+  "scan_seconds": 21.5,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 178 binary + 1684 multi | kalshi: 5000 events -> 559 binary + 1485 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 189 binary + 1641 multi | kalshi: 5000 events -> 559 binary + 1485 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -168,13 +168,43 @@
   },
   {
    "venue": "polymarket",
+   "event": "Republicans win the Senate pending oil above or below $80?",
+   "n_legs": 2,
+   "gross": 0.677,
+   "fees": 0.0,
+   "net": 0.677,
+   "capital": 0.323,
+   "roi": 2.0959752321981426,
+   "url": "https://polymarket.com/event/republicans-win-the-senate-pending-oil-above-or-below-80",
+   "neg_risk": false,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Oil \u2265 $80; R Senate",
+     "ask": 0.311,
+     "fee": 0.0,
+     "token": "112916747837587429778579971496416941131541765339750156428124470736271804177426"
+    },
+    {
+     "label": "Oil < $80; R Senate",
+     "ask": 0.012,
+     "fee": 0.0,
+     "token": "106300419210539533370396776085801116445761881700269044062974622616597616715279"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "republicans-win-the-senate-pending-oil-above-or-below-80"
+  },
+  {
+   "venue": "polymarket",
    "event": "Ostium FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.7,
-   "fees": 0.020355440000000002,
-   "net": 0.67964456,
-   "capital": 0.32035544,
-   "roi": 2.1215327574896183,
+   "gross": 0.6970000000000001,
+   "fees": 0.020553190000000002,
+   "net": 0.6764468100000001,
+   "capital": 0.32355319,
+   "roi": 2.0906819370255634,
    "url": "https://polymarket.com/event/ostium-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -194,7 +224,7 @@
     },
     {
      "label": "$50M",
-     "ask": 0.045,
+     "ask": 0.046,
      "fee": 0.07,
      "token": "53992420100435277392856566453062156937173735686022755966612892390150121733037"
     },
@@ -242,7 +272,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.02,
+     "ask": 0.022,
      "fee": 0.07,
      "token": "61384821861020103787623281520700288318589749882375316579339461848964931051637"
     }
@@ -252,43 +282,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Republicans win the Senate pending oil above or below $80?",
-   "n_legs": 2,
-   "gross": 0.677,
-   "fees": 0.0,
-   "net": 0.677,
-   "capital": 0.323,
-   "roi": 2.0959752321981426,
-   "url": "https://polymarket.com/event/republicans-win-the-senate-pending-oil-above-or-below-80",
-   "neg_risk": false,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Oil \u2265 $80; R Senate",
-     "ask": 0.311,
-     "fee": 0.0,
-     "token": "112916747837587429778579971496416941131541765339750156428124470736271804177426"
-    },
-    {
-     "label": "Oil < $80; R Senate",
-     "ask": 0.012,
-     "fee": 0.0,
-     "token": "106300419210539533370396776085801116445761881700269044062974622616597616715279"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "republicans-win-the-senate-pending-oil-above-or-below-80"
-  },
-  {
-   "venue": "polymarket",
    "event": "Who will Xi Jinping purge in 2026?",
    "n_legs": 9,
-   "gross": 0.5569999999999999,
+   "gross": 0.56,
    "fees": 0.0,
-   "net": 0.5569999999999999,
-   "capital": 0.443,
-   "roi": 1.257336343115124,
+   "net": 0.56,
+   "capital": 0.44,
+   "roi": 1.272727272727273,
    "url": "https://polymarket.com/event/who-will-xi-jinping-purge-in-2026",
    "neg_risk": false,
    "coverage": "9/9",
@@ -332,13 +332,13 @@
     },
     {
      "label": "Li Xi",
-     "ask": 0.059,
+     "ask": 0.057,
      "fee": 0.0,
      "token": "43035443907656506704527037200225719721941648954979830565481550335322734318837"
     },
     {
      "label": "Zhang Shengmin",
-     "ask": 0.023,
+     "ask": 0.022,
      "fee": 0.0,
      "token": "22421376825857578232792346245033330746472757945889934894295306402549254009073"
     },
@@ -446,11 +446,11 @@
    "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.47,
-   "fees": 0.03437322,
-   "net": 0.43562678,
-   "capital": 0.56437322,
-   "roi": 0.7718771276922034,
+   "gross": 0.46199999999999997,
+   "fees": 0.034822900000000004,
+   "net": 0.4271771,
+   "capital": 0.5728229,
+   "roi": 0.7457402628281795,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -488,13 +488,13 @@
     },
     {
      "label": "$100M",
-     "ask": 0.09,
+     "ask": 0.1,
      "fee": 0.07,
      "token": "38175379283808228327034811002747441529537312086974479792536732908990840238523"
     },
     {
      "label": "$100M",
-     "ask": 0.082,
+     "ask": 0.08,
      "fee": 0.07,
      "token": "15390584632108771016450588704807221443840679092964759511537241445184106992060"
     },
@@ -560,11 +560,11 @@
    "venue": "polymarket",
    "event": "Who will the OpenAI spy be accused of working for in 2026?",
    "n_legs": 10,
-   "gross": 0.34099999999999997,
+   "gross": 0.33799999999999997,
    "fees": 0.0,
-   "net": 0.34099999999999997,
-   "capital": 0.659,
-   "roi": 0.5174506828528073,
+   "net": 0.33799999999999997,
+   "capital": 0.662,
+   "roi": 0.5105740181268882,
    "url": "https://polymarket.com/event/who-will-the-openai-spy-be-accused-of-working-for-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -614,7 +614,7 @@
     },
     {
      "label": "Meta",
-     "ask": 0.05,
+     "ask": 0.053,
      "fee": 0.0,
      "token": "59350064047730331402439308587260002261246184903300066641664992810295390535693"
     },
@@ -926,11 +926,11 @@
    "venue": "polymarket",
    "event": "Ink FDV above ___ one day after launch?",
    "n_legs": 6,
-   "gross": 0.24,
-   "fees": 0.04432694000000001,
-   "net": 0.19567305999999998,
-   "capital": 0.80432694,
-   "roi": 0.24327552674040728,
+   "gross": 0.29000000000000004,
+   "fees": 0.04198194000000001,
+   "net": 0.24801806000000004,
+   "capital": 0.75198194,
+   "roi": 0.3298191709231741,
    "url": "https://polymarket.com/event/ink-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "6/6",
@@ -944,7 +944,7 @@
     },
     {
      "label": "$500M ",
-     "ask": 0.19,
+     "ask": 0.14,
      "fee": 0.07,
      "token": "111038777903810500955184501816954346973829614534020117303301259782775956752807"
     },
@@ -1124,7 +1124,7 @@
     },
     {
      "label": "Kamala Harris v. JD Vance",
-     "ask": 0.069,
+     "ask": 0.07,
      "fee": 0.07,
      "ticker": "KXPRESMATCHUP-28NOV07-KHARJVAN"
     },
@@ -1166,7 +1166,7 @@
     },
     {
      "label": "James Talarico v. Marco Rubio",
-     "ask": 0.026,
+     "ask": 0.025,
      "fee": 0.07,
      "ticker": "KXPRESMATCHUP-28NOV07-JTALMRUB"
     }
@@ -1310,11 +1310,11 @@
    "venue": "polymarket",
    "event": "Will AOC announce a run for Senate or President before 2028?",
    "n_legs": 3,
-   "gross": 0.05400000000000005,
+   "gross": 0.05700000000000005,
    "fees": 0.0,
-   "net": 0.05400000000000005,
-   "capital": 0.946,
-   "roi": 0.0570824524312897,
+   "net": 0.05700000000000005,
+   "capital": 0.943,
+   "roi": 0.06044538706256634,
    "url": "https://polymarket.com/event/will-aoc-announce-a-run-for-senate-or-president-before-2028",
    "neg_risk": true,
    "coverage": "3/3",
@@ -1322,7 +1322,7 @@
    "legs": [
     {
      "label": "Senate",
-     "ask": 0.228,
+     "ask": 0.227,
      "fee": 0.0,
      "token": "15955335254587623951996931492421635331132397655069036024714198819424672744760"
     },
@@ -1334,7 +1334,7 @@
     },
     {
      "label": "Neither",
-     "ask": 0.118,
+     "ask": 0.116,
      "fee": 0.0,
      "token": "112799546057799297735111252657882906927863187049799433450936336695222238039879"
     }
@@ -1344,61 +1344,61 @@
   },
   {
    "venue": "polymarket",
-   "event": "AutoZone Q1 domestic same store sales growth?",
+   "event": "Maduro Prison Time?",
    "n_legs": 5,
-   "gross": 0.04800000000000004,
+   "gross": 0.026999999999999913,
    "fees": 0.0,
-   "net": 0.04800000000000004,
-   "capital": 0.952,
-   "roi": 0.05042016806722694,
-   "url": "https://polymarket.com/event/autozone-q1-domestic-same-store-sales-growth",
+   "net": 0.026999999999999913,
+   "capital": 0.9730000000000001,
+   "roi": 0.02774922918807802,
+   "url": "https://polymarket.com/event/maduro-prison-time-527",
    "neg_risk": true,
    "coverage": "5/5",
    "tier": 1,
    "legs": [
     {
-     "label": "<0.5%",
-     "ask": 0.122,
+     "label": "No prison time",
+     "ask": 0.55,
      "fee": 0.0,
-     "token": "38187996675983059348568014290451265298312894694030148138263294877524016016082"
+     "token": "93162886704224000274015568397419611555175609473321892979018161300356238927833"
     },
     {
-     "label": "0.5% to 1.5%",
-     "ask": 0.24,
+     "label": "<20",
+     "ask": 0.098,
      "fee": 0.0,
-     "token": "43214488512694280168437638171886640866231666187208877337162212773134007647125"
+     "token": "59384261526964250038574073876197739413338205041441126633976885115034334726761"
     },
     {
-     "label": "1.5% to 2.5%",
-     "ask": 0.33,
+     "label": "20\u201340",
+     "ask": 0.039,
      "fee": 0.0,
-     "token": "47850000765021972455587397005040316442882515627036774287452724076807777883209"
+     "token": "108283860620623908425119670262246172133668802414636801348932715917595242685050"
     },
     {
-     "label": "2.5% to 3.5%",
-     "ask": 0.23,
+     "label": "40\u201360",
+     "ask": 0.066,
      "fee": 0.0,
-     "token": "73557212746647238997718209030628486757838337324444775234183586609289403205024"
+     "token": "42171576084675472526683846881070958756041732401294541140904719706535468943157"
     },
     {
-     "label": "3.5%+",
-     "ask": 0.03,
+     "label": "60+",
+     "ask": 0.22,
      "fee": 0.0,
-     "token": "98353242584484220557320347551384640687073201194842547769488682356696669781403"
+     "token": "101856306106619561547484060337828195810676190048477336006217084007311032600729"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "autozone-q1-domestic-same-store-sales-growth"
+   "event_slug": "maduro-prison-time-527"
   },
   {
    "venue": "polymarket",
    "event": "OpenAI IPO Closing Market Cap",
    "n_legs": 7,
-   "gross": 0.03200000000000003,
+   "gross": 0.026000000000000023,
    "fees": 0.0,
-   "net": 0.03200000000000003,
-   "capital": 0.968,
-   "roi": 0.03305785123966945,
+   "net": 0.026000000000000023,
+   "capital": 0.974,
+   "roi": 0.026694045174538012,
    "url": "https://polymarket.com/event/openai-ipo-closing-market-cap-554",
    "neg_risk": true,
    "coverage": "7/7",
@@ -1424,7 +1424,7 @@
     },
     {
      "label": "1T\u20131.25T",
-     "ask": 0.068,
+     "ask": 0.074,
      "fee": 0.0,
      "token": "52275706593137793319318925926177756496204385627147209958254016456013188034724"
     },
@@ -1436,163 +1436,19 @@
     },
     {
      "label": "1.5T+",
-     "ask": 0.385,
+     "ask": 0.384,
      "fee": 0.0,
      "token": "63793996707762588429087893110546889766612541662978180322747690538629665518484"
     },
     {
      "label": "No IPO by December 31, 2027",
-     "ask": 0.301,
+     "ask": 0.302,
      "fee": 0.0,
      "token": "65635846672230517938250725434521085140827228441803710554357924247471745513898"
     }
    ],
    "kind": "intra-event",
    "event_slug": "openai-ipo-closing-market-cap-554"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Maduro Prison Time?",
-   "n_legs": 5,
-   "gross": 0.027999999999999914,
-   "fees": 0.0,
-   "net": 0.027999999999999914,
-   "capital": 0.9720000000000001,
-   "roi": 0.028806584362139828,
-   "url": "https://polymarket.com/event/maduro-prison-time-527",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "No prison time",
-     "ask": 0.55,
-     "fee": 0.0,
-     "token": "93162886704224000274015568397419611555175609473321892979018161300356238927833"
-    },
-    {
-     "label": "<20",
-     "ask": 0.098,
-     "fee": 0.0,
-     "token": "59384261526964250038574073876197739413338205041441126633976885115034334726761"
-    },
-    {
-     "label": "20\u201340",
-     "ask": 0.038,
-     "fee": 0.0,
-     "token": "108283860620623908425119670262246172133668802414636801348932715917595242685050"
-    },
-    {
-     "label": "40\u201360",
-     "ask": 0.066,
-     "fee": 0.0,
-     "token": "42171576084675472526683846881070958756041732401294541140904719706535468943157"
-    },
-    {
-     "label": "60+",
-     "ask": 0.22,
-     "fee": 0.0,
-     "token": "101856306106619561547484060337828195810676190048477336006217084007311032600729"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "maduro-prison-time-527"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Vertiv (VRT) Q3 adjusted operating margin?",
-   "n_legs": 5,
-   "gross": 0.017999999999999905,
-   "fees": 0.0,
-   "net": 0.017999999999999905,
-   "capital": 0.9820000000000001,
-   "roi": 0.01832993890020357,
-   "url": "https://polymarket.com/event/vertiv-vrt-q3-adjusted-operating-margin-20261008120035000",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<22%",
-     "ask": 0.012,
-     "fee": 0.0,
-     "token": "77351011183105937360931016032450784932769839075595828042004905768263061892952"
-    },
-    {
-     "label": "22% to 24%",
-     "ask": 0.08,
-     "fee": 0.0,
-     "token": "7854691021321767649742446544928865831288656073844926211369978319949508512404"
-    },
-    {
-     "label": "24% to 26%",
-     "ask": 0.52,
-     "fee": 0.0,
-     "token": "23533435104829211195080691230377576425006123595582998197948105613705609416176"
-    },
-    {
-     "label": "26% to 28%",
-     "ask": 0.273,
-     "fee": 0.0,
-     "token": "74701463363622332081104712116723956925365470980969340710320467036996077948584"
-    },
-    {
-     "label": "28%+",
-     "ask": 0.097,
-     "fee": 0.0,
-     "token": "62360390971185882141054268429940740824598992816629267184774695245459235896567"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "vertiv-vrt-q3-adjusted-operating-margin-20261008120035000"
-  },
-  {
-   "venue": "polymarket",
-   "event": "First to list tokenized stocks in the US?",
-   "n_legs": 5,
-   "gross": 0.06300000000000006,
-   "fees": 0.048430690000000005,
-   "net": 0.01456931000000005,
-   "capital": 0.9854306899999999,
-   "roi": 0.014784713067948037,
-   "url": "https://polymarket.com/event/first-to-list-tokenized-stocks-in-the-us",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "Robinhood",
-     "ask": 0.35,
-     "fee": 0.07,
-     "token": "109653052070133709391948868361297569582692534902581687329093320934499501412821"
-    },
-    {
-     "label": "Coinbase",
-     "ask": 0.148,
-     "fee": 0.07,
-     "token": "56288302073825065037856725242268819560054413448160249361062642276351573155270"
-    },
-    {
-     "label": "Kraken",
-     "ask": 0.102,
-     "fee": 0.07,
-     "token": "18160239875298190409497751306394016428740710753681186100653844409625565865196"
-    },
-    {
-     "label": "Gemini",
-     "ask": 0.039,
-     "fee": 0.07,
-     "token": "33332211778937988914176518315777948491276124246002573462531010522223861818632"
-    },
-    {
-     "label": "No listing by December 31, 2027",
-     "ask": 0.298,
-     "fee": 0.07,
-     "token": "66271378305212148404877501008744854544015975943125569848377919578671799091744"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "first-to-list-tokenized-stocks-in-the-us"
   },
   {
    "venue": "polymarket",
@@ -1665,6 +1521,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "GOVPARTYMT-28"
+  },
+  {
+   "venue": "polymarket",
+   "event": "First to list tokenized stocks in the US?",
+   "n_legs": 5,
+   "gross": 0.04700000000000004,
+   "fees": 0.04937863000000001,
+   "net": -0.002378629999999965,
+   "capital": 1.00237863,
+   "roi": -0.002372985545392129,
+   "url": "https://polymarket.com/event/first-to-list-tokenized-stocks-in-the-us",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Robinhood",
+     "ask": 0.35,
+     "fee": 0.07,
+     "token": "109653052070133709391948868361297569582692534902581687329093320934499501412821"
+    },
+    {
+     "label": "Coinbase",
+     "ask": 0.148,
+     "fee": 0.07,
+     "token": "56288302073825065037856725242268819560054413448160249361062642276351573155270"
+    },
+    {
+     "label": "Kraken",
+     "ask": 0.121,
+     "fee": 0.07,
+     "token": "18160239875298190409497751306394016428740710753681186100653844409625565865196"
+    },
+    {
+     "label": "Gemini",
+     "ask": 0.039,
+     "fee": 0.07,
+     "token": "33332211778937988914176518315777948491276124246002573462531010522223861818632"
+    },
+    {
+     "label": "No listing by December 31, 2027",
+     "ask": 0.295,
+     "fee": 0.07,
+     "token": "66271378305212148404877501008744854544015975943125569848377919578671799091744"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "first-to-list-tokenized-stocks-in-the-us"
   },
   {
    "venue": "kalshi",
@@ -1755,36 +1659,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-WA04-26"
-  },
-  {
-   "venue": "kalshi",
-   "event": "NY-13 House winner?",
-   "n_legs": 2,
-   "gross": 0.010000000000000009,
-   "fees": 0.02,
-   "net": -0.009999999999999992,
-   "capital": 1.01,
-   "roi": -0.009900990099009892,
-   "url": "https://kalshi.com/events/KXHOUSERACE-NY13-26",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Darializa Avila Chevalier",
-     "ask": 0.976,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-NY13-26-D"
-    },
-    {
-     "label": "Manual \"Jomo\" Williams",
-     "ask": 0.014,
-     "fee": 0.07,
-     "ticker": "KXHOUSERACE-NY13-26-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXHOUSERACE-NY13-26"
   },
   {
    "venue": "kalshi",
@@ -1971,6 +1845,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "GOVPARTYAR-26"
+  },
+  {
+   "venue": "kalshi",
+   "event": "NY-13 House winner?",
+   "n_legs": 2,
+   "gross": 0.009000000000000008,
+   "fees": 0.02,
+   "net": -0.010999999999999992,
+   "capital": 1.011,
+   "roi": -0.010880316518298707,
+   "url": "https://kalshi.com/events/KXHOUSERACE-NY13-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Darializa Avila Chevalier",
+     "ask": 0.976,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-NY13-26-D"
+    },
+    {
+     "label": "Manual \"Jomo\" Williams",
+     "ask": 0.015,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-NY13-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSERACE-NY13-26"
   },
   {
    "venue": "kalshi",
@@ -2262,6 +2166,36 @@
   },
   {
    "venue": "kalshi",
+   "event": "Wyoming Governor winner?",
+   "n_legs": 2,
+   "gross": 0.0020000000000000018,
+   "fees": 0.02,
+   "net": -0.018,
+   "capital": 1.018,
+   "roi": -0.01768172888015717,
+   "url": "https://kalshi.com/events/GOVPARTYWY-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Kenneth Casner",
+     "ask": 0.019,
+     "fee": 0.07,
+     "ticker": "GOVPARTYWY-26-D"
+    },
+    {
+     "label": "Eric Barlow",
+     "ask": 0.979,
+     "fee": 0.07,
+     "ticker": "GOVPARTYWY-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "GOVPARTYWY-26"
+  },
+  {
+   "venue": "kalshi",
    "event": "California Governor winner? (Person)",
    "n_legs": 2,
    "gross": 0.0020000000000000018,
@@ -2319,6 +2253,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXHOUSERACE-WYAL-26"
+  },
+  {
+   "venue": "kalshi",
+   "event": "Idaho Governor winner?",
+   "n_legs": 2,
+   "gross": 0.0010000000000000009,
+   "fees": 0.02,
+   "net": -0.019,
+   "capital": 1.019,
+   "roi": -0.018645731108930325,
+   "url": "https://kalshi.com/events/GOVPARTYID-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Terri Pickens",
+     "ask": 0.028,
+     "fee": 0.07,
+     "ticker": "GOVPARTYID-26-D"
+    },
+    {
+     "label": "Brad Little",
+     "ask": 0.971,
+     "fee": 0.07,
+     "ticker": "GOVPARTYID-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "GOVPARTYID-26"
   },
   {
    "venue": "kalshi",
@@ -2691,6 +2655,36 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXATTYGENFL-26"
+  },
+  {
+   "venue": "kalshi",
+   "event": "NC-13 House winner?",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.04,
+   "net": -0.029999999999999992,
+   "capital": 1.03,
+   "roi": -0.029126213592233,
+   "url": "https://kalshi.com/events/KXHOUSERACE-NC13-26",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Paul Barringer",
+     "ask": 0.31,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-NC13-26-D"
+    },
+    {
+     "label": "Brad Knott",
+     "ask": 0.68,
+     "fee": 0.07,
+     "ticker": "KXHOUSERACE-NC13-26-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXHOUSERACE-NC13-26"
   },
   {
    "venue": "kalshi",
@@ -3368,11 +3362,11 @@
    "venue": "kalshi",
    "event": "2028 Republican Presidential ticket",
    "n_legs": 25,
-   "gross": 0.06799999999999995,
+   "gross": 0.05799999999999994,
    "fees": 0.26,
-   "net": -0.19200000000000006,
-   "capital": 1.1920000000000002,
-   "roi": -0.16107382550335572,
+   "net": -0.20200000000000007,
+   "capital": 1.202,
+   "roi": -0.16805324459234616,
    "url": "https://kalshi.com/events/KXRTICKET-28NOV07",
    "neg_risk": null,
    "coverage": "25/25",
@@ -3380,7 +3374,7 @@
    "legs": [
     {
      "label": "JD Vance and Marco Rubio",
-     "ask": 0.27,
+     "ask": 0.28,
      "fee": 0.07,
      "ticker": "KXRTICKET-28NOV07-JVANMRUB"
     },
