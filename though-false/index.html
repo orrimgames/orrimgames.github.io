@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Though False - Edward Art</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    background: #0b0b0f;
+    color: #f2f2f7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px calc(32px + env(safe-area-inset-bottom));
+    text-align: center;
+  }
+  .card { width: 100%; max-width: 480px; }
+  .label {
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #8e8e93; margin-bottom: 14px;
+  }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .sub { font-size: 15px; color: #a1a1a6; margin-bottom: 28px; }
+  .player {
+    background: #16161c;
+    border: 1px solid #26262e;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+  }
+  audio { width: 100%; display: block; }
+  .speeds { display: flex; gap: 8px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .speeds button {
+    background: #23232b; color: #d6d6db; border: 1px solid #32323c;
+    border-radius: 999px; padding: 8px 14px; font-size: 14px; font-weight: 600;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .speeds button.active { background: #f2f2f7; color: #0b0b0f; border-color: #f2f2f7; }
+  .links { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  a.btn {
+    display: block; text-decoration: none; font-size: 15px; font-weight: 600;
+    padding: 13px 16px; border-radius: 14px;
+  }
+  a.primary { background: #f2f2f7; color: #0b0b0f; }
+  a.ghost { background: transparent; color: #a1a1a6; border: 1px solid #2c2c34; }
+  .note { font-size: 12.5px; color: #6d6d74; margin-top: 22px; line-height: 1.55; }
+  .note a { color: #8e8e93; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="label">Lecture &middot; 23 min &middot; Volume boosted</div>
+    <h1>Though False</h1>
+    <div class="sub">Edward Art &middot; Neville Goddard inspired</div>
+    <div class="player">
+      <audio id="a" controls preload="metadata" src="though-false-edward-art-louder.mp3"></audio>
+      <div class="speeds" id="speeds">
+        <button data-s="0.75">0.75&times;</button>
+        <button data-s="1" class="active">1&times;</button>
+        <button data-s="1.25">1.25&times;</button>
+        <button data-s="1.5">1.5&times;</button>
+        <button data-s="2">2&times;</button>
+      </div>
+    </div>
+    <div class="links">
+      <a class="btn primary" href="though-false-edward-art-louder.mp3" download="Though False - Edward Art (louder).mp3">Download MP3</a>
+      <a class="btn ghost" href="https://www.youtube.com/watch?v=wzIcEORen-4" rel="noopener">Original source on YouTube</a>
+    </div>
+    <div class="note">
+      Volume-boosted copy of the original lecture for personal listening. All rights remain with the creator,
+      <a href="https://www.youtube.com/watch?v=wzIcEORen-4" rel="noopener">Edward Art on YouTube</a>.
+    </div>
+  </div>
+<script>
+  var a = document.getElementById('a');
+  document.getElementById('speeds').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    a.playbackRate = parseFloat(b.dataset.s);
+    this.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+  });
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: 'Though False',
+      artist: 'Edward Art',
+      album: 'Neville Goddard inspired lecture'
+    });
+  }
+</script>
+</body>
+</html>
