@@ -627,11 +627,30 @@ async function loadData() {
     let d;
     if (window.__EMBED_DATA) { d = window.__EMBED_DATA; }
     else {
-      const r = await fetch("data.json?cb=" + Date.now(), { cache: "no-store" });
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      d = await r.json();
+      // Scans commit immediately; the shared Pages artifact can deploy slowly.
+      // Compare both public copies so a delayed deployment cannot freeze the board.
+      const sources = [
+        "data.json",
+        "https://raw.githubusercontent.com/orrimgames/orrimgames.github.io/main/arb/data.json"
+      ];
+      const snapshots = await Promise.all(sources.map(async url => {
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 12000);
+        try {
+          const r = await fetch(url + "?cb=" + Date.now(), {
+            cache: "no-store", signal: ctl.signal
+          });
+          if (!r.ok) return null;
+          const snapshot = await r.json();
+          return snapshot && snapshot.meta && Number.isFinite(snapshot.meta.ts)
+            && snapshot.meta.schema >= 2 ? snapshot : null;
+        } catch (_) { return null; }
+        finally { clearTimeout(timer); }
+      }));
+      d = snapshots.filter(Boolean).sort((a, b) => b.meta.ts - a.meta.ts)[0];
+      if (!d) throw new Error("No valid public scan snapshot is available");
     }
-    if (d.meta && d.meta.ts !== S.dataTs) {
+    if (d.meta && (!S.dataTs || d.meta.ts > S.dataTs)) {
       S.dataTs = d.meta.ts; S.meta = d.meta;
       S.rows = buildRows(d);
       if (!d.meta.schema || d.meta.schema < 2)
