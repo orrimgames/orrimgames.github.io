@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-08T20:10:43Z",
-  "ts": 1794168643.3321416,
-  "scan_seconds": 13.8,
+  "generated_at": "2026-11-08T20:15:39Z",
+  "ts": 1794168939.9754224,
+  "scan_seconds": 11.1,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 259 binary + 1591 multi | kalshi: 5000 events -> 70 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 252 binary + 1594 multi | kalshi: 5000 events -> 70 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -290,11 +290,11 @@
    "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.611,
-   "fees": 0.025710930000000003,
-   "net": 0.58528907,
-   "capital": 0.41471093000000003,
-   "roi": 1.411318168055035,
+   "gross": 0.61,
+   "fees": 0.025777500000000002,
+   "net": 0.5842225,
+   "capital": 0.4157775,
+   "roi": 1.4051325528678198,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -314,7 +314,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.024,
+     "ask": 0.025,
      "fee": 0.07,
      "token": "10354824396290237452261900772542438328647475212250295212595180489652143431127"
     },
@@ -356,11 +356,11 @@
    "venue": "polymarket",
    "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
    "n_legs": 4,
-   "gross": 0.5700000000000001,
-   "fees": 0.01473968,
-   "net": 0.55526032,
-   "capital": 0.44473967999999997,
-   "roi": 1.248506362193722,
+   "gross": 0.588,
+   "fees": 0.0140528,
+   "net": 0.5739472,
+   "capital": 0.4260528,
+   "roi": 1.34712692886891,
    "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
    "neg_risk": false,
    "coverage": "4/4",
@@ -368,7 +368,7 @@
    "legs": [
     {
      "label": "Top 1",
-     "ask": 0.032,
+     "ask": 0.014,
      "fee": 0.04,
      "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
     },
@@ -1578,6 +1578,72 @@
   },
   {
    "venue": "polymarket",
+   "event": "What will Anthropic's IPO valuation be?",
+   "n_legs": 8,
+   "gross": 0.05700000000000005,
+   "fees": 0.02725196,
+   "net": 0.029748040000000052,
+   "capital": 0.9702519599999999,
+   "roi": 0.03066011842944389,
+   "url": "https://polymarket.com/event/what-will-anthropics-ipo-valuation-be",
+   "neg_risk": true,
+   "coverage": "8/8",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<$1.25T",
+     "ask": 0.119,
+     "fee": 0.04,
+     "token": "32822009899301597519556112409312896586275486474887170531648895207957417589059"
+    },
+    {
+     "label": "$1.25\u2013$1.50T",
+     "ask": 0.439,
+     "fee": 0.04,
+     "token": "86351833530626841967218167932935147667187390410230538287611286227749100750125"
+    },
+    {
+     "label": "$1.50\u2013$1.75T",
+     "ask": 0.219,
+     "fee": 0.04,
+     "token": "93673921410512921454234219359882494655237117062546031709040981679545033941614"
+    },
+    {
+     "label": "$1.75\u2013$2.00T",
+     "ask": 0.061,
+     "fee": 0.04,
+     "token": "71236115189596359084048814224637226298326910847425963075159517381094575168792"
+    },
+    {
+     "label": "$2.00\u2013$2.25T",
+     "ask": 0.036,
+     "fee": 0.04,
+     "token": "94182141136213606663787621887560606302326381615179908246805677524783800680726"
+    },
+    {
+     "label": "$2.25\u2013$2.50T",
+     "ask": 0.03,
+     "fee": 0.04,
+     "token": "36184746676110384223883531689556969398835854885634877593856870443259671059761"
+    },
+    {
+     "label": "$2.50T+",
+     "ask": 0.01,
+     "fee": 0.04,
+     "token": "74417679919851085129574901164944021712392668863610689400583638442888187013059"
+    },
+    {
+     "label": "No IPO by December 31, 2027",
+     "ask": 0.029,
+     "fee": 0.04,
+     "token": "51297565039095581545082423372078316949948473823410304032886316688246765827169"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "what-will-anthropics-ipo-valuation-be"
+  },
+  {
+   "venue": "polymarket",
    "event": "Fed Decision in April?",
    "n_legs": 5,
    "gross": 0.04500000000000004,
@@ -1623,72 +1689,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "fed-decision-in-april-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "What will Anthropic's IPO valuation be?",
-   "n_legs": 8,
-   "gross": 0.04200000000000004,
-   "fees": 0.027638,
-   "net": 0.014362000000000038,
-   "capital": 0.985638,
-   "roi": 0.014571272617330133,
-   "url": "https://polymarket.com/event/what-will-anthropics-ipo-valuation-be",
-   "neg_risk": true,
-   "coverage": "8/8",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<$1.25T",
-     "ask": 0.141,
-     "fee": 0.04,
-     "token": "32822009899301597519556112409312896586275486474887170531648895207957417589059"
-    },
-    {
-     "label": "$1.25\u2013$1.50T",
-     "ask": 0.439,
-     "fee": 0.04,
-     "token": "86351833530626841967218167932935147667187390410230538287611286227749100750125"
-    },
-    {
-     "label": "$1.50\u2013$1.75T",
-     "ask": 0.219,
-     "fee": 0.04,
-     "token": "93673921410512921454234219359882494655237117062546031709040981679545033941614"
-    },
-    {
-     "label": "$1.75\u2013$2.00T",
-     "ask": 0.061,
-     "fee": 0.04,
-     "token": "71236115189596359084048814224637226298326910847425963075159517381094575168792"
-    },
-    {
-     "label": "$2.00\u2013$2.25T",
-     "ask": 0.036,
-     "fee": 0.04,
-     "token": "94182141136213606663787621887560606302326381615179908246805677524783800680726"
-    },
-    {
-     "label": "$2.25\u2013$2.50T",
-     "ask": 0.023,
-     "fee": 0.04,
-     "token": "36184746676110384223883531689556969398835854885634877593856870443259671059761"
-    },
-    {
-     "label": "$2.50T+",
-     "ask": 0.01,
-     "fee": 0.04,
-     "token": "74417679919851085129574901164944021712392668863610689400583638442888187013059"
-    },
-    {
-     "label": "No IPO by December 31, 2027",
-     "ask": 0.029,
-     "fee": 0.04,
-     "token": "51297565039095581545082423372078316949948473823410304032886316688246765827169"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-will-anthropics-ipo-valuation-be"
   },
   {
    "venue": "kalshi",
