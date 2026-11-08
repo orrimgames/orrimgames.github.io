@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-07T23:36:56Z",
-  "ts": 1794094616.676378,
-  "scan_seconds": 21.9,
+  "generated_at": "2026-11-08T02:42:22Z",
+  "ts": 1794105742.2947247,
+  "scan_seconds": 13.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 227 binary + 1636 multi | kalshi: 5000 events -> 70 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 240 binary + 1675 multi | kalshi: 5000 events -> 70 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -66,13 +66,55 @@
   },
   {
    "venue": "polymarket",
+   "event": "Makina FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.8220000000000001,
+   "fees": 0.011816140000000003,
+   "net": 0.8101838600000001,
+   "capital": 0.18981614,
+   "roi": 4.268255902790986,
+   "url": "https://polymarket.com/event/makina-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$80M",
+     "ask": 0.067,
+     "fee": 0.07,
+     "token": "98219980679999429916226639686761979665421897797777040099602713686824802810254"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.056,
+     "fee": 0.07,
+     "token": "96249263453107233115352955844803350309071456313480667272642789710792596579437"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.033,
+     "fee": 0.07,
+     "token": "5002552579727082234417543840751231363710972961715613982747934893417670200181"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.022,
+     "fee": 0.07,
+     "token": "94041054826948094458516807909608237662754077816958616769196799633242970299956"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "makina-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "StandX FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.813,
-   "fees": 0.012839610000000001,
-   "net": 0.8001603899999999,
-   "capital": 0.19983961,
-   "roi": 4.004012968199848,
+   "gross": 0.8089999999999999,
+   "fees": 0.01311485,
+   "net": 0.7958851499999999,
+   "capital": 0.20411485000000001,
+   "roi": 3.8992025812918554,
    "url": "https://polymarket.com/event/standx-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -128,7 +170,7 @@
     },
     {
      "label": "$10B",
-     "ask": 0.009,
+     "ask": 0.015,
      "fee": 0.07,
      "token": "95534434999296497184506608723915109703063669617513491421335057715681127323952"
     },
@@ -140,7 +182,7 @@
     },
     {
      "label": "$200M",
-     "ask": 0.02,
+     "ask": 0.018,
      "fee": 0.07,
      "token": "112680133727341712048625489981542622175575331217528856115945351368430513568040"
     }
@@ -200,11 +242,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.6679999999999999,
-   "fees": 0.021751100000000002,
-   "net": 0.6462488999999999,
-   "capital": 0.35375110000000004,
-   "roi": 1.8268463334813654,
+   "gross": 0.665,
+   "fees": 0.021932750000000004,
+   "net": 0.64306725,
+   "capital": 0.35693275,
+   "roi": 1.8016482096417321,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -224,7 +266,7 @@
     },
     {
      "label": "$50M",
-     "ask": 0.066,
+     "ask": 0.069,
      "fee": 0.07,
      "token": "69626151402846862779475550621233927524301107136544704332168040527442555586381"
     },
@@ -318,55 +360,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
-   "n_legs": 4,
-   "gross": 0.603,
-   "fees": 0.01370204,
-   "net": 0.58929796,
-   "capital": 0.41070204000000005,
-   "roi": 1.4348552054915529,
-   "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Top 1",
-     "ask": 0.032,
-     "fee": 0.04,
-     "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
-    },
-    {
-     "label": "Top 5",
-     "ask": 0.045,
-     "fee": 0.04,
-     "token": "33680702576319008137314059783220111325425488334688123922436101736117273079350"
-    },
-    {
-     "label": "Top 10",
-     "ask": 0.15,
-     "fee": 0.04,
-     "token": "21674386118144906625932360298343138335934756246570865891559879402792916064320"
-    },
-    {
-     "label": "Top 20",
-     "ask": 0.17,
-     "fee": 0.04,
-     "token": "111802433528104687939590679499346938177706354550385736398376602674632922844243"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "gpt-astra-6pt1-text-arena-rank-debut-20261027"
-  },
-  {
-   "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.606,
-   "fees": 0.026074580000000003,
-   "net": 0.57992542,
-   "capital": 0.42007458000000003,
-   "roi": 1.380529666898673,
+   "gross": 0.611,
+   "fees": 0.025778130000000003,
+   "net": 0.58522187,
+   "capital": 0.41477813,
+   "roi": 1.4109274999624497,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -410,13 +410,13 @@
     },
     {
      "label": "$100M",
-     "ask": 0.051,
+     "ask": 0.056,
      "fee": 0.07,
      "token": "15390584632108771016450588704807221443840679092964759511537241445184106992060"
     },
     {
      "label": "$300M",
-     "ask": 0.07,
+     "ask": 0.06,
      "fee": 0.07,
      "token": "46636592743319383924405256772168587714503779223013840936712367884124732324660"
     }
@@ -428,11 +428,11 @@
    "venue": "polymarket",
    "event": "Democratic 2028 presidential odds hit __ by December 31?",
    "n_legs": 4,
-   "gross": 0.5700000000000001,
-   "fees": 0.014652000000000002,
-   "net": 0.5553480000000001,
-   "capital": 0.444652,
-   "roi": 1.2489497404712002,
+   "gross": 0.569,
+   "fees": 0.014690360000000001,
+   "net": 0.5543096399999999,
+   "capital": 0.44569036,
+   "roi": 1.243710184801843,
    "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
    "neg_risk": false,
    "coverage": "4/4",
@@ -440,7 +440,7 @@
    "legs": [
     {
      "label": "\u2191 75%",
-     "ask": 0.02,
+     "ask": 0.021,
      "fee": 0.04,
      "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
     },
@@ -465,6 +465,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "democratic-2028-presidential-odds-hit-by-december-31"
+  },
+  {
+   "venue": "polymarket",
+   "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
+   "n_legs": 4,
+   "gross": 0.5609999999999999,
+   "fees": 0.014715160000000001,
+   "net": 0.54628484,
+   "capital": 0.45371516,
+   "roi": 1.2040259796476713,
+   "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Top 1",
+     "ask": 0.04,
+     "fee": 0.04,
+     "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
+    },
+    {
+     "label": "Top 5",
+     "ask": 0.039,
+     "fee": 0.04,
+     "token": "33680702576319008137314059783220111325425488334688123922436101736117273079350"
+    },
+    {
+     "label": "Top 10",
+     "ask": 0.14,
+     "fee": 0.04,
+     "token": "21674386118144906625932360298343138335934756246570865891559879402792916064320"
+    },
+    {
+     "label": "Top 20",
+     "ask": 0.22,
+     "fee": 0.04,
+     "token": "111802433528104687939590679499346938177706354550385736398376602674632922844243"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "gpt-astra-6pt1-text-arena-rank-debut-20261027"
   },
   {
    "venue": "polymarket",
@@ -582,13 +624,127 @@
   },
   {
    "venue": "polymarket",
+   "event": "Theo FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.5549999999999999,
+   "fees": 0.025686290000000004,
+   "net": 0.5293137099999999,
+   "capital": 0.47068629,
+   "roi": 1.12455731395958,
+   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$100M",
+     "ask": 0.21,
+     "fee": 0.07,
+     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.18,
+     "fee": 0.07,
+     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
+    },
+    {
+     "label": "$700M",
+     "ask": 0.023,
+     "fee": 0.07,
+     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.032,
+     "fee": 0.07,
+     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "theo-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Pacifica FDV above ___ one day after launch?",
+   "n_legs": 9,
+   "gross": 0.531,
+   "fees": 0.030260930000000002,
+   "net": 0.5007390700000001,
+   "capital": 0.49926093,
+   "roi": 1.0029606562644509,
+   "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$50M",
+     "ask": 0.12,
+     "fee": 0.07,
+     "token": "16795957534988501215235347348644372320002983627408040830654583226326934050970"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.095,
+     "fee": 0.07,
+     "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.087,
+     "fee": 0.07,
+     "token": "115285402015517899188745869878711529694328803279592884118332821477257604660390"
+    },
+    {
+     "label": "$500M",
+     "ask": 0.032,
+     "fee": 0.07,
+     "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
+    },
+    {
+     "label": "$800M",
+     "ask": 0.042,
+     "fee": 0.07,
+     "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.009,
+     "fee": 0.07,
+     "token": "67849147834977248117510384775411225824950308388140345110360581181039651169382"
+    },
+    {
+     "label": "$2B",
+     "ask": 0.019,
+     "fee": 0.07,
+     "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
+    },
+    {
+     "label": "$3B",
+     "ask": 0.019,
+     "fee": 0.07,
+     "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.046,
+     "fee": 0.07,
+     "token": "29038954839483761326156091612813755283483527889927269685441096217717416698382"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "pacifica-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "Who will the OpenAI spy be accused of working for in 2026?",
    "n_legs": 10,
-   "gross": 0.504,
-   "fees": 0.0180772,
-   "net": 0.4859228,
-   "capital": 0.5140772,
-   "roi": 0.9452331284095074,
+   "gross": 0.505,
+   "fees": 0.0180398,
+   "net": 0.4869602,
+   "capital": 0.5130398,
+   "roi": 0.9491665169057059,
    "url": "https://polymarket.com/event/who-will-the-openai-spy-be-accused-of-working-for-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -638,7 +794,7 @@
     },
     {
      "label": "Meta",
-     "ask": 0.033,
+     "ask": 0.032,
      "fee": 0.04,
      "token": "59350064047730331402439308587260002261246184903300066641664992810295390535693"
     },
@@ -660,85 +816,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Pacifica FDV above ___ one day after launch?",
-   "n_legs": 9,
-   "gross": 0.489,
-   "fees": 0.03269553,
-   "net": 0.45630446999999996,
-   "capital": 0.54369553,
-   "roi": 0.8392647075836727,
-   "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$50M",
-     "ask": 0.13,
-     "fee": 0.07,
-     "token": "16795957534988501215235347348644372320002983627408040830654583226326934050970"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.105,
-     "fee": 0.07,
-     "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.098,
-     "fee": 0.07,
-     "token": "115285402015517899188745869878711529694328803279592884118332821477257604660390"
-    },
-    {
-     "label": "$500M",
-     "ask": 0.032,
-     "fee": 0.07,
-     "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
-    },
-    {
-     "label": "$800M",
-     "ask": 0.043,
-     "fee": 0.07,
-     "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.009,
-     "fee": 0.07,
-     "token": "67849147834977248117510384775411225824950308388140345110360581181039651169382"
-    },
-    {
-     "label": "$2B",
-     "ask": 0.026,
-     "fee": 0.07,
-     "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
-    },
-    {
-     "label": "$3B",
-     "ask": 0.019,
-     "fee": 0.07,
-     "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.049,
-     "fee": 0.07,
-     "token": "29038954839483761326156091612813755283483527889927269685441096217717416698382"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "pacifica-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
    "event": "What will be in a US-Iran deal in 2026?",
    "n_legs": 6,
-   "gross": 0.39,
+   "gross": 0.42000000000000004,
    "fees": 0.0,
-   "net": 0.39,
-   "capital": 0.61,
-   "roi": 0.639344262295082,
+   "net": 0.42000000000000004,
+   "capital": 0.58,
+   "roi": 0.7241379310344829,
    "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
    "neg_risk": false,
    "coverage": "6/6",
@@ -752,7 +836,7 @@
     },
     {
      "label": "Uranium Enrichment % Cap (1+ Year)",
-     "ask": 0.12,
+     "ask": 0.08,
      "fee": 0.0,
      "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
     },
@@ -770,7 +854,7 @@
     },
     {
      "label": "Dilution of Iran's Uranium",
-     "ask": 0.09,
+     "ask": 0.1,
      "fee": 0.0,
      "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
     },
@@ -788,11 +872,11 @@
    "venue": "polymarket",
    "event": "Which Senators will vote for the Clarity Act?",
    "n_legs": 15,
-   "gross": 0.40700000000000003,
-   "fees": 0.02256116,
-   "net": 0.38443884,
-   "capital": 0.6155611599999999,
-   "roi": 0.6245339455790226,
+   "gross": 0.41300000000000003,
+   "fees": 0.022367,
+   "net": 0.390633,
+   "capital": 0.609367,
+   "roi": 0.6410471850297111,
    "url": "https://polymarket.com/event/which-senators-will-vote-for-the-clarity-act-20260729190926658",
    "neg_risk": false,
    "coverage": "15/15",
@@ -800,7 +884,7 @@
    "legs": [
     {
      "label": "Mike Lee",
-     "ask": 0.054,
+     "ask": 0.056,
      "fee": 0.04,
      "token": "8427677425042164738091616144906281888706937615355928745941831538590155311590"
     },
@@ -812,7 +896,7 @@
     },
     {
      "label": "Mark Warner",
-     "ask": 0.075,
+     "ask": 0.068,
      "fee": 0.04,
      "token": "10202827714935282497859227158003474761289298950591881815816580710037498119308"
     },
@@ -872,13 +956,13 @@
     },
     {
      "label": "Thom Tillis",
-     "ask": 0.013,
+     "ask": 0.017,
      "fee": 0.04,
      "token": "47381756084584906715622232685694492725441920068317174249551177011034316167026"
     },
     {
      "label": "Jacky Rosen",
-     "ask": 0.051,
+     "ask": 0.046,
      "fee": 0.04,
      "token": "57540756019284857834153071382254466362231869030897509163557483578201984493181"
     },
@@ -891,6 +975,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "which-senators-will-vote-for-the-clarity-act-20260729190926658"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Next Google Gemini Pro Model: Humanity\u2019s Last Exam Debut?",
+   "n_legs": 4,
+   "gross": 0.401,
+   "fees": 0.02036396,
+   "net": 0.38063604,
+   "capital": 0.6193639599999999,
+   "roi": 0.6145595555802118,
+   "url": "https://polymarket.com/event/next-google-gemini-pro-model-humanitys-last-exam-debut-20260729192434644",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "40%+",
+     "ask": 0.149,
+     "fee": 0.04,
+     "token": "61626396936135534387255598822072032822427356046085661886191264067533617653935"
+    },
+    {
+     "label": "45%+",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "14468150072305860151439241177850686113656123773934349453504221456985624518313"
+    },
+    {
+     "label": "50%+",
+     "ask": 0.16,
+     "fee": 0.04,
+     "token": "36042285175428118442413846936500286692318665758313455062852706903451381194279"
+    },
+    {
+     "label": "55%+",
+     "ask": 0.14,
+     "fee": 0.04,
+     "token": "1689974301539039412335036437701475842823357805994662591328627846164870437141"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "next-google-gemini-pro-model-humanitys-last-exam-debut-20260729192434644"
   },
   {
    "venue": "polymarket",
@@ -932,11 +1058,11 @@
    "venue": "polymarket",
    "event": "Cambria listed on ___ within 30 days of TGE?",
    "n_legs": 6,
-   "gross": 0.33999999999999997,
-   "fees": 0.03393502,
-   "net": 0.30606498,
-   "capital": 0.6939350200000001,
-   "roi": 0.44105711799931924,
+   "gross": 0.33799999999999997,
+   "fees": 0.03406746,
+   "net": 0.30393254,
+   "capital": 0.6960674600000001,
+   "roi": 0.4366423622216156,
    "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
    "neg_risk": false,
    "coverage": "6/6",
@@ -974,7 +1100,7 @@
     },
     {
      "label": "Upbit",
-     "ask": 0.026,
+     "ask": 0.028,
      "fee": 0.07,
      "token": "36493261045648608661956884118224751942262111265334077702764616270365221342226"
     }
@@ -984,61 +1110,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
-   "n_legs": 5,
-   "gross": 0.28,
-   "fees": 0.0,
-   "net": 0.28,
-   "capital": 0.72,
-   "roi": 0.38888888888888895,
-   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "10+",
-     "ask": 0.26,
-     "fee": 0.0,
-     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
-    },
-    {
-     "label": "20+",
-     "ask": 0.19,
-     "fee": 0.0,
-     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
-    },
-    {
-     "label": "30+",
-     "ask": 0.16,
-     "fee": 0.0,
-     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
-    },
-    {
-     "label": "40+",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
-    },
-    {
-     "label": "50+",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
-  },
-  {
-   "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.268,
+   "gross": 0.273,
    "fees": 0.0,
-   "net": 0.268,
-   "capital": 0.732,
-   "roi": 0.366120218579235,
+   "net": 0.273,
+   "capital": 0.727,
+   "roi": 0.375515818431912,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -1046,7 +1124,7 @@
    "legs": [
     {
      "label": "Pakistan",
-     "ask": 0.055,
+     "ask": 0.05,
      "fee": 0.0,
      "token": "27878529186547641092775518716527925251139384445741239955147040030967757130050"
     },
@@ -1121,6 +1199,54 @@
    "event_slug": "which-country-will-join-abraham-accords-before-2027"
   },
   {
+   "venue": "polymarket",
+   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
+   "n_legs": 5,
+   "gross": 0.26,
+   "fees": 0.0,
+   "net": 0.26,
+   "capital": 0.74,
+   "roi": 0.35135135135135137,
+   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "10+",
+     "ask": 0.31,
+     "fee": 0.0,
+     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
+    },
+    {
+     "label": "20+",
+     "ask": 0.19,
+     "fee": 0.0,
+     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
+    },
+    {
+     "label": "30+",
+     "ask": 0.14,
+     "fee": 0.0,
+     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
+    },
+    {
+     "label": "40+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
+    },
+    {
+     "label": "50+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
+  },
+  {
    "venue": "kalshi",
    "event": "Who will be the next COO of Goldman Sachs?",
    "n_legs": 5,
@@ -1170,45 +1296,39 @@
   },
   {
    "venue": "polymarket",
-   "event": "Next US president's age at inauguration?",
-   "n_legs": 4,
-   "gross": 0.25,
-   "fees": 0.023556,
-   "net": 0.226444,
-   "capital": 0.773556,
-   "roi": 0.2927312308352595,
-   "url": "https://polymarket.com/event/next-us-president-age-at-inauguration",
+   "event": "What floor price will Milady hit before 2027?",
+   "n_legs": 3,
+   "gross": 0.28,
+   "fees": 0.03556,
+   "net": 0.24444000000000002,
+   "capital": 0.75556,
+   "roi": 0.32352162634337445,
+   "url": "https://polymarket.com/event/what-floor-price-will-milady-hit-before-2027",
    "neg_risk": false,
-   "coverage": "4/4",
+   "coverage": "3/3",
    "tier": 2,
    "legs": [
     {
-     "label": "50+",
-     "ask": 0.27,
-     "fee": 0.04,
-     "token": "59063151889329964096936564033491742541853158190439612199057294089981853684452"
-    },
-    {
-     "label": "60+",
+     "label": "\u2191 6 ETH",
      "ask": 0.24,
-     "fee": 0.04,
-     "token": "10761534016767655250632229685998760715613519937641316573178234113512140649295"
+     "fee": 0.07,
+     "token": "33797703186094915393347834350048690918021177376953631244056261497011463129764"
     },
     {
-     "label": "70+",
-     "ask": 0.15,
-     "fee": 0.04,
-     "token": "54169649734355989730796348256451225869803614156203395360568658507010789542992"
+     "label": "\u2191 4 ETH",
+     "ask": 0.1,
+     "fee": 0.07,
+     "token": "18373389362559663881938858331742866620554590854957022609311627299881075359286"
     },
     {
-     "label": "80+",
-     "ask": 0.09,
-     "fee": 0.04,
-     "token": "78898191541262477113342717768970815067482657719909295265810860991261410701652"
+     "label": "\u2191 2 ETH",
+     "ask": 0.38,
+     "fee": 0.07,
+     "token": "113522709309071852145981423547772699625542500496225148793740249122295241440568"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "next-us-president-age-at-inauguration"
+   "event_slug": "what-floor-price-will-milady-hit-before-2027"
   },
   {
    "venue": "polymarket",
@@ -1254,49 +1374,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "What floor price will Milady hit before 2027?",
-   "n_legs": 3,
-   "gross": 0.26,
-   "fees": 0.03626,
-   "net": 0.22374,
-   "capital": 0.77626,
-   "roi": 0.28822817097364284,
-   "url": "https://polymarket.com/event/what-floor-price-will-milady-hit-before-2027",
-   "neg_risk": false,
-   "coverage": "3/3",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "\u2191 6 ETH",
-     "ask": 0.26,
-     "fee": 0.07,
-     "token": "33797703186094915393347834350048690918021177376953631244056261497011463129764"
-    },
-    {
-     "label": "\u2191 4 ETH",
-     "ask": 0.1,
-     "fee": 0.07,
-     "token": "18373389362559663881938858331742866620554590854957022609311627299881075359286"
-    },
-    {
-     "label": "\u2191 2 ETH",
-     "ask": 0.38,
-     "fee": 0.07,
-     "token": "113522709309071852145981423547772699625542500496225148793740249122295241440568"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-floor-price-will-milady-hit-before-2027"
-  },
-  {
-   "venue": "polymarket",
    "event": "Next Google Gemini Pro Model: Arena Debut?",
    "n_legs": 6,
-   "gross": 0.21999999999999997,
-   "fees": 0.02713352,
-   "net": 0.19286647999999998,
-   "capital": 0.80713352,
-   "roi": 0.23895238547396713,
+   "gross": 0.23299999999999998,
+   "fees": 0.026746520000000003,
+   "net": 0.20625348,
+   "capital": 0.79374652,
+   "roi": 0.25984804317630267,
    "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
    "neg_risk": false,
    "coverage": "6/6",
@@ -1304,13 +1388,13 @@
    "legs": [
     {
      "label": "1480+",
-     "ask": 0.131,
+     "ask": 0.12,
      "fee": 0.04,
      "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
     },
     {
      "label": "1490+",
-     "ask": 0.135,
+     "ask": 0.131,
      "fee": 0.04,
      "token": "5717213777158991755851161671784735239176114853982045661511655513077951811855"
     },
@@ -1322,7 +1406,7 @@
     },
     {
      "label": "1510+",
-     "ask": 0.124,
+     "ask": 0.126,
      "fee": 0.04,
      "token": "3253266438640589916367220273721046444105089880635011272452961047056509745530"
     },
@@ -1344,55 +1428,55 @@
   },
   {
    "venue": "polymarket",
-   "event": "Pro Football: Lamar Jackson 2026-27 Regular Season Rushing Touchdowns",
+   "event": "Next US president's age at inauguration?",
    "n_legs": 4,
-   "gross": 0.19599999999999995,
-   "fees": 0.030497200000000002,
-   "net": 0.16550279999999995,
-   "capital": 0.8344972,
-   "roi": 0.19832636945935822,
-   "url": "https://polymarket.com/event/lamar-jackson-rushing-touchdowns-2026-27",
+   "gross": 0.20999999999999996,
+   "fees": 0.023988,
+   "net": 0.18601199999999996,
+   "capital": 0.813988,
+   "roi": 0.22851933935144,
+   "url": "https://polymarket.com/event/next-us-president-age-at-inauguration",
    "neg_risk": false,
    "coverage": "4/4",
    "tier": 2,
    "legs": [
     {
-     "label": "1.5+ rushing TDs",
-     "ask": 0.334,
-     "fee": 0.05,
-     "token": "88769796761578215062939459056540637920708260558574455425621437224559776811315"
+     "label": "50+",
+     "ask": 0.34,
+     "fee": 0.04,
+     "token": "59063151889329964096936564033491742541853158190439612199057294089981853684452"
     },
     {
-     "label": "3.5+ rushing TDs",
-     "ask": 0.19,
-     "fee": 0.05,
-     "token": "20679532732122557922870166303240029911938343892851900599175219304821402333808"
+     "label": "60+",
+     "ask": 0.21,
+     "fee": 0.04,
+     "token": "10761534016767655250632229685998760715613519937641316573178234113512140649295"
     },
     {
-     "label": "5.5+ rushing TDs",
-     "ask": 0.2,
-     "fee": 0.05,
-     "token": "2423717103900449293381833512300992632897220167631181598204571115941686213973"
+     "label": "70+",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "54169649734355989730796348256451225869803614156203395360568658507010789542992"
     },
     {
-     "label": "7.5+ rushing TDs",
-     "ask": 0.08,
-     "fee": 0.05,
-     "token": "78445688860494799057630545187223492593083546369847100613125204022712569466133"
+     "label": "80+",
+     "ask": 0.09,
+     "fee": 0.04,
+     "token": "78898191541262477113342717768970815067482657719909295265810860991261410701652"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "lamar-jackson-rushing-touchdowns-2026-27"
+   "event_slug": "next-us-president-age-at-inauguration"
   },
   {
    "venue": "polymarket",
    "event": "Kimi K3.1 Pro: Text Arena Debut?",
    "n_legs": 5,
-   "gross": 0.14900000000000002,
-   "fees": 0.02346268,
-   "net": 0.12553732,
-   "capital": 0.8744626799999999,
-   "roi": 0.14355937980109112,
+   "gross": 0.20899999999999996,
+   "fees": 0.02336668,
+   "net": 0.18563331999999996,
+   "capital": 0.81436668,
+   "roi": 0.22794807862227365,
    "url": "https://polymarket.com/event/kimi-k3pt1-pro-text-arena-debut-20261023",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1400,13 +1484,13 @@
    "legs": [
     {
      "label": "1470+",
-     "ask": 0.47,
+     "ask": 0.4,
      "fee": 0.04,
      "token": "97294580578297081612815623925218892457727764538208610622323961183259091029628"
     },
     {
      "label": "1480+",
-     "ask": 0.16,
+     "ask": 0.17,
      "fee": 0.04,
      "token": "75869688121177780989660444832644522814279062694297725101282347226855510939519"
     },
@@ -1433,14 +1517,56 @@
    "event_slug": "kimi-k3pt1-pro-text-arena-debut-20261023"
   },
   {
+   "venue": "polymarket",
+   "event": "Pro Football: Lamar Jackson 2026-27 Regular Season Rushing Touchdowns",
+   "n_legs": 4,
+   "gross": 0.20699999999999996,
+   "fees": 0.030165550000000006,
+   "net": 0.17683444999999995,
+   "capital": 0.82316555,
+   "roi": 0.21482246189724527,
+   "url": "https://polymarket.com/event/lamar-jackson-rushing-touchdowns-2026-27",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "1.5+ rushing TDs",
+     "ask": 0.333,
+     "fee": 0.05,
+     "token": "88769796761578215062939459056540637920708260558574455425621437224559776811315"
+    },
+    {
+     "label": "3.5+ rushing TDs",
+     "ask": 0.18,
+     "fee": 0.05,
+     "token": "20679532732122557922870166303240029911938343892851900599175219304821402333808"
+    },
+    {
+     "label": "5.5+ rushing TDs",
+     "ask": 0.2,
+     "fee": 0.05,
+     "token": "2423717103900449293381833512300992632897220167631181598204571115941686213973"
+    },
+    {
+     "label": "7.5+ rushing TDs",
+     "ask": 0.08,
+     "fee": 0.05,
+     "token": "78445688860494799057630545187223492593083546369847100613125204022712569466133"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "lamar-jackson-rushing-touchdowns-2026-27"
+  },
+  {
    "venue": "kalshi",
    "event": "Who will be named as Xi Jinping's successor?",
    "n_legs": 14,
-   "gross": 0.22799999999999998,
+   "gross": 0.22999999999999998,
    "fees": 0.14,
-   "net": 0.08799999999999997,
-   "capital": 0.912,
-   "roi": 0.0964912280701754,
+   "net": 0.08999999999999997,
+   "capital": 0.91,
+   "roi": 0.09890109890109887,
    "url": "https://kalshi.com/events/KXXISUCCESSOR-45JAN01",
    "neg_risk": null,
    "coverage": "14/14",
@@ -1472,7 +1598,7 @@
     },
     {
      "label": "Li Xi",
-     "ask": 0.071,
+     "ask": 0.069,
      "fee": 0.07,
      "ticker": "KXXISUCCESSOR-45JAN01-LXI"
     },
@@ -1536,57 +1662,51 @@
   },
   {
    "venue": "polymarket",
-   "event": "Which Millennium Prize Problem will AI solve next?",
-   "n_legs": 6,
-   "gross": 0.05500000000000005,
-   "fees": 0.02956604,
-   "net": 0.02543396000000005,
-   "capital": 0.9745660399999999,
-   "roi": 0.02609772858491976,
-   "url": "https://polymarket.com/event/which-millennium-prize-problem-will-ai-solve-next",
+   "event": "Swiss National Bank Decision in March?",
+   "n_legs": 5,
+   "gross": 0.04700000000000004,
+   "fees": 0.02966665,
+   "net": 0.017333350000000042,
+   "capital": 0.98266665,
+   "roi": 0.017639094600391744,
+   "url": "https://polymarket.com/event/swiss-national-bank-decision-in-march-2027",
    "neg_risk": true,
-   "coverage": "6/6",
+   "coverage": "5/5",
    "tier": 1,
    "legs": [
     {
-     "label": "Birch and Swinnerton-Dyer",
-     "ask": 0.16,
-     "fee": 0.04,
-     "token": "45002854920632205842375008701834494919687123999359447430484085567728548529599"
+     "label": "50+ bps decrease",
+     "ask": 0.099,
+     "fee": 0.05,
+     "token": "104045214333685947605392747100625918133023905430070369784931273169854585027152"
     },
     {
-     "label": "Hodge Conjecture",
-     "ask": 0.2,
-     "fee": 0.04,
-     "token": "2476725205019729631424404750329035688450353560388947855064478812097488396326"
+     "label": "25 bps decrease",
+     "ask": 0.029,
+     "fee": 0.05,
+     "token": "46308574869928766015679744805739500554399253201128769773978955433257786794948"
     },
     {
-     "label": "P versus NP",
-     "ask": 0.018,
-     "fee": 0.04,
-     "token": "42350636821320607409137206631220344948522585860907233938867086058208067378263"
+     "label": "No Change",
+     "ask": 0.49,
+     "fee": 0.05,
+     "token": "30757282906981078935668865929134836305749881914636087999284061720590737652239"
     },
     {
-     "label": "Riemann Hypothesis",
-     "ask": 0.049,
-     "fee": 0.04,
-     "token": "86049549412527110401342651601582558086024426696929817872551303258295908746274"
+     "label": "25 bps increase",
+     "ask": 0.33,
+     "fee": 0.05,
+     "token": "13218359871664300656814382308796927537953424743960708734013359746955881613225"
     },
     {
-     "label": "Yang-Mills",
-     "ask": 0.218,
-     "fee": 0.04,
-     "token": "87258957446167628400774072344996016047563723429033361753715807011875444523296"
-    },
-    {
-     "label": "No solution by Dec 31, 2027",
-     "ask": 0.3,
-     "fee": 0.04,
-     "token": "30500546747312370672108002034406431538511288799914390408472695258565878727559"
+     "label": "50+ bps increase",
+     "ask": 0.005,
+     "fee": 0.05,
+     "token": "57934457660965573444310525187852717670464409745701180269502081063042514516024"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "which-millennium-prize-problem-will-ai-solve-next"
+   "event_slug": "swiss-national-bank-decision-in-march-2027"
   },
   {
    "venue": "polymarket",
@@ -1638,51 +1758,87 @@
   },
   {
    "venue": "polymarket",
-   "event": "Swiss National Bank Decision in March?",
+   "event": "Doncaster Rovers FC vs. Leyton Orient FC",
+   "n_legs": 3,
+   "gross": 0.0020000000000000018,
+   "fees": 0.0013845000000000007,
+   "net": 0.000615500000000001,
+   "capital": 0.9993845,
+   "roi": 0.0006158790735697832,
+   "url": "https://polymarket.com/event/el1-don-ley-2026-11-14",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Doncaster Rovers FC",
+     "ask": 0.007,
+     "fee": 0.05,
+     "token": "43184130141164937878621477204897190853938042084733076501481894714837574921891"
+    },
+    {
+     "label": "Draw (Doncaster Rovers FC vs. Leyton Orient FC)",
+     "ask": 0.985,
+     "fee": 0.05,
+     "token": "87799229702705602132434746352837248322814175390693520199027661448352395157697"
+    },
+    {
+     "label": "Leyton Orient FC",
+     "ask": 0.006,
+     "fee": 0.05,
+     "token": "82513778937130349058874044615606201990568690618209489925050039945887678720608"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "el1-don-ley-2026-11-14"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Where will 2026 rank among the highest U.S. domestic box office years on record?",
    "n_legs": 5,
-   "gross": 0.027000000000000024,
-   "fees": 0.02998665,
-   "net": -0.002986649999999976,
-   "capital": 1.00298665,
-   "roi": -0.0029777564835982376,
-   "url": "https://polymarket.com/event/swiss-national-bank-decision-in-march-2027",
+   "gross": 0.019000000000000017,
+   "fees": 0.027322850000000003,
+   "net": -0.008322849999999986,
+   "capital": 1.0083228499999999,
+   "roi": -0.008254151931596102,
+   "url": "https://polymarket.com/event/where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401",
    "neg_risk": true,
    "coverage": "5/5",
    "tier": 1,
    "legs": [
     {
-     "label": "50+ bps decrease",
-     "ask": 0.099,
+     "label": "6th or higher",
+     "ask": 0.045,
      "fee": 0.05,
-     "token": "104045214333685947605392747100625918133023905430070369784931273169854585027152"
+     "token": "33055139480720928337544044671212347348212483177343462671670587359248982530067"
     },
     {
-     "label": "25 bps decrease",
-     "ask": 0.029,
+     "label": "7th-9th",
+     "ask": 0.46,
      "fee": 0.05,
-     "token": "46308574869928766015679744805739500554399253201128769773978955433257786794948"
+     "token": "100448413203442875274401674534714559927670821663383572180619458461064801056800"
     },
     {
-     "label": "No Change",
-     "ask": 0.49,
+     "label": "10th-12th",
+     "ask": 0.47,
      "fee": 0.05,
-     "token": "30757282906981078935668865929134836305749881914636087999284061720590737652239"
+     "token": "53111214950769819238639992036893106939679664663312031962518317404644731756301"
     },
     {
-     "label": "25 bps increase",
-     "ask": 0.35,
+     "label": "13th-15th",
+     "ask": 0.003,
      "fee": 0.05,
-     "token": "13218359871664300656814382308796927537953424743960708734013359746955881613225"
+     "token": "21272734602335873642604277783094090829203789108870266071519222628921767636694"
     },
     {
-     "label": "50+ bps increase",
-     "ask": 0.005,
+     "label": "Below 15th",
+     "ask": 0.003,
      "fee": 0.05,
-     "token": "57934457660965573444310525187852717670464409745701180269502081063042514516024"
+     "token": "100399321692273620363412178960421989544525427382276114833916754400525015568180"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "swiss-national-bank-decision-in-march-2027"
+   "event_slug": "where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401"
   },
   {
    "venue": "polymarket",
@@ -1734,109 +1890,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Where will 2026 rank among the highest U.S. domestic box office years on record?",
-   "n_legs": 5,
-   "gross": 0.009000000000000008,
-   "fees": 0.027347850000000003,
-   "net": -0.018347849999999995,
-   "capital": 1.01834785,
-   "roi": -0.018017271799611493,
-   "url": "https://polymarket.com/event/where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "6th or higher",
-     "ask": 0.045,
-     "fee": 0.05,
-     "token": "33055139480720928337544044671212347348212483177343462671670587359248982530067"
-    },
-    {
-     "label": "7th-9th",
-     "ask": 0.46,
-     "fee": 0.05,
-     "token": "100448413203442875274401674534714559927670821663383572180619458461064801056800"
-    },
-    {
-     "label": "10th-12th",
-     "ask": 0.48,
-     "fee": 0.05,
-     "token": "53111214950769819238639992036893106939679664663312031962518317404644731756301"
-    },
-    {
-     "label": "13th-15th",
-     "ask": 0.003,
-     "fee": 0.05,
-     "token": "21272734602335873642604277783094090829203789108870266071519222628921767636694"
-    },
-    {
-     "label": "Below 15th",
-     "ask": 0.003,
-     "fee": 0.05,
-     "token": "100399321692273620363412178960421989544525427382276114833916754400525015568180"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Pro Football: Justin Herbert 2026-27 Regular Season Passing Touchdowns",
-   "n_legs": 5,
-   "gross": 0.017000000000000015,
-   "fees": 0.035534550000000005,
-   "net": -0.01853454999999999,
-   "capital": 1.01853455,
-   "roi": -0.01819727175676072,
-   "url": "https://polymarket.com/event/justin-herbert-passing-touchdowns-2026-27",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "18.5+ passing TDs",
-     "ask": 0.38,
-     "fee": 0.05,
-     "token": "36106944850117899629103012424388119488093642166412997298048781646388322112416"
-    },
-    {
-     "label": "21.5+ passing TDs",
-     "ask": 0.29,
-     "fee": 0.05,
-     "token": "51284047302770984513655886765870130280626433349494356033161394108117325189384"
-    },
-    {
-     "label": "24.5+ passing TDs",
-     "ask": 0.19,
-     "fee": 0.05,
-     "token": "36378015538113374216543910366255141130583115877921246282496551813453562787911"
-    },
-    {
-     "label": "27.5+ passing TDs",
-     "ask": 0.053,
-     "fee": 0.05,
-     "token": "25069760177888489941311435146291436117777162786580387658674516221518383857375"
-    },
-    {
-     "label": "30.5+ passing TDs",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "99182980884180110664842723182515974407798310270566640030696032733222768562660"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "justin-herbert-passing-touchdowns-2026-27"
-  },
-  {
-   "venue": "polymarket",
    "event": "OpenAI IPO Closing Market Cap",
    "n_legs": 7,
-   "gross": 0.008000000000000007,
-   "fees": 0.02990872,
-   "net": -0.021908719999999993,
-   "capital": 1.0219087199999999,
-   "roi": -0.02143901854560943,
+   "gross": 0.0030000000000000027,
+   "fees": 0.02998276,
+   "net": -0.026982759999999998,
+   "capital": 1.02698276,
+   "roi": -0.026273819825368826,
    "url": "https://polymarket.com/event/openai-ipo-closing-market-cap-554",
    "neg_risk": true,
    "coverage": "7/7",
@@ -1874,13 +1934,13 @@
     },
     {
      "label": "1.5T+",
-     "ask": 0.343,
+     "ask": 0.345,
      "fee": 0.04,
      "token": "63793996707762588429087893110546889766612541662978180322747690538629665518484"
     },
     {
      "label": "No IPO by December 31, 2027",
-     "ask": 0.294,
+     "ask": 0.297,
      "fee": 0.04,
      "token": "65635846672230517938250725434521085140827228441803710554357924247471745513898"
     }
@@ -1889,74 +1949,14 @@
    "event_slug": "openai-ipo-closing-market-cap-554"
   },
   {
-   "venue": "polymarket",
-   "event": "US GDP growth in Q4 2026?",
-   "n_legs": 7,
-   "gross": 0.007000000000000006,
-   "fees": 0.042111550000000005,
-   "net": -0.03511155,
-   "capital": 1.03511155,
-   "roi": -0.03392054701737218,
-   "url": "https://polymarket.com/event/us-gdp-growth-in-q4-2026",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<1.5%",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "61417402314939856901253269226720313823944777313665834108500211280759566160038"
-    },
-    {
-     "label": "1.5% to 2.0%",
-     "ask": 0.213,
-     "fee": 0.05,
-     "token": "102376859258933777034692602572378380256301153778219239429084021147029956523482"
-    },
-    {
-     "label": "2.0% to 2.5%",
-     "ask": 0.12,
-     "fee": 0.05,
-     "token": "36691600072285229608213719200254618945635038842579707956791812221347985648817"
-    },
-    {
-     "label": "2.5% to 3.0%",
-     "ask": 0.16,
-     "fee": 0.05,
-     "token": "114843312378198286224553456676610339966486427317724048709017863290453811000536"
-    },
-    {
-     "label": "3.0% to 3.5%",
-     "ask": 0.14,
-     "fee": 0.05,
-     "token": "78768567792104663020668841758285067273758248296225313847881946411282705487890"
-    },
-    {
-     "label": "3.5% to 4.0%",
-     "ask": 0.11,
-     "fee": 0.05,
-     "token": "51044170036162319822483479960668645148710111613020058078569068248214992679640"
-    },
-    {
-     "label": "\u22654.0%",
-     "ask": 0.16,
-     "fee": 0.05,
-     "token": "15791869181628167495650373808119172170254873042135197751375289086261352710412"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "us-gdp-growth-in-q4-2026"
-  },
-  {
    "venue": "kalshi",
    "event": "Which of these African leaders will leave office next?",
    "n_legs": 10,
-   "gross": 0.052999999999999936,
+   "gross": 0.051999999999999935,
    "fees": 0.12,
-   "net": -0.06700000000000006,
-   "capital": 1.0670000000000002,
-   "roi": -0.06279287722586696,
+   "net": -0.06800000000000006,
+   "capital": 1.068,
+   "roi": -0.06367041198501878,
    "url": "https://kalshi.com/events/KXAFRICALEADEROUT-35",
    "neg_risk": null,
    "coverage": "10/10",
@@ -1976,7 +1976,7 @@
     },
     {
      "label": "Abdel Fattah el-Sisi",
-     "ask": 0.092,
+     "ask": 0.093,
      "fee": 0.07,
      "ticker": "KXAFRICALEADEROUT-35-AFES"
     },
@@ -2030,11 +2030,11 @@
    "venue": "kalshi",
    "event": "Who will be the world's second trillionaire?",
    "n_legs": 12,
-   "gross": 0.050000000000000044,
+   "gross": 0.040000000000000036,
    "fees": 0.14,
-   "net": -0.08999999999999997,
-   "capital": 1.0899999999999999,
-   "roi": -0.08256880733944952,
+   "net": -0.09999999999999998,
+   "capital": 1.1,
+   "roi": -0.09090909090909088,
    "url": "https://kalshi.com/events/KXNEXTTRILLIONAIRE-33",
    "neg_risk": null,
    "coverage": "12/12",
@@ -2090,7 +2090,7 @@
     },
     {
      "label": "Jensen Huang",
-     "ask": 0.1,
+     "ask": 0.11,
      "fee": 0.07,
      "ticker": "KXNEXTTRILLIONAIRE-33-JH"
     },
