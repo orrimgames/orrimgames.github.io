@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-09T05:15:42Z",
-  "ts": 1794201342.994233,
-  "scan_seconds": 14.7,
+  "generated_at": "2026-11-09T05:20:45Z",
+  "ts": 1794201645.1048956,
+  "scan_seconds": 15.3,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 294 binary + 1679 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 294 binary + 1688 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -102,13 +102,49 @@
   },
   {
    "venue": "polymarket",
+   "event": "Kimi K3.1 Pro: Text Arena Rank Debut?",
+   "n_legs": 3,
+   "gross": 0.7230000000000001,
+   "fees": 0.009856519999999999,
+   "net": 0.71314348,
+   "capital": 0.28685651999999995,
+   "roi": 2.4860633462331627,
+   "url": "https://polymarket.com/event/kimi-k3pt1-pro-text-arena-rank-debut-20261023",
+   "neg_risk": false,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Top 5",
+     "ask": 0.041,
+     "fee": 0.04,
+     "token": "84288083754636763819595157938714553548854496695750121117882875727389292597049"
+    },
+    {
+     "label": "Top 10",
+     "ask": 0.095,
+     "fee": 0.04,
+     "token": "49894870349177623457372607037416137842829781425754891994052382683022227081422"
+    },
+    {
+     "label": "Top 20",
+     "ask": 0.141,
+     "fee": 0.04,
+     "token": "90854095661240486673757241659113053034617785424495476767397649438185391564919"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "kimi-k3pt1-pro-text-arena-rank-debut-20261023"
+  },
+  {
+   "venue": "polymarket",
    "event": "Abstract FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.731,
-   "fees": 0.018241510000000002,
-   "net": 0.71275849,
-   "capital": 0.28724151000000003,
-   "roi": 2.4813909730526063,
+   "gross": 0.729,
+   "fees": 0.01837507,
+   "net": 0.7106249299999999,
+   "capital": 0.28937507,
+   "roi": 2.4557227061750684,
    "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -134,25 +170,25 @@
     },
     {
      "label": "$800M",
-     "ask": 0.022,
+     "ask": 0.023,
      "fee": 0.07,
      "token": "57014152902843873436298267975647352566614812264184262964627304589799772371869"
     },
     {
      "label": "$1B",
-     "ask": 0.021,
+     "ask": 0.022,
      "fee": 0.07,
      "token": "29464984159527182226786284598084151852915087509927059755874912820881004290711"
     },
     {
      "label": "$1.5B",
-     "ask": 0.027,
+     "ask": 0.028,
      "fee": 0.07,
      "token": "34006275526941913730889063441517864419431100389141199685409808212815618919830"
     },
     {
      "label": "$2B",
-     "ask": 0.026,
+     "ask": 0.025,
      "fee": 0.07,
      "token": "37619692236255486158369207526002971972700674358795196765237007434469215408915"
     },
@@ -171,42 +207,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "abstract-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Kimi K3.1 Pro: Text Arena Rank Debut?",
-   "n_legs": 3,
-   "gross": 0.7190000000000001,
-   "fees": 0.00998548,
-   "net": 0.7090145200000001,
-   "capital": 0.29098547999999996,
-   "roi": 2.4365975924296985,
-   "url": "https://polymarket.com/event/kimi-k3pt1-pro-text-arena-rank-debut-20261023",
-   "neg_risk": false,
-   "coverage": "3/3",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Top 5",
-     "ask": 0.041,
-     "fee": 0.04,
-     "token": "84288083754636763819595157938714553548854496695750121117882875727389292597049"
-    },
-    {
-     "label": "Top 10",
-     "ask": 0.099,
-     "fee": 0.04,
-     "token": "49894870349177623457372607037416137842829781425754891994052382683022227081422"
-    },
-    {
-     "label": "Top 20",
-     "ask": 0.141,
-     "fee": 0.04,
-     "token": "90854095661240486673757241659113053034617785424495476767397649438185391564919"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "kimi-k3pt1-pro-text-arena-rank-debut-20261023"
   },
   {
    "venue": "polymarket",
@@ -494,11 +494,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.554,
-   "fees": 0.028977620000000003,
-   "net": 0.52502238,
-   "capital": 0.47497762,
-   "roi": 1.10536235370416,
+   "gross": 0.5589999999999999,
+   "fees": 0.028663670000000002,
+   "net": 0.5303363299999999,
+   "capital": 0.46966367,
+   "roi": 1.1291832089120284,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -524,7 +524,7 @@
     },
     {
      "label": "$500M",
-     "ask": 0.054,
+     "ask": 0.049,
      "fee": 0.07,
      "token": "73356786969251784817826404028517173197879713599890594338261597978307275085695"
     },
@@ -566,11 +566,11 @@
    "venue": "polymarket",
    "event": "Ink FDV above ___ one day after launch?",
    "n_legs": 6,
-   "gross": 0.488,
-   "fees": 0.0320845,
-   "net": 0.4559155,
-   "capital": 0.5440845,
-   "roi": 0.8379498037529097,
+   "gross": 0.489,
+   "fees": 0.03202129,
+   "net": 0.45697871,
+   "capital": 0.54302129,
+   "roi": 0.8415484225305421,
    "url": "https://polymarket.com/event/ink-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "6/6",
@@ -596,7 +596,7 @@
     },
     {
      "label": "$2B",
-     "ask": 0.049,
+     "ask": 0.048,
      "fee": 0.07,
      "token": "28866225543465128139768756566484608339364822624537993610950548450652388284923"
     },
@@ -746,11 +746,11 @@
    "venue": "polymarket",
    "event": "Democratic 2028 presidential odds hit __ by December 31?",
    "n_legs": 4,
-   "gross": 0.44699999999999995,
-   "fees": 0.01730044,
-   "net": 0.42969956,
-   "capital": 0.57030044,
-   "roi": 0.7534617367645726,
+   "gross": 0.44499999999999995,
+   "fees": 0.017375,
+   "net": 0.4276249999999999,
+   "capital": 0.5723750000000001,
+   "roi": 0.7471063550993664,
    "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
    "neg_risk": false,
    "coverage": "4/4",
@@ -758,7 +758,7 @@
    "legs": [
     {
      "label": "\u2191 75%",
-     "ask": 0.033,
+     "ask": 0.035,
      "fee": 0.04,
      "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
     },
@@ -992,11 +992,11 @@
    "venue": "polymarket",
    "event": "Kimi K3.1 Pro: Text Arena Debut?",
    "n_legs": 5,
-   "gross": 0.28400000000000003,
-   "fees": 0.022560880000000002,
-   "net": 0.26143912,
-   "capital": 0.73856088,
-   "roi": 0.35398452189885826,
+   "gross": 0.29400000000000004,
+   "fees": 0.02230088,
+   "net": 0.27169912,
+   "capital": 0.7283008799999999,
+   "roi": 0.3730588929125007,
    "url": "https://polymarket.com/event/kimi-k3pt1-pro-text-arena-debut-20261023",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1010,7 +1010,7 @@
     },
     {
      "label": "1480+",
-     "ask": 0.18,
+     "ask": 0.17,
      "fee": 0.04,
      "token": "75869688121177780989660444832644522814279062694297725101282347226855510939519"
     },
@@ -1088,11 +1088,11 @@
    "venue": "polymarket",
    "event": "Which parties will be in the next Berlin state government?",
    "n_legs": 8,
-   "gross": 0.27,
-   "fees": 0.02518032,
-   "net": 0.24481968,
-   "capital": 0.75518032,
-   "roi": 0.32418704978964497,
+   "gross": 0.28,
+   "fees": 0.02491232,
+   "net": 0.25508768000000004,
+   "capital": 0.74491232,
+   "roi": 0.3424398726550798,
    "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
    "neg_risk": false,
    "coverage": "8/8",
@@ -1130,7 +1130,7 @@
     },
     {
      "label": "Linke",
-     "ask": 0.17,
+     "ask": 0.16,
      "fee": 0.04,
      "token": "45994902306346299558396188639083351358621700680737760471366529838542938771727"
     },
@@ -1196,11 +1196,11 @@
    "venue": "polymarket",
    "event": "Next Google Gemini Pro Model: Arena Debut?",
    "n_legs": 6,
-   "gross": 0.18199999999999994,
-   "fees": 0.02820184,
-   "net": 0.15379815999999993,
-   "capital": 0.8462018400000001,
-   "roi": 0.18175115289278965,
+   "gross": 0.18100000000000005,
+   "fees": 0.02823028,
+   "net": 0.15276972000000005,
+   "capital": 0.84723028,
+   "roi": 0.1803166430737108,
    "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
    "neg_risk": false,
    "coverage": "6/6",
@@ -1208,7 +1208,7 @@
    "legs": [
     {
      "label": "1480+",
-     "ask": 0.144,
+     "ask": 0.145,
      "fee": 0.04,
      "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
     },
@@ -1514,11 +1514,11 @@
    "venue": "polymarket",
    "event": "OpenAI IPO Closing Market Cap",
    "n_legs": 7,
-   "gross": 0.0010000000000000009,
-   "fees": 0.03016156,
-   "net": -0.02916156,
-   "capital": 1.02916156,
-   "roi": -0.0283352596262923,
+   "gross": 0.0040000000000000036,
+   "fees": 0.03011128,
+   "net": -0.026111279999999997,
+   "capital": 1.02611128,
+   "roi": -0.025446830679027324,
    "url": "https://polymarket.com/event/openai-ipo-closing-market-cap-554",
    "neg_risk": true,
    "coverage": "7/7",
@@ -1562,7 +1562,7 @@
     },
     {
      "label": "No IPO by December 31, 2027",
-     "ask": 0.292,
+     "ask": 0.289,
      "fee": 0.04,
      "token": "65635846672230517938250725434521085140827228441803710554357924247471745513898"
     }
