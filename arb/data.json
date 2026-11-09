@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-09T21:20:45Z",
-  "ts": 1794259245.265487,
-  "scan_seconds": 14.5,
+  "generated_at": "2026-11-09T21:25:50Z",
+  "ts": 1794259550.444151,
+  "scan_seconds": 14.9,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 256 binary + 1703 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 269 binary + 1697 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Jalen Hurts 2026-27 Regular Season Passing Yards",
    "n_legs": 5,
-   "gross": 0.901,
-   "fees": 0.00483615,
-   "net": 0.89616385,
-   "capital": 0.10383615,
-   "roi": 8.63055737332326,
+   "gross": 0.902,
+   "fees": 0.0047887,
+   "net": 0.8972113,
+   "capital": 0.10278870000000001,
+   "roi": 8.72869585859146,
    "url": "https://polymarket.com/event/jalen-hurts-passing-yards-2026-27",
    "neg_risk": false,
    "coverage": "5/5",
@@ -50,7 +50,7 @@
     },
     {
      "label": "3,499.5+ passing yards",
-     "ask": 0.026,
+     "ask": 0.025,
      "fee": 0.05,
      "token": "112099033466086199059977972276031738284326631311459530930748116266804308898683"
     },
@@ -63,6 +63,42 @@
    ],
    "kind": "intra-event",
    "event_slug": "jalen-hurts-passing-yards-2026-27"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Kimi K3.1 Pro: Text Arena Rank Debut?",
+   "n_legs": 3,
+   "gross": 0.884,
+   "fees": 0.00445144,
+   "net": 0.87954856,
+   "capital": 0.12045144,
+   "roi": 7.302100830010833,
+   "url": "https://polymarket.com/event/kimi-k3pt1-pro-text-arena-rank-debut-20261023",
+   "neg_risk": false,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Top 5",
+     "ask": 0.041,
+     "fee": 0.04,
+     "token": "84288083754636763819595157938714553548854496695750121117882875727389292597049"
+    },
+    {
+     "label": "Top 10",
+     "ask": 0.027,
+     "fee": 0.04,
+     "token": "49894870349177623457372607037416137842829781425754891994052382683022227081422"
+    },
+    {
+     "label": "Top 20",
+     "ask": 0.048,
+     "fee": 0.04,
+     "token": "90854095661240486673757241659113053034617785424495476767397649438185391564919"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "kimi-k3pt1-pro-text-arena-rank-debut-20261023"
   },
   {
    "venue": "polymarket",
@@ -105,78 +141,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "makina-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Abstract FDV above ___ one day after launch?",
-   "n_legs": 9,
-   "gross": 0.726,
-   "fees": 0.018567780000000002,
-   "net": 0.70743222,
-   "capital": 0.29256778,
-   "roi": 2.4180113750051353,
-   "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$200M",
-     "ask": 0.028,
-     "fee": 0.07,
-     "token": "84358917457786118111350061347880730021105314335676049736086740763081010842066"
-    },
-    {
-     "label": "$400M",
-     "ask": 0.041,
-     "fee": 0.07,
-     "token": "14969137041406568482998226174886244413458670324702681555747452734368526655610"
-    },
-    {
-     "label": "$600M",
-     "ask": 0.036,
-     "fee": 0.07,
-     "token": "114879246777746957563854865580834381829941131829173907409108025551635398937381"
-    },
-    {
-     "label": "$800M",
-     "ask": 0.022,
-     "fee": 0.07,
-     "token": "57014152902843873436298267975647352566614812264184262964627304589799772371869"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.021,
-     "fee": 0.07,
-     "token": "29464984159527182226786284598084151852915087509927059755874912820881004290711"
-    },
-    {
-     "label": "$1.5B",
-     "ask": 0.028,
-     "fee": 0.07,
-     "token": "34006275526941913730889063441517864419431100389141199685409808212815618919830"
-    },
-    {
-     "label": "$2B",
-     "ask": 0.026,
-     "fee": 0.07,
-     "token": "37619692236255486158369207526002971972700674358795196765237007434469215408915"
-    },
-    {
-     "label": "$2.5B",
-     "ask": 0.038,
-     "fee": 0.07,
-     "token": "47025970199621774724599842248616610229790137086617642731626650337316966975824"
-    },
-    {
-     "label": "$3B",
-     "ask": 0.034,
-     "fee": 0.07,
-     "token": "84988825932254561689139868984747462316935591007949837666629200635220289630271"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "abstract-fdv-above-one-day-after-launch"
   },
   {
    "venue": "polymarket",
@@ -236,11 +200,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.6679999999999999,
-   "fees": 0.022211,
-   "net": 0.645789,
-   "capital": 0.354211,
-   "roi": 1.823176016555104,
+   "gross": 0.669,
+   "fees": 0.02214821,
+   "net": 0.64685179,
+   "capital": 0.35314821,
+   "roi": 1.8316722885272447,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -290,7 +254,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.052,
+     "ask": 0.051,
      "fee": 0.07,
      "token": "100463364281600463917162923535716593254627752680239892527128357625123655869336"
     }
@@ -362,11 +326,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.605,
-   "fees": 0.025834410000000002,
-   "net": 0.57916559,
-   "capital": 0.42083441,
-   "roi": 1.37623154437395,
+   "gross": 0.604,
+   "fees": 0.025901820000000002,
+   "net": 0.57809818,
+   "capital": 0.42190182000000004,
+   "roi": 1.370219687604097,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -410,7 +374,7 @@
     },
     {
      "label": "$2B",
-     "ask": 0.018,
+     "ask": 0.019,
      "fee": 0.07,
      "token": "6084486765734652944861844492119387810746533873640431459232371811432651313364"
     },
@@ -590,11 +554,11 @@
    "venue": "polymarket",
    "event": "Who will the OpenAI spy be accused of working for in 2026?",
    "n_legs": 10,
-   "gross": 0.495,
-   "fees": 0.01829052,
-   "net": 0.47670948,
-   "capital": 0.52329052,
-   "roi": 0.910984361039065,
+   "gross": 0.493,
+   "fees": 0.01836476,
+   "net": 0.47463524,
+   "capital": 0.52536476,
+   "roi": 0.903439431301026,
    "url": "https://polymarket.com/event/who-will-the-openai-spy-be-accused-of-working-for-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -644,7 +608,7 @@
     },
     {
      "label": "Meta",
-     "ask": 0.035,
+     "ask": 0.037,
      "fee": 0.04,
      "token": "59350064047730331402439308587260002261246184903300066641664992810295390535693"
     },
@@ -806,11 +770,11 @@
    "venue": "polymarket",
    "event": "Which parties will be in the next Berlin state government?",
    "n_legs": 8,
-   "gross": 0.395,
-   "fees": 0.021394279999999998,
-   "net": 0.37360572000000003,
-   "capital": 0.62639428,
-   "roi": 0.5964385881684616,
+   "gross": 0.42600000000000005,
+   "fees": 0.020534959999999998,
+   "net": 0.40546504000000005,
+   "capital": 0.59453496,
+   "roi": 0.6819868759273636,
    "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
    "neg_risk": false,
    "coverage": "8/8",
@@ -830,7 +794,7 @@
     },
     {
      "label": "Gr\u00fcne",
-     "ask": 0.169,
+     "ask": 0.138,
      "fee": 0.04,
      "token": "79430113721395718684612773337151551812963909573196995977928070134773676251232"
     },
@@ -1130,11 +1094,11 @@
    "venue": "polymarket",
    "event": "Cambridge Dictionary Word of the Year 2026 contains...?",
    "n_legs": 9,
-   "gross": 0.278,
-   "fees": 0.0329131,
-   "net": 0.24508690000000002,
-   "capital": 0.7549131,
-   "roi": 0.32465577826110054,
+   "gross": 0.254,
+   "fees": 0.0339239,
+   "net": 0.2200761,
+   "capital": 0.7799239,
+   "roi": 0.2821763764387782,
    "url": "https://polymarket.com/event/cambridge-dictionary-word-of-the-year-2026-contains",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1166,7 +1130,7 @@
     },
     {
      "label": "larp",
-     "ask": 0.046,
+     "ask": 0.06,
      "fee": 0.05,
      "token": "101652770751391158280289615466146660168712998767421297654412180726551230241266"
     },
@@ -1178,7 +1142,7 @@
     },
     {
      "label": "agent",
-     "ask": 0.11,
+     "ask": 0.12,
      "fee": 0.05,
      "token": "55275712458477033490023464401229385694158176164972385786434441470444110044716"
     },
@@ -1268,11 +1232,11 @@
    "venue": "polymarket",
    "event": "Who will be added to Chinese Military Companies list by June 30, 2027?",
    "n_legs": 4,
-   "gross": 0.20999999999999996,
+   "gross": 0.19999999999999996,
    "fees": 0.0,
-   "net": 0.20999999999999996,
-   "capital": 0.79,
-   "roi": 0.2658227848101265,
+   "net": 0.19999999999999996,
+   "capital": 0.8,
+   "roi": 0.24999999999999994,
    "url": "https://polymarket.com/event/who-will-be-added-to-chinese-military-companies-list-by-june-30-2027-20260706225129414",
    "neg_risk": false,
    "coverage": "4/4",
@@ -1298,13 +1262,85 @@
     },
     {
      "label": "Moonshot AI",
-     "ask": 0.23,
+     "ask": 0.24,
      "fee": 0.0,
      "token": "82681404375567431285125084081368760622844242809131363245836353767214071741902"
     }
    ],
    "kind": "intra-event",
    "event_slug": "who-will-be-added-to-chinese-military-companies-list-by-june-30-2027-20260706225129414"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Merriam-Webster Word of the Year 2026 contains...?",
+   "n_legs": 9,
+   "gross": 0.20499999999999996,
+   "fees": 0.034389050000000004,
+   "net": 0.17061094999999996,
+   "capital": 0.8293890500000001,
+   "roi": 0.20570677898387968,
+   "url": "https://polymarket.com/event/merriam-webster-word-of-the-year-2026-contains",
+   "neg_risk": false,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "vibe",
+     "ask": 0.046,
+     "fee": 0.05,
+     "token": "21120032220954271924876562601944906168223981769211451003792257807212335297179"
+    },
+    {
+     "label": "rage",
+     "ask": 0.031,
+     "fee": 0.05,
+     "token": "57073772155145935730067470973961452392771508606042885310491253534174105255116"
+    },
+    {
+     "label": "maxx",
+     "ask": 0.19,
+     "fee": 0.05,
+     "token": "89602526286042670528929324816886025925023122957850252262514423574644522823380"
+    },
+    {
+     "label": "lore",
+     "ask": 0.044,
+     "fee": 0.05,
+     "token": "67631387458000486890543680947588274900060062212307593368754194987256405475286"
+    },
+    {
+     "label": "larp",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "7338478443215935944304070961934153575373488840654070113920931372120383010372"
+    },
+    {
+     "label": "rot",
+     "ask": 0.13,
+     "fee": 0.05,
+     "token": "79591972689347469057483368052189716680845801371445731720461088700916147762375"
+    },
+    {
+     "label": "agent",
+     "ask": 0.19,
+     "fee": 0.05,
+     "token": "65942177578681056227794083978939034453446171249502541001313364573091296811087"
+    },
+    {
+     "label": "slop",
+     "ask": 0.009,
+     "fee": 0.05,
+     "token": "52484380839499758279659766175319004232104171754731783051924759961104577377136"
+    },
+    {
+     "label": "bait",
+     "ask": 0.055,
+     "fee": 0.05,
+     "token": "84720151826640435537420814413933880066551225856380000182206198862730068068653"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "merriam-webster-word-of-the-year-2026-contains"
   },
   {
    "venue": "polymarket",
@@ -1356,85 +1392,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Merriam-Webster Word of the Year 2026 contains...?",
-   "n_legs": 9,
-   "gross": 0.19199999999999995,
-   "fees": 0.034903800000000006,
-   "net": 0.15709619999999994,
-   "capital": 0.8429038000000001,
-   "roi": 0.18637500507175306,
-   "url": "https://polymarket.com/event/merriam-webster-word-of-the-year-2026-contains",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "vibe",
-     "ask": 0.046,
-     "fee": 0.05,
-     "token": "21120032220954271924876562601944906168223981769211451003792257807212335297179"
-    },
-    {
-     "label": "rage",
-     "ask": 0.034,
-     "fee": 0.05,
-     "token": "57073772155145935730067470973961452392771508606042885310491253534174105255116"
-    },
-    {
-     "label": "maxx",
-     "ask": 0.19,
-     "fee": 0.05,
-     "token": "89602526286042670528929324816886025925023122957850252262514423574644522823380"
-    },
-    {
-     "label": "lore",
-     "ask": 0.045,
-     "fee": 0.05,
-     "token": "67631387458000486890543680947588274900060062212307593368754194987256405475286"
-    },
-    {
-     "label": "larp",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "7338478443215935944304070961934153575373488840654070113920931372120383010372"
-    },
-    {
-     "label": "rot",
-     "ask": 0.139,
-     "fee": 0.05,
-     "token": "79591972689347469057483368052189716680845801371445731720461088700916147762375"
-    },
-    {
-     "label": "agent",
-     "ask": 0.19,
-     "fee": 0.05,
-     "token": "65942177578681056227794083978939034453446171249502541001313364573091296811087"
-    },
-    {
-     "label": "slop",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "52484380839499758279659766175319004232104171754731783051924759961104577377136"
-    },
-    {
-     "label": "bait",
-     "ask": 0.055,
-     "fee": 0.05,
-     "token": "84720151826640435537420814413933880066551225856380000182206198862730068068653"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "merriam-webster-word-of-the-year-2026-contains"
-  },
-  {
-   "venue": "polymarket",
    "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
    "n_legs": 5,
-   "gross": 0.119,
+   "gross": 0.139,
    "fees": 0.0,
-   "net": 0.119,
-   "capital": 0.881,
-   "roi": 0.13507377979568672,
+   "net": 0.139,
+   "capital": 0.861,
+   "roi": 0.16144018583042974,
    "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1448,7 +1412,7 @@
     },
     {
      "label": "20+",
-     "ask": 0.26,
+     "ask": 0.24,
      "fee": 0.0,
      "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
     },
@@ -1764,39 +1728,45 @@
   },
   {
    "venue": "polymarket",
-   "event": "UD Las Palmas vs. CD Eldense",
-   "n_legs": 3,
-   "gross": 0.010000000000000009,
-   "fees": 0.019095,
-   "net": -0.009094999999999992,
-   "capital": 1.009095,
-   "roi": -0.009013026523766336,
-   "url": "https://polymarket.com/event/es2-lpm-eld-2026-11-08",
-   "neg_risk": true,
-   "coverage": "3/3",
-   "tier": 1,
+   "event": "GPT Astra 6.1+: Output Token Price Debut?",
+   "n_legs": 4,
+   "gross": 0.014999999999999902,
+   "fees": 0.023647,
+   "net": -0.008647000000000099,
+   "capital": 1.008647,
+   "roi": -0.008572870389740016,
+   "url": "https://polymarket.com/event/gpt-astra-6pt1-output-token-price-debut",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
    "legs": [
     {
-     "label": "UD Las Palmas",
-     "ask": 0.16,
-     "fee": 0.05,
-     "token": "25089883694418976416733467044209460521187859575853502928462751774622108687434"
+     "label": "$40+",
+     "ask": 0.52,
+     "fee": 0.04,
+     "token": "65719089510232973344795713045809241013217408393353464760298659371791532137937"
     },
     {
-     "label": "Draw (UD Las Palmas vs. CD Eldense)",
-     "ask": 0.76,
-     "fee": 0.05,
-     "token": "48550430156852797361139118848307334034139068010773331992191879674047387853188"
+     "label": "$50+",
+     "ask": 0.34,
+     "fee": 0.04,
+     "token": "115257322962872588617954698897146016553110518194335720241922825533264095734720"
     },
     {
-     "label": "CD Eldense",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "36388388100963374596716299465036289849289205968619934527409053592667518046732"
+     "label": "$60+",
+     "ask": 0.06,
+     "fee": 0.04,
+     "token": "65593614924642640193467420896631061971758355867558790600430639313989195394986"
+    },
+    {
+     "label": "$75+",
+     "ask": 0.065,
+     "fee": 0.04,
+     "token": "12590265736983181605792519532231579918557286698647467620775538091622717953004"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "es2-lpm-eld-2026-11-08"
+   "event_slug": "gpt-astra-6pt1-output-token-price-debut"
   },
   {
    "venue": "kalshi",
@@ -1827,168 +1797,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXSTATELEGNC-28NOV07NCH024"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Reya FDV above ___ one day after launch?",
-   "n_legs": 8,
-   "gross": 0.04399999999999993,
-   "fees": 0.05483702000000001,
-   "net": -0.010837020000000079,
-   "capital": 1.01083702,
-   "roi": -0.010720838063489283,
-   "url": "https://polymarket.com/event/reya-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "8/8",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$10M",
-     "ask": 0.26,
-     "fee": 0.07,
-     "token": "54055487709565746739771042101289645706282525479833719240392636252565078604535"
-    },
-    {
-     "label": "$40M",
-     "ask": 0.22,
-     "fee": 0.07,
-     "token": "3358846643845831375173377665034162404051246974253302795071076795882921063810"
-    },
-    {
-     "label": "$150M",
-     "ask": 0.1,
-     "fee": 0.07,
-     "token": "11464391875239611515979269680659446096405693079558327137066231106678276116591"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.067,
-     "fee": 0.07,
-     "token": "78433024518676680431174478322854148606578065650008220678402966840627347604025"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.048,
-     "fee": 0.07,
-     "token": "50559798756353407844848764255928312283955977398112280029946941558311246926711"
-    },
-    {
-     "label": "$400M",
-     "ask": 0.06,
-     "fee": 0.07,
-     "token": "73267706047103031036392501830346257031758527085670026582489921982591918498087"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.011,
-     "fee": 0.07,
-     "token": "42568688742206577928019167868451362805582953113234617095222400502101541337738"
-    },
-    {
-     "label": "$70M",
-     "ask": 0.19,
-     "fee": 0.07,
-     "token": "6018600176509044189121672244721585245599282237489793697762952294537789937405"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "reya-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Sportivo San Lorenzo vs. Rubio Nu",
-   "n_legs": 3,
-   "gross": 0.010000000000000009,
-   "fees": 0.028485,
-   "net": -0.01848499999999999,
-   "capital": 1.018485,
-   "roi": -0.01814950637466432,
-   "url": "https://polymarket.com/event/par1-ssl-rub-2026-11-09",
-   "neg_risk": true,
-   "coverage": "3/3",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "Sportivo San Lorenzo",
-     "ask": 0.57,
-     "fee": 0.05,
-     "token": "77384761014421004270119251893833328748503589862099285720951418065438986695494"
-    },
-    {
-     "label": "Draw (Sportivo San Lorenzo vs. Rubio Nu)",
-     "ask": 0.27,
-     "fee": 0.05,
-     "token": "88403514640231119658029937540485504747095304006744078189482694632464086135291"
-    },
-    {
-     "label": "Rubio Nu",
-     "ask": 0.15,
-     "fee": 0.05,
-     "token": "65327741230066323971229163524998606980597306825263357528584736204016984775269"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "par1-ssl-rub-2026-11-09"
-  },
-  {
-   "venue": "polymarket",
-   "event": "South Korea Annual Inflation 2026",
-   "n_legs": 7,
-   "gross": 0.014000000000000012,
-   "fees": 0.0347602,
-   "net": -0.020760199999999986,
-   "capital": 1.0207602,
-   "roi": -0.020337979478431845,
-   "url": "https://polymarket.com/event/south-korea-annual-inflation-2026",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<1.5%",
-     "ask": 0.007,
-     "fee": 0.05,
-     "token": "71525282065182121177376702725462872746584228278774865566588784876566020679580"
-    },
-    {
-     "label": "1.5% to 1.7%",
-     "ask": 0.013,
-     "fee": 0.05,
-     "token": "53560332904374490980426587978114903485003599714229280360809290134467526731570"
-    },
-    {
-     "label": "1.8% to 2.0%",
-     "ask": 0.017,
-     "fee": 0.05,
-     "token": "65740141673669604387453835911458952621672164958650991005655346794597412447188"
-    },
-    {
-     "label": "2.1% to 2.3%",
-     "ask": 0.028,
-     "fee": 0.05,
-     "token": "45336727114415975189262032401486308161908824629898154035751044621776218397469"
-    },
-    {
-     "label": "2.4% to 2.6%",
-     "ask": 0.242,
-     "fee": 0.05,
-     "token": "56490216689928867904061006596647863590571313177777303019096794985636881104014"
-    },
-    {
-     "label": "2.7% to 2.9%",
-     "ask": 0.354,
-     "fee": 0.05,
-     "token": "104416599105845681942169272621534095615547528786669410384486488684163016242991"
-    },
-    {
-     "label": "3.0%+",
-     "ask": 0.325,
-     "fee": 0.05,
-     "token": "61633927546342453884225148481971419565225246459195931002447504386001790385818"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "south-korea-annual-inflation-2026"
   },
   {
    "venue": "kalshi",
@@ -2067,6 +1875,72 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXAFRICALEADEROUT-35"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Reya FDV above ___ one day after launch?",
+   "n_legs": 8,
+   "gross": 0.0040000000000000036,
+   "fees": 0.056293020000000006,
+   "net": -0.05229302,
+   "capital": 1.05229302,
+   "roi": -0.04969435224420666,
+   "url": "https://polymarket.com/event/reya-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "8/8",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$10M",
+     "ask": 0.26,
+     "fee": 0.07,
+     "token": "54055487709565746739771042101289645706282525479833719240392636252565078604535"
+    },
+    {
+     "label": "$40M",
+     "ask": 0.26,
+     "fee": 0.07,
+     "token": "3358846643845831375173377665034162404051246974253302795071076795882921063810"
+    },
+    {
+     "label": "$150M",
+     "ask": 0.1,
+     "fee": 0.07,
+     "token": "11464391875239611515979269680659446096405693079558327137066231106678276116591"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.067,
+     "fee": 0.07,
+     "token": "78433024518676680431174478322854148606578065650008220678402966840627347604025"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.048,
+     "fee": 0.07,
+     "token": "50559798756353407844848764255928312283955977398112280029946941558311246926711"
+    },
+    {
+     "label": "$400M",
+     "ask": 0.06,
+     "fee": 0.07,
+     "token": "73267706047103031036392501830346257031758527085670026582489921982591918498087"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.011,
+     "fee": 0.07,
+     "token": "42568688742206577928019167868451362805582953113234617095222400502101541337738"
+    },
+    {
+     "label": "$70M",
+     "ask": 0.19,
+     "fee": 0.07,
+     "token": "6018600176509044189121672244721585245599282237489793697762952294537789937405"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "reya-fdv-above-one-day-after-launch"
   },
   {
    "venue": "kalshi",
