@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-09T00:10:39Z",
-  "ts": 1794183039.7072225,
-  "scan_seconds": 12.2,
+  "generated_at": "2026-11-09T00:15:54Z",
+  "ts": 1794183354.2410247,
+  "scan_seconds": 21.9,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 281 binary + 1651 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 280 binary + 1652 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "StandX FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.808,
-   "fees": 0.013183100000000001,
-   "net": 0.7948169,
-   "capital": 0.2051831,
-   "roi": 3.873695738099288,
+   "gross": 0.8089999999999999,
+   "fees": 0.013115830000000002,
+   "net": 0.7958841699999999,
+   "capital": 0.20411583,
+   "roi": 3.899179059262576,
    "url": "https://polymarket.com/event/standx-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -92,13 +92,67 @@
     },
     {
      "label": "$200M",
-     "ask": 0.02,
+     "ask": 0.019,
      "fee": 0.07,
      "token": "112680133727341712048625489981542622175575331217528856115945351368430513568040"
     }
    ],
    "kind": "intra-event",
    "event_slug": "standx-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Cambria listed on ___ within 30 days of TGE?",
+   "n_legs": 6,
+   "gross": 0.649,
+   "fees": 0.022879570000000002,
+   "net": 0.6261204300000001,
+   "capital": 0.37387957000000005,
+   "roi": 1.6746580456375297,
+   "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Binance",
+     "ask": 0.032,
+     "fee": 0.07,
+     "token": "33133888381833697363598232399921331430113166441222747644830320768557811865677"
+    },
+    {
+     "label": "Bybit",
+     "ask": 0.1,
+     "fee": 0.07,
+     "token": "31456213910688165232414896348922872828263344522645115443979222852564164274401"
+    },
+    {
+     "label": "Coinbase",
+     "ask": 0.05,
+     "fee": 0.07,
+     "token": "108456552440791823260960033635314125747774903568374052320005884385159048816979"
+    },
+    {
+     "label": "Kraken",
+     "ask": 0.08,
+     "fee": 0.07,
+     "token": "2037424483225175368674328976536283747321232845096377319690295393880599840183"
+    },
+    {
+     "label": "OKX",
+     "ask": 0.056,
+     "fee": 0.07,
+     "token": "112011131728658755973417160091316234320988962892879156306986710580328397159904"
+    },
+    {
+     "label": "Upbit",
+     "ask": 0.033,
+     "fee": 0.07,
+     "token": "36493261045648608661956884118224751942262111265334077702764616270365221342226"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "cambria-listed-on-within-30-days-of-tge"
   },
   {
    "venue": "polymarket",
@@ -165,60 +219,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "metamask-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Cambria listed on ___ within 30 days of TGE?",
-   "n_legs": 6,
-   "gross": 0.6479999999999999,
-   "fees": 0.022945020000000003,
-   "net": 0.6250549799999999,
-   "capital": 0.37494502,
-   "roi": 1.6670576928852125,
-   "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Binance",
-     "ask": 0.033,
-     "fee": 0.07,
-     "token": "33133888381833697363598232399921331430113166441222747644830320768557811865677"
-    },
-    {
-     "label": "Bybit",
-     "ask": 0.1,
-     "fee": 0.07,
-     "token": "31456213910688165232414896348922872828263344522645115443979222852564164274401"
-    },
-    {
-     "label": "Coinbase",
-     "ask": 0.05,
-     "fee": 0.07,
-     "token": "108456552440791823260960033635314125747774903568374052320005884385159048816979"
-    },
-    {
-     "label": "Kraken",
-     "ask": 0.08,
-     "fee": 0.07,
-     "token": "2037424483225175368674328976536283747321232845096377319690295393880599840183"
-    },
-    {
-     "label": "OKX",
-     "ask": 0.056,
-     "fee": 0.07,
-     "token": "112011131728658755973417160091316234320988962892879156306986710580328397159904"
-    },
-    {
-     "label": "Upbit",
-     "ask": 0.033,
-     "fee": 0.07,
-     "token": "36493261045648608661956884118224751942262111265334077702764616270365221342226"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "cambria-listed-on-within-30-days-of-tge"
   },
   {
    "venue": "kalshi",
@@ -348,6 +348,48 @@
   },
   {
    "venue": "polymarket",
+   "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
+   "n_legs": 4,
+   "gross": 0.5840000000000001,
+   "fees": 0.01420768,
+   "net": 0.5697923200000001,
+   "capital": 0.43020768,
+   "roi": 1.3244587358366084,
+   "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Top 1",
+     "ask": 0.018,
+     "fee": 0.04,
+     "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
+    },
+    {
+     "label": "Top 5",
+     "ask": 0.078,
+     "fee": 0.04,
+     "token": "33680702576319008137314059783220111325425488334688123922436101736117273079350"
+    },
+    {
+     "label": "Top 10",
+     "ask": 0.12,
+     "fee": 0.04,
+     "token": "21674386118144906625932360298343138335934756246570865891559879402792916064320"
+    },
+    {
+     "label": "Top 20",
+     "ask": 0.2,
+     "fee": 0.04,
+     "token": "111802433528104687939590679499346938177706354550385736398376602674632922844243"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "gpt-astra-6pt1-text-arena-rank-debut-20261027"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which countries will recognize Israel by December 31?",
    "n_legs": 16,
    "gross": 0.56,
@@ -462,55 +504,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
-   "n_legs": 4,
-   "gross": 0.562,
-   "fees": 0.01503664,
-   "net": 0.54696336,
-   "capital": 0.45303664,
-   "roi": 1.2073269835305154,
-   "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Top 1",
-     "ask": 0.04,
-     "fee": 0.04,
-     "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
-    },
-    {
-     "label": "Top 5",
-     "ask": 0.078,
-     "fee": 0.04,
-     "token": "33680702576319008137314059783220111325425488334688123922436101736117273079350"
-    },
-    {
-     "label": "Top 10",
-     "ask": 0.12,
-     "fee": 0.04,
-     "token": "21674386118144906625932360298343138335934756246570865891559879402792916064320"
-    },
-    {
-     "label": "Top 20",
-     "ask": 0.2,
-     "fee": 0.04,
-     "token": "111802433528104687939590679499346938177706354550385736398376602674632922844243"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "gpt-astra-6pt1-text-arena-rank-debut-20261027"
-  },
-  {
-   "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.5229999999999999,
-   "fees": 0.030762970000000004,
-   "net": 0.4922370299999999,
-   "capital": 0.50776297,
-   "roi": 0.9694228588587306,
+   "gross": 0.5269999999999999,
+   "fees": 0.030521890000000003,
+   "net": 0.4964781099999999,
+   "capital": 0.50352189,
+   "roi": 0.986010975610216,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -524,7 +524,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.095,
+     "ask": 0.093,
      "fee": 0.07,
      "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
     },
@@ -542,7 +542,7 @@
     },
     {
      "label": "$800M",
-     "ask": 0.046,
+     "ask": 0.044,
      "fee": 0.07,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -632,11 +632,11 @@
    "venue": "polymarket",
    "event": "Which Senators will vote for the Clarity Act?",
    "n_legs": 15,
-   "gross": 0.44899999999999995,
-   "fees": 0.02102588,
-   "net": 0.42797411999999996,
-   "capital": 0.5720258800000001,
-   "roi": 0.7481726526079552,
+   "gross": 0.44999999999999996,
+   "fees": 0.02099136,
+   "net": 0.42900863999999994,
+   "capital": 0.5709913600000001,
+   "roi": 0.751339985249514,
    "url": "https://polymarket.com/event/which-senators-will-vote-for-the-clarity-act-20260729190926658",
    "neg_risk": false,
    "coverage": "15/15",
@@ -656,7 +656,7 @@
     },
     {
      "label": "Mark Warner",
-     "ask": 0.069,
+     "ask": 0.068,
      "fee": 0.04,
      "token": "10202827714935282497859227158003474761289298950591881815816580710037498119308"
     },
@@ -834,6 +834,48 @@
   },
   {
    "venue": "polymarket",
+   "event": "Theo FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.40700000000000003,
+   "fees": 0.031146850000000004,
+   "net": 0.37585315,
+   "capital": 0.62414685,
+   "roi": 0.6021870494099265,
+   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$100M",
+     "ask": 0.25,
+     "fee": 0.07,
+     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.29,
+     "fee": 0.07,
+     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
+    },
+    {
+     "label": "$700M",
+     "ask": 0.022,
+     "fee": 0.07,
+     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.031,
+     "fee": 0.07,
+     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "theo-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
    "n_legs": 5,
    "gross": 0.37,
@@ -921,10 +963,10 @@
    "event": "What kind of product will OpenAI announce in 2026?",
    "n_legs": 10,
    "gross": 0.33499999999999996,
-   "fees": 0.0241786,
-   "net": 0.31082139999999997,
-   "capital": 0.6891786000000001,
-   "roi": 0.4510026863863735,
+   "fees": 0.02418724,
+   "net": 0.31081275999999997,
+   "capital": 0.6891872400000001,
+   "roi": 0.4509844958824251,
    "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -944,7 +986,7 @@
     },
     {
      "label": "Necklace",
-     "ask": 0.026,
+     "ask": 0.027,
      "fee": 0.04,
      "token": "20826236952766096458839542076301237144154160218855573686197597978501264662054"
     },
@@ -968,7 +1010,7 @@
     },
     {
      "label": "Phone",
-     "ask": 0.135,
+     "ask": 0.134,
      "fee": 0.04,
      "token": "4967389004560237148087059097306936016483726557350463241288661442119258090198"
     },
@@ -1094,11 +1136,11 @@
    "venue": "polymarket",
    "event": "Which parties will be in the next Berlin state government?",
    "n_legs": 8,
-   "gross": 0.28,
-   "fees": 0.02485208,
-   "net": 0.25514792000000003,
-   "capital": 0.74485208,
-   "roi": 0.34254844263843637,
+   "gross": 0.276,
+   "fees": 0.02488264,
+   "net": 0.25111736,
+   "capital": 0.7488826399999999,
+   "roi": 0.33532271491832155,
    "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
    "neg_risk": false,
    "coverage": "8/8",
@@ -1130,13 +1172,13 @@
     },
     {
      "label": "FDP",
-     "ask": 0.025,
+     "ask": 0.019,
      "fee": 0.04,
      "token": "27276160253692277268764267884225207845726086465358158747090025961244262769561"
     },
     {
      "label": "Linke",
-     "ask": 0.17,
+     "ask": 0.18,
      "fee": 0.04,
      "token": "45994902306346299558396188639083351358621700680737760471366529838542938771727"
     },
@@ -1160,11 +1202,11 @@
    "venue": "polymarket",
    "event": "Carlson's Republican nomination odds hit __ by December 31?",
    "n_legs": 3,
-   "gross": 0.27,
-   "fees": 0.021124,
-   "net": 0.24887600000000001,
-   "capital": 0.751124,
-   "roi": 0.33133810129885344,
+   "gross": 0.26,
+   "fees": 0.021368,
+   "net": 0.238632,
+   "capital": 0.761368,
+   "roi": 0.3134253081295773,
    "url": "https://polymarket.com/event/carlsons-republican-nomination-odds-hit-by-december-31",
    "neg_risk": false,
    "coverage": "3/3",
@@ -1172,7 +1214,7 @@
    "legs": [
     {
      "label": "\u2191 6%",
-     "ask": 0.19,
+     "ask": 0.2,
      "fee": 0.04,
      "token": "23838176520815790516998933646941211425758341726063374558078205175828745414884"
     },
@@ -1194,55 +1236,67 @@
   },
   {
    "venue": "polymarket",
-   "event": "Theo FDV above ___ one day after launch?",
-   "n_legs": 4,
-   "gross": 0.277,
-   "fees": 0.033785850000000006,
-   "net": 0.24321415000000002,
-   "capital": 0.75678585,
-   "roi": 0.32137777153206554,
-   "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
+   "event": "Next Google Gemini Pro Model: Arena Debut?",
+   "n_legs": 6,
+   "gross": 0.21999999999999997,
+   "fees": 0.02713624,
+   "net": 0.19286375999999997,
+   "capital": 0.8071362400000001,
+   "roi": 0.23894821027984067,
+   "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
    "neg_risk": false,
-   "coverage": "4/4",
+   "coverage": "6/6",
    "tier": 2,
    "legs": [
     {
-     "label": "$100M",
-     "ask": 0.25,
-     "fee": 0.07,
-     "token": "58800978055388023338291687246896501978356988550132031132721880889104766453130"
+     "label": "1480+",
+     "ask": 0.136,
+     "fee": 0.04,
+     "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
     },
     {
-     "label": "$300M",
-     "ask": 0.42,
-     "fee": 0.07,
-     "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
+     "label": "1490+",
+     "ask": 0.137,
+     "fee": 0.04,
+     "token": "5717213777158991755851161671784735239176114853982045661511655513077951811855"
     },
     {
-     "label": "$700M",
-     "ask": 0.022,
-     "fee": 0.07,
-     "token": "11839168084840622249119854938968216569778924691672033683793489339701753383298"
+     "label": "1500+",
+     "ask": 0.12,
+     "fee": 0.04,
+     "token": "92205817338549581942996291977146287067184626116756204357001405482376199798910"
     },
     {
-     "label": "$1B",
-     "ask": 0.031,
-     "fee": 0.07,
-     "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
+     "label": "1510+",
+     "ask": 0.127,
+     "fee": 0.04,
+     "token": "3253266438640589916367220273721046444105089880635011272452961047056509745530"
+    },
+    {
+     "label": "1495+",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "69345073575565588242189194892772551592901292816376992431290469884395002800745"
+    },
+    {
+     "label": "1470+",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "98294806074299790213625887159464175881931188208288410936234193467702062160830"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "theo-fdv-above-one-day-after-launch"
+   "event_slug": "next-google-gemini-pro-model-arena-debut"
   },
   {
    "venue": "polymarket",
    "event": "World Cup 2030: Location of Final",
    "n_legs": 5,
-   "gross": 0.09699999999999998,
-   "fees": 0.029343950000000004,
-   "net": 0.06765604999999997,
-   "capital": 0.93234395,
-   "roi": 0.07256554836871089,
+   "gross": 0.09799999999999998,
+   "fees": 0.029313300000000004,
+   "net": 0.06868669999999998,
+   "capital": 0.9313133,
+   "roi": 0.07375251701011891,
    "url": "https://polymarket.com/event/world-cup-2030-location-of-final-20260805200159829",
    "neg_risk": true,
    "coverage": "5/5",
@@ -1256,7 +1310,7 @@
     },
     {
      "label": "Madrid",
-     "ask": 0.194,
+     "ask": 0.193,
      "fee": 0.05,
      "token": "68499192702392425849250928497699313036578126390882875695331037362634884957382"
     },
@@ -1388,11 +1442,11 @@
    "venue": "polymarket",
    "event": "Which Millennium Prize Problem will AI solve next?",
    "n_legs": 6,
-   "gross": 0.08499999999999996,
-   "fees": 0.02818476,
-   "net": 0.05681523999999996,
-   "capital": 0.9431847600000001,
-   "roi": 0.060237656935847816,
+   "gross": 0.08599999999999997,
+   "fees": 0.02816624,
+   "net": 0.05783375999999997,
+   "capital": 0.94216624,
+   "roi": 0.061383816936594934,
    "url": "https://polymarket.com/event/which-millennium-prize-problem-will-ai-solve-next",
    "neg_risk": true,
    "coverage": "6/6",
@@ -1424,7 +1478,7 @@
     },
     {
      "label": "Yang-Mills",
-     "ask": 0.269,
+     "ask": 0.268,
      "fee": 0.04,
      "token": "87258957446167628400774072344996016047563723429033361753715807011875444523296"
     },
@@ -1485,6 +1539,42 @@
    ],
    "kind": "intra-event",
    "event_slug": "maduro-prison-time-527"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Quer\u00e9taro FC vs. Club Puebla",
+   "n_legs": 3,
+   "gross": 0.010000000000000009,
+   "fees": 0.032735,
+   "net": -0.02273499999999999,
+   "capital": 1.022735,
+   "roi": -0.02222960982072579,
+   "url": "https://polymarket.com/event/mex-que-pue-2026-11-08",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Quer\u00e9taro FC",
+     "ask": 0.34,
+     "fee": 0.05,
+     "token": "812388103695318670856221242641300540471347015570655570395513342420564823157"
+    },
+    {
+     "label": "Draw (Quer\u00e9taro FC vs. Club Puebla)",
+     "ask": 0.26,
+     "fee": 0.05,
+     "token": "7752076083722435027141746444589104069967421619715926698372001322269930482907"
+    },
+    {
+     "label": "Club Puebla",
+     "ask": 0.39,
+     "fee": 0.05,
+     "token": "87832492958454393057931346392461648040364455577123149158028261692919824390366"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "mex-que-pue-2026-11-08"
   },
   {
    "venue": "kalshi",
