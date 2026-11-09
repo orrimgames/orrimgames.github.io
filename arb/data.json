@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-09T14:15:38Z",
-  "ts": 1794233738.68769,
-  "scan_seconds": 10.7,
+  "generated_at": "2026-11-09T14:20:41Z",
+  "ts": 1794234041.476621,
+  "scan_seconds": 11.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 292 binary + 1709 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 287 binary + 1717 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Jalen Hurts 2026-27 Regular Season Passing Yards",
    "n_legs": 5,
-   "gross": 0.913,
-   "fees": 0.00425525,
-   "net": 0.90874475,
-   "capital": 0.09125525000000001,
-   "roi": 9.958273633571766,
+   "gross": 0.905,
+   "fees": 0.00463295,
+   "net": 0.9003670500000001,
+   "capital": 0.09963295,
+   "roi": 9.03684022203498,
    "url": "https://polymarket.com/event/jalen-hurts-passing-yards-2026-27",
    "neg_risk": false,
    "coverage": "5/5",
@@ -44,13 +44,13 @@
     },
     {
      "label": "3,249.5+ passing yards",
-     "ask": 0.007,
+     "ask": 0.006,
      "fee": 0.05,
      "token": "104207960267418441399795657951627184299691646095184089385180621257983951700964"
     },
     {
      "label": "3,499.5+ passing yards",
-     "ask": 0.021,
+     "ask": 0.03,
      "fee": 0.05,
      "token": "112099033466086199059977972276031738284326631311459530930748116266804308898683"
     },
@@ -188,11 +188,11 @@
    "venue": "polymarket",
    "event": "Abstract FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.723,
-   "fees": 0.018767770000000003,
-   "net": 0.70423223,
-   "capital": 0.29576777000000004,
-   "roi": 2.381031002803314,
+   "gross": 0.722,
+   "fees": 0.018833500000000003,
+   "net": 0.7031665,
+   "capital": 0.29683350000000003,
+   "roi": 2.368891988269518,
    "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -224,13 +224,13 @@
     },
     {
      "label": "$1B",
-     "ask": 0.021,
+     "ask": 0.022,
      "fee": 0.07,
      "token": "29464984159527182226786284598084151852915087509927059755874912820881004290711"
     },
     {
      "label": "$1.5B",
-     "ask": 0.029,
+     "ask": 0.028,
      "fee": 0.07,
      "token": "34006275526941913730889063441517864419431100389141199685409808212815618919830"
     },
@@ -242,7 +242,7 @@
     },
     {
      "label": "$2.5B",
-     "ask": 0.037,
+     "ask": 0.038,
      "fee": 0.07,
      "token": "47025970199621774724599842248616610229790137086617642731626650337316966975824"
     },
@@ -540,6 +540,54 @@
   },
   {
    "venue": "polymarket",
+   "event": "NVIDIA (NVDA) closes above ___ on November 9?",
+   "n_legs": 5,
+   "gross": 0.562,
+   "fees": 0.013787119999999998,
+   "net": 0.54821288,
+   "capital": 0.45178712,
+   "roi": 1.2134318481677833,
+   "url": "https://polymarket.com/event/nvda-close-above-on-november-9-2026",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$180",
+     "ask": 0.29,
+     "fee": 0.04,
+     "token": "82094322634273065030902323388824671230542064560231401727825480504211889687170"
+    },
+    {
+     "label": "$185",
+     "ask": 0.09,
+     "fee": 0.04,
+     "token": "113160269272968761791695539802006784532421889934055295600615409075207976144786"
+    },
+    {
+     "label": "$190",
+     "ask": 0.019,
+     "fee": 0.04,
+     "token": "19884805901890977863701060951417646912179205849547921605575764637372419371651"
+    },
+    {
+     "label": "$195",
+     "ask": 0.019,
+     "fee": 0.04,
+     "token": "115100450652778080665582586728277002930770672316452137589394984742980658786386"
+    },
+    {
+     "label": "$200",
+     "ask": 0.02,
+     "fee": 0.04,
+     "token": "5105462328638601380864414219801873260830407071456289438051423147912896265108"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "nvda-close-above-on-november-9-2026"
+  },
+  {
+   "venue": "polymarket",
    "event": "Theo FDV above ___ one day after launch?",
    "n_legs": 4,
    "gross": 0.5549999999999999,
@@ -579,54 +627,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "theo-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "NVIDIA (NVDA) closes above ___ on November 9?",
-   "n_legs": 5,
-   "gross": 0.542,
-   "fees": 0.014107119999999999,
-   "net": 0.52789288,
-   "capital": 0.47210712,
-   "roi": 1.1181633524188324,
-   "url": "https://polymarket.com/event/nvda-close-above-on-november-9-2026",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$180",
-     "ask": 0.31,
-     "fee": 0.04,
-     "token": "82094322634273065030902323388824671230542064560231401727825480504211889687170"
-    },
-    {
-     "label": "$185",
-     "ask": 0.09,
-     "fee": 0.04,
-     "token": "113160269272968761791695539802006784532421889934055295600615409075207976144786"
-    },
-    {
-     "label": "$190",
-     "ask": 0.019,
-     "fee": 0.04,
-     "token": "19884805901890977863701060951417646912179205849547921605575764637372419371651"
-    },
-    {
-     "label": "$195",
-     "ask": 0.019,
-     "fee": 0.04,
-     "token": "115100450652778080665582586728277002930770672316452137589394984742980658786386"
-    },
-    {
-     "label": "$200",
-     "ask": 0.02,
-     "fee": 0.04,
-     "token": "5105462328638601380864414219801873260830407071456289438051423147912896265108"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "nvda-close-above-on-november-9-2026"
   },
   {
    "venue": "polymarket",
@@ -1274,11 +1274,11 @@
    "venue": "polymarket",
    "event": "Merriam-Webster Word of the Year 2026 contains...?",
    "n_legs": 9,
-   "gross": 0.19199999999999995,
-   "fees": 0.03475230000000001,
-   "net": 0.15724769999999993,
-   "capital": 0.8427523,
-   "roi": 0.1865882774808208,
+   "gross": 0.19899999999999995,
+   "fees": 0.03442085,
+   "net": 0.16457914999999995,
+   "capital": 0.83542085,
+   "roi": 0.19700148733419803,
    "url": "https://polymarket.com/event/merriam-webster-word-of-the-year-2026-contains",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1292,7 +1292,7 @@
     },
     {
      "label": "rage",
-     "ask": 0.03,
+     "ask": 0.023,
      "fee": 0.05,
      "token": "57073772155145935730067470973961452392771508606042885310491253534174105255116"
     },
@@ -1341,6 +1341,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "merriam-webster-word-of-the-year-2026-contains"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Pro Football: Sam Darnold 2026-27 Regular Season Passing Yards",
+   "n_legs": 5,
+   "gross": 0.18000000000000005,
+   "fees": 0.03063,
+   "net": 0.14937000000000006,
+   "capital": 0.85063,
+   "roi": 0.17559926172366372,
+   "url": "https://polymarket.com/event/sam-darnold-passing-yards-2026-27",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "3,199.5+ passing yards",
+     "ask": 0.35,
+     "fee": 0.05,
+     "token": "70465806791939424839719680981946652055737070697745363323758722116773953391178"
+    },
+    {
+     "label": "3,449.5+ passing yards",
+     "ask": 0.26,
+     "fee": 0.05,
+     "token": "82998681237095145244495453722749605562299893138528817949173410849657037985673"
+    },
+    {
+     "label": "3,699.5+ passing yards",
+     "ask": 0.11,
+     "fee": 0.05,
+     "token": "90258851238073398237329032856788700126685686142657981987091769553686414354284"
+    },
+    {
+     "label": "3,949.5+ passing yards",
+     "ask": 0.04,
+     "fee": 0.05,
+     "token": "9804045273256474565820413023655410790300876202723253236909504311336633409633"
+    },
+    {
+     "label": "4,199.5+ passing yards",
+     "ask": 0.06,
+     "fee": 0.05,
+     "token": "25602701371870523811008982201120927697083582850459061114414857841281988536549"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "sam-darnold-passing-yards-2026-27"
   },
   {
    "venue": "kalshi",
@@ -1736,11 +1784,11 @@
    "venue": "polymarket",
    "event": "South Africa Annual Inflation 2026",
    "n_legs": 10,
-   "gross": 0.006000000000000005,
-   "fees": 0.0306382,
-   "net": -0.024638199999999996,
-   "capital": 1.0246382,
-   "roi": -0.024045755858018953,
+   "gross": 0.0040000000000000036,
+   "fees": 0.0307182,
+   "net": -0.026718199999999998,
+   "capital": 1.0267182,
+   "roi": -0.026022914564093634,
    "url": "https://polymarket.com/event/south-africa-annual-inflation-2026",
    "neg_risk": true,
    "coverage": "10/10",
@@ -1790,7 +1838,7 @@
     },
     {
      "label": "4.4-4.7%",
-     "ask": 0.099,
+     "ask": 0.101,
      "fee": 0.05,
      "token": "3951919163412134525399597702873162228172849536319846939827893988080465158612"
     },
