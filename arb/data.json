@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-09T00:45:54Z",
-  "ts": 1794185154.7255695,
-  "scan_seconds": 21.8,
+  "generated_at": "2026-11-09T00:50:41Z",
+  "ts": 1794185441.6683867,
+  "scan_seconds": 12.9,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 287 binary + 1648 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 286 binary + 1651 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -20,11 +20,11 @@
    "venue": "polymarket",
    "event": "StandX FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.808,
-   "fees": 0.013183100000000001,
-   "net": 0.7948169,
-   "capital": 0.2051831,
-   "roi": 3.873695738099288,
+   "gross": 0.81,
+   "fees": 0.013048420000000002,
+   "net": 0.7969515800000001,
+   "capital": 0.20304842,
+   "roi": 3.9249336685308855,
    "url": "https://polymarket.com/event/standx-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -92,7 +92,7 @@
     },
     {
      "label": "$200M",
-     "ask": 0.02,
+     "ask": 0.018,
      "fee": 0.07,
      "token": "112680133727341712048625489981542622175575331217528856115945351368430513568040"
     }
@@ -104,11 +104,11 @@
    "venue": "polymarket",
    "event": "Abstract FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.7190000000000001,
-   "fees": 0.01902803,
-   "net": 0.6999719700000001,
-   "capital": 0.30002803,
-   "roi": 2.333021917985463,
+   "gross": 0.72,
+   "fees": 0.01896132,
+   "net": 0.70103868,
+   "capital": 0.29896132,
+   "roi": 2.3449143186817616,
    "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -134,7 +134,7 @@
     },
     {
      "label": "$800M",
-     "ask": 0.024,
+     "ask": 0.023,
      "fee": 0.07,
      "token": "57014152902843873436298267975647352566614812264184262964627304589799772371869"
     },
@@ -242,11 +242,11 @@
    "venue": "polymarket",
    "event": "Cambria listed on ___ within 30 days of TGE?",
    "n_legs": 6,
-   "gross": 0.645,
-   "fees": 0.023140810000000005,
-   "net": 0.62185919,
-   "capital": 0.37814081000000005,
-   "roi": 1.6445175277431705,
+   "gross": 0.6459999999999999,
+   "fees": 0.023075640000000005,
+   "net": 0.62292436,
+   "capital": 0.37707564000000005,
+   "roi": 1.6519878080694894,
    "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
    "neg_risk": false,
    "coverage": "6/6",
@@ -254,7 +254,7 @@
    "legs": [
     {
      "label": "Binance",
-     "ask": 0.035,
+     "ask": 0.034,
      "fee": 0.07,
      "token": "33133888381833697363598232399921331430113166441222747644830320768557811865677"
     },
@@ -420,6 +420,48 @@
   },
   {
    "venue": "polymarket",
+   "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
+   "n_legs": 4,
+   "gross": 0.593,
+   "fees": 0.0140022,
+   "net": 0.5789978,
+   "capital": 0.4210022,
+   "roi": 1.3752844997009517,
+   "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Top 1",
+     "ask": 0.019,
+     "fee": 0.04,
+     "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
+    },
+    {
+     "label": "Top 5",
+     "ask": 0.078,
+     "fee": 0.04,
+     "token": "33680702576319008137314059783220111325425488334688123922436101736117273079350"
+    },
+    {
+     "label": "Top 10",
+     "ask": 0.12,
+     "fee": 0.04,
+     "token": "21674386118144906625932360298343138335934756246570865891559879402792916064320"
+    },
+    {
+     "label": "Top 20",
+     "ask": 0.19,
+     "fee": 0.04,
+     "token": "111802433528104687939590679499346938177706354550385736398376602674632922844243"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "gpt-astra-6pt1-text-arena-rank-debut-20261027"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which countries will recognize Israel by December 31?",
    "n_legs": 16,
    "gross": 0.56,
@@ -531,48 +573,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "which-countries-will-recognize-israel-by-december-31"
-  },
-  {
-   "venue": "polymarket",
-   "event": "GPT Astra 6.1+: Text Arena Rank Debut?",
-   "n_legs": 4,
-   "gross": 0.5740000000000001,
-   "fees": 0.01471888,
-   "net": 0.5592811200000001,
-   "capital": 0.44071888,
-   "roi": 1.2690201064224889,
-   "url": "https://polymarket.com/event/gpt-astra-6pt1-text-arena-rank-debut-20261027",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Top 1",
-     "ask": 0.038,
-     "fee": 0.04,
-     "token": "3244581946295179498468868136058675120336917460192594730978447958228854193100"
-    },
-    {
-     "label": "Top 5",
-     "ask": 0.078,
-     "fee": 0.04,
-     "token": "33680702576319008137314059783220111325425488334688123922436101736117273079350"
-    },
-    {
-     "label": "Top 10",
-     "ask": 0.12,
-     "fee": 0.04,
-     "token": "21674386118144906625932360298343138335934756246570865891559879402792916064320"
-    },
-    {
-     "label": "Top 20",
-     "ask": 0.19,
-     "fee": 0.04,
-     "token": "111802433528104687939590679499346938177706354550385736398376602674632922844243"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "gpt-astra-6pt1-text-arena-rank-debut-20261027"
   },
   {
    "venue": "polymarket",
@@ -704,11 +704,11 @@
    "venue": "polymarket",
    "event": "Which Senators will vote for the Clarity Act?",
    "n_legs": 15,
-   "gross": 0.44899999999999995,
-   "fees": 0.0210102,
-   "net": 0.4279898,
-   "capital": 0.5720102,
-   "roi": 0.7482205736890705,
+   "gross": 0.44999999999999996,
+   "fees": 0.0209712,
+   "net": 0.42902879999999993,
+   "capital": 0.5709712,
+   "roi": 0.7514018220183434,
    "url": "https://polymarket.com/event/which-senators-will-vote-for-the-clarity-act-20260729190926658",
    "neg_risk": false,
    "coverage": "15/15",
@@ -788,7 +788,7 @@
     },
     {
      "label": "Thom Tillis",
-     "ask": 0.013,
+     "ask": 0.012,
      "fee": 0.04,
      "token": "47381756084584906715622232685694492725441920068317174249551177011034316167026"
     },
@@ -807,48 +807,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "which-senators-will-vote-for-the-clarity-act-20260729190926658"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Democratic 2028 presidential odds hit __ by December 31?",
-   "n_legs": 4,
-   "gross": 0.44099999999999995,
-   "fees": 0.01752316,
-   "net": 0.42347683999999997,
-   "capital": 0.57652316,
-   "roi": 0.7345356949753761,
-   "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "\u2191 75%",
-     "ask": 0.039,
-     "fee": 0.04,
-     "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
-    },
-    {
-     "label": "\u2191 70%",
-     "ask": 0.31,
-     "fee": 0.04,
-     "token": "99924985459174807912905088098188460537077509259191979212811700892664044360760"
-    },
-    {
-     "label": "\u2193 60%",
-     "ask": 0.13,
-     "fee": 0.04,
-     "token": "105620317014345915227862022719498893803551274005248504250079913836090395148896"
-    },
-    {
-     "label": "\u2193 55%",
-     "ask": 0.08,
-     "fee": 0.04,
-     "token": "16654915472858212465529482870776910344097373353691725922653041067845783706153"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "democratic-2028-presidential-odds-hit-by-december-31"
   },
   {
    "venue": "polymarket",
@@ -906,13 +864,103 @@
   },
   {
    "venue": "polymarket",
+   "event": "Democratic 2028 presidential odds hit __ by December 31?",
+   "n_legs": 4,
+   "gross": 0.43300000000000005,
+   "fees": 0.01781564,
+   "net": 0.41518436000000003,
+   "capital": 0.58481564,
+   "roi": 0.7099405891401948,
+   "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "\u2191 75%",
+     "ask": 0.047,
+     "fee": 0.04,
+     "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
+    },
+    {
+     "label": "\u2191 70%",
+     "ask": 0.31,
+     "fee": 0.04,
+     "token": "99924985459174807912905088098188460537077509259191979212811700892664044360760"
+    },
+    {
+     "label": "\u2193 60%",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "105620317014345915227862022719498893803551274005248504250079913836090395148896"
+    },
+    {
+     "label": "\u2193 55%",
+     "ask": 0.08,
+     "fee": 0.04,
+     "token": "16654915472858212465529482870776910344097373353691725922653041067845783706153"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "democratic-2028-presidential-odds-hit-by-december-31"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
+   "n_legs": 5,
+   "gross": 0.39,
+   "fees": 0.0,
+   "net": 0.39,
+   "capital": 0.61,
+   "roi": 0.639344262295082,
+   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "10+",
+     "ask": 0.33,
+     "fee": 0.0,
+     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
+    },
+    {
+     "label": "20+",
+     "ask": 0.12,
+     "fee": 0.0,
+     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
+    },
+    {
+     "label": "30+",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
+    },
+    {
+     "label": "40+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
+    },
+    {
+     "label": "50+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
+  },
+  {
+   "venue": "polymarket",
    "event": "Theo FDV above ___ one day after launch?",
    "n_legs": 4,
-   "gross": 0.4179999999999999,
-   "fees": 0.03078012,
-   "net": 0.3872198799999999,
-   "capital": 0.61278012,
-   "roi": 0.6319067270002164,
+   "gross": 0.4169999999999999,
+   "fees": 0.03084585,
+   "net": 0.3861541499999999,
+   "capital": 0.61384585,
+   "roi": 0.6290734880752227,
    "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "4/4",
@@ -938,61 +986,13 @@
     },
     {
      "label": "$1B",
-     "ask": 0.03,
+     "ask": 0.031,
      "fee": 0.07,
      "token": "20578819632497094948919832231791927806037505104259258693847706947740485172298"
     }
    ],
    "kind": "intra-event",
    "event_slug": "theo-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
-   "n_legs": 5,
-   "gross": 0.38,
-   "fees": 0.0,
-   "net": 0.38,
-   "capital": 0.62,
-   "roi": 0.6129032258064516,
-   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "10+",
-     "ask": 0.33,
-     "fee": 0.0,
-     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
-    },
-    {
-     "label": "20+",
-     "ask": 0.12,
-     "fee": 0.0,
-     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
-    },
-    {
-     "label": "30+",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
-    },
-    {
-     "label": "40+",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
-    },
-    {
-     "label": "50+",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
   },
   {
    "venue": "polymarket",
@@ -1206,6 +1206,72 @@
   },
   {
    "venue": "polymarket",
+   "event": "Which parties will be in the next Berlin state government?",
+   "n_legs": 8,
+   "gross": 0.274,
+   "fees": 0.02495944,
+   "net": 0.24904056000000002,
+   "capital": 0.7509594399999999,
+   "roi": 0.3316298414199308,
+   "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
+   "neg_risk": false,
+   "coverage": "8/8",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "CDU",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "14346372732427061710264317994044585905163931992185186094335370525892876637442"
+    },
+    {
+     "label": "AfD",
+     "ask": 0.038,
+     "fee": 0.04,
+     "token": "73627188668615683328953341117391833756237594117372343433376238055041948657352"
+    },
+    {
+     "label": "Gr\u00fcne",
+     "ask": 0.171,
+     "fee": 0.04,
+     "token": "79430113721395718684612773337151551812963909573196995977928070134773676251232"
+    },
+    {
+     "label": "SPD",
+     "ask": 0.176,
+     "fee": 0.04,
+     "token": "53692983533610571873025514595602369226223440912331734299400442249891721559197"
+    },
+    {
+     "label": "FDP",
+     "ask": 0.021,
+     "fee": 0.04,
+     "token": "27276160253692277268764267884225207845726086465358158747090025961244262769561"
+    },
+    {
+     "label": "Linke",
+     "ask": 0.18,
+     "fee": 0.04,
+     "token": "45994902306346299558396188639083351358621700680737760471366529838542938771727"
+    },
+    {
+     "label": "FW",
+     "ask": 0.026,
+     "fee": 0.04,
+     "token": "804524894748707081815207407443399893597644574338007440998866703524800893884"
+    },
+    {
+     "label": "BSW",
+     "ask": 0.044,
+     "fee": 0.04,
+     "token": "96273339526483570210098179683040594183078593522685679856050782632964326850111"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "which-parties-will-be-in-next-berlin-state-government"
+  },
+  {
+   "venue": "polymarket",
    "event": "Carlson's Republican nomination odds hit __ by December 31?",
    "n_legs": 3,
    "gross": 0.27,
@@ -1239,72 +1305,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "carlsons-republican-nomination-odds-hit-by-december-31"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Which parties will be in the next Berlin state government?",
-   "n_legs": 8,
-   "gross": 0.268,
-   "fees": 0.02518792,
-   "net": 0.24281208,
-   "capital": 0.75718792,
-   "roi": 0.32067611432575416,
-   "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
-   "neg_risk": false,
-   "coverage": "8/8",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "CDU",
-     "ask": 0.07,
-     "fee": 0.04,
-     "token": "14346372732427061710264317994044585905163931992185186094335370525892876637442"
-    },
-    {
-     "label": "AfD",
-     "ask": 0.038,
-     "fee": 0.04,
-     "token": "73627188668615683328953341117391833756237594117372343433376238055041948657352"
-    },
-    {
-     "label": "Gr\u00fcne",
-     "ask": 0.171,
-     "fee": 0.04,
-     "token": "79430113721395718684612773337151551812963909573196995977928070134773676251232"
-    },
-    {
-     "label": "SPD",
-     "ask": 0.176,
-     "fee": 0.04,
-     "token": "53692983533610571873025514595602369226223440912331734299400442249891721559197"
-    },
-    {
-     "label": "FDP",
-     "ask": 0.027,
-     "fee": 0.04,
-     "token": "27276160253692277268764267884225207845726086465358158747090025961244262769561"
-    },
-    {
-     "label": "Linke",
-     "ask": 0.18,
-     "fee": 0.04,
-     "token": "45994902306346299558396188639083351358621700680737760471366529838542938771727"
-    },
-    {
-     "label": "FW",
-     "ask": 0.026,
-     "fee": 0.04,
-     "token": "804524894748707081815207407443399893597644574338007440998866703524800893884"
-    },
-    {
-     "label": "BSW",
-     "ask": 0.044,
-     "fee": 0.04,
-     "token": "96273339526483570210098179683040594183078593522685679856050782632964326850111"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-parties-will-be-in-next-berlin-state-government"
   },
   {
    "venue": "polymarket",
@@ -1364,11 +1364,11 @@
    "venue": "polymarket",
    "event": "World Cup 2030: Location of Final",
    "n_legs": 5,
-   "gross": 0.10799999999999998,
-   "fees": 0.029004800000000004,
-   "net": 0.07899519999999999,
-   "capital": 0.9210048000000001,
-   "roi": 0.08577067133634915,
+   "gross": 0.10599999999999998,
+   "fees": 0.029067000000000003,
+   "net": 0.07693299999999997,
+   "capital": 0.923067,
+   "roi": 0.08334497929186069,
    "url": "https://polymarket.com/event/world-cup-2030-location-of-final-20260805200159829",
    "neg_risk": true,
    "coverage": "5/5",
@@ -1382,7 +1382,7 @@
     },
     {
      "label": "Madrid",
-     "ask": 0.188,
+     "ask": 0.19,
      "fee": 0.05,
      "token": "68499192702392425849250928497699313036578126390882875695331037362634884957382"
     },
@@ -1560,6 +1560,42 @@
   },
   {
    "venue": "polymarket",
+   "event": "CD Universidad de Concepci\u00f3n vs. O'Higgins FC",
+   "n_legs": 3,
+   "gross": 0.04999999999999993,
+   "fees": 0.014115,
+   "net": 0.03588499999999993,
+   "capital": 0.964115,
+   "roi": 0.03722066351005837,
+   "url": "https://polymarket.com/event/chi1-cu1-ohf-2026-11-08",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "CD Universidad de Concepci\u00f3n",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "35465683583976897821531429555316268224134376222783809936971376633795447287077"
+    },
+    {
+     "label": "Draw (CD Universidad de Concepci\u00f3n vs. O'Higgins FC)",
+     "ask": 0.81,
+     "fee": 0.05,
+     "token": "2554038389288202261580134582444967664927306390176832801619384519700552569295"
+    },
+    {
+     "label": "O'Higgins FC",
+     "ask": 0.04,
+     "fee": 0.05,
+     "token": "81046733035093667514082663038991848926281027622155332324045442546271123316440"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "chi1-cu1-ohf-2026-11-08"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which Millennium Prize Problem will AI solve next?",
    "n_legs": 6,
    "gross": 0.03400000000000003,
@@ -1616,11 +1652,11 @@
    "venue": "polymarket",
    "event": "Where will 2026 rank among the highest U.S. domestic box office years on record?",
    "n_legs": 5,
-   "gross": 0.020000000000000018,
-   "fees": 0.0319677,
-   "net": -0.011967699999999984,
-   "capital": 1.0119677,
-   "roi": -0.011826167969590318,
+   "gross": 0.018999999999999906,
+   "fees": 0.03200745,
+   "net": -0.013007450000000094,
+   "capital": 1.0130074500000001,
+   "roi": -0.01284042876486258,
    "url": "https://polymarket.com/event/where-will-2026-rank-among-the-highest-uptspt-domestic-box-office-years-on-record-20260807033449401",
    "neg_risk": true,
    "coverage": "5/5",
@@ -1652,7 +1688,7 @@
     },
     {
      "label": "Below 15th",
-     "ask": 0.102,
+     "ask": 0.103,
      "fee": 0.05,
      "token": "100399321692273620363412178960421989544525427382276114833916754400525015568180"
     }
