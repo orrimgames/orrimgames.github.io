@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-11T08:01:03Z",
-  "ts": 1794384063.2094262,
-  "scan_seconds": 15.6,
+  "generated_at": "2026-11-11T08:05:52Z",
+  "ts": 1794384352.618998,
+  "scan_seconds": 13.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 318 binary + 1715 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 319 binary + 1715 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1452,6 +1452,66 @@
   },
   {
    "venue": "polymarket",
+   "event": "Anthropic IPO closing market cap above ___ ?",
+   "n_legs": 7,
+   "gross": 0.15500000000000003,
+   "fees": 0.02205476,
+   "net": 0.13294524000000002,
+   "capital": 0.8670547599999999,
+   "roi": 0.1533296928097137,
+   "url": "https://polymarket.com/event/anthropic-ipo-closing-market-cap-above",
+   "neg_risk": false,
+   "coverage": "7/7",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$1.5T",
+     "ask": 0.485,
+     "fee": 0.04,
+     "token": "52511106538309758320785822679064512584902994979393627814320253612101718719917"
+    },
+    {
+     "label": "$1.75T",
+     "ask": 0.23,
+     "fee": 0.04,
+     "token": "855581994033047650793620080677512273779362759301355573182429367584749805925"
+    },
+    {
+     "label": "$2T",
+     "ask": 0.063,
+     "fee": 0.04,
+     "token": "80002952986473814322038492757441306964816226984386880292275304272524448288302"
+    },
+    {
+     "label": "$2.25T",
+     "ask": 0.034,
+     "fee": 0.04,
+     "token": "26486483067805336952791431069594693006850810733991226063403777405311104832359"
+    },
+    {
+     "label": "$2.5T",
+     "ask": 0.011,
+     "fee": 0.04,
+     "token": "101195904643307403619500265673335087079005299622082570759963325575423903514571"
+    },
+    {
+     "label": "$2.75T",
+     "ask": 0.014,
+     "fee": 0.04,
+     "token": "40882472387883846695421769517895210064788698427069327908218179315098799474500"
+    },
+    {
+     "label": "$3T",
+     "ask": 0.008,
+     "fee": 0.04,
+     "token": "57507060068913254514294623046629035183567940899171250375832251266635307299650"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "anthropic-ipo-closing-market-cap-above"
+  },
+  {
+   "venue": "polymarket",
    "event": "Next GPT Terra Model (5.7+): Text Arena Debut?",
    "n_legs": 4,
    "gross": 0.14600000000000002,
@@ -1491,66 +1551,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "next-gpt-terra-model-5pt7-text-arena-debut-20261022"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Anthropic IPO closing market cap above ___ ?",
-   "n_legs": 7,
-   "gross": 0.14300000000000002,
-   "fees": 0.02247988,
-   "net": 0.12052012000000001,
-   "capital": 0.87947988,
-   "roi": 0.13703567613167,
-   "url": "https://polymarket.com/event/anthropic-ipo-closing-market-cap-above",
-   "neg_risk": false,
-   "coverage": "7/7",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$1.5T",
-     "ask": 0.486,
-     "fee": 0.04,
-     "token": "52511106538309758320785822679064512584902994979393627814320253612101718719917"
-    },
-    {
-     "label": "$1.75T",
-     "ask": 0.23,
-     "fee": 0.04,
-     "token": "855581994033047650793620080677512273779362759301355573182429367584749805925"
-    },
-    {
-     "label": "$2T",
-     "ask": 0.063,
-     "fee": 0.04,
-     "token": "80002952986473814322038492757441306964816226984386880292275304272524448288302"
-    },
-    {
-     "label": "$2.25T",
-     "ask": 0.036,
-     "fee": 0.04,
-     "token": "26486483067805336952791431069594693006850810733991226063403777405311104832359"
-    },
-    {
-     "label": "$2.5T",
-     "ask": 0.011,
-     "fee": 0.04,
-     "token": "101195904643307403619500265673335087079005299622082570759963325575423903514571"
-    },
-    {
-     "label": "$2.75T",
-     "ask": 0.02,
-     "fee": 0.04,
-     "token": "40882472387883846695421769517895210064788698427069327908218179315098799474500"
-    },
-    {
-     "label": "$3T",
-     "ask": 0.011,
-     "fee": 0.04,
-     "token": "57507060068913254514294623046629035183567940899171250375832251266635307299650"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "anthropic-ipo-closing-market-cap-above"
   },
   {
    "venue": "kalshi",
@@ -1784,11 +1784,11 @@
    "venue": "polymarket",
    "event": "Will AOC announce a run for Senate or President before 2028?",
    "n_legs": 3,
-   "gross": 0.050000000000000044,
-   "fees": 0.020502879999999998,
-   "net": 0.029497120000000047,
-   "capital": 0.97050288,
-   "roi": 0.03039364499361408,
+   "gross": 0.049000000000000044,
+   "fees": 0.020538999999999998,
+   "net": 0.028461000000000045,
+   "capital": 0.9715389999999999,
+   "roi": 0.02929475811058542,
    "url": "https://polymarket.com/event/will-aoc-announce-a-run-for-senate-or-president-before-2028",
    "neg_risk": true,
    "coverage": "3/3",
@@ -1808,7 +1808,7 @@
     },
     {
      "label": "Neither",
-     "ask": 0.048,
+     "ask": 0.049,
      "fee": 0.04,
      "token": "112799546057799297735111252657882906927863187049799433450936336695222238039879"
     }
@@ -1908,55 +1908,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "How many Trump vetoes overridden by December 31, 2027?",
-   "n_legs": 4,
-   "gross": 0.020000000000000018,
-   "fees": 0.025575999999999998,
-   "net": -0.00557599999999998,
-   "capital": 1.005576,
-   "roi": -0.005545080630404843,
-   "url": "https://polymarket.com/event/how-many-trump-vetoes-overridden-by-december-31-2027",
-   "neg_risk": true,
-   "coverage": "4/4",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "0",
-     "ask": 0.48,
-     "fee": 0.04,
-     "token": "83904404678594435553974072018031119852073487756590749140568356989546700871749"
-    },
-    {
-     "label": "1",
-     "ask": 0.29,
-     "fee": 0.04,
-     "token": "9287344346490926842394537324096323925343430345536169911110538409695085079929"
-    },
-    {
-     "label": "2",
-     "ask": 0.06,
-     "fee": 0.04,
-     "token": "35481063353477564379557879438289679680444688691034601369274115651976201858876"
-    },
-    {
-     "label": "3+",
-     "ask": 0.15,
-     "fee": 0.04,
-     "token": "86094205506653271358615155254638520619245301699732944964344469835076808362737"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-trump-vetoes-overridden-by-december-31-2027"
-  },
-  {
-   "venue": "polymarket",
    "event": "Japan GDP growth in Q3 2026 (QoQ Annualized)?",
    "n_legs": 10,
-   "gross": 0.03200000000000003,
-   "fees": 0.0395474,
-   "net": -0.007547399999999975,
-   "capital": 1.0075474,
-   "roi": -0.00749086345714353,
+   "gross": 0.03400000000000003,
+   "fees": 0.039451400000000005,
+   "net": -0.005451399999999974,
+   "capital": 1.0054513999999999,
+   "roi": -0.005421843363090424,
    "url": "https://polymarket.com/event/japan-gdp-growth-in-q3-2026-qoq-annualized",
    "neg_risk": true,
    "coverage": "10/10",
@@ -2006,7 +1964,7 @@
     },
     {
      "label": "2.4%\u20133.2%",
-     "ask": 0.021,
+     "ask": 0.019,
      "fee": 0.05,
      "token": "88536310972262830106537498989466659169014059483135052599902773379145235677795"
     },
@@ -2025,6 +1983,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "japan-gdp-growth-in-q3-2026-qoq-annualized"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How many Trump vetoes overridden by December 31, 2027?",
+   "n_legs": 4,
+   "gross": 0.020000000000000018,
+   "fees": 0.025575999999999998,
+   "net": -0.00557599999999998,
+   "capital": 1.005576,
+   "roi": -0.005545080630404843,
+   "url": "https://polymarket.com/event/how-many-trump-vetoes-overridden-by-december-31-2027",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "0",
+     "ask": 0.48,
+     "fee": 0.04,
+     "token": "83904404678594435553974072018031119852073487756590749140568356989546700871749"
+    },
+    {
+     "label": "1",
+     "ask": 0.29,
+     "fee": 0.04,
+     "token": "9287344346490926842394537324096323925343430345536169911110538409695085079929"
+    },
+    {
+     "label": "2",
+     "ask": 0.06,
+     "fee": 0.04,
+     "token": "35481063353477564379557879438289679680444688691034601369274115651976201858876"
+    },
+    {
+     "label": "3+",
+     "ask": 0.15,
+     "fee": 0.04,
+     "token": "86094205506653271358615155254638520619245301699732944964344469835076808362737"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-trump-vetoes-overridden-by-december-31-2027"
   },
   {
    "venue": "polymarket",
@@ -2234,11 +2234,11 @@
    "venue": "kalshi",
    "event": "Who will be the world's second trillionaire?",
    "n_legs": 12,
-   "gross": 0.06999999999999995,
+   "gross": 0.05999999999999994,
    "fees": 0.14,
-   "net": -0.07000000000000006,
-   "capital": 1.07,
-   "roi": -0.0654205607476636,
+   "net": -0.08000000000000007,
+   "capital": 1.08,
+   "roi": -0.07407407407407414,
    "url": "https://kalshi.com/events/KXNEXTTRILLIONAIRE-33",
    "neg_risk": null,
    "coverage": "12/12",
@@ -2294,7 +2294,7 @@
     },
     {
      "label": "Jensen Huang",
-     "ask": 0.08,
+     "ask": 0.09,
      "fee": 0.07,
      "ticker": "KXNEXTTRILLIONAIRE-33-JH"
     },
