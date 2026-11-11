@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-11T15:15:41Z",
-  "ts": 1794410141.0985172,
-  "scan_seconds": 14.7,
+  "generated_at": "2026-11-11T15:20:44Z",
+  "ts": 1794410444.7176948,
+  "scan_seconds": 10.5,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 294 binary + 1696 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 295 binary + 1695 multi | kalshi: 5000 events -> 71 binary + 4769 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -18,13 +18,61 @@
  "intra_event": [
   {
    "venue": "polymarket",
+   "event": "Microsoft (MSFT) closes above ___ on November 11?",
+   "n_legs": 5,
+   "gross": 0.835,
+   "fees": 0.00591092,
+   "net": 0.8290890799999999,
+   "capital": 0.17091092000000002,
+   "roi": 4.85100121162533,
+   "url": "https://polymarket.com/event/msft-close-above-on-november-11-2026",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$530",
+     "ask": 0.13,
+     "fee": 0.04,
+     "token": "65542430272471311546669226411475144360170319207612701171048594683495484084000"
+    },
+    {
+     "label": "$540",
+     "ask": 0.011,
+     "fee": 0.04,
+     "token": "104719169712745629320879660872086232662756834717223836371824098223946994454740"
+    },
+    {
+     "label": "$550",
+     "ask": 0.011,
+     "fee": 0.04,
+     "token": "83928227188920806689012077580049420313612617814007283201562630801380793954890"
+    },
+    {
+     "label": "$560",
+     "ask": 0.006,
+     "fee": 0.04,
+     "token": "5881745797673234558724856656314567816836794489761687374308835276571832212481"
+    },
+    {
+     "label": "$570",
+     "ask": 0.007,
+     "fee": 0.04,
+     "token": "20636520457449848029602305746039293778101512964881604863870866304771829073945"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "msft-close-above-on-november-11-2026"
+  },
+  {
+   "venue": "polymarket",
    "event": "Cambria listed on ___ within 30 days of TGE?",
    "n_legs": 6,
-   "gross": 0.7989999999999999,
-   "fees": 0.01355767,
-   "net": 0.78544233,
-   "capital": 0.21455767,
-   "roi": 3.6607515825465478,
+   "gross": 0.79,
+   "fees": 0.014137900000000002,
+   "net": 0.7758621,
+   "capital": 0.2241379,
+   "roi": 3.4615390792900262,
    "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
    "neg_risk": false,
    "coverage": "6/6",
@@ -56,7 +104,7 @@
     },
     {
      "label": "OKX",
-     "ask": 0.035,
+     "ask": 0.044,
      "fee": 0.07,
      "token": "112011131728658755973417160091316234320988962892879156306986710580328397159904"
     },
@@ -72,61 +120,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Microsoft (MSFT) closes above ___ on November 11?",
-   "n_legs": 5,
-   "gross": 0.722,
-   "fees": 0.00897952,
-   "net": 0.71302048,
-   "capital": 0.28697952000000004,
-   "roi": 2.4845692124650562,
-   "url": "https://polymarket.com/event/msft-close-above-on-november-11-2026",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$530",
-     "ask": 0.23,
-     "fee": 0.04,
-     "token": "65542430272471311546669226411475144360170319207612701171048594683495484084000"
-    },
-    {
-     "label": "$540",
-     "ask": 0.011,
-     "fee": 0.04,
-     "token": "104719169712745629320879660872086232662756834717223836371824098223946994454740"
-    },
-    {
-     "label": "$550",
-     "ask": 0.011,
-     "fee": 0.04,
-     "token": "83928227188920806689012077580049420313612617814007283201562630801380793954890"
-    },
-    {
-     "label": "$560",
-     "ask": 0.017,
-     "fee": 0.04,
-     "token": "5881745797673234558724856656314567816836794489761687374308835276571832212481"
-    },
-    {
-     "label": "$570",
-     "ask": 0.009,
-     "fee": 0.04,
-     "token": "20636520457449848029602305746039293778101512964881604863870866304771829073945"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "msft-close-above-on-november-11-2026"
-  },
-  {
-   "venue": "polymarket",
    "event": "Abstract FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.7190000000000001,
-   "fees": 0.01902145,
-   "net": 0.6999785500000001,
-   "capital": 0.30002144999999997,
-   "roi": 2.3330950170396156,
+   "gross": 0.7170000000000001,
+   "fees": 0.01915543,
+   "net": 0.6978445700000001,
+   "capital": 0.30215543,
+   "roi": 2.309554953223909,
    "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -134,7 +134,7 @@
    "legs": [
     {
      "label": "$200M",
-     "ask": 0.032,
+     "ask": 0.031,
      "fee": 0.07,
      "token": "84358917457786118111350061347880730021105314335676049736086740763081010842066"
     },
@@ -152,13 +152,13 @@
     },
     {
      "label": "$800M",
-     "ask": 0.023,
+     "ask": 0.024,
      "fee": 0.07,
      "token": "57014152902843873436298267975647352566614812264184262964627304589799772371869"
     },
     {
      "label": "$1B",
-     "ask": 0.023,
+     "ask": 0.024,
      "fee": 0.07,
      "token": "29464984159527182226786284598084151852915087509927059755874912820881004290711"
     },
@@ -170,7 +170,7 @@
     },
     {
      "label": "$2B",
-     "ask": 0.027,
+     "ask": 0.028,
      "fee": 0.07,
      "token": "37619692236255486158369207526002971972700674358795196765237007434469215408915"
     },
@@ -194,11 +194,11 @@
    "venue": "polymarket",
    "event": "Who will Xi Jinping purge in 2026?",
    "n_legs": 9,
-   "gross": 0.6839999999999999,
-   "fees": 0.01208088,
-   "net": 0.67191912,
-   "capital": 0.32808088,
-   "roi": 2.048028888486278,
+   "gross": 0.681,
+   "fees": 0.012192360000000001,
+   "net": 0.66880764,
+   "capital": 0.33119236,
+   "roi": 2.019393321754161,
    "url": "https://polymarket.com/event/who-will-xi-jinping-purge-in-2026",
    "neg_risk": false,
    "coverage": "9/9",
@@ -218,7 +218,7 @@
     },
     {
      "label": "Li Qiang",
-     "ask": 0.034,
+     "ask": 0.037,
      "fee": 0.04,
      "token": "110150817960743189311716492454150370182697030297588973712236199857034578518169"
     },
@@ -314,11 +314,11 @@
    "venue": "polymarket",
    "event": "Which parties will be in the next Berlin state government?",
    "n_legs": 8,
-   "gross": 0.673,
-   "fees": 0.01247412,
-   "net": 0.66052588,
-   "capital": 0.33947412,
-   "roi": 1.9457326526098662,
+   "gross": 0.677,
+   "fees": 0.01232468,
+   "net": 0.6646753200000001,
+   "capital": 0.33532468,
+   "roi": 1.9821843116349207,
    "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
    "neg_risk": false,
    "coverage": "8/8",
@@ -338,7 +338,7 @@
     },
     {
      "label": "Gr\u00fcne",
-     "ask": 0.035,
+     "ask": 0.031,
      "fee": 0.04,
      "token": "79430113721395718684612773337151551812963909573196995977928070134773676251232"
     },
@@ -800,11 +800,11 @@
    "venue": "polymarket",
    "event": "What kind of product will OpenAI announce in 2026?",
    "n_legs": 10,
-   "gross": 0.487,
-   "fees": 0.01929596,
-   "net": 0.46770404,
-   "capital": 0.53229596,
-   "roi": 0.8786541231686221,
+   "gross": 0.483,
+   "fees": 0.01943868,
+   "net": 0.46356132,
+   "capital": 0.5364386800000001,
+   "roi": 0.8641459635237339,
    "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -848,7 +848,7 @@
     },
     {
      "label": "Phone",
-     "ask": 0.052,
+     "ask": 0.056,
      "fee": 0.04,
      "token": "4967389004560237148087059097306936016483726557350463241288661442119258090198"
     },
@@ -1182,54 +1182,6 @@
   },
   {
    "venue": "polymarket",
-   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
-   "n_legs": 5,
-   "gross": 0.31900000000000006,
-   "fees": 0.0,
-   "net": 0.31900000000000006,
-   "capital": 0.6809999999999999,
-   "roi": 0.46842878120411174,
-   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "10+",
-     "ask": 0.29,
-     "fee": 0.0,
-     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
-    },
-    {
-     "label": "20+",
-     "ask": 0.21,
-     "fee": 0.0,
-     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
-    },
-    {
-     "label": "30+",
-     "ask": 0.08,
-     "fee": 0.0,
-     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
-    },
-    {
-     "label": "40+",
-     "ask": 0.058,
-     "fee": 0.0,
-     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
-    },
-    {
-     "label": "50+",
-     "ask": 0.043,
-     "fee": 0.0,
-     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
-  },
-  {
-   "venue": "polymarket",
    "event": "Oxford Word of the Year 2026 contains...?",
    "n_legs": 9,
    "gross": 0.347,
@@ -1304,11 +1256,11 @@
    "venue": "polymarket",
    "event": "Cambridge Dictionary Word of the Year 2026 contains...?",
    "n_legs": 9,
-   "gross": 0.33599999999999997,
-   "fees": 0.0299081,
-   "net": 0.3060919,
-   "capital": 0.6939081,
-   "roi": 0.44111302346809317,
+   "gross": 0.32999999999999996,
+   "fees": 0.0301853,
+   "net": 0.29981469999999993,
+   "capital": 0.7001853,
+   "roi": 0.42819336538484876,
    "url": "https://polymarket.com/event/cambridge-dictionary-word-of-the-year-2026-contains",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1340,7 +1292,7 @@
     },
     {
      "label": "larp",
-     "ask": 0.035,
+     "ask": 0.041,
      "fee": 0.05,
      "token": "101652770751391158280289615466146660168712998767421297654412180726551230241266"
     },
@@ -1371,6 +1323,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "cambridge-dictionary-word-of-the-year-2026-contains"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
+   "n_legs": 5,
+   "gross": 0.28900000000000003,
+   "fees": 0.0,
+   "net": 0.28900000000000003,
+   "capital": 0.711,
+   "roi": 0.4064697609001407,
+   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "10+",
+     "ask": 0.3,
+     "fee": 0.0,
+     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
+    },
+    {
+     "label": "20+",
+     "ask": 0.23,
+     "fee": 0.0,
+     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
+    },
+    {
+     "label": "30+",
+     "ask": 0.08,
+     "fee": 0.0,
+     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
+    },
+    {
+     "label": "40+",
+     "ask": 0.058,
+     "fee": 0.0,
+     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
+    },
+    {
+     "label": "50+",
+     "ask": 0.043,
+     "fee": 0.0,
+     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
   },
   {
    "venue": "kalshi",
@@ -1424,11 +1424,11 @@
    "venue": "polymarket",
    "event": "How low will 2-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.277,
-   "fees": 0.03315855,
-   "net": 0.24384145000000002,
-   "capital": 0.75615855,
-   "roi": 0.3224739705713835,
+   "gross": 0.28800000000000003,
+   "fees": 0.0327005,
+   "net": 0.2552995,
+   "capital": 0.7447005,
+   "roi": 0.3428217115471253,
    "url": "https://polymarket.com/event/how-low-will-2-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1454,7 +1454,7 @@
     },
     {
      "label": "Below 4.35%",
-     "ask": 0.09,
+     "ask": 0.08,
      "fee": 0.05,
      "token": "9310523602826090373403407524884284799319589164153102684982263785646120535010"
     },
@@ -1466,13 +1466,13 @@
     },
     {
      "label": "Below 4.29%",
-     "ask": 0.06,
+     "ask": 0.069,
      "fee": 0.05,
      "token": "50275652512525713179896793810571955489887772817338606121983794902632388932855"
     },
     {
      "label": "Below 4.26%",
-     "ask": 0.07,
+     "ask": 0.06,
      "fee": 0.05,
      "token": "94175445878688648004345750188029346464395814347644395060807254146775183435927"
     },
@@ -1538,11 +1538,11 @@
    "venue": "polymarket",
    "event": "Anthropic IPO closing market cap above ___ ?",
    "n_legs": 7,
-   "gross": 0.19699999999999995,
-   "fees": 0.02137588,
-   "net": 0.17562411999999994,
-   "capital": 0.8243758800000001,
-   "roi": 0.21303888706690438,
+   "gross": 0.20500000000000007,
+   "fees": 0.0212786,
+   "net": 0.18372140000000006,
+   "capital": 0.8162786,
+   "roi": 0.2250719300983758,
    "url": "https://polymarket.com/event/anthropic-ipo-closing-market-cap-above",
    "neg_risk": false,
    "coverage": "7/7",
@@ -1550,13 +1550,13 @@
    "legs": [
     {
      "label": "$1.5T",
-     "ask": 0.472,
+     "ask": 0.47,
      "fee": 0.04,
      "token": "52511106538309758320785822679064512584902994979393627814320253612101718719917"
     },
     {
      "label": "$1.75T",
-     "ask": 0.2,
+     "ask": 0.19,
      "fee": 0.04,
      "token": "855581994033047650793620080677512273779362759301355573182429367584749805925"
     },
@@ -1568,7 +1568,7 @@
     },
     {
      "label": "$2.25T",
-     "ask": 0.025,
+     "ask": 0.029,
      "fee": 0.04,
      "token": "26486483067805336952791431069594693006850810733991226063403777405311104832359"
     },
@@ -1743,10 +1743,10 @@
    "event": "What price will Solana hit November 9-15?",
    "n_legs": 15,
    "gross": 0.14300000000000002,
-   "fees": 0.041430690000000006,
-   "net": 0.10156931000000001,
-   "capital": 0.89843069,
-   "roi": 0.11305191500081103,
+   "fees": 0.04087069000000001,
+   "net": 0.10212931,
+   "capital": 0.89787069,
+   "roi": 0.11374612306366745,
    "url": "https://polymarket.com/event/what-price-will-solana-hit-november-9-15-2026",
    "neg_risk": false,
    "coverage": "15/15",
@@ -1796,7 +1796,7 @@
     },
     {
      "label": "\u2193 80",
-     "ask": 0.44,
+     "ask": 0.46,
      "fee": 0.07,
      "token": "7853703282252595347400780004104798639447091768332313234985226504793796792029"
     },
@@ -1838,7 +1838,7 @@
     },
     {
      "label": "\u2191 90",
-     "ask": 0.26,
+     "ask": 0.24,
      "fee": 0.07,
      "token": "35210842805313182443448307148221116987829863528513049997100073643312474309221"
     }
@@ -1850,11 +1850,11 @@
    "venue": "polymarket",
    "event": "How low will 5-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.07999999999999996,
-   "fees": 0.03994,
-   "net": 0.04005999999999996,
-   "capital": 0.95994,
-   "roi": 0.04173177490259803,
+   "gross": 0.12,
+   "fees": 0.0388,
+   "net": 0.0812,
+   "capital": 0.9188000000000001,
+   "roi": 0.08837614279494992,
    "url": "https://polymarket.com/event/how-low-will-5-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1862,13 +1862,13 @@
    "legs": [
     {
      "label": "Below 4.59%",
-     "ask": 0.22,
+     "ask": 0.19,
      "fee": 0.05,
      "token": "86223651370129605550636053209248154094826933229851877033370645163078286094152"
     },
     {
      "label": "Below 4.56%",
-     "ask": 0.16,
+     "ask": 0.14,
      "fee": 0.05,
      "token": "69565405469443780365338080628621129944474650323671874918004789021390244426964"
     },
@@ -1904,7 +1904,7 @@
     },
     {
      "label": "Below 4.37%",
-     "ask": 0.05,
+     "ask": 0.06,
      "fee": 0.05,
      "token": "39671382570543632920395816806346219292044453924331096501670694403920200022802"
     },
@@ -1988,11 +1988,11 @@
    "venue": "polymarket",
    "event": "How low will 10-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.07000000000000006,
-   "fees": 0.041285,
-   "net": 0.02871500000000006,
-   "capital": 0.971285,
-   "roi": 0.02956392819821171,
+   "gross": 0.06999999999999995,
+   "fees": 0.041335000000000004,
+   "net": 0.028664999999999947,
+   "capital": 0.9713350000000001,
+   "roi": 0.029510930832308057,
    "url": "https://polymarket.com/event/how-low-will-10-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -2000,19 +2000,19 @@
    "legs": [
     {
      "label": "Below 4.82%",
-     "ask": 0.18,
+     "ask": 0.17,
      "fee": 0.05,
      "token": "13377721987098980051749607039131658402729491779351639608813085146833269355484"
     },
     {
      "label": "Below 4.79%",
-     "ask": 0.11,
+     "ask": 0.13,
      "fee": 0.05,
      "token": "90999116052433179326295346506194469643187572373856736791170226159277710153227"
     },
     {
      "label": "Below 4.76%",
-     "ask": 0.12,
+     "ask": 0.11,
      "fee": 0.05,
      "token": "42579316561871604284156190889284585288977750608923922690198544984439829177179"
     },
@@ -2246,11 +2246,11 @@
    "venue": "polymarket",
    "event": "Japan GDP growth in Q3 2026 (QoQ Annualized)?",
    "n_legs": 10,
-   "gross": 0.03400000000000003,
-   "fees": 0.0390237,
-   "net": -0.005023699999999971,
-   "capital": 1.0050237,
-   "roi": -0.0049985885904978876,
+   "gross": 0.03500000000000003,
+   "fees": 0.038994650000000006,
+   "net": -0.003994649999999975,
+   "capital": 1.0039946499999999,
+   "roi": -0.00397875626130077,
    "url": "https://polymarket.com/event/japan-gdp-growth-in-q3-2026-qoq-annualized",
    "neg_risk": true,
    "coverage": "10/10",
@@ -2288,7 +2288,7 @@
     },
     {
      "label": "0.8%\u20131.6%",
-     "ask": 0.21,
+     "ask": 0.209,
      "fee": 0.05,
      "token": "60504243362806706577320561383990214342997152673929036704606704117731603932393"
     },
@@ -2361,72 +2361,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "how-many-trump-vetoes-overridden-by-december-31-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Canada Annual Inflation 2026",
-   "n_legs": 8,
-   "gross": 0.009000000000000008,
-   "fees": 0.03580015,
-   "net": -0.026800149999999995,
-   "capital": 1.02680015,
-   "roi": -0.02610064869974941,
-   "url": "https://polymarket.com/event/canada-annual-inflation-2026",
-   "neg_risk": true,
-   "coverage": "8/8",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<1.0%",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "31257204937237990467751124193937165588994407435836702498606483382304261744962"
-    },
-    {
-     "label": "1.0\u20131.4%",
-     "ask": 0.016,
-     "fee": 0.05,
-     "token": "67791298699048517760028878527858714994580564495268937772889200256855400088568"
-    },
-    {
-     "label": "1.5\u20131.9%",
-     "ask": 0.007,
-     "fee": 0.05,
-     "token": "65374253505651121923763194846201889808498251344458910043222348451869639241464"
-    },
-    {
-     "label": "2.0\u20132.4%",
-     "ask": 0.075,
-     "fee": 0.05,
-     "token": "18235424021187509751166100534830141576764837136321519399171002009668230346326"
-    },
-    {
-     "label": "2.5\u20132.9%",
-     "ask": 0.262,
-     "fee": 0.05,
-     "token": "42886740787070849677667435962046954744507546692160141925653974894735788658911"
-    },
-    {
-     "label": "4.0%+",
-     "ask": 0.086,
-     "fee": 0.05,
-     "token": "73551193560193534894600808769170100050078056991646420917804310023113474856243"
-    },
-    {
-     "label": "3.0-3.4%",
-     "ask": 0.425,
-     "fee": 0.05,
-     "token": "70947022834029907891985983421086617935623882414718990926364070609942565191239"
-    },
-    {
-     "label": "3.5-3.9%",
-     "ask": 0.111,
-     "fee": 0.05,
-     "token": "114717933804246055543643295237152736549748997887059435405580904226717354373479"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "canada-annual-inflation-2026"
   },
   {
    "venue": "polymarket",
@@ -2561,74 +2495,14 @@
    "event_slug": "how-many-votes-will-hakeem-jeffries-get-on-first-ballot"
   },
   {
-   "venue": "kalshi",
-   "event": "2030 U.S. House winner?",
-   "n_legs": 2,
-   "gross": 0.010000000000000009,
-   "fees": 0.04,
-   "net": -0.029999999999999992,
-   "capital": 1.03,
-   "roi": -0.029126213592233,
-   "url": "https://kalshi.com/events/KXCONTROLH-2030",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Democratic party",
-     "ask": 0.55,
-     "fee": 0.07,
-     "ticker": "KXCONTROLH-2030-D"
-    },
-    {
-     "label": "Republican party",
-     "ask": 0.44,
-     "fee": 0.07,
-     "ticker": "KXCONTROLH-2030-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXCONTROLH-2030"
-  },
-  {
-   "venue": "kalshi",
-   "event": "North Carolina House District 24 winner? (2028)",
-   "n_legs": 2,
-   "gross": 0.010000000000000009,
-   "fees": 0.04,
-   "net": -0.029999999999999992,
-   "capital": 1.03,
-   "roi": -0.029126213592233,
-   "url": "https://kalshi.com/events/KXSTATELEGNC-28NOV07NCH024",
-   "neg_risk": null,
-   "coverage": "2/2",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Democratic party",
-     "ask": 0.69,
-     "fee": 0.07,
-     "ticker": "KXSTATELEGNC-28NOV07NCH024-D"
-    },
-    {
-     "label": "Republican party",
-     "ask": 0.3,
-     "fee": 0.07,
-     "ticker": "KXSTATELEGNC-28NOV07NCH024-R"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXSTATELEGNC-28NOV07NCH024"
-  },
-  {
    "venue": "polymarket",
    "event": "Who will be arrested before 2027?",
    "n_legs": 24,
-   "gross": 0.006000000000000005,
-   "fees": 0.03731464,
-   "net": -0.03131464,
-   "capital": 1.03131464,
-   "roi": -0.03036380827484423,
+   "gross": 0.008000000000000007,
+   "fees": 0.037243280000000004,
+   "net": -0.029243279999999996,
+   "capital": 1.02924328,
+   "roi": -0.028412407997456146,
    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027",
    "neg_risk": false,
    "coverage": "24/24",
@@ -2744,7 +2618,7 @@
     },
     {
      "label": "Tom Homan",
-     "ask": 0.04,
+     "ask": 0.039,
      "fee": 0.04,
      "token": "68573038148377142897679188886918535473939642314197309810135827411166768194472"
     },
@@ -2768,7 +2642,7 @@
     },
     {
      "label": "Lee Jun-seok",
-     "ask": 0.069,
+     "ask": 0.068,
      "fee": 0.04,
      "token": "40509049808387523915856542863931989788066066974260505108538437520002318794359"
     },
@@ -2781,6 +2655,66 @@
    ],
    "kind": "intra-event",
    "event_slug": "who-will-be-arrested-before-2027"
+  },
+  {
+   "venue": "kalshi",
+   "event": "2030 U.S. House winner?",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.04,
+   "net": -0.029999999999999992,
+   "capital": 1.03,
+   "roi": -0.029126213592233,
+   "url": "https://kalshi.com/events/KXCONTROLH-2030",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Democratic party",
+     "ask": 0.55,
+     "fee": 0.07,
+     "ticker": "KXCONTROLH-2030-D"
+    },
+    {
+     "label": "Republican party",
+     "ask": 0.44,
+     "fee": 0.07,
+     "ticker": "KXCONTROLH-2030-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXCONTROLH-2030"
+  },
+  {
+   "venue": "kalshi",
+   "event": "North Carolina House District 24 winner? (2028)",
+   "n_legs": 2,
+   "gross": 0.010000000000000009,
+   "fees": 0.04,
+   "net": -0.029999999999999992,
+   "capital": 1.03,
+   "roi": -0.029126213592233,
+   "url": "https://kalshi.com/events/KXSTATELEGNC-28NOV07NCH024",
+   "neg_risk": null,
+   "coverage": "2/2",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Democratic party",
+     "ask": 0.69,
+     "fee": 0.07,
+     "ticker": "KXSTATELEGNC-28NOV07NCH024-D"
+    },
+    {
+     "label": "Republican party",
+     "ask": 0.3,
+     "fee": 0.07,
+     "ticker": "KXSTATELEGNC-28NOV07NCH024-R"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "KXSTATELEGNC-28NOV07NCH024"
   },
   {
    "venue": "kalshi",
