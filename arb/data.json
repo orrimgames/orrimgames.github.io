@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-12T04:31:09Z",
-  "ts": 1794457869.5530112,
-  "scan_seconds": 12.8,
+  "generated_at": "2026-11-12T04:35:41Z",
+  "ts": 1794458141.6805182,
+  "scan_seconds": 16.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 273 binary + 1713 multi | kalshi: 5000 events -> 71 binary + 4765 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 273 binary + 1712 multi | kalshi: 5000 events -> 71 binary + 4765 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1412,11 +1412,11 @@
    "venue": "polymarket",
    "event": "Anthropic IPO closing market cap above ___ ?",
    "n_legs": 7,
-   "gross": 0.236,
-   "fees": 0.020885599999999997,
-   "net": 0.21511439999999998,
-   "capital": 0.7848856,
-   "roi": 0.27407102385366733,
+   "gross": 0.23299999999999998,
+   "fees": 0.02089604,
+   "net": 0.21210395999999998,
+   "capital": 0.78789604,
+   "roi": 0.2692029775907999,
    "url": "https://polymarket.com/event/anthropic-ipo-closing-market-cap-above",
    "neg_risk": false,
    "coverage": "7/7",
@@ -1424,7 +1424,7 @@
    "legs": [
     {
      "label": "$1.5T",
-     "ask": 0.455,
+     "ask": 0.458,
      "fee": 0.04,
      "token": "52511106538309758320785822679064512584902994979393627814320253612101718719917"
     },
@@ -2244,61 +2244,55 @@
   },
   {
    "venue": "polymarket",
-   "event": "First to list tokenized stocks in the US?",
-   "n_legs": 5,
-   "gross": 0.031000000000000028,
-   "fees": 0.05286785000000001,
-   "net": -0.02186784999999998,
-   "capital": 1.02186785,
-   "roi": -0.021399880620571417,
-   "url": "https://polymarket.com/event/first-to-list-tokenized-stocks-in-the-us",
+   "event": "Jensen Huang resigned or removed & Nvidia above $4T end of 2026?",
+   "n_legs": 4,
+   "gross": 0.009000000000000008,
+   "fees": 0.02404156,
+   "net": -0.015041559999999992,
+   "capital": 1.01504156,
+   "roi": -0.014818664173711263,
+   "url": "https://polymarket.com/event/jensen-huang-resigned-or-removed-and-nvidia-market-cap-above-4t-end-of-2026",
    "neg_risk": true,
-   "coverage": "5/5",
+   "coverage": "4/4",
    "tier": 1,
    "legs": [
     {
-     "label": "Robinhood",
-     "ask": 0.27,
-     "fee": 0.07,
-     "token": "109653052070133709391948868361297569582692534902581687329093320934499501412821"
+     "label": "Resigned/removed; Over $4T",
+     "ask": 0.47,
+     "fee": 0.04,
+     "token": "23238002151482355283836133352526069452052493023158052380740368446219246935403"
     },
     {
-     "label": "Coinbase",
-     "ask": 0.172,
-     "fee": 0.07,
-     "token": "56288302073825065037856725242268819560054413448160249361062642276351573155270"
+     "label": "Resigned/removed; Under $4T",
+     "ask": 0.4,
+     "fee": 0.04,
+     "token": "100408824189650655556942536380487668085223983507872782178713974046253226706791"
     },
     {
-     "label": "Kraken",
-     "ask": 0.182,
-     "fee": 0.07,
-     "token": "18160239875298190409497751306394016428740710753681186100653844409625565865196"
+     "label": "Not resigned/removed; Over $4T",
+     "ask": 0.09,
+     "fee": 0.04,
+     "token": "4635569359919517497245692116048334653851915777383774754060444545586676205133"
     },
     {
-     "label": "Gemini",
-     "ask": 0.076,
-     "fee": 0.07,
-     "token": "33332211778937988914176518315777948491276124246002573462531010522223861818632"
-    },
-    {
-     "label": "No listing by December 31, 2027",
-     "ask": 0.269,
-     "fee": 0.07,
-     "token": "66271378305212148404877501008744854544015975943125569848377919578671799091744"
+     "label": "Not resigned/removed; Under $4T",
+     "ask": 0.031,
+     "fee": 0.04,
+     "token": "41377089272566624349223254189200931137439974535416446739781511853696947510853"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "first-to-list-tokenized-stocks-in-the-us"
+   "event_slug": "jensen-huang-resigned-or-removed-and-nvidia-market-cap-above-4t-end-of-2026"
   },
   {
    "venue": "polymarket",
    "event": "What will OpenAI's IPO valuation be?",
    "n_legs": 8,
-   "gross": 0.01100000000000001,
-   "fees": 0.03287268,
-   "net": -0.02187267999999999,
-   "capital": 1.02187268,
-   "roi": -0.021404506087783843,
+   "gross": 0.017000000000000015,
+   "fees": 0.03265236,
+   "net": -0.015652359999999983,
+   "capital": 1.01565236,
+   "roi": -0.015411139299671379,
    "url": "https://polymarket.com/event/what-will-openais-ipo-valuation-be",
    "neg_risk": true,
    "coverage": "8/8",
@@ -2348,13 +2342,61 @@
     },
     {
      "label": "$2.5T+",
-     "ask": 0.044,
+     "ask": 0.038,
      "fee": 0.04,
      "token": "103237098062510886690443421829712169490186159801502289336394100213621790984195"
     }
    ],
    "kind": "intra-event",
    "event_slug": "what-will-openais-ipo-valuation-be"
+  },
+  {
+   "venue": "polymarket",
+   "event": "First to list tokenized stocks in the US?",
+   "n_legs": 5,
+   "gross": 0.031000000000000028,
+   "fees": 0.05286785000000001,
+   "net": -0.02186784999999998,
+   "capital": 1.02186785,
+   "roi": -0.021399880620571417,
+   "url": "https://polymarket.com/event/first-to-list-tokenized-stocks-in-the-us",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Robinhood",
+     "ask": 0.27,
+     "fee": 0.07,
+     "token": "109653052070133709391948868361297569582692534902581687329093320934499501412821"
+    },
+    {
+     "label": "Coinbase",
+     "ask": 0.172,
+     "fee": 0.07,
+     "token": "56288302073825065037856725242268819560054413448160249361062642276351573155270"
+    },
+    {
+     "label": "Kraken",
+     "ask": 0.182,
+     "fee": 0.07,
+     "token": "18160239875298190409497751306394016428740710753681186100653844409625565865196"
+    },
+    {
+     "label": "Gemini",
+     "ask": 0.076,
+     "fee": 0.07,
+     "token": "33332211778937988914176518315777948491276124246002573462531010522223861818632"
+    },
+    {
+     "label": "No listing by December 31, 2027",
+     "ask": 0.269,
+     "fee": 0.07,
+     "token": "66271378305212148404877501008744854544015975943125569848377919578671799091744"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "first-to-list-tokenized-stocks-in-the-us"
   },
   {
    "venue": "polymarket",
@@ -2720,11 +2762,11 @@
    "venue": "kalshi",
    "event": "Who will be the world's second trillionaire?",
    "n_legs": 12,
-   "gross": 0.04999999999999993,
+   "gross": 0.05999999999999994,
    "fees": 0.14,
-   "net": -0.09000000000000008,
-   "capital": 1.09,
-   "roi": -0.08256880733944962,
+   "net": -0.08000000000000007,
+   "capital": 1.08,
+   "roi": -0.07407407407407414,
    "url": "https://kalshi.com/events/KXNEXTTRILLIONAIRE-33",
    "neg_risk": null,
    "coverage": "12/12",
@@ -2744,7 +2786,7 @@
     },
     {
      "label": "Jeff Bezos",
-     "ask": 0.22,
+     "ask": 0.21,
      "fee": 0.07,
      "ticker": "KXNEXTTRILLIONAIRE-33-JB"
     },
