@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-12T05:10:42Z",
-  "ts": 1794460242.9258504,
-  "scan_seconds": 15.3,
+  "generated_at": "2026-11-12T05:15:37Z",
+  "ts": 1794460537.745535,
+  "scan_seconds": 10.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 260 binary + 1712 multi | kalshi: 5000 events -> 71 binary + 4765 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 260 binary + 1711 multi | kalshi: 5000 events -> 71 binary + 4765 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -2625,6 +2625,66 @@
    ],
    "kind": "intra-event",
    "event_slug": "who-will-be-arrested-before-2027"
+  },
+  {
+   "venue": "polymarket",
+   "event": "OpenAI IPO Closing Market Cap",
+   "n_legs": 7,
+   "gross": 0.0030000000000000027,
+   "fees": 0.03174036,
+   "net": -0.02874036,
+   "capital": 1.02874036,
+   "roi": -0.027937428254491734,
+   "url": "https://polymarket.com/event/openai-ipo-closing-market-cap-554",
+   "neg_risk": true,
+   "coverage": "7/7",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<500B",
+     "ask": 0.025,
+     "fee": 0.04,
+     "token": "114601374514602363994953134090498854694942144165145373434165375925420011593489"
+    },
+    {
+     "label": "500\u2013750B",
+     "ask": 0.036,
+     "fee": 0.04,
+     "token": "16431849415858885456221049616384331828049053247914187859344012689995986679551"
+    },
+    {
+     "label": "750B\u20131T",
+     "ask": 0.06,
+     "fee": 0.04,
+     "token": "71303623632029515181354276809222039562821444106606211512380907216622852730173"
+    },
+    {
+     "label": "1T\u20131.25T",
+     "ask": 0.164,
+     "fee": 0.04,
+     "token": "52275706593137793319318925926177756496204385627147209958254016456013188034724"
+    },
+    {
+     "label": "1.25T\u20131.5T",
+     "ask": 0.2,
+     "fee": 0.04,
+     "token": "9526007795082902399258386938460641599054284632702846609175989239215244504833"
+    },
+    {
+     "label": "1.5T+",
+     "ask": 0.255,
+     "fee": 0.04,
+     "token": "63793996707762588429087893110546889766612541662978180322747690538629665518484"
+    },
+    {
+     "label": "No IPO by December 31, 2027",
+     "ask": 0.257,
+     "fee": 0.04,
+     "token": "65635846672230517938250725434521085140827228441803710554357924247471745513898"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "openai-ipo-closing-market-cap-554"
   },
   {
    "venue": "kalshi",
