@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-13T04:15:45Z",
-  "ts": 1794543345.3643737,
-  "scan_seconds": 15.0,
+  "generated_at": "2026-11-13T04:20:38Z",
+  "ts": 1794543638.3873472,
+  "scan_seconds": 10.5,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 281 binary + 1722 multi | kalshi: 5000 events -> 71 binary + 4766 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 281 binary + 1725 multi | kalshi: 5000 events -> 71 binary + 4766 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -2364,6 +2364,54 @@
   },
   {
    "venue": "polymarket",
+   "event": "How many Jensen Huang affairs will be reported by December 31?",
+   "n_legs": 5,
+   "gross": 0.010000000000000009,
+   "fees": 0.026036000000000004,
+   "net": -0.016035999999999995,
+   "capital": 1.016036,
+   "roi": -0.015782905330126093,
+   "url": "https://polymarket.com/event/how-many-jensen-huang-affairs-will-be-reported-by-december-31",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "3",
+     "ask": 0.5,
+     "fee": 0.04,
+     "token": "92723387666573921437159452613474392617447699007597179858375168996499029429437"
+    },
+    {
+     "label": "4",
+     "ask": 0.27,
+     "fee": 0.04,
+     "token": "17145772970155534292361119294361327854815463253910054833411588868182255113499"
+    },
+    {
+     "label": "5",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "5244037376561737344282181306933586714256698330895301972127436366717212833951"
+    },
+    {
+     "label": "6",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "2257582451962680954042726489858912425041645481588192385301748215975170303352"
+    },
+    {
+     "label": "7+",
+     "ask": 0.08,
+     "fee": 0.04,
+     "token": "85772606124291460148374642815466628031089029546354389330423741049017451131309"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-jensen-huang-affairs-will-be-reported-by-december-31"
+  },
+  {
+   "venue": "polymarket",
    "event": "GPU rental prices (RTX 5090) end of November?",
    "n_legs": 6,
    "gross": 0.01100000000000001,
@@ -2582,11 +2630,11 @@
    "venue": "kalshi",
    "event": "Who will be the world's second trillionaire?",
    "n_legs": 12,
-   "gross": 0.04999999999999993,
+   "gross": 0.06999999999999995,
    "fees": 0.14,
-   "net": -0.09000000000000008,
-   "capital": 1.09,
-   "roi": -0.08256880733944962,
+   "net": -0.07000000000000006,
+   "capital": 1.07,
+   "roi": -0.0654205607476636,
    "url": "https://kalshi.com/events/KXNEXTTRILLIONAIRE-33",
    "neg_risk": null,
    "coverage": "12/12",
@@ -2600,7 +2648,7 @@
     },
     {
      "label": "Mark Zuckerberg",
-     "ask": 0.19,
+     "ask": 0.18,
      "fee": 0.07,
      "ticker": "KXNEXTTRILLIONAIRE-33-MZ"
     },
@@ -2642,7 +2690,7 @@
     },
     {
      "label": "Jensen Huang",
-     "ask": 0.09,
+     "ask": 0.08,
      "fee": 0.07,
      "ticker": "KXNEXTTRILLIONAIRE-33-JH"
     },
