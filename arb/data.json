@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-14T15:50:44Z",
-  "ts": 1794671444.1179876,
-  "scan_seconds": 16.1,
+  "generated_at": "2026-11-14T15:55:36Z",
+  "ts": 1794671736.8445334,
+  "scan_seconds": 11.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 232 binary + 1698 multi | kalshi: 5000 events -> 71 binary + 4764 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 235 binary + 1691 multi | kalshi: 5000 events -> 71 binary + 4764 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,60 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "Cambria listed on ___ within 30 days of TGE?",
+   "n_legs": 6,
+   "gross": 0.844,
+   "fees": 0.010598840000000002,
+   "net": 0.83340116,
+   "capital": 0.16659884,
+   "roi": 5.0024427541032095,
+   "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Binance",
+     "ask": 0.019,
+     "fee": 0.07,
+     "token": "33133888381833697363598232399921331430113166441222747644830320768557811865677"
+    },
+    {
+     "label": "Bybit",
+     "ask": 0.038,
+     "fee": 0.07,
+     "token": "31456213910688165232414896348922872828263344522645115443979222852564164274401"
+    },
+    {
+     "label": "Coinbase",
+     "ask": 0.033,
+     "fee": 0.07,
+     "token": "108456552440791823260960033635314125747774903568374052320005884385159048816979"
+    },
+    {
+     "label": "Kraken",
+     "ask": 0.011,
+     "fee": 0.07,
+     "token": "2037424483225175368674328976536283747321232845096377319690295393880599840183"
+    },
+    {
+     "label": "OKX",
+     "ask": 0.033,
+     "fee": 0.07,
+     "token": "112011131728658755973417160091316234320988962892879156306986710580328397159904"
+    },
+    {
+     "label": "Upbit",
+     "ask": 0.022,
+     "fee": 0.07,
+     "token": "36493261045648608661956884118224751942262111265334077702764616270365221342226"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "cambria-listed-on-within-30-days-of-tge"
+  },
   {
    "venue": "polymarket",
    "event": "Makina FDV above ___ one day after launch?",
@@ -57,60 +111,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "makina-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Cambria listed on ___ within 30 days of TGE?",
-   "n_legs": 6,
-   "gross": 0.823,
-   "fees": 0.011926250000000001,
-   "net": 0.8110737499999999,
-   "capital": 0.18892625,
-   "roi": 4.293070708808331,
-   "url": "https://polymarket.com/event/cambria-listed-on-within-30-days-of-tge",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Binance",
-     "ask": 0.019,
-     "fee": 0.07,
-     "token": "33133888381833697363598232399921331430113166441222747644830320768557811865677"
-    },
-    {
-     "label": "Bybit",
-     "ask": 0.059,
-     "fee": 0.07,
-     "token": "31456213910688165232414896348922872828263344522645115443979222852564164274401"
-    },
-    {
-     "label": "Coinbase",
-     "ask": 0.033,
-     "fee": 0.07,
-     "token": "108456552440791823260960033635314125747774903568374052320005884385159048816979"
-    },
-    {
-     "label": "Kraken",
-     "ask": 0.011,
-     "fee": 0.07,
-     "token": "2037424483225175368674328976536283747321232845096377319690295393880599840183"
-    },
-    {
-     "label": "OKX",
-     "ask": 0.033,
-     "fee": 0.07,
-     "token": "112011131728658755973417160091316234320988962892879156306986710580328397159904"
-    },
-    {
-     "label": "Upbit",
-     "ask": 0.022,
-     "fee": 0.07,
-     "token": "36493261045648608661956884118224751942262111265334077702764616270365221342226"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "cambria-listed-on-within-30-days-of-tge"
   },
   {
    "venue": "polymarket",
@@ -284,11 +284,11 @@
    "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.606,
-   "fees": 0.02609124,
-   "net": 0.57990876,
-   "capital": 0.42009124000000003,
-   "roi": 1.3804352597307195,
+   "gross": 0.603,
+   "fees": 0.02627695,
+   "net": 0.57672305,
+   "capital": 0.42327695000000004,
+   "roi": 1.3625193859481362,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -308,7 +308,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.035,
+     "ask": 0.036,
      "fee": 0.07,
      "token": "10354824396290237452261900772542438328647475212250295212595180489652143431127"
     },
@@ -326,7 +326,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.068,
+     "ask": 0.07,
      "fee": 0.07,
      "token": "38175379283808228327034811002747441529537312086974479792536732908990840238523"
     },
@@ -636,60 +636,6 @@
   },
   {
    "venue": "polymarket",
-   "event": "Next Google Gemini Pro Model: Arena Debut?",
-   "n_legs": 6,
-   "gross": 0.5409999999999999,
-   "fees": 0.01693276,
-   "net": 0.5240672399999999,
-   "capital": 0.47593276,
-   "roi": 1.1011371438267874,
-   "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "1480+",
-     "ask": 0.075,
-     "fee": 0.04,
-     "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
-    },
-    {
-     "label": "1490+",
-     "ask": 0.084,
-     "fee": 0.04,
-     "token": "5717213777158991755851161671784735239176114853982045661511655513077951811855"
-    },
-    {
-     "label": "1500+",
-     "ask": 0.07,
-     "fee": 0.04,
-     "token": "92205817338549581942996291977146287067184626116756204357001405482376199798910"
-    },
-    {
-     "label": "1510+",
-     "ask": 0.06,
-     "fee": 0.04,
-     "token": "3253266438640589916367220273721046444105089880635011272452961047056509745530"
-    },
-    {
-     "label": "1495+",
-     "ask": 0.08,
-     "fee": 0.04,
-     "token": "69345073575565588242189194892772551592901292816376992431290469884395002800745"
-    },
-    {
-     "label": "1470+",
-     "ask": 0.09,
-     "fee": 0.04,
-     "token": "98294806074299790213625887159464175881931188208288410936234193467702062160830"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "next-google-gemini-pro-model-arena-debut"
-  },
-  {
-   "venue": "polymarket",
    "event": "What will be in a US-Iran deal in 2026?",
    "n_legs": 6,
    "gross": 0.52,
@@ -744,13 +690,139 @@
   },
   {
    "venue": "polymarket",
+   "event": "Next Google Gemini Pro Model: Arena Debut?",
+   "n_legs": 6,
+   "gross": 0.5309999999999999,
+   "fees": 0.017256760000000003,
+   "net": 0.5137432399999999,
+   "capital": 0.48625676,
+   "roi": 1.0565266794440038,
+   "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "1480+",
+     "ask": 0.075,
+     "fee": 0.04,
+     "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
+    },
+    {
+     "label": "1490+",
+     "ask": 0.084,
+     "fee": 0.04,
+     "token": "5717213777158991755851161671784735239176114853982045661511655513077951811855"
+    },
+    {
+     "label": "1500+",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "92205817338549581942996291977146287067184626116756204357001405482376199798910"
+    },
+    {
+     "label": "1510+",
+     "ask": 0.06,
+     "fee": 0.04,
+     "token": "3253266438640589916367220273721046444105089880635011272452961047056509745530"
+    },
+    {
+     "label": "1495+",
+     "ask": 0.08,
+     "fee": 0.04,
+     "token": "69345073575565588242189194892772551592901292816376992431290469884395002800745"
+    },
+    {
+     "label": "1470+",
+     "ask": 0.1,
+     "fee": 0.04,
+     "token": "98294806074299790213625887159464175881931188208288410936234193467702062160830"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "next-google-gemini-pro-model-arena-debut"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How low will 30-year Treasury yield get in November?",
+   "n_legs": 9,
+   "gross": 0.52,
+   "fees": 0.0222871,
+   "net": 0.4977129,
+   "capital": 0.5022871,
+   "roi": 0.9908932560680934,
+   "url": "https://polymarket.com/event/how-low-will-30-year-treasury-yield-get-in-november",
+   "neg_risk": false,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Below 5.20%",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "2925303663002673881412257424219390869549965321588366882088989715912024618316"
+    },
+    {
+     "label": "Below 5.17%",
+     "ask": 0.068,
+     "fee": 0.05,
+     "token": "97259101968796190768353000282112414867098659526827959521150481526887330415754"
+    },
+    {
+     "label": "Below 5.14%",
+     "ask": 0.069,
+     "fee": 0.05,
+     "token": "22547632452003385826963726416935901683491871947544882860108215506580066830052"
+    },
+    {
+     "label": "Below 5.11%",
+     "ask": 0.056,
+     "fee": 0.05,
+     "token": "94991357087099684820311567439277502061396475148749825227029974312843605302439"
+    },
+    {
+     "label": "Below 5.08%",
+     "ask": 0.014,
+     "fee": 0.05,
+     "token": "75187941761148286353385108979444676392421040584674915765660874463531956055209"
+    },
+    {
+     "label": "Below 5.05%",
+     "ask": 0.014,
+     "fee": 0.05,
+     "token": "68638440906342361638739243927688359703475451514008579677437529327042888577620"
+    },
+    {
+     "label": "Below 5.02%",
+     "ask": 0.035,
+     "fee": 0.05,
+     "token": "78619275628575537502105639035576369762876262206663841042886762403262157184928"
+    },
+    {
+     "label": "Below 4.99%",
+     "ask": 0.036,
+     "fee": 0.05,
+     "token": "61430859335533556396662006876139515217667170494534216228991840174881491159613"
+    },
+    {
+     "label": "Below 4.96%",
+     "ask": 0.118,
+     "fee": 0.05,
+     "token": "66069166164111639106106433697577281616508476184543430398845056453266233149310"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-low-will-30-year-treasury-yield-get-in-november"
+  },
+  {
+   "venue": "polymarket",
    "event": "What kind of product will OpenAI announce in 2026?",
    "n_legs": 10,
-   "gross": 0.497,
-   "fees": 0.01884116,
-   "net": 0.47815884,
-   "capital": 0.52184116,
-   "roi": 0.9162919230058433,
+   "gross": 0.43700000000000006,
+   "fees": 0.02061716,
+   "net": 0.41638284000000003,
+   "capital": 0.58361716,
+   "roi": 0.7134520170722877,
    "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -764,7 +836,7 @@
     },
     {
      "label": "Clip-on device for clothing",
-     "ask": 0.1,
+     "ask": 0.16,
      "fee": 0.04,
      "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
     },
@@ -819,78 +891,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "what-kind-of-product-will-openai-announce-in-2026"
-  },
-  {
-   "venue": "polymarket",
-   "event": "How low will 30-year Treasury yield get in November?",
-   "n_legs": 9,
-   "gross": 0.392,
-   "fees": 0.027385700000000002,
-   "net": 0.3646143,
-   "capital": 0.6353856999999999,
-   "roi": 0.5738471923431705,
-   "url": "https://polymarket.com/event/how-low-will-30-year-treasury-yield-get-in-november",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Below 5.20%",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "2925303663002673881412257424219390869549965321588366882088989715912024618316"
-    },
-    {
-     "label": "Below 5.17%",
-     "ask": 0.068,
-     "fee": 0.05,
-     "token": "97259101968796190768353000282112414867098659526827959521150481526887330415754"
-    },
-    {
-     "label": "Below 5.14%",
-     "ask": 0.069,
-     "fee": 0.05,
-     "token": "22547632452003385826963726416935901683491871947544882860108215506580066830052"
-    },
-    {
-     "label": "Below 5.11%",
-     "ask": 0.054,
-     "fee": 0.05,
-     "token": "94991357087099684820311567439277502061396475148749825227029974312843605302439"
-    },
-    {
-     "label": "Below 5.08%",
-     "ask": 0.014,
-     "fee": 0.05,
-     "token": "75187941761148286353385108979444676392421040584674915765660874463531956055209"
-    },
-    {
-     "label": "Below 5.05%",
-     "ask": 0.014,
-     "fee": 0.05,
-     "token": "68638440906342361638739243927688359703475451514008579677437529327042888577620"
-    },
-    {
-     "label": "Below 5.02%",
-     "ask": 0.034,
-     "fee": 0.05,
-     "token": "78619275628575537502105639035576369762876262206663841042886762403262157184928"
-    },
-    {
-     "label": "Below 4.99%",
-     "ask": 0.164,
-     "fee": 0.05,
-     "token": "61430859335533556396662006876139515217667170494534216228991840174881491159613"
-    },
-    {
-     "label": "Below 4.96%",
-     "ask": 0.121,
-     "fee": 0.05,
-     "token": "66069166164111639106106433697577281616508476184543430398845056453266233149310"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-low-will-30-year-treasury-yield-get-in-november"
   },
   {
    "venue": "polymarket",
@@ -1400,11 +1400,11 @@
    "venue": "polymarket",
    "event": "South Africa Annual Inflation 2026",
    "n_legs": 10,
-   "gross": 0.051000000000000045,
-   "fees": 0.03379135,
-   "net": 0.017208650000000048,
-   "capital": 0.98279135,
-   "roi": 0.017509972996811632,
+   "gross": 0.05400000000000005,
+   "fees": 0.0337546,
+   "net": 0.020245400000000045,
+   "capital": 0.9797545999999999,
+   "roi": 0.020663745799203236,
    "url": "https://polymarket.com/event/south-africa-annual-inflation-2026",
    "neg_risk": true,
    "coverage": "10/10",
@@ -1460,7 +1460,7 @@
     },
     {
      "label": "4.7-5.0%",
-     "ask": 0.379,
+     "ask": 0.376,
      "fee": 0.05,
      "token": "107028333687669336034312843739051385389832352665578317459760936234132764773607"
     },
@@ -1557,10 +1557,10 @@
    "event": "Who will be arrested before 2027?",
    "n_legs": 24,
    "gross": 0.03400000000000003,
-   "fees": 0.03629064,
-   "net": -0.002290639999999969,
-   "capital": 1.00229064,
-   "roi": -0.0022854049599824347,
+   "fees": 0.03629304,
+   "net": -0.0022930399999999684,
+   "capital": 1.00229304,
+   "roi": -0.0022877939968534234,
    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027",
    "neg_risk": false,
    "coverage": "24/24",
@@ -1640,7 +1640,7 @@
     },
     {
      "label": "Candace Owens",
-     "ask": 0.058,
+     "ask": 0.059,
      "fee": 0.04,
      "token": "47264700355280111220763983503506940668039621201599440140931837330593348899023"
     },
@@ -1700,7 +1700,7 @@
     },
     {
      "label": "Lee Jun-seok",
-     "ask": 0.089,
+     "ask": 0.088,
      "fee": 0.04,
      "token": "40509049808387523915856542863931989788066066974260505108538437520002318794359"
     },
@@ -1782,66 +1782,6 @@
   },
   {
    "venue": "polymarket",
-   "event": "Brazil GDP Growth in Q3 2026 (QoQ)?",
-   "n_legs": 7,
-   "gross": 0.019000000000000017,
-   "fees": 0.031618150000000005,
-   "net": -0.012618149999999988,
-   "capital": 1.01261815,
-   "roi": -0.012460916289126349,
-   "url": "https://polymarket.com/event/brazil-gdp-growth-in-q3-2026-qoq",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<-0.3%",
-     "ask": 0.334,
-     "fee": 0.05,
-     "token": "89668175962268775579156032483300556241997798289086522152774179382532025370793"
-    },
-    {
-     "label": "-0.3% to -0.1%",
-     "ask": 0.47,
-     "fee": 0.05,
-     "token": "29718400685072615360997403613419270260186219262175158534115878273071750346230"
-    },
-    {
-     "label": "0.0% to 0.2%",
-     "ask": 0.123,
-     "fee": 0.05,
-     "token": "110441938068770825708421802822506161576294917755107482718557238867939280780665"
-    },
-    {
-     "label": "0.3% to 0.5%",
-     "ask": 0.029,
-     "fee": 0.05,
-     "token": "71376627309555980313428227425250764433978130157526652349384134099608771887584"
-    },
-    {
-     "label": "0.6% to 0.8%",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "31858020118385387120319679964944793138631285152541174461944685201847614732637"
-    },
-    {
-     "label": "0.9% to 1.1%",
-     "ask": 0.007,
-     "fee": 0.05,
-     "token": "94117128565873872443024116890043399382523136073502005628867606058472404163763"
-    },
-    {
-     "label": "\u22651.2%",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "36807767131790144274017675044659394180099819894648421429227546205759523909872"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "brazil-gdp-growth-in-q3-2026-qoq"
-  },
-  {
-   "venue": "polymarket",
    "event": "Bank of Israel Decision in January?",
    "n_legs": 5,
    "gross": 0.014000000000000012,
@@ -1887,6 +1827,132 @@
    ],
    "kind": "intra-event",
    "event_slug": "bank-of-israel-decision-in-january-2027"
+  },
+  {
+   "venue": "polymarket",
+   "event": "What will OpenAI's IPO valuation be?",
+   "n_legs": 8,
+   "gross": 0.007000000000000006,
+   "fees": 0.03301004,
+   "net": -0.02601003999999999,
+   "capital": 1.02601004,
+   "roi": -0.025350668108471912,
+   "url": "https://polymarket.com/event/what-will-openais-ipo-valuation-be",
+   "neg_risk": true,
+   "coverage": "8/8",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<$1T",
+     "ask": 0.21,
+     "fee": 0.04,
+     "token": "34364770132628089445663861616190474086377373921155601806483803672069358703472"
+    },
+    {
+     "label": "$1.0T\u2013$1.25T",
+     "ask": 0.154,
+     "fee": 0.04,
+     "token": "114487067577642371601428611604681794638789803278847876315680192458265598009713"
+    },
+    {
+     "label": "$1.25T\u2013$1.5T",
+     "ask": 0.232,
+     "fee": 0.04,
+     "token": "52540429872218211610913704779925694751511190737693260642338453325177504847893"
+    },
+    {
+     "label": "$1.5T\u2013$1.75T",
+     "ask": 0.175,
+     "fee": 0.04,
+     "token": "108608046186389916588310792096178633814905721316446771031388214199119594568887"
+    },
+    {
+     "label": "$1.75T\u2013$2.0T",
+     "ask": 0.1,
+     "fee": 0.04,
+     "token": "20528705226080175194613421874381364675165566442600364131554921862701273855456"
+    },
+    {
+     "label": "$2.0T\u2013$2.25T",
+     "ask": 0.058,
+     "fee": 0.04,
+     "token": "18988064035400045381851606224734135492442938573764421352194183729249368763649"
+    },
+    {
+     "label": "$2.25T\u2013$2.5T",
+     "ask": 0.026,
+     "fee": 0.04,
+     "token": "1864093973955192781274337662717324783471056371971076761805445913596227268574"
+    },
+    {
+     "label": "$2.5T+",
+     "ask": 0.038,
+     "fee": 0.04,
+     "token": "103237098062510886690443421829712169490186159801502289336394100213621790984195"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "what-will-openais-ipo-valuation-be"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Brazil GDP Growth in Q3 2026 (QoQ)?",
+   "n_legs": 7,
+   "gross": 0.0050000000000000044,
+   "fees": 0.032146850000000005,
+   "net": -0.02714685,
+   "capital": 1.02714685,
+   "roi": -0.026429375702218236,
+   "url": "https://polymarket.com/event/brazil-gdp-growth-in-q3-2026-qoq",
+   "neg_risk": true,
+   "coverage": "7/7",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "<-0.3%",
+     "ask": 0.334,
+     "fee": 0.05,
+     "token": "89668175962268775579156032483300556241997798289086522152774179382532025370793"
+    },
+    {
+     "label": "-0.3% to -0.1%",
+     "ask": 0.47,
+     "fee": 0.05,
+     "token": "29718400685072615360997403613419270260186219262175158534115878273071750346230"
+    },
+    {
+     "label": "0.0% to 0.2%",
+     "ask": 0.136,
+     "fee": 0.05,
+     "token": "110441938068770825708421802822506161576294917755107482718557238867939280780665"
+    },
+    {
+     "label": "0.3% to 0.5%",
+     "ask": 0.03,
+     "fee": 0.05,
+     "token": "71376627309555980313428227425250764433978130157526652349384134099608771887584"
+    },
+    {
+     "label": "0.6% to 0.8%",
+     "ask": 0.009,
+     "fee": 0.05,
+     "token": "31858020118385387120319679964944793138631285152541174461944685201847614732637"
+    },
+    {
+     "label": "0.9% to 1.1%",
+     "ask": 0.007,
+     "fee": 0.05,
+     "token": "94117128565873872443024116890043399382523136073502005628867606058472404163763"
+    },
+    {
+     "label": "\u22651.2%",
+     "ask": 0.009,
+     "fee": 0.05,
+     "token": "36807767131790144274017675044659394180099819894648421429227546205759523909872"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "brazil-gdp-growth-in-q3-2026-qoq"
   },
   {
    "venue": "kalshi",
@@ -1953,96 +2019,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXMAYORLA-30"
-  },
-  {
-   "venue": "kalshi",
-   "event": "Who will be the world's second trillionaire?",
-   "n_legs": 12,
-   "gross": 0.010000000000000009,
-   "fees": 0.14,
-   "net": -0.13,
-   "capital": 1.13,
-   "roi": -0.11504424778761063,
-   "url": "https://kalshi.com/events/KXNEXTTRILLIONAIRE-33",
-   "neg_risk": null,
-   "coverage": "12/12",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Larry Ellison",
-     "ask": 0.02,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-LE"
-    },
-    {
-     "label": "Mark Zuckerberg",
-     "ask": 0.24,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-MZ"
-    },
-    {
-     "label": "Jeff Bezos",
-     "ask": 0.2,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-JB"
-    },
-    {
-     "label": "Bernard Arnault & family",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-BA"
-    },
-    {
-     "label": "Warren Buffett",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-WB"
-    },
-    {
-     "label": "Larry Page",
-     "ask": 0.08,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-LP"
-    },
-    {
-     "label": "Sergey Brin",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-SRB"
-    },
-    {
-     "label": "Steve Ballmer",
-     "ask": 0.02,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-SB"
-    },
-    {
-     "label": "Jensen Huang",
-     "ask": 0.08,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-JH"
-    },
-    {
-     "label": "Sam Altman",
-     "ask": 0.06,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-SA"
-    },
-    {
-     "label": "Michael Dell",
-     "ask": 0.07,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-MD"
-    },
-    {
-     "label": "Changpeng Zhao",
-     "ask": 0.02,
-     "fee": 0.07,
-     "ticker": "KXNEXTTRILLIONAIRE-33-CZ"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "KXNEXTTRILLIONAIRE-33"
   }
  ],
  "cross": []
