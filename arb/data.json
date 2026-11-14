@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-14T19:20:43Z",
-  "ts": 1794684043.5739558,
-  "scan_seconds": 15.6,
+  "generated_at": "2026-11-14T19:25:42Z",
+  "ts": 1794684342.003607,
+  "scan_seconds": 16.5,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 226 binary + 1680 multi | kalshi: 5000 events -> 71 binary + 4764 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 236 binary + 1684 multi | kalshi: 5000 events -> 71 binary + 4764 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,48 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "Makina FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.832,
+   "fees": 0.011126500000000001,
+   "net": 0.8208734999999999,
+   "capital": 0.17912650000000002,
+   "roi": 4.582646900374874,
+   "url": "https://polymarket.com/event/makina-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$80M",
+     "ask": 0.057,
+     "fee": 0.07,
+     "token": "98219980679999429916226639686761979665421897797777040099602713686824802810254"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.07,
+     "fee": 0.07,
+     "token": "96249263453107233115352955844803350309071456313480667272642789710792596579437"
+    },
+    {
+     "label": "$200M",
+     "ask": 0.026,
+     "fee": 0.07,
+     "token": "5002552579727082234417543840751231363710972961715613982747934893417670200181"
+    },
+    {
+     "label": "$300M",
+     "ask": 0.015,
+     "fee": 0.07,
+     "token": "94041054826948094458516807909608237662754077816958616769196799633242970299956"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "makina-fdv-above-one-day-after-launch"
+  },
   {
    "venue": "polymarket",
    "event": "Cambria listed on ___ within 30 days of TGE?",
@@ -69,102 +111,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "cambria-listed-on-within-30-days-of-tge"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Which college football games will be cancelled or postponed on Nov 14?",
-   "n_legs": 6,
-   "gross": 0.8,
-   "fees": 0.0095433,
-   "net": 0.7904567,
-   "capital": 0.20954330000000002,
-   "roi": 3.7722833419154895,
-   "url": "https://polymarket.com/event/which-college-football-games-will-be-cancelled-or-postponed-on-nov-14",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Alabama @ Vanderbilt",
-     "ask": 0.039,
-     "fee": 0.05,
-     "token": "94096428604752105472177849331841380197353452836713849728915153306477501689260"
-    },
-    {
-     "label": "Michigan @ Oregon",
-     "ask": 0.048,
-     "fee": 0.05,
-     "token": "72140359331764585994777954758341031134632184949847593007703559400352693541173"
-    },
-    {
-     "label": "USC @ Indiana",
-     "ask": 0.04,
-     "fee": 0.05,
-     "token": "51477065334834107644473999160580429335667680506990360887266250682893250516758"
-    },
-    {
-     "label": "Missouri @ Georgia",
-     "ask": 0.01,
-     "fee": 0.05,
-     "token": "449263609461691563303842977911339946335075892596455859943959699702552768008"
-    },
-    {
-     "label": "Utah @ Arizona",
-     "ask": 0.003,
-     "fee": 0.05,
-     "token": "85723933305083404243240853991186483033537555772875308092806077858592883084465"
-    },
-    {
-     "label": "Texas @ LSU",
-     "ask": 0.06,
-     "fee": 0.05,
-     "token": "112699791324999707568510343937086431140669388196898708594805804292186364142063"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "which-college-football-games-will-be-cancelled-or-postponed-on-nov-14"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Makina FDV above ___ one day after launch?",
-   "n_legs": 4,
-   "gross": 0.8029999999999999,
-   "fees": 0.012836390000000001,
-   "net": 0.7901636099999999,
-   "capital": 0.20983639,
-   "roi": 3.7656176319083636,
-   "url": "https://polymarket.com/event/makina-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$80M",
-     "ask": 0.057,
-     "fee": 0.07,
-     "token": "98219980679999429916226639686761979665421897797777040099602713686824802810254"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.097,
-     "fee": 0.07,
-     "token": "96249263453107233115352955844803350309071456313480667272642789710792596579437"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.026,
-     "fee": 0.07,
-     "token": "5002552579727082234417543840751231363710972961715613982747934893417670200181"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.017,
-     "fee": 0.07,
-     "token": "94041054826948094458516807909608237662754077816958616769196799633242970299956"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "makina-fdv-above-one-day-after-launch"
   },
   {
    "venue": "polymarket",
@@ -359,6 +305,78 @@
    "event_slug": "metamask-fdv-above-one-day-after-launch"
   },
   {
+   "venue": "polymarket",
+   "event": "How low will 30-year Treasury yield get in November?",
+   "n_legs": 9,
+   "gross": 0.6559999999999999,
+   "fees": 0.0163734,
+   "net": 0.6396265999999999,
+   "capital": 0.3603734,
+   "roi": 1.7748995902583262,
+   "url": "https://polymarket.com/event/how-low-will-30-year-treasury-yield-get-in-november",
+   "neg_risk": false,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Below 5.20%",
+     "ask": 0.069,
+     "fee": 0.05,
+     "token": "2925303663002673881412257424219390869549965321588366882088989715912024618316"
+    },
+    {
+     "label": "Below 5.17%",
+     "ask": 0.054,
+     "fee": 0.05,
+     "token": "97259101968796190768353000282112414867098659526827959521150481526887330415754"
+    },
+    {
+     "label": "Below 5.14%",
+     "ask": 0.057,
+     "fee": 0.05,
+     "token": "22547632452003385826963726416935901683491871947544882860108215506580066830052"
+    },
+    {
+     "label": "Below 5.11%",
+     "ask": 0.026,
+     "fee": 0.05,
+     "token": "94991357087099684820311567439277502061396475148749825227029974312843605302439"
+    },
+    {
+     "label": "Below 5.08%",
+     "ask": 0.014,
+     "fee": 0.05,
+     "token": "75187941761148286353385108979444676392421040584674915765660874463531956055209"
+    },
+    {
+     "label": "Below 5.05%",
+     "ask": 0.014,
+     "fee": 0.05,
+     "token": "68638440906342361638739243927688359703475451514008579677437529327042888577620"
+    },
+    {
+     "label": "Below 5.02%",
+     "ask": 0.028,
+     "fee": 0.05,
+     "token": "78619275628575537502105639035576369762876262206663841042886762403262157184928"
+    },
+    {
+     "label": "Below 4.99%",
+     "ask": 0.027,
+     "fee": 0.05,
+     "token": "61430859335533556396662006876139515217667170494534216228991840174881491159613"
+    },
+    {
+     "label": "Below 4.96%",
+     "ask": 0.055,
+     "fee": 0.05,
+     "token": "66069166164111639106106433697577281616508476184543430398845056453266233149310"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-low-will-30-year-treasury-yield-get-in-november"
+  },
+  {
    "venue": "kalshi",
    "event": "Who will the next Pope be?",
    "n_legs": 7,
@@ -420,85 +438,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "How low will 30-year Treasury yield get in November?",
-   "n_legs": 9,
-   "gross": 0.603,
-   "fees": 0.018662250000000002,
-   "net": 0.58433775,
-   "capital": 0.41566225,
-   "roi": 1.4057994200820498,
-   "url": "https://polymarket.com/event/how-low-will-30-year-treasury-yield-get-in-november",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Below 5.20%",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "2925303663002673881412257424219390869549965321588366882088989715912024618316"
-    },
-    {
-     "label": "Below 5.17%",
-     "ask": 0.071,
-     "fee": 0.05,
-     "token": "97259101968796190768353000282112414867098659526827959521150481526887330415754"
-    },
-    {
-     "label": "Below 5.14%",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "22547632452003385826963726416935901683491871947544882860108215506580066830052"
-    },
-    {
-     "label": "Below 5.11%",
-     "ask": 0.028,
-     "fee": 0.05,
-     "token": "94991357087099684820311567439277502061396475148749825227029974312843605302439"
-    },
-    {
-     "label": "Below 5.08%",
-     "ask": 0.014,
-     "fee": 0.05,
-     "token": "75187941761148286353385108979444676392421040584674915765660874463531956055209"
-    },
-    {
-     "label": "Below 5.05%",
-     "ask": 0.014,
-     "fee": 0.05,
-     "token": "68638440906342361638739243927688359703475451514008579677437529327042888577620"
-    },
-    {
-     "label": "Below 5.02%",
-     "ask": 0.028,
-     "fee": 0.05,
-     "token": "78619275628575537502105639035576369762876262206663841042886762403262157184928"
-    },
-    {
-     "label": "Below 4.99%",
-     "ask": 0.027,
-     "fee": 0.05,
-     "token": "61430859335533556396662006876139515217667170494534216228991840174881491159613"
-    },
-    {
-     "label": "Below 4.96%",
-     "ask": 0.055,
-     "fee": 0.05,
-     "token": "66069166164111639106106433697577281616508476184543430398845056453266233149310"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-low-will-30-year-treasury-yield-get-in-november"
-  },
-  {
-   "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.605,
-   "fees": 0.026148150000000002,
-   "net": 0.57885185,
-   "capital": 0.42114815,
-   "roi": 1.374461338604954,
+   "gross": 0.603,
+   "fees": 0.026269110000000002,
+   "net": 0.57673089,
+   "capital": 0.42326911,
+   "roi": 1.362563145701797,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -536,13 +482,13 @@
     },
     {
      "label": "$100M",
-     "ask": 0.069,
+     "ask": 0.07,
      "fee": 0.07,
      "token": "38175379283808228327034811002747441529537312086974479792536732908990840238523"
     },
     {
      "label": "$100M",
-     "ask": 0.066,
+     "ask": 0.067,
      "fee": 0.07,
      "token": "15390584632108771016450588704807221443840679092964759511537241445184106992060"
     },
@@ -558,61 +504,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Pro Football: Malik Willis 2026-27 Regular Season Passing Yards",
-   "n_legs": 5,
-   "gross": 0.577,
-   "fees": 0.01875575,
-   "net": 0.55824425,
-   "capital": 0.44175575,
-   "roi": 1.263694360514832,
-   "url": "https://polymarket.com/event/malik-willis-passing-yards-2026-27",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "2,449.5+ passing yards",
-     "ask": 0.14,
-     "fee": 0.05,
-     "token": "4444038844854586754712619151350057033612516117059577394197040682947512392689"
-    },
-    {
-     "label": "2,699.5+ passing yards",
-     "ask": 0.11,
-     "fee": 0.05,
-     "token": "14961350932172055258521120825969875558684711159157454638000397212160950234553"
-    },
-    {
-     "label": "2,949.5+ passing yards",
-     "ask": 0.122,
-     "fee": 0.05,
-     "token": "77928580441106956130694790490985765027634814172020359348360093457749455435908"
-    },
-    {
-     "label": "3,199.5+ passing yards",
-     "ask": 0.026,
-     "fee": 0.05,
-     "token": "19420300806281922704291946720609486017558934813678359991321032024109273784917"
-    },
-    {
-     "label": "3,449.5+ passing yards",
-     "ask": 0.025,
-     "fee": 0.05,
-     "token": "109257690405729346073213887788108792595102091596100409653799853817403461026230"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "malik-willis-passing-yards-2026-27"
-  },
-  {
-   "venue": "polymarket",
    "event": "Which Senators will vote for the Clarity Act?",
    "n_legs": 15,
-   "gross": 0.571,
-   "fees": 0.016522039999999998,
-   "net": 0.5544779599999999,
-   "capital": 0.44552204,
-   "roi": 1.2445578674401832,
+   "gross": 0.5720000000000001,
+   "fees": 0.01648544,
+   "net": 0.5555145600000001,
+   "capital": 0.44448544,
+   "roi": 1.249792479141724,
    "url": "https://polymarket.com/event/which-senators-will-vote-for-the-clarity-act-20260729190926658",
    "neg_risk": false,
    "coverage": "15/15",
@@ -644,7 +542,7 @@
     },
     {
      "label": "Kirsten Gillibrand",
-     "ask": 0.043,
+     "ask": 0.042,
      "fee": 0.04,
      "token": "1297331976271599467920977419123411198075604661787023951471785552162240887068"
     },
@@ -771,10 +669,10 @@
    "event": "Next Google Gemini Pro Model: Arena Debut?",
    "n_legs": 6,
    "gross": 0.5660000000000001,
-   "fees": 0.01609336,
-   "net": 0.5499066400000001,
-   "capital": 0.45009336,
-   "roi": 1.2217612808151628,
+   "fees": 0.016092960000000003,
+   "net": 0.54990704,
+   "capital": 0.45009296,
+   "roi": 1.2217632553061928,
    "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
    "neg_risk": false,
    "coverage": "6/6",
@@ -782,13 +680,13 @@
    "legs": [
     {
      "label": "1480+",
-     "ask": 0.075,
+     "ask": 0.074,
      "fee": 0.04,
      "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
     },
     {
      "label": "1490+",
-     "ask": 0.079,
+     "ask": 0.08,
      "fee": 0.04,
      "token": "5717213777158991755851161671784735239176114853982045661511655513077951811855"
     },
@@ -819,6 +717,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "next-google-gemini-pro-model-arena-debut"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Pro Football: Malik Willis 2026-27 Regular Season Passing Yards",
+   "n_legs": 5,
+   "gross": 0.552,
+   "fees": 0.019906800000000002,
+   "net": 0.5320932,
+   "capital": 0.4679068,
+   "roi": 1.1371777456536216,
+   "url": "https://polymarket.com/event/malik-willis-passing-yards-2026-27",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "2,449.5+ passing yards",
+     "ask": 0.14,
+     "fee": 0.05,
+     "token": "4444038844854586754712619151350057033612516117059577394197040682947512392689"
+    },
+    {
+     "label": "2,699.5+ passing yards",
+     "ask": 0.11,
+     "fee": 0.05,
+     "token": "14961350932172055258521120825969875558684711159157454638000397212160950234553"
+    },
+    {
+     "label": "2,949.5+ passing yards",
+     "ask": 0.122,
+     "fee": 0.05,
+     "token": "77928580441106956130694790490985765027634814172020359348360093457749455435908"
+    },
+    {
+     "label": "3,199.5+ passing yards",
+     "ask": 0.052,
+     "fee": 0.05,
+     "token": "19420300806281922704291946720609486017558934813678359991321032024109273784917"
+    },
+    {
+     "label": "3,449.5+ passing yards",
+     "ask": 0.024,
+     "fee": 0.05,
+     "token": "109257690405729346073213887788108792595102091596100409653799853817403461026230"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "malik-willis-passing-yards-2026-27"
   },
   {
    "venue": "polymarket",
@@ -990,55 +936,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Democratic 2028 presidential odds hit __ by December 31?",
-   "n_legs": 4,
-   "gross": 0.43399999999999994,
-   "fees": 0.0162644,
-   "net": 0.41773559999999993,
-   "capital": 0.5822644,
-   "roi": 0.7174328363540685,
-   "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "\u2191 75%",
-     "ask": 0.039,
-     "fee": 0.04,
-     "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
-    },
-    {
-     "label": "\u2191 70%",
-     "ask": 0.38,
-     "fee": 0.04,
-     "token": "99924985459174807912905088098188460537077509259191979212811700892664044360760"
-    },
-    {
-     "label": "\u2193 60%",
-     "ask": 0.11,
-     "fee": 0.04,
-     "token": "105620317014345915227862022719498893803551274005248504250079913836090395148896"
-    },
-    {
-     "label": "\u2193 55%",
-     "ask": 0.037,
-     "fee": 0.04,
-     "token": "16654915472858212465529482870776910344097373353691725922653041067845783706153"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "democratic-2028-presidential-odds-hit-by-december-31"
-  },
-  {
-   "venue": "polymarket",
    "event": "What kind of product will OpenAI announce in 2026?",
    "n_legs": 10,
-   "gross": 0.33699999999999997,
-   "fees": 0.022938359999999998,
-   "net": 0.31406164,
-   "capital": 0.6859383600000001,
-   "roi": 0.45785694213106837,
+   "gross": 0.44700000000000006,
+   "fees": 0.02034236,
+   "net": 0.42665764000000006,
+   "capital": 0.5733423599999999,
+   "roi": 0.744158586154353,
    "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -1052,7 +956,7 @@
     },
     {
      "label": "Clip-on device for clothing",
-     "ask": 0.26,
+     "ask": 0.15,
      "fee": 0.04,
      "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
     },
@@ -1110,13 +1014,55 @@
   },
   {
    "venue": "polymarket",
+   "event": "Democratic 2028 presidential odds hit __ by December 31?",
+   "n_legs": 4,
+   "gross": 0.43399999999999994,
+   "fees": 0.0162644,
+   "net": 0.41773559999999993,
+   "capital": 0.5822644,
+   "roi": 0.7174328363540685,
+   "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
+   "neg_risk": false,
+   "coverage": "4/4",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "\u2191 75%",
+     "ask": 0.039,
+     "fee": 0.04,
+     "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
+    },
+    {
+     "label": "\u2191 70%",
+     "ask": 0.38,
+     "fee": 0.04,
+     "token": "99924985459174807912905088098188460537077509259191979212811700892664044360760"
+    },
+    {
+     "label": "\u2193 60%",
+     "ask": 0.11,
+     "fee": 0.04,
+     "token": "105620317014345915227862022719498893803551274005248504250079913836090395148896"
+    },
+    {
+     "label": "\u2193 55%",
+     "ask": 0.037,
+     "fee": 0.04,
+     "token": "16654915472858212465529482870776910344097373353691725922653041067845783706153"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "democratic-2028-presidential-odds-hit-by-december-31"
+  },
+  {
+   "venue": "polymarket",
    "event": "How low will 5-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.31299999999999994,
-   "fees": 0.03129715,
-   "net": 0.28170284999999995,
-   "capital": 0.71829715,
-   "roi": 0.3921814948033692,
+   "gross": 0.34299999999999997,
+   "fees": 0.030160150000000004,
+   "net": 0.31283985,
+   "capital": 0.6871601500000001,
+   "roi": 0.45526483164077536,
    "url": "https://polymarket.com/event/how-low-will-5-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1130,19 +1076,19 @@
     },
     {
      "label": "Below 4.56%",
-     "ask": 0.065,
+     "ask": 0.077,
      "fee": 0.05,
      "token": "69565405469443780365338080628621129944474650323671874918004789021390244426964"
     },
     {
      "label": "Below 4.53%",
-     "ask": 0.051,
+     "ask": 0.053,
      "fee": 0.05,
      "token": "12236841287422256981190473806256292038680332572603244704599635823601532813638"
     },
     {
      "label": "Below 4.50%",
-     "ask": 0.092,
+     "ask": 0.066,
      "fee": 0.05,
      "token": "32495274510140920139522866825776911058234492742713770275012016319817681314491"
     },
@@ -1154,25 +1100,25 @@
     },
     {
      "label": "Below 4.44%",
-     "ask": 0.055,
+     "ask": 0.061,
      "fee": 0.05,
      "token": "58496642245394930668253600498608914364185423389911706239865668358565126817531"
     },
     {
      "label": "Below 4.41%",
-     "ask": 0.051,
+     "ask": 0.084,
      "fee": 0.05,
      "token": "104216188108451540437212373529451296797579477219803606250866249849479445619326"
     },
     {
      "label": "Below 4.37%",
-     "ask": 0.056,
+     "ask": 0.058,
      "fee": 0.05,
      "token": "39671382570543632920395816806346219292044453924331096501670694403920200022802"
     },
     {
      "label": "Below 4.33%",
-     "ask": 0.118,
+     "ask": 0.059,
      "fee": 0.05,
      "token": "34759742012522054834814935964589457873976935528860056061322617290647093023078"
     }
@@ -1274,11 +1220,11 @@
    "venue": "polymarket",
    "event": "Next GPT Terra Model (5.7+): Text Arena Debut?",
    "n_legs": 4,
-   "gross": 0.19899999999999995,
-   "fees": 0.02276428,
-   "net": 0.17623571999999996,
-   "capital": 0.82376428,
-   "roi": 0.21393950220808305,
+   "gross": 0.19699999999999995,
+   "fees": 0.02283644,
+   "net": 0.17416355999999994,
+   "capital": 0.82583644,
+   "roi": 0.2108935275367601,
    "url": "https://polymarket.com/event/next-gpt-terra-model-5pt7-text-arena-debut-20261022",
    "neg_risk": false,
    "coverage": "4/4",
@@ -1304,7 +1250,7 @@
     },
     {
      "label": "1470+",
-     "ask": 0.048,
+     "ask": 0.05,
      "fee": 0.04,
      "token": "114972943267650395673630027906140555571222655044651299379803276377666501900063"
     }
@@ -1658,11 +1604,11 @@
    "venue": "polymarket",
    "event": "Who will be arrested before 2027?",
    "n_legs": 24,
-   "gross": 0.04600000000000004,
-   "fees": 0.03589648,
-   "net": 0.01010352000000004,
-   "capital": 0.98989648,
-   "roi": 0.010206643021904714,
+   "gross": 0.051000000000000045,
+   "fees": 0.03572068,
+   "net": 0.015279320000000048,
+   "capital": 0.9847206799999999,
+   "roi": 0.015516400041481864,
    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027",
    "neg_risk": false,
    "coverage": "24/24",
@@ -1742,7 +1688,7 @@
     },
     {
      "label": "Candace Owens",
-     "ask": 0.063,
+     "ask": 0.058,
      "fee": 0.04,
      "token": "47264700355280111220763983503506940668039621201599440140931837330593348899023"
     },
@@ -1850,11 +1796,11 @@
    "venue": "polymarket",
    "event": "South Africa Annual Inflation 2026",
    "n_legs": 10,
-   "gross": 0.03499999999999992,
-   "fees": 0.03409945,
-   "net": 0.0009005499999999167,
-   "capital": 0.9990994500000001,
-   "roi": 0.0009013617212980315,
+   "gross": 0.03599999999999992,
+   "fees": 0.0340724,
+   "net": 0.0019275999999999183,
+   "capital": 0.9980724000000001,
+   "roi": 0.0019313228178636321,
    "url": "https://polymarket.com/event/south-africa-annual-inflation-2026",
    "neg_risk": true,
    "coverage": "10/10",
@@ -1904,7 +1850,7 @@
     },
     {
      "label": "4.4-4.7%",
-     "ask": 0.23,
+     "ask": 0.229,
      "fee": 0.05,
      "token": "3951919163412134525399597702873162228172849536319846939827893988080465158612"
     },
