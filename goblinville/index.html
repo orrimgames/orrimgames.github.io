@@ -158,6 +158,18 @@ const TBE=(()=>{  // tangent basis at SITE_DIR: TBE1 = map +y dir, TBE2 = map +x
   const e1=[e2[1]*s[2]-e2[2]*s[1], e2[2]*s[0]-e2[0]*s[2], e2[0]*s[1]-e2[1]*s[0]];   // v65: map +y -> world +z (was s x e2 = -z: the whole sphere mirrored against the authored map)
   return {e1,e2};
 })();
+function landMat(out,x,y,ride,yaw){   // v141: ballMat's sibling for solid ground - radius is the land surface, not the sea shell
+  const d=dirOf(x,y,[0,0,0]);
+  const R2=icoHeight(d)+(ride||0);
+  const px=SITE.x+d[0]*R2, py=WATER-PLANET_R+d[1]*R2, pz=SITE.y+d[2]*R2;
+  const vx=Math.sin(yaw), vz=Math.cos(yaw), dot=vx*d[0]+vz*d[2];
+  let fx=vx-d[0]*dot, fy=-d[1]*dot, fz=vz-d[2]*dot;
+  const fl=Math.hypot(fx,fy,fz)||1; fx/=fl; fy/=fl; fz/=fl;
+  let rx=d[1]*fz-d[2]*fy, ry=d[2]*fx-d[0]*fz, rz=d[0]*fy-d[1]*fx;
+  const rl=Math.hypot(rx,ry,rz)||1; rx/=rl; ry/=rl; rz/=rl;
+  const f2x=ry*d[2]-rz*d[1], f2y=rz*d[0]-rx*d[2], f2z=rx*d[1]-ry*d[0];
+  out.set([rx,d[0],f2x,0, ry,d[1],f2y,0, rz,d[2],f2z,0, px,py,pz,1]);
+}
 function ballMat(out,x,y,ride,yaw){
   const d=dirOf(x,y,[0,0,0]);
   const R2=SEA_OFF+(ride||0);
@@ -848,6 +860,9 @@ function icoBilerp(x,y){
 }
 /* v64: the exact visual surface of the sphere mesh - everything that stands touches THIS */
 function sitY(x,y){ const d=dirOf(x,y,[0,0,0]); return d[1]*icoHeight(d)+WATER-PLANET_R; }
+// v141: the far shore - authored land on the procedural ball: [x, y, radius, height, strength]
+// every surface read (far mesh, walking, sailing, seats) flows through icoHeight, so one list shapes them all
+const FAR_SHAPES=[[-46.7,183.38,5.2,0.55,1.6]];      // the Last Chart terrace: a flat pad above the wrack line
 function icoHeight(d){          // unit dir -> surface radius
   const p=invOf(d);
   const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
@@ -856,7 +871,9 @@ function icoHeight(d){          // unit dir -> surface radius
   const w=clamp((r-38)/12,0,1);
   if(w===0) return PLANET_R+hNear;
   const fld=worldField(d);
-  const hFar=fld.h;                                   // ONE surface: seats == the far mesh (R_WORLD+f.h), no air gap, no second formula
+  let hFar=fld.h;                                   // ONE surface: seats == the far mesh (R_WORLD+f.h), no air gap, no second formula
+  for(const fs of FAR_SHAPES){ const dd=Math.hypot(p[0]-fs[0],p[1]-fs[1]);
+    if(dd<fs[2]){ const k=1-dd/fs[2]; hFar=lerp(hFar,fs[3],Math.min(1,k*k*fs[4])); } }
   return PLANET_R+lerp(hNear,hFar,w);
 }
 function icoColor(d){           // unit dir -> [r,g,b] for this patch of world
@@ -3322,9 +3339,10 @@ const INTERIORS={
     interact:{dx:0, dz:-1.55, dd:3.5, ang:0.55, key:'scope', sparkY:1.9, spark:'#bfe8ff', spark2:'#ffb347',
       first:{b:['THE STARS ARE ALSO WATCHING','every one of them counted - and below, one amber eye keeps the ledger'],
         c:'Through the great lens the brood saw it at last: the sky is not empty, and the thing under the mountain is not counting stars. It is counting fires.', say:3},
-      lines:['the captive star above the spire is in no chart. it is new. it is looking.',
+      linesFn:()=>['the captive star above the spire is in no chart. it is new. it is looking.',
         'the sky-readers wrote: DO NOT COUNT BACK. the margin note, in a smaller hand: too late.',
-        'the fifth constellation is not a constellation. it is an iris.']},
+        'the fifth constellation is not a constellation. it is an iris.',
+        S.secrets.chart?'the tide-chart came home with salt on it and one new drawing. the racks feel less empty. the sky does not.':'one chart is missing from the racks: the tide-chart. the margin says: borrowed, like everything else. it never came back.']},
     afterEnter:()=>{ if(S.secrets.seventh&&!S.secrets.column){ S.secrets.column=1; saveGame();
       banner2('THE NEW COLUMN','the mountain dips the pen. the word is kept twice.');
       chron('The mountain added a column to its book. It holds one word, written small, in the hand the brood taught it: WARM. The elder calls it an answer. The mountain calls it a keepsake.',true);
@@ -3419,7 +3437,21 @@ const INTERIORS={
         'the mushrooms go in pale and come out wise. this is the whole of goblin cuisine and goblin philosophy.',
         'the spring does not bubble for visitors. it bubbled once for the mountain, long ago. once.',
         'the water is older than the fire. the elder says the fire knows it. the fire pops, embarrassed.'
-      ]}}
+      ]}},
+  chart:{land:null, r:2.3, room:[43,46.5], name:'THE LAST CHART', fpDoor:true,
+    fpHint:'a doorway of sea-worn stone stands above the wrack line. face it and tap to duck inside.',
+    blurb:'the sky-readers sailed until the stars were wrong. they kept reading.',
+    doorFn:()=>[-46.7,183.38],
+    build:()=>buildChartRoom(),
+    interact:{dx:0, dz:-1.35, dd:3.5, ang:0.55, key:'chart', sparkY:1.15, spark:'#cfe4ff', spark2:'#ffb347',
+      first:{b:['THEY SAW IT FIRST','the last chart is not a map of stars. it is a drawing of an eye, dated before the mountain woke.'],
+        c:'Past the edge of every map the brood found where the sky-readers went: a watch-post of sea-worn stone above the wrack line, and in it the last chart - not stars but an iris, drawn patient in black salt, older than the mountain\u2019s first word. They saw it first. Then they sailed home, because someone had to keep the fire. The elder says that is the whole of courage.', say:3},
+      linesFn:()=>{ const L=['the charts are weighted with shells against a wind that died a hundred years ago. the ink did not get the news.',
+        'a tide-table, a star-table, and a third table with one column: things that watch back. the list has one entry.',
+        'they drew the eye over and over, smaller each time, as if distance could be practiced.'];
+        if(S.secrets.iris) L.push('you have seen it too, hanging over the springs on a clear night. the chart is not a warning. it is a letter that arrived early.');
+        if(S.secrets.word2) L.push('the mountain wrote STAYED. the sky-readers wrote it first, in salt, and went home to keep the fire. everyone stays. that is the whole finding.');
+        return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
 function buildObservatoryRoom(){
@@ -3911,6 +3943,9 @@ function fpUpdate(dt){
     if(fpWalkableAny(FP.x,nz)) FP.y=nz;
     FP.bob+=dt*Math.hypot(dx,dy)*9;
   }
+  if(!FP.interior&&!FP.battle) for(const k in INTERIORS){ const itd=INTERIORS[k]; if(!itd.fpDoor||!itd.fpHint) continue;
+    if(Math.hypot(FP.x-interiorDoorPos(k)[0],FP.y-interiorDoorPos(k)[1])<8){ const sk='fpdoor_'+k;
+      if(!S.secrets[sk]){ S.secrets[sk]=1; saveGame(); toast2(itd.fpHint); } } }
   if(Math.hypot(FP.x-SITE.x,FP.y-SITE.y)<31.5){ FP.x=clamp(FP.x,0.6,MAP-0.6); FP.y=clamp(FP.y,0.6,MAP-0.6); }
   fpSyncCam();
   if(FP.battle && FP.hp<140) FP.hp=Math.min(140,FP.hp+3*dt);
@@ -3963,6 +3998,12 @@ function fpTap(x,y){
       return true;
     }
   }
+  if(!S.sail&&!FP.battle){ for(const k in INTERIORS){ const itd=INTERIORS[k]; if(!itd.fpDoor) continue;   // v141: doors you walk up to
+    const d=interiorDoorPos(k), tdx=d[0]-FP.x, tdz=d[1]-FP.y;
+    if(Math.hypot(tdx,tdz)<itd.r){
+      const ang2=Math.abs(((Math.atan2(tdx,tdz)-FP.a+Math.PI*3)%TAU)-Math.PI);
+      if(ang2<0.9){ if(itd.locked&&itd.locked()){ if(itd.lockedMsg){ toast2(itd.lockedMsg); A.say(9); } return true; }
+        enterInterior(k); return true; } } } }
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
 }
@@ -4172,7 +4213,7 @@ function drawWorldStatics(prog, noCrops){
   if(RIMLIP) drawStatic(prog, RIMLIP, MODEL);
   if(BOATM&&S.boat){ ballMat(MODEL,S.boat.x,S.boat.y,0.10+Math.sin(G.t*1.2)*0.05,S.boat.yaw+Math.sin(G.t*0.5)*0.05); drawStatic(prog,BOATM,MODEL); }
   if(BOATM&&S.sail){ const ss2=S.sail; ballMat(MODEL,ss2.x,ss2.y,0.10+Math.sin(G.t*1.4)*0.05,ss2.hdg); drawStatic(prog,BOATM,MODEL); }
-  for(const p of PROPS){ if(!p.mesh) continue; M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
+  for(const p of PROPS){ if(!p.mesh) continue; if(p.far){ landMat(MODEL,p.x,p.y,p.ride||0,p.r||0); drawStatic(prog,p.mesh,MODEL); continue; } M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
   if(S.wilds) for(const w of S.wilds){ if(w.hide||w.den) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v43 giants & wolves
   if(S.peoples) for(const w of S.peoples){ if(w.hide) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,w.tl||0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v48: the peoples keep their seats
   if(S.savages) for(const w of S.savages){ M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v68: savages roam, seat on the same surface
@@ -5564,9 +5605,86 @@ function buildElfGrove(){
   for(let i=0;i<7;i++){ const a=i/7*TAU; M4.trs(T,Math.cos(a)*0.85,0.06,Math.sin(a)*0.85,0,0,0,1,1,1); ball(m,0.07,5,leaf,T,0,0.85); }
   return upload(m);
 }
+/* v141: THE FAR SHORE - the sky-readers' second observatory, on an island past every map */
+function buildChartRuin(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#7d8694'), stone2=hex('#5d6675'), pale=hex('#c9d2d8'), dark=hex('#10141c'),
+        salt=hex('#dfe6ea'), brass=hex('#b8985a'), verdi=hex('#4aa88e'), glow=hex('#d8ecff');
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // foundation terrace, salt-stained and pale from the sea
+  M4.trs(T,0,0.02,0,0,0,0,1,1,1); tube(m,1.95,2.05,0.34,14,stone2,T,0,true,true);
+  M4.trs(T,0,0.375,0,0,0,0,1,1,1); tube(m,1.62,1.62,0.07,14,pale,T,0,true,false);
+  // the doorway: the hero - a standing portal facing the landing
+  M4.trs(T,0,0.92,1.05,0,0,0,1,1,1); box(m,0.72,1.05,0.14,dark,T,0,0.75);
+  M4.trs(T,0,1.52,1.05,0,0,0,1,1,1); box(m,1.10,0.17,0.26,stone,T,0,0.62);    // lintel
+  for(const s of[-1,1]){ M4.trs(T,s*0.55,0.95,1.05,0,0,0,1,1,1); box(m,0.18,1.12,0.24,stone,T,0,0.62); }   // jambs
+  orb(0,1.66,1.05,0.05,salt,1.0);                                          // a set stone over the door
+  // the watch-tower stub behind, sea-worn, its crown gone to weather
+  M4.trs(T,-0.85,0.40,-1.05,0,0,0,1,1,1); tube(m,0.95,0.88,1.45,12,stone,T,0,true,true);
+  M4.trs(T,-0.85,1.85,-1.05,0,0,0,1,1,1); tube(m,0.90,0.80,0.75,12,stone2,T,0,true,true);
+  for(const [jx,jz,jh] of [[-0.6,-0.4,0.34],[0.35,-0.75,0.22]]){
+    M4.trs(T,-0.85+jx,2.60+jh*0.5,-1.05+jz,0,jx*3,0,1,1,1); box(m,0.38,jh,0.34,stone2,T,0,0.62); }
+  // the lens-mount: a brass stub on the crown, still pointed at the sky
+  M4.trs(T,-0.85,2.86,-1.05,0,0,0,1,1,1); tube(m,0.06,0.06,0.6,6,brass,T,0.5,true,true);
+  orb(-0.85,3.08,-1.32,0.075,verdi,1.0);                                   // the last lens, green with sea-air
+  // the beacon: a pale lamp on a tall post, lit for ships that never came
+  M4.trs(T,0.95,0.40,-0.15,0,0,0,1,1,1); tube(m,0.05,0.07,1.95,6,stone2,T,0,true,true);
+  orb(0.95,2.45,-0.15,0.14,glow,1.0);
+  // a fallen column along the east edge, clear of the door
+  M4.trs(T,1.35,0.50,-0.95,0,1.05,1.5708,1,1,1); tube(m,0.16,0.14,1.9,8,stone,T,0,true,true);
+  // rubble and salt blooms
+  for(const [rx2,rz2,rr] of [[1.3,-1.6,0.15],[-1.55,0.4,0.12],[1.05,1.7,0.10],[-1.2,1.55,0.11]]){
+    M4.trs(T,rx2,0.41,rz2,0,rx2*4,0,1,1,1); box(m,rr*2,rr*1.4,rr*2,stone2,T,0,0.7); }
+  orb(-1.05,0.46,-0.3,0.055,salt,1.0); orb(1.15,0.44,0.5,0.05,salt,1.0);
+  return upload(m);
+}
+function buildChartRoom(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#6a7280'), stone2=hex('#4e5563'), dark=hex('#141824'), salt=hex('#e8ecef'),
+        verdi=hex('#4aa88e'), brass=hex('#a8894a'), glow=hex('#cfe4ff'), amber=hex('#ffb347'),
+        ink=hex('#101018'), ember=hex('#ff9d5c'), nightsea=hex('#121a26');
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: sea-stone with a rime of salt at the edges
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.75,2.75,0.7,14,stone2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.56,2.56,0.07,14,salt,T,0,true,false);
+  M4.trs(T,0,0.26,0,0,0,0,1,1,1); tube(m,2.10,2.10,0.05,14,hex('#4a5262'),T,0,true,false);
+  // the outer shell: night-sea dark, hiding the mainland that was never there
+  for(let i=0;i<14;i++){ const a=i/14*TAU;
+    M4.trs(T,Math.cos(a)*2.72,1.45,Math.sin(a)*2.72,0,a+Math.PI/2,0,1,1,1); box(m,1.35,3.1,0.2,nightsea,T,0,0.55); }
+  // walls: a broken ring - the sea took the north side long ago
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    const broken=(i>=8&&i<=10), h=broken?(0.55+(i%2)*0.3):1.5;
+    M4.trs(T,x,0.2+h/2,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,h,0.26,i%2?stone:stone2,T,0,0.62);
+    if(!broken&&i%3===0) orb(x*0.915,0.72,z*0.915,0.05,salt,1.0); }      // salt blooms on the standing stones
+  M4.trs(T,0,1.36,2.05,0,0,0,1,1,1); box(m,1.35,0.24,0.3,stone,T,0,0.62);   // door lintel, cold to the touch
+  // the roof survives only over the door half: two ribs and a cross-stone; the rest is open sky
+  for(const s of[-1,1]){ M4.trs(T,s*1.45,1.80,1.15,-0.42,0,0,1,1,1); box(m,0.22,0.20,2.3,stone2,T,0,0.62); }
+  M4.trs(T,0,1.94,0.62,0,0,0,1,1,1); box(m,3.0,0.16,0.24,stone2,T,0,0.62);
+  // a rib the sea pulled down, leaning on the east wall
+  M4.trs(T,1.62,0.95,-0.85,0.85,0,-0.30,1,1,1); box(m,0.18,0.16,2.0,stone2,T,0,0.62);
+  // the chart table: a low drafting slab facing the broken wall and the sea beyond it
+  for(const s of[-0.42,0.42]){ M4.trs(T,s,0.55,-1.35,0,0,0,1,1,1); box(m,0.09,0.26,0.6,stone2,T,0,0.62); }
+  M4.trs(T,0,0.815,-1.35,0,0.18,0,1,1,1); box(m,1.15,0.07,0.85,stone,T,0,0.62);
+  M4.trs(T,0,0.855,-1.35,0,0.18,0,1,1,1); tube(m,0.34,0.34,0.014,16,salt,T,0,true,false);   // the chart ground
+  M4.trs(T,0,0.870,-1.35,0,0.18,0,1,1,1); tube(m,0.22,0.22,0.016,14,ink,T,0,true,false);    // the drawn sky
+  M4.trs(T,0,0.887,-1.35,0,0.18,0,1,1,1); tube(m,0.13,0.13,0.014,12,glow,T,0,true,false);   // the iris ring
+  orb(0,0.905,-1.35,0.05,amber,0.55);                                                        // the pupil, warm
+  for(const s of[[-0.48,-1.68],[0.48,-1.68],[-0.48,-1.02],[0.48,-1.02]]) orb(s[0],0.885,s[1],0.035,verdi,0.8);   // shell-weights
+  // the broken lens, set down against the east wall and never picked back up
+  M4.trs(T,1.52,0.58,-0.35,0,0,0.5,1,1,1); tube(m,0.14,0.17,1.15,8,brass,T,0,true,true);
+  orb(1.28,1.08,-0.35,0.075,verdi,1.0);
+  // a dead fire ring by the door, one ember not quite out
+  for(let i=0;i<6;i++){ const a=i/6*TAU; orb(Math.cos(a)*0.30,0.60,0.85+Math.sin(a)*0.30,0.055,stone2,0.7); }
+  orb(0,0.58,0.85,0.045,ember,0.6);
+  // the kept sky-light
+  orb(0,2.25,0.3,0.07,glow,1.0);
+  return upload(m);
+}
 function seedLandmarks(){
   const B={bone:buildBoneSpire,crimson:buildVampCourt,spire:buildWizardSpire,crag:buildOgreCrag,warrens:buildWarrens,hollow:buildHollow,ridge:buildRidge,bedlam:buildBedlam,vulkarrax:buildDragonCoil,orcs:buildOrcHold,men:buildMenCity,elves:buildElfGrove};
   for(const L of LANDS) PROPS.push({mesh:B[L.id](), x:L.x, y:L.y, r:0, gy:sitY(L.x,L.y)-0.03, land:L.id});
+  if(!PROPS.some(p=>p.far==='chart')) PROPS.push({mesh:buildChartRuin(), x:-46.7, y:183.38, r:0.72, far:'chart', ride:-0.02});   // v141: the far shore
   seedBoneYard();
 }
 
