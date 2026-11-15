@@ -1581,6 +1581,7 @@ function tapSecret(pt){
     if(st>=sc.stages.length){ const wn=(S.secrets[k+'_w']||0); S.secrets[k+'_w']=wn+1;
       let ws=(S.secrets.align&&k==='eye')?sc.whispers.concat(['the count is right. the mountain hums it like a lullaby.','gold motes, gold stones. it is showing off, a little.']):sc.whispers;
       if(S.secrets.ledger&&k==='eye') ws=ws.concat(['the book is closed. the fire is not. the mountain likes it that way.','six witnesses. one name. kept.']);
+      if(S.secrets.column&&k==='eye') ws=ws.concat(['the mountain keeps two books now. one counts. one keeps.','warm, spelled the old way. the mountain spells it that way now too.']);
       toast2(ws[wn%ws.length]); A.say(8); sparkW(p[0],p[1],p[2],6,S.secrets.align?'#ffd98a':'#ffb347'); saveGame(); return true; }
     if(S.secrets[k+'_d']===S.day){ toast2('the eye is still. for now.'); A.say(9); return true; }
     const ST=sc.stages[st]; S.secrets[k]=st+1; S.secrets[k+'_d']=S.day;
@@ -3286,7 +3287,11 @@ const INTERIORS={
         c:'Through the great lens the brood saw it at last: the sky is not empty, and the thing under the mountain is not counting stars. It is counting fires.', say:3},
       lines:['the captive star above the spire is in no chart. it is new. it is looking.',
         'the sky-readers wrote: DO NOT COUNT BACK. the margin note, in a smaller hand: too late.',
-        'the fifth constellation is not a constellation. it is an iris.']}},
+        'the fifth constellation is not a constellation. it is an iris.']},
+    afterEnter:()=>{ if(S.secrets.seventh&&!S.secrets.column){ S.secrets.column=1; saveGame();
+      banner2('THE NEW COLUMN','the mountain dips the pen. the word is kept twice.');
+      chron('The mountain added a column to its book. It holds one word, written small, in the hand the brood taught it: WARM. The elder calls it an answer. The mountain calls it a keepsake.',true);
+      A.say(3); } }},
   ridge:{land:'ridge', dx:0, dz:0.95, r:1.7, room:[19,40.5], name:'THE IRONBEARD FORGE',
     blurb:'the coals have not been cold one night since the world was smelted',
     build:()=>buildForgeRoom(),
@@ -3385,6 +3390,13 @@ function buildObservatoryRoom(){
   M4.trs(T,0.62,1.00,0.42,0,0.9,0,1,1,1); tube(m,0.045,0.045,0.42,6,gold,T,0,true,true);
   // candles: three tall patient flames
   for(const c of[[1.7,-0.9],[-1.5,0.9],[-0.9,-1.75]]){ bx(c[0],0.20,c[1],0.07,0.55,0.07,pale,0.9); orb(c[0],0.82,c[1],0.055,glow,1.0); orb(c[0],0.88,c[1],0.03,amber,1.0); }
+  // the new column: once the brood's word exists, the mountain keeps it here - a river-mud tablet, one warm line
+  if(S.secrets&&S.secrets.seventh){
+    bx(-0.95,0.20,0.65,0.34,0.5,0.34,wood,0.9);
+    M4.trs(T,-0.95,0.76,0.65,-0.42,0.25,0,1,1,1); box(m,0.52,0.34,0.07,hex('#5a4028'),T,0,0.85);
+    M4.trs(T,-0.95,0.78,0.71,-0.42,0.25,0,1,1,1); box(m,0.40,0.045,0.02,amber,T,0,0.9);
+    orb(-0.95,0.86,0.60,0.028,amber,1.0);
+  }
   return upload(m);
 }
 function buildForgeRoom(){
@@ -3652,6 +3664,7 @@ function enterInterior(k){
   FP.x=it.room[0]; FP.y=it.room[1]+1.1; FP.a=Math.PI; FP.pitch=0.10; FP.bob=0; FP.mv=null; FP.lk=null; FP.hurt=0;
   FP.on=true; FP.battle=false; CAM.mode='fp'; fpSyncCam();
   A.pop(3); banner2(it.name, it.blurb);
+  if(it.afterEnter) it.afterEnter();
 }
 function tapInteriorDoor(pt){
   if(S.mode!=='village'||FP.on) return false;
