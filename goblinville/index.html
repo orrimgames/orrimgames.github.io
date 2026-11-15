@@ -1898,7 +1898,14 @@ function tickAmbience(dt){
     S._birdT=(S._birdT===undefined?14:S._birdT)-0.22;
     if(S._birdT<=0){ S._birdT=rnd(80,30); spawnFlock(); }
   }
+  // v142: the far-shore beacon glints for sailors - a lamp lit for ships that never came
+  if(S.sail && rnd(1)<0.055){
+    const bd=dirOf(-46.7,183.38,[0,0,0]), br=icoHeight(bd)+2.45;
+    if(Math.hypot(FP.x+46.7,FP.y-183.38)<52)
+      sparkW(SITE.x+bd[0]*br, WATER-PLANET_R+bd[1]*br, SITE.y+bd[2]*br, 7, '#d8ecff');
+  }
 }
+
 // v30: light rainy spells
 function tickWeather(dt){
   if(S.wx.want){ S.wx.left=(S.wx.left||0)-dt; if(S.wx.left<=0) S.wx.want=0; }   // v116: the spell clock counts down in updateWorld dt - S.t never existed
