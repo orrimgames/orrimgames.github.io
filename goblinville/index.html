@@ -3378,7 +3378,23 @@ const INTERIORS={
         c:'Under the spire the counter\u2019s room was found at last: tally marks scratched patient in the stone, six little flames drawn under them, and one word kept apart from every count. The eye counts what burns. It keeps what warms.', say:3},
       lines:['the tally marks stop one short of the ceiling. the counter is saving room.',
         'six flames, drawn small. beside them, a seventh mark. no flame above it: a door.',
-        'it counted the springs first, before anyone. it was waiting for someone to keep them.']}}
+        'it counted the springs first, before anyone. it was waiting for someone to keep them.']}},
+  springs:{land:null, r:1.8, room:[25,40.5], name:'THE FIRST SPRING',
+    blurb:'the water was warm before anyone thought to thank it',
+    doorFn:()=>[SITE.x-3.4, SITE.y+2.8],
+    build:()=>buildSpringsRoom(),
+    interact:{dx:0, dz:-1.15, dd:3.5, ang:0.55, key:'springs', sparkY:1.1, spark:'#9fe8d8', spark2:'#ffd98a',
+      first:{b:['THE FIRST SPRING','the water was warm before anyone thought to thank it'],
+        c:'Under the village the oldest warmth in Orrim still rises: the first spring, which kept the brood before the brood kept the fire. The elder says the fire was learned here. The goblins boil mushrooms in it, which is the whole of the liturgy.', say:9, gift:{food:10}, giftText:'boiled, and wiser: '},
+      linesFn:()=>S.secrets.word2?[
+        'since the brood wrote STAY the spring runs a touch warmer. the elder denies measuring it. the elder measures it.',
+        'the spring bubbled once for the mountain, long ago. once. it is saving the second time.',
+        'the water is older than the fire. the fire knows it. the fire pops, embarrassed.'
+      ]:[
+        'the mushrooms go in pale and come out wise. this is the whole of goblin cuisine and goblin philosophy.',
+        'the spring does not bubble for visitors. it bubbled once for the mountain, long ago. once.',
+        'the water is older than the fire. the elder says the fire knows it. the fire pops, embarrassed.'
+      ]}}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
 function buildObservatoryRoom(){
@@ -3594,6 +3610,43 @@ function buildChoirRoom(){
     bx(t2[0],0.26,t2[1],0.05,0.3,0.05,bone2,0.9); orb(t2[0],0.6,t2[1],0.045,glow,1.0); orb(t2[0],0.65,t2[1],0.024,ice,1.0); }
   return upload(m);
 }
+function buildSpringsRoom(){
+  const m=MB(),T=M4.id();
+  const basalt=hex('#2e2a26'), basalt2=hex('#241f1c'), dark=hex('#161210'), aqua=hex('#9fe8d8'), aqua2=hex('#3d9f88'),
+        sulfur=hex('#d8c782'), steam=hex('#e8f2ee'), moss=hex('#5a7a4a'), glow=hex('#ffd98a'), pot=hex('#8a5a3a');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: dark warm rock, slick with age
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,basalt2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#1c1916'),T,0,true,false);
+  // the spring: three terraced pools stepping down toward the door, stone-rimmed
+  for(const p of[[0,-1.25,0.55,0.60],[0.85,-0.45,0.55,0.38],[-0.82,-0.42,0.55,0.34]]){
+    M4.trs(T,p[0],p[2],p[1],0,0,0,1,1,1); tube(m,p[3]+0.1,p[3]+0.06,0.05,12,basalt,T,0,true,true);  // its rim, low
+    M4.trs(T,p[0],p[2],p[1],0,0,0,1,1,1); tube(m,p[3],p[3],0.08,12,aqua2,T,0,true,true); }         // the water, proud of the rim
+  orb(0,0.78,-1.15,0.05,steam,1.0); orb(0.3,0.88,-1.0,0.035,steam,1.0); orb(-0.25,0.94,-1.3,0.04,steam,1.0);  // the breath
+  orb(0.75,0.74,-0.55,0.032,steam,1.0); orb(-0.7,0.72,-0.5,0.03,steam,1.0);
+  // walls: warm black rock with sulfur veining and moss where the drips run
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,0.95,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.5,0.26,i%2?basalt:basalt2,T,0,0.62);
+    if(i%3===0){ M4.trs(T,x*0.915,0.7,z*0.915,0,a+Math.PI/2,0,1,1,1); box(m,0.07,0.9,0.05,sulfur,T,0,0.75); }    // the veining
+    if(i%3===1){ M4.trs(T,x*0.915,0.64,z*0.915,0,a+Math.PI/2,0,1,1,1); box(m,0.4,0.1,0.06,moss,T,0,0.8); } }     // the moss-lines
+  M4.trs(T,0,1.36,2.05,0,0,0,1,1,1); box(m,1.35,0.24,0.3,basalt,T,0,0.62);   // door lintel, warm to the touch
+  // roof: a low cave vault, dripping gentle
+  M4.trs(T,0,1.58,0,0,0,0,1,1,1); tube(m,2.10,1.88,0.45,14,basalt2,T,0,true,true);
+  M4.trs(T,0,1.92,0,0,0,0,1,1,1); tube(m,1.55,1.32,0.4,12,dark,T,0,true,true);
+  for(const d of[[0.6,1.5,0.3],[-0.5,1.45,-0.6],[0.1,1.48,0.9],[-0.9,1.42,0.5]])
+    orb(d[0],d[1],d[2],0.028,steam,1.0);                                      // the drips, mid-fall, unhurried
+  // the boiling pots: mushrooms in, wisdom out
+  for(const q of[[1.35,0.55],[-1.3,0.75]]){
+    M4.trs(T,q[0],0.55,q[1],0,0,0,1,1,1); tube(m,0.22,0.18,0.22,10,pot,T,0,true,true);
+    orb(q[0],0.85,q[1],0.045,steam,1.0); orb(q[0]+0.08,0.95,q[1],0.03,steam,1.0); }
+  // the warm stones the elders sit on, in a row facing the spring
+  for(const s2 of[-0.5,0,0.5]){ M4.trs(T,s2,0.55,0.6,0,0,0,1,1,1); box(m,0.36,0.14,0.3,basalt,T,0,0.7); }
+  orb(0,1.15,-1.15,0.06,glow,1.0);                                           // the spring-light, kept
+  return upload(m);
+}
+
 function buildCourtRoom(){
   const m=MB(),T=M4.id();
   const wine=hex('#2a1220'), wine2=hex('#1c0d16'), dark=hex('#120810'), velvet=hex('#8e1e2e'), velvet2=hex('#6e1420'),
