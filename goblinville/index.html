@@ -1594,6 +1594,7 @@ function tapSecret(pt){
       if(S.secrets.column&&k==='eye') ws=ws.concat(['the mountain keeps two books now. one counts. one keeps.','warm, spelled the old way. the mountain spells it that way now too.']);
       if(S.secrets.count&&k==='eye') ws=ws.concat(['you found the room. it hoped you would. it left the light on.','ten thousand fires. one word. the arithmetic of a patient eye.']);
       if(S.secrets.word2&&k==='eye') ws=ws.concat(['the mountain is thinking. it has never had to think before. it likes it.','stay, they wrote. as if the mountain could bear to go.']);
+      if(S.secrets.answer&&k==='eye') ws=ws.concat(['it is not thinking anymore. it is remembering. there is a difference.','stayed, it wrote. the mountain has never been so pleased with itself.']);
       toast2(ws[wn%ws.length]); A.say(8); sparkW(p[0],p[1],p[2],6,S.secrets.align?'#ffd98a':'#ffb347'); saveGame(); return true; }
     if(S.secrets[k+'_d']===S.day){ toast2('the eye is still. for now.'); A.say(9); return true; }
     const ST=sc.stages[st]; S.secrets[k]=st+1; S.secrets[k+'_d']=S.day;
@@ -1829,12 +1830,23 @@ function tickAmbience(dt){
   }
   // v137: the second word - three nights after the counter's room is found, the brood writes again, slower
   if(S.secrets.count_d && !S.secrets.word2 && S.day>=S.secrets.count_d+3 && f<0.35){
-    S.secrets.word2=1;
+    S.secrets.word2=1; S.secrets.word2_d=S.day;
     banner2('THE SECOND WORD','the brood writes slower now. there is no hurry anymore.');
     chron('Three nights the elder slept on it, and then the brood wrote their second word, smaller than the first: STAY. The mountain has not answered yet. The fire burns a little straighter while it thinks.', true);
     A.say(3);
     const d7=interiorDoorPos('seventh'); sparkW(d7[0],groundH(d7[0],d7[1])+1.2,d7[1],24,'#ff9d5c'); sparkW(d7[0],groundH(d7[0],d7[1])+1.8,d7[1],14,'#ffe9a8');
     S.shake=Math.max(S.shake||0,0.15);
+    saveGame();
+  }
+  // v140: the mountain answers - seven nights after STAY, one word back, in the hand the brood taught it
+  if(S.secrets.word2 && !S.secrets.word2_d){ S.secrets.word2_d=S.day; saveGame(); }
+  if(S.secrets.word2_d && !S.secrets.answer && S.day>=S.secrets.word2_d+7 && f<0.35){
+    S.secrets.answer=1;
+    banner2('THE MOUNTAIN ANSWERS','seven nights of thought, one word back. the letters are the brood\u2019s. the patience is its own.');
+    chron('On the seventh night after the brood wrote STAY, the mountain answered. One word under the first, scratched patient and deep in the letters the elder taught: STAYED. The elder read it twice, said nothing, and fed the fire an extra log. The mountain answers in seasons. This season turned early.', true);
+    A.say(3);
+    const d8=interiorDoorPos('counting'); sparkW(d8[0],groundH(d8[0],d8[1])+1.2,d8[1],24,'#bfe8ff'); sparkW(d8[0],groundH(d8[0],d8[1])+1.8,d8[1],14,'#ffe9a8');
+    S.shake=Math.max(S.shake||0,0.18);
     saveGame();
   }
   // v132: the ledger closes - all six kingdoms witnessed, the count came right, the book is kept
@@ -3380,7 +3392,7 @@ const INTERIORS={
         '"you ask what WARM cost," the elder says. "a word given is a word kept. that is the whole price."',
         '"i taught the mountain my letters," the elder says. "it taught me patience. i maintain that i won."',
         '"six kingdoms, one mountain, one brood," the elder counts on stained fingers. "the book balances. have a mushroom."'
-      ].concat(S.secrets.word2?['"STAY," the elder says, tasting it. "a big word for a small brood. we mean it."','"the mountain has not answered," the elder says, unconcerned. "it is a mountain. it answers in seasons."']:['the elder licks the pen. "the next word is yours to choose. choose a warm one."']):null}},
+      ].concat(S.secrets.answer?['"it wrote STAYED," the elder says, wiping an eye with the pen-hand. "past tense. as if it could ever have borne to go."','"the mountain answers in seasons," the elder says. "this season turned early. we are told that is our fault, and we are proud."','"STAY," the elder says, tasting it. "a big word for a small brood. we mean it."']:S.secrets.word2?['"STAY," the elder says, tasting it. "a big word for a small brood. we mean it."','"the mountain has not answered," the elder says, unconcerned. "it is a mountain. it answers in seasons."']:['the elder licks the pen. "the next word is yours to choose. choose a warm one."']):null}},
   counting:{land:null, r:1.9, room:[37,46.5], name:'THE COUNTING ROOM',
     blurb:'the fissure goes down further than the springs do. it is warm all the way.',
     doorFn:()=>{ const p=secretPos('eye'); return [p[0],p[2]]; },
@@ -3796,6 +3808,10 @@ function buildCountingRoom(){
     M4.trs(T,x,y,-1.28,-0.35,0,0,1,1,1); box(m,0.028,0.012,0.16,tally,T,0,0.85); }   // the count
   M4.trs(T,0.38,0.92,-1.3,-0.35,0,0,1,1,1); box(m,0.30,0.014,0.05,flame,T,0,0.9);    // the word, kept
   orb(0.38,0.98,-1.34,0.03,glow,1.0);
+  if(S.secrets&&S.secrets.answer){
+    M4.trs(T,0.38,0.905,-1.42,-0.35,0,0,1,1,1); box(m,0.22,0.011,0.04,tally,T,0,0.9);  // the answer, scratched smaller, in tally-stone
+    M4.trs(T,0.38,0.898,-1.47,-0.35,0,0,1,1,1); box(m,0.14,0.011,0.03,tally,T,0,0.9);
+    orb(0.38,0.96,-1.46,0.022,glow,1.0); }                                              // it is pleased with itself, a little
   // a smooth hollow stone where something patient sits
   orb(1.35,0.42,-0.7,0.3,rock2,0.75); orb(1.35,0.62,-0.7,0.22,rock,0.75);
   return upload(m);
