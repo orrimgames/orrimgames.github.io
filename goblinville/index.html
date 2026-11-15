@@ -1579,7 +1579,8 @@ function tapSecret(pt){
     if(Math.hypot(pt[0]-p[0], pt[1]-p[2])>sc.r) continue;
     const st=S.secrets[k]||0;
     if(st>=sc.stages.length){ const wn=(S.secrets[k+'_w']||0); S.secrets[k+'_w']=wn+1;
-      toast2(sc.whispers[wn%sc.whispers.length]); A.say(8); sparkW(p[0],p[1],p[2],6,'#ffb347'); saveGame(); return true; }
+      const ws=(S.secrets.align&&k==='eye')?sc.whispers.concat(['the count is right. the mountain hums it like a lullaby.','gold motes, gold stones. it is showing off, a little.']):sc.whispers;
+      toast2(ws[wn%ws.length]); A.say(8); sparkW(p[0],p[1],p[2],6,S.secrets.align?'#ffd98a':'#ffb347'); saveGame(); return true; }
     if(S.secrets[k+'_d']===S.day){ toast2('the eye is still. for now.'); A.say(9); return true; }
     const ST=sc.stages[st]; S.secrets[k]=st+1; S.secrets[k+'_d']=S.day;
     banner2(ST.b[0],ST.b[1]); chron(ST.c, st===sc.stages.length-1); A.say(ST.say);
@@ -1793,8 +1794,24 @@ function tickAmbience(dt){
   // v124: the eye breathes - a rare glint to draw the curious at stage 0, rising motes once it watches
   const eyeSt=S.secrets.eye||0;
   if(eyeSt>=2 && f<0.7 || eyeSt===0 && f<0.5 && rnd(1)<0.12){
-    const p=secretPos('eye');
-    S.parts.push({x:p[0]+rnd(0.5,-0.5), y:p[1]+rnd(0.3,0), z:p[2]+rnd(0.5,-0.5), vx:rnd(0.06,-0.06), vy:rnd(0.35,0.15), vz:rnd(0.06,-0.06), g:-0.02, life:rnd(2.6,1.6), c:'#ffb347', r:rnd(2.6,1.4), star:1});
+    const p=secretPos('eye'), al=S.secrets.align?1:0;
+    S.parts.push({x:p[0]+rnd(0.5,-0.5), y:p[1]+rnd(0.3,0), z:p[2]+rnd(0.5,-0.5), vx:rnd(0.06,-0.06), vy:rnd(0.35,0.15)+al*0.35, vz:rnd(0.06,-0.06), g:-0.02, life:rnd(2.6,1.6)+al*1.2, c:al?'#ffd98a':'#ffb347', r:rnd(2.6,1.4), star:1});
+    // v126: once the ledger balances, the ward ring keeps the count in gold
+    if(al && rnd(1)<0.5){ const L=LANDS.find(l=>l.id==='spire'), wa=rnd(TAU), wr=3.25;
+      const wx2=L.x+Math.cos(wa)*wr, wz2=L.y+Math.sin(wa)*wr;
+      S.parts.push({x:wx2, y:groundH(wx2,wz2)+rnd(1.2,0.4), z:wz2, vx:0, vy:rnd(0.3,0.15), vz:0, g:-0.015, life:rnd(2.2,1.4), c:'#ffe9a8', r:rnd(2.0,1.2), star:1}); }
+  }
+  // v126: the alignment - when the watching eye meets the watched sky, the count comes right, once
+  if(!S.secrets.align && eyeSt>=2 && S.secrets.scope && f<0.35){
+    S.secrets.align=1;
+    const p=secretPos('eye'), L=LANDS.find(l=>l.id==='spire');
+    banner2('THE LEDGER BALANCES','the stars lean close, the eye looks up, and for one held breath the count is right');
+    chron('On a still night the motes rose all the way to the ward stones and the stones answered in gold. Whatever the eye counts, it counted us kindly.', true);
+    A.say(3);
+    sparkW(p[0],p[1]+0.3,p[2],30,'#ffd98a'); sparkW(p[0],p[1]+0.8,p[2],16,'#bfe8ff');
+    sparkW(L.x,groundH(L.x,L.y)+3.4,L.y,26,'#ffe9a8');
+    S.shake=Math.max(S.shake||0,0.22);
+    saveGame();
   }
   // v35: bird flocks drift across by day, shelter in the rain
   if(!BIRDS.length && f>0.42 && wet<0.2){
