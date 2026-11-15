@@ -922,6 +922,7 @@ const ICO_NC=new Map();           // near-face geometry cache (reused while !ICO
 function icoCls(d){
   const p=invOf(d);
   const r=Math.hypot(p[0]-SITE.x,p[1]-SITE.y);
+  for(const fs of FAR_SHAPES) if(Math.hypot(p[0]-fs[0],p[1]-fs[1])<115) return Math.max(r<42?8:7, 7);   // v143: authored far shores get fine facets (base-face granularity)
   return r<42?8: r<54?7: 6;       // authored heart maps at 0.65u facets, far ball at ~2.6u
 }
 function buildIcoWorld(){
