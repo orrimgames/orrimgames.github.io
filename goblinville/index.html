@@ -1561,6 +1561,36 @@ function screenRay(sx,sy){
   const d=[b[0]-a[0],b[1]-a[1],b[2]-a[2]], L=Math.hypot(d[0],d[1],d[2])||1;
   return {o:a, d:[d[0]/L,d[1]/L,d[2]/L]};
 }
+// v124: secrets - staged discoveries hidden in the landmarks. The first: the eye under Spirehold.
+const SECRETS={
+  eye:{land:'spire', dx:-1.78, dz:2.16, dy:0.42, r:2.6,
+    stages:[
+      {b:['IT BLINKS','the crack at the spire\u2019s foot is not a crack. it has been counting your fires.'], c:'Something under Spirehold opened one amber eye. It blinked first.', say:8},
+      {b:['IT WATCHES','amber motes rise from the fissure now, patient as snow falling up'], c:'The eye does not close anymore. Amber motes drift up all night, and the fires burn a little straighter.', say:9},
+      {b:['A VOICE LIKE BANKED COALS','"LITTLE KEEPERS. THE FIRE YOU KEEP IS MINE. KEEP IT WELL."'], c:'The mountain spoke once, in a voice like banked coals, and left a gift of the deep.', say:3, gift:{food:40,wood:40,stone:30,gold:20}}
+    ],
+    whispers:['the eye follows the brood. not unkindly.','something under the mountain hums the fire\u2019s song, one note low','the fissure is warm. warmer than the springs.','it is still counting. it likes how the number grows.']}
+};
+function secretPos(k){ const sc=SECRETS[k], L=LANDS.find(l=>l.id===sc.land);
+  return [L.x+sc.dx, groundH(L.x+sc.dx, L.y+sc.dz)+sc.dy, L.y+sc.dz]; }
+function tapSecret(pt){
+  if(S.mode!=='village') return false;
+  for(const k in SECRETS){ const sc=SECRETS[k], p=secretPos(k);
+    if(Math.hypot(pt[0]-p[0], pt[1]-p[2])>sc.r) continue;
+    const st=S.secrets[k]||0;
+    if(st>=sc.stages.length){ const wn=(S.secrets[k+'_w']||0); S.secrets[k+'_w']=wn+1;
+      toast2(sc.whispers[wn%sc.whispers.length]); A.say(8); sparkW(p[0],p[1],p[2],6,'#ffb347'); saveGame(); return true; }
+    if(S.secrets[k+'_d']===S.day){ toast2('the eye is still. for now.'); A.say(9); return true; }
+    const ST=sc.stages[st]; S.secrets[k]=st+1; S.secrets[k+'_d']=S.day;
+    banner2(ST.b[0],ST.b[1]); chron(ST.c, st===sc.stages.length-1); A.say(ST.say);
+    sparkW(p[0],p[1]+0.2,p[2],26,'#ffb347'); sparkW(p[0],p[1]+0.5,p[2],14,'#ffd98a');
+    if(ST.gift){ for(const rk in ST.gift) addRes(rk,ST.gift[rk]);
+      toast2('a gift of the deep: +'+Object.keys(ST.gift).map(rk=>ST.gift[rk]+' '+rk).join(', ')); }
+    S.shake=Math.max(S.shake||0, st===2?0.5:0.18);
+    saveGame(); return true;
+  }
+  return false;
+}
 function rayGround(sx,sy){ // march fixed stride, then interpolate the exact crossing
   const r=screenRay(sx,sy);
   if(r.d[1]>=-0.0005) return null;
@@ -1596,7 +1626,8 @@ const S={
   victory:0, ceremonyDone:0, victPhase:-1, victT:0, goalDone:0,
   school:'none', scholar:null,
   ogre:{fed:0, lastDay:0, bound:false, used:false, pending:false},
-  vanto:{signed:false, lapsed:false, trades:0, main:false}
+  vanto:{signed:false, lapsed:false, trades:0, main:false},
+  secrets:{}
 };
 const BT={
   hall:   {name:'Great Hall', w:3,h:3, cost:{}, hp:900, desc:'The heart of Goblinville', max:1},
@@ -1758,6 +1789,12 @@ function tickAmbience(dt){
       S.parts.push({x:wx, y:gy+rnd(0.9,0.3), z:wz, vx:rnd(0.22,-0.22), vy:rnd(0.10,-0.05), vz:rnd(0.22,-0.22),
                     g:-0.01, life:rnd(1.8,1.1), c:'#d8f07a', r:rnd(2.4,1.4), star:1});
     }
+  }
+  // v124: the eye breathes - a rare glint to draw the curious at stage 0, rising motes once it watches
+  const eyeSt=S.secrets.eye||0;
+  if(eyeSt>=2 && f<0.7 || eyeSt===0 && f<0.5 && rnd(1)<0.12){
+    const p=secretPos('eye');
+    S.parts.push({x:p[0]+rnd(0.5,-0.5), y:p[1]+rnd(0.3,0), z:p[2]+rnd(0.5,-0.5), vx:rnd(0.06,-0.06), vy:rnd(0.35,0.15), vz:rnd(0.06,-0.06), g:-0.02, life:rnd(2.6,1.6), c:'#ffb347', r:rnd(2.6,1.4), star:1});
   }
   // v35: bird flocks drift across by day, shelter in the rain
   if(!BIRDS.length && f>0.42 && wet<0.2){
@@ -4474,7 +4511,7 @@ function packSave(){
   return {v:20, site:[SITE.x,SITE.y], res:S.res, cap:S.cap, faith:S.faith, muted:!!S.muted, day:S.day, dayT:S.dayT,
     omen:S.omen, school:S.school, scholar:S.scholar, ogre:S.ogre, vanto:S.vanto,
     war:{troops:S.war.troops, won:S.war.won, cd:S.war.cd, banners:S.war.banners, treaty:S.war.treaty},
-    ach:S.ach||{}, seen:S.seen||{},
+    ach:S.ach||{}, seen:S.seen||{}, secrets:S.secrets||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level})),
@@ -4521,7 +4558,7 @@ function restoreSave(sv){
   if(sv.vanto) Object.assign(S.vanto,sv.vanto);
   if(sv.war){ S.war.troops=sv.war.troops||0; S.war.won=sv.war.won||{}; S.war.cd=sv.war.cd||{};
     S.war.banners=sv.war.banners||[]; S.war.treaty=!!sv.war.treaty; }
-  S.ach=sv.ach||{}; S.seen=sv.seen||{};
+  S.ach=sv.ach||{}; S.seen=sv.seen||{}; S.secrets=sv.secrets||{};
   S.tut=sv.tut||0; S.metGob=sv.metGob||0; S.sawMap=sv.sawMap||0; S.tapCombo=sv.tapCombo||0; S.dawnSeen=sv.dawnSeen||0; S.elderHush=sv.elderHush||0; S.hints=sv.hints||{};
   S.victory=sv.victory||0; S.ceremonyDone=sv.ceremonyDone||0; S.victPhase=-1; S.victT=0;
   S.goalDone=sv.goalDone||0; S._goal=undefined;
@@ -5420,6 +5457,7 @@ function handleTap3(x,y){
   if(g){ S.inspect={g,t:3.4}; S.metGob=1; A.blip(); g.emote='!'; g.emoteT=1.2; g.squash=0.6; return; }
   const pt=rayGround(x,y);
   if(!pt) return;
+  if(tapSecret(pt)) return;
   const t=[clamp(Math.floor(pt[0]),0,MAP-1), clamp(Math.floor(pt[1]),0,MAP-1)];
   const c=tiles[t[1]][t[0]];
   const wc=[t[0]+0.5, groundH(t[0]+0.5,t[1]+0.5), t[1]+0.5];
