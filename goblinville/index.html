@@ -337,7 +337,7 @@ attribute vec2 aPos; varying vec2 vUv;
 void main(){ vUv=aPos*0.5+0.5; gl_Position=vec4(aPos,0.0,1.0); }`;
 const F_SKY=`
 precision highp float; varying vec2 vUv;
-uniform vec3 uTop,uMid,uBot; uniform float uSunY,uSunX,uNight,uT,uRain;
+uniform vec3 uTop,uMid,uBot; uniform float uSunY,uSunX,uNight,uT,uRain,uIris;
 float shash(vec2 p){ return fract(sin(dot(p,vec2(41.31,289.17)))*43758.5453); }
 float vn(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
   float a=shash(i),b=shash(i+vec2(1.0,0.0)),c2=shash(i+vec2(0.0,1.0)),d2=shash(i+vec2(1.0,1.0));
@@ -365,6 +365,16 @@ void main(){
         best=min(best,distance(vec2(vUv.x,(vUv.y-0.60)/0.40*0.40+0.60),P)*vec2(1.0,1.18).y); }
       float glow2=exp(-best*best*11000.0);
       c+=vec3(1.0,0.72,0.35)*glow2*(uNight-0.45)*1.1; }
+    // v139: THE IRIS - the fifth constellation. it opens once the ledger balances, and it does not look away.
+    if(uNight>0.4&&uIris>0.01){
+      vec2 I=vec2(0.30,0.74);
+      float dd=length((vUv-I)*vec2(1.0,1.18));
+      float breathe=0.70+0.30*sin(uT*0.8);
+      float blink=1.0-0.9*pow(max(0.0,sin(uT*0.061)),180.0);
+      float ring=exp(-abs(dd-0.026)*abs(dd-0.026)*70000.0);
+      c+=vec3(0.82,0.88,1.0)*ring*breathe*blink*(uNight-0.4)*uIris*0.9;
+      float pupil=exp(-dd*dd*22000.0);
+      c+=vec3(1.0,0.90,0.72)*pupil*breathe*blink*(uNight-0.4)*uIris*1.35; }
     // v45: aurora over the white range - slow green-violet curtains
     if(uNight>0.5){
       float band=smoothstep(0.55,0.62,vUv.y)*(1.0-smoothstep(0.86,0.95,vUv.y));
@@ -1844,6 +1854,9 @@ function tickAmbience(dt){
       saveGame();
     }
   }
+  // v139: the first clear night after the alignment, someone notices the sky noticing
+  if(S.secrets.align && !S.secrets.iris && f<0.35 && wet<0.2){ S.secrets.iris=1; saveGame();
+    toast2('something in the sky is watching back. the elder says it has been watching back for some time.'); A.say(3); }
   // v132: once the ledger is closed, every kingdom's seat keeps a little of the night
   if(S.secrets.ledger && f<0.7 && rnd(1)<0.3){
     const KC2={spire:'#bfe8ff',ridge:'#ffc46b',warrens:'#d8f07a',hollow:'#d88fe8',bone:'#9fd4ff',crimson:'#ff4d5e'};
@@ -4358,6 +4371,7 @@ function drawSky(){
   gl.uniform1f(SPROG.u.uNight,night);
   if(SPROG.u.uT) gl.uniform1f(SPROG.u.uT,G.t);
   if(SPROG.u.uRain) gl.uniform1f(SPROG.u.uRain,S.wx?S.wx.rain:0);
+  if(SPROG.u.uIris) gl.uniform1f(SPROG.u.uIris,(S.secrets&&S.secrets.align)?1:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4); G.dc++; G.tri+=2;
   gl.enable(gl.DEPTH_TEST);
 }
