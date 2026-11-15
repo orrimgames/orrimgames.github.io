@@ -3297,7 +3297,17 @@ const INTERIORS={
         c:'The Choir of the Bone Kingdom sang one of the brood\u2019s names back, in the third voice, as practice. The dead are not gone; they are filed.', say:9},
       lines:['they sing your name in the third choir. it is not your turn. it is only practice.',
         'the Choir knows the name the brood has not chosen yet.',
-        'every fire the mountain counts, the Choir answers with a name. the ledger has two columns.']}}
+        'every fire the mountain counts, the Choir answers with a name. the ledger has two columns.']}},
+  crimson:{land:'crimson', dx:0, dz:1.9, r:1.8, room:[19,46.5], name:'THE VELVET AUDIENCE',
+    blurb:'the Court is warm, and the warmth is counted, and the counting is precise.',
+    build:()=>buildCourtRoom(),
+    interact:{dx:0, dz:-1.30, dd:3.5, ang:0.55, key:'court', sparkY:1.3, spark:'#ff4d5e', spark2:'#e8d0c8',
+      first:{b:['THE COURT RECEIVES','the Court applauds, slowly, the way one appraises furniture that has learned to walk.'],
+        c:'The Crimson Court received the brood warmly, and counted the warmth, and wrote it in a book with a red ribbon. Nothing at the Court is asked for twice.', say:9,
+        gift:{gold:30}, giftText:'accepted on credit. the terms were not read aloud: '},
+      lines:['the mirrors are covered. the elder says the Court is considerate. the elder does not say considerate of whom.',
+        'the Court bowed to you. it is still bowing. it has been bowing for some years.',
+        'the goblet was full when you arrived. it is full now. no one has been seen to fill it.']}}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k], L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
 function buildObservatoryRoom(){
@@ -3504,6 +3514,50 @@ function buildChoirRoom(){
   // ghost-candles along the aisle
   for(const t2 of[[-0.65,0.2],[0.65,0.2],[-0.65,-0.7],[0.65,-0.7]]){
     bx(t2[0],0.26,t2[1],0.05,0.3,0.05,bone2,0.9); orb(t2[0],0.6,t2[1],0.045,glow,1.0); orb(t2[0],0.65,t2[1],0.024,ice,1.0); }
+  return upload(m);
+}
+function buildCourtRoom(){
+  const m=MB(),T=M4.id();
+  const wine=hex('#2a1220'), wine2=hex('#1c0d16'), dark=hex('#120810'), velvet=hex('#8e1e2e'), velvet2=hex('#6e1420'),
+        gold=hex('#c9a35a'), glow=hex('#ff4d5e'), flame=hex('#ffb347'), pale=hex('#e8d0c8'), mirror=hex('#0a0d14');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: dark wine stone under a carpet that remembers every step
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,wine2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#1a0a12'),T,0,true,false);
+  bx(0,0.26,0.35,0.62,0.02,2.7,velvet,0.8);                                  // the carpet, laid and counted
+  bx(0,0.27,0.35,0.70,0.012,2.78,gold,0.85);                                 // its gold selvage
+  // walls: panelled dark wood, the mirrors hung and covered
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,0.95,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.5,0.26,i%2?wine:wine2,T,0,0.62);
+    if(i%2===1){ M4.trs(T,x*0.96,1.0,z*0.96,0,a+Math.PI/2,0,1,1,1); box(m,0.34,0.62,0.05,velvet2,T,0,0.7); } }  // the curtains
+  for(const s2 of[-1,1]){ const a=s2*1.1, x=Math.cos(a)*1.98, z=Math.sin(a)*1.98;
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,0.42,0.78,0.06,gold,T,0,0.7);
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,0.34,0.68,0.07,mirror,T,0,0.9); }                            // the mirrors, covered
+  M4.trs(T,0,1.36,2.05,0,0,0,1,1,1); box(m,1.35,0.24,0.3,velvet2,T,0,0.62);   // door lintel, red-draped
+  // roof: a low gilt vault, warm as a held breath
+  M4.trs(T,0,1.58,0,0,0,0,1,1,1); tube(m,2.10,1.88,0.45,14,wine2,T,0,true,true);
+  M4.trs(T,0,1.92,0,0,0,0,1,1,1); tube(m,1.55,1.32,0.4,12,dark,T,0,true,true);
+  M4.trs(T,0,2.22,0,0,0,0,1,1,1); tube(m,0.95,0.72,0.35,10,wine2,T,0,true,true);
+  for(let r2=0;r2<6;r2++){ const a=r2/6*TAU;
+    M4.trs(T,Math.cos(a)*0.9,1.72,Math.sin(a)*0.9,0,a,0.35,1,1,1); box(m,1.75,0.05,0.07,gold,T,0,0.7); }
+  orb(0,2.32,0,0.06,glow,1.0);                                                // the one red lamp
+  // the dais and the throne, north: small, patient, upholstered
+  bx(0,0.26,-1.35,1.15,0.18,0.8,wine2,0.85);
+  bx(0,0.44,-1.5,0.5,0.22,0.42,velvet,0.75);
+  bx(0,0.5,-1.72,0.5,1.15,0.08,velvet2,0.7);                                  // the tall back
+  bx(0,1.62,-1.72,0.56,0.08,0.1,gold,0.7);                                    // its gilt crest
+  for(const s2 of[-1,1]){ bx(s2*0.31,0.5,-1.52,0.07,0.42,0.4,gold,0.75); }    // the arms
+  orb(0,0.72,-1.48,0.05,pale,0.9);                                            // the cushion, recently warm
+  // candle stands, four, flames that lean toward the visitor
+  for(const t2 of[[-0.8,0.3],[0.8,0.3],[-0.8,-0.8],[0.8,-0.8]]){
+    bx(t2[0],0.26,t2[1],0.05,0.75,0.05,gold,0.8); orb(t2[0],1.06,t2[1],0.045,flame,1.2); orb(t2[0],1.0,t2[1],0.028,glow,1.0); }
+  // the goblet table, west of the carpet: offered, never emptied
+  bx(-0.95,0.26,-0.35,0.34,0.5,0.34,wine,0.8);
+  bx(-0.95,0.76,-0.35,0.42,0.03,0.42,gold,0.8);
+  orb(-0.95,0.84,-0.35,0.05,velvet,1.3);                                      // the goblet, full
+  orb(-0.95,0.9,-0.35,0.02,glow,1.0);
   return upload(m);
 }
 function enterInterior(k){
