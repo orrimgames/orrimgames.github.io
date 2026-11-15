@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-15T06:40:58Z",
-  "ts": 1794724858.9233854,
-  "scan_seconds": 14.3,
+  "generated_at": "2026-11-15T06:45:38Z",
+  "ts": 1794725138.046143,
+  "scan_seconds": 10.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 303 binary + 1670 multi | kalshi: 5000 events -> 72 binary + 4764 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 301 binary + 1666 multi | kalshi: 5000 events -> 72 binary + 4764 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,42 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "Consensys IPO closing market cap above ___ ?",
+   "n_legs": 3,
+   "gross": 0.85,
+   "fees": 0.009960580000000002,
+   "net": 0.84003942,
+   "capital": 0.15996058,
+   "roi": 5.251540223222497,
+   "url": "https://polymarket.com/event/consensys-ipo-closing-market-cap-above",
+   "neg_risk": false,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$1B",
+     "ask": 0.061,
+     "fee": 0.07,
+     "token": "73186602572996399039512908758032713401027509740424057747695798608438369774367"
+    },
+    {
+     "label": "$2B",
+     "ask": 0.041,
+     "fee": 0.07,
+     "token": "53431607780108312118529894316638730898056867191206531730181786369235995357233"
+    },
+    {
+     "label": "$3B",
+     "ask": 0.048,
+     "fee": 0.07,
+     "token": "100053070271083919715825174428042762682570047698117969561192721260051515162849"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "consensys-ipo-closing-market-cap-above"
+  },
   {
    "venue": "polymarket",
    "event": "Cambria listed on ___ within 30 days of TGE?",
@@ -74,11 +110,11 @@
    "venue": "polymarket",
    "event": "Makina FDV above ___ one day after launch?",
    "n_legs": 4,
-   "gross": 0.815,
-   "fees": 0.012112730000000002,
-   "net": 0.8028872699999999,
-   "capital": 0.19711273,
-   "roi": 4.073239054626253,
+   "gross": 0.817,
+   "fees": 0.011975250000000002,
+   "net": 0.80502475,
+   "capital": 0.19497525,
+   "roi": 4.128856098402233,
    "url": "https://polymarket.com/event/makina-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "4/4",
@@ -104,7 +140,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.01,
+     "ask": 0.008,
      "fee": 0.07,
      "token": "94041054826948094458516807909608237662754077816958616769196799633242970299956"
     }
@@ -282,6 +318,54 @@
   },
   {
    "venue": "polymarket",
+   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
+   "n_legs": 5,
+   "gross": 0.658,
+   "fees": 0.0,
+   "net": 0.658,
+   "capital": 0.34199999999999997,
+   "roi": 1.9239766081871348,
+   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "10+",
+     "ask": 0.15,
+     "fee": 0.0,
+     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
+    },
+    {
+     "label": "20+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
+    },
+    {
+     "label": "30+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
+    },
+    {
+     "label": "40+",
+     "ask": 0.049,
+     "fee": 0.0,
+     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
+    },
+    {
+     "label": "50+",
+     "ask": 0.043,
+     "fee": 0.0,
+     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
+  },
+  {
+   "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
    "gross": 0.669,
@@ -348,61 +432,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
-   "n_legs": 5,
-   "gross": 0.646,
-   "fees": 0.0,
-   "net": 0.646,
-   "capital": 0.354,
-   "roi": 1.824858757062147,
-   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "10+",
-     "ask": 0.15,
-     "fee": 0.0,
-     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
-    },
-    {
-     "label": "20+",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
-    },
-    {
-     "label": "30+",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
-    },
-    {
-     "label": "40+",
-     "ask": 0.051,
-     "fee": 0.0,
-     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
-    },
-    {
-     "label": "50+",
-     "ask": 0.043,
-     "fee": 0.0,
-     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
-  },
-  {
-   "venue": "polymarket",
    "event": "Who will Xi Jinping purge in 2026?",
    "n_legs": 9,
-   "gross": 0.644,
-   "fees": 0.01353064,
-   "net": 0.63046936,
-   "capital": 0.36953063999999997,
-   "roi": 1.7061355453501772,
+   "gross": 0.646,
+   "fees": 0.01346168,
+   "net": 0.63253832,
+   "capital": 0.36746167999999996,
+   "roi": 1.7213721985922452,
    "url": "https://polymarket.com/event/who-will-xi-jinping-purge-in-2026",
    "neg_risk": false,
    "coverage": "9/9",
@@ -446,7 +482,7 @@
     },
     {
      "label": "Li Xi",
-     "ask": 0.07,
+     "ask": 0.068,
      "fee": 0.04,
      "token": "43035443907656506704527037200225719721941648954979830565481550335322734318837"
     },
@@ -974,11 +1010,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.552,
-   "fees": 0.028606340000000004,
-   "net": 0.5233936600000001,
-   "capital": 0.47660634,
-   "roi": 1.0981676408249208,
+   "gross": 0.5509999999999999,
+   "fees": 0.028663950000000004,
+   "net": 0.5223360499999999,
+   "capital": 0.47766395,
+   "roi": 1.093522025264833,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -992,7 +1028,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.088,
+     "ask": 0.089,
      "fee": 0.07,
      "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
     },
@@ -1184,11 +1220,11 @@
    "venue": "polymarket",
    "event": "How low will 30-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.5189999999999999,
-   "fees": 0.022710150000000002,
-   "net": 0.4962898499999999,
-   "capital": 0.5037101500000001,
-   "roi": 0.9852687105868322,
+   "gross": 0.51,
+   "fees": 0.023124600000000002,
+   "net": 0.4868754,
+   "capital": 0.5131246,
+   "roi": 0.9488443937398441,
    "url": "https://polymarket.com/event/how-low-will-30-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1244,7 +1280,7 @@
     },
     {
      "label": "Below 4.96%",
-     "ask": 0.035,
+     "ask": 0.044,
      "fee": 0.05,
      "token": "66069166164111639106106433697577281616508476184543430398845056453266233149310"
     }
@@ -1304,11 +1340,11 @@
    "venue": "polymarket",
    "event": "What kind of product will OpenAI announce in 2026?",
    "n_legs": 10,
-   "gross": 0.46099999999999997,
-   "fees": 0.01991036,
-   "net": 0.44108963999999995,
-   "capital": 0.55891036,
-   "roi": 0.789195677102854,
+   "gross": 0.491,
+   "fees": 0.01901036,
+   "net": 0.47198964,
+   "capital": 0.52801036,
+   "roi": 0.8939022332819379,
    "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -1322,7 +1358,7 @@
     },
     {
      "label": "Clip-on device for clothing",
-     "ask": 0.14,
+     "ask": 0.11,
      "fee": 0.04,
      "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
     },
@@ -1382,11 +1418,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Malik Willis 2026-27 Regular Season Passing Yards",
    "n_legs": 5,
-   "gross": 0.45699999999999996,
-   "fees": 0.02330375,
-   "net": 0.43369624999999995,
-   "capital": 0.56630375,
-   "roi": 0.7658367969486339,
+   "gross": 0.46099999999999997,
+   "fees": 0.023125350000000003,
+   "net": 0.43787465,
+   "capital": 0.5621253500000001,
+   "roi": 0.7789626459649968,
    "url": "https://polymarket.com/event/malik-willis-passing-yards-2026-27",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1412,7 +1448,7 @@
     },
     {
      "label": "3,199.5+ passing yards",
-     "ask": 0.056,
+     "ask": 0.052,
      "fee": 0.05,
      "token": "19420300806281922704291946720609486017558934813678359991321032024109273784917"
     },
@@ -1430,11 +1466,11 @@
    "venue": "polymarket",
    "event": "How low will 10-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.43999999999999995,
-   "fees": 0.0262081,
-   "net": 0.41379189999999993,
-   "capital": 0.5862081,
-   "roi": 0.7058788508722413,
+   "gross": 0.44599999999999995,
+   "fees": 0.025951000000000002,
+   "net": 0.42004899999999995,
+   "capital": 0.5799510000000001,
+   "roi": 0.7242836032699312,
    "url": "https://polymarket.com/event/how-low-will-10-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1442,13 +1478,13 @@
    "legs": [
     {
      "label": "Below 4.82%",
-     "ask": 0.075,
+     "ask": 0.074,
      "fee": 0.05,
      "token": "13377721987098980051749607039131658402729491779351639608813085146833269355484"
     },
     {
      "label": "Below 4.79%",
-     "ask": 0.074,
+     "ask": 0.072,
      "fee": 0.05,
      "token": "90999116052433179326295346506194469643187572373856736791170226159277710153227"
     },
@@ -1466,31 +1502,31 @@
     },
     {
      "label": "Below 4.70%",
-     "ask": 0.058,
+     "ask": 0.057,
      "fee": 0.05,
      "token": "74660631692469606625965642662874932647520269631543903382856083861331410954833"
     },
     {
      "label": "Below 4.67%",
-     "ask": 0.045,
+     "ask": 0.048,
      "fee": 0.05,
      "token": "95784900426154966460263365604868194673653705014301467307693967215275125806681"
     },
     {
      "label": "Below 4.64%",
-     "ask": 0.047,
+     "ask": 0.043,
      "fee": 0.05,
      "token": "99458966200690317890531973869054242666541855627029686601218473990720015615370"
     },
     {
      "label": "Below 4.61%",
-     "ask": 0.057,
+     "ask": 0.065,
      "fee": 0.05,
      "token": "108683739551781849289733884128553137887285925924115507393979701433030483399635"
     },
     {
      "label": "Below 4.57%",
-     "ask": 0.071,
+     "ask": 0.062,
      "fee": 0.05,
      "token": "87015592051056516728220028613108522071329028649837064578534327296733593575815"
     }
@@ -1502,11 +1538,11 @@
    "venue": "polymarket",
    "event": "How many Senators will vote for the Clarity Act?",
    "n_legs": 8,
-   "gross": 0.406,
-   "fees": 0.02193512,
-   "net": 0.38406488000000005,
-   "capital": 0.61593512,
-   "roi": 0.6235476230028905,
+   "gross": 0.405,
+   "fees": 0.02196948,
+   "net": 0.38303052000000004,
+   "capital": 0.61696948,
+   "roi": 0.6208257173434253,
    "url": "https://polymarket.com/event/how-many-senators-will-vote-for-the-clarity-act-20260729193533306",
    "neg_risk": false,
    "coverage": "8/8",
@@ -1526,7 +1562,7 @@
     },
     {
      "label": "Above 58",
-     "ask": 0.07,
+     "ask": 0.071,
      "fee": 0.04,
      "token": "90478389068106043826833580661092508858615079475879584220859211951733291944919"
     },
@@ -1563,6 +1599,78 @@
    ],
    "kind": "intra-event",
    "event_slug": "how-many-senators-will-vote-for-the-clarity-act-20260729193533306"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How low will 5-year Treasury yield get in November?",
+   "n_legs": 9,
+   "gross": 0.368,
+   "fees": 0.029359000000000003,
+   "net": 0.33864099999999997,
+   "capital": 0.661359,
+   "roi": 0.512038091263595,
+   "url": "https://polymarket.com/event/how-low-will-5-year-treasury-yield-get-in-november",
+   "neg_risk": false,
+   "coverage": "9/9",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Below 4.59%",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "86223651370129605550636053209248154094826933229851877033370645163078286094152"
+    },
+    {
+     "label": "Below 4.56%",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "69565405469443780365338080628621129944474650323671874918004789021390244426964"
+    },
+    {
+     "label": "Below 4.53%",
+     "ask": 0.073,
+     "fee": 0.05,
+     "token": "12236841287422256981190473806256292038680332572603244704599635823601532813638"
+    },
+    {
+     "label": "Below 4.50%",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "32495274510140920139522866825776911058234492742713770275012016319817681314491"
+    },
+    {
+     "label": "Below 4.47%",
+     "ask": 0.059,
+     "fee": 0.05,
+     "token": "50922830033354309660690790537975930970500349193720059127627005983235127323052"
+    },
+    {
+     "label": "Below 4.44%",
+     "ask": 0.078,
+     "fee": 0.05,
+     "token": "58496642245394930668253600498608914364185423389911706239865668358565126817531"
+    },
+    {
+     "label": "Below 4.41%",
+     "ask": 0.072,
+     "fee": 0.05,
+     "token": "104216188108451540437212373529451296797579477219803606250866249849479445619326"
+    },
+    {
+     "label": "Below 4.37%",
+     "ask": 0.059,
+     "fee": 0.05,
+     "token": "39671382570543632920395816806346219292044453924331096501670694403920200022802"
+    },
+    {
+     "label": "Below 4.33%",
+     "ask": 0.081,
+     "fee": 0.05,
+     "token": "34759742012522054834814935964589457873976935528860056061322617290647093023078"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-low-will-5-year-treasury-yield-get-in-november"
   },
   {
    "venue": "polymarket",
@@ -1605,78 +1713,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "democratic-2028-presidential-odds-hit-by-december-31"
-  },
-  {
-   "venue": "polymarket",
-   "event": "How low will 5-year Treasury yield get in November?",
-   "n_legs": 9,
-   "gross": 0.32999999999999996,
-   "fees": 0.0309483,
-   "net": 0.2990517,
-   "capital": 0.7009483000000001,
-   "roi": 0.42663874068886387,
-   "url": "https://polymarket.com/event/how-low-will-5-year-treasury-yield-get-in-november",
-   "neg_risk": false,
-   "coverage": "9/9",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "Below 4.59%",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "86223651370129605550636053209248154094826933229851877033370645163078286094152"
-    },
-    {
-     "label": "Below 4.56%",
-     "ask": 0.097,
-     "fee": 0.05,
-     "token": "69565405469443780365338080628621129944474650323671874918004789021390244426964"
-    },
-    {
-     "label": "Below 4.53%",
-     "ask": 0.073,
-     "fee": 0.05,
-     "token": "12236841287422256981190473806256292038680332572603244704599635823601532813638"
-    },
-    {
-     "label": "Below 4.50%",
-     "ask": 0.07,
-     "fee": 0.05,
-     "token": "32495274510140920139522866825776911058234492742713770275012016319817681314491"
-    },
-    {
-     "label": "Below 4.47%",
-     "ask": 0.059,
-     "fee": 0.05,
-     "token": "50922830033354309660690790537975930970500349193720059127627005983235127323052"
-    },
-    {
-     "label": "Below 4.44%",
-     "ask": 0.078,
-     "fee": 0.05,
-     "token": "58496642245394930668253600498608914364185423389911706239865668358565126817531"
-    },
-    {
-     "label": "Below 4.41%",
-     "ask": 0.083,
-     "fee": 0.05,
-     "token": "104216188108451540437212373529451296797579477219803606250866249849479445619326"
-    },
-    {
-     "label": "Below 4.37%",
-     "ask": 0.059,
-     "fee": 0.05,
-     "token": "39671382570543632920395816806346219292044453924331096501670694403920200022802"
-    },
-    {
-     "label": "Below 4.33%",
-     "ask": 0.081,
-     "fee": 0.05,
-     "token": "34759742012522054834814935964589457873976935528860056061322617290647093023078"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-low-will-5-year-treasury-yield-get-in-november"
   },
   {
    "venue": "kalshi",
@@ -1730,11 +1766,11 @@
    "venue": "polymarket",
    "event": "Next GPT Terra Model (5.7+): Text Arena Debut?",
    "n_legs": 4,
-   "gross": 0.15400000000000003,
-   "fees": 0.022824399999999998,
-   "net": 0.13117560000000003,
-   "capital": 0.8688243999999999,
-   "roi": 0.150980566383725,
+   "gross": 0.14500000000000002,
+   "fees": 0.02315308,
+   "net": 0.12184692000000003,
+   "capital": 0.87815308,
+   "roi": 0.13875362140732914,
    "url": "https://polymarket.com/event/next-gpt-terra-model-5pt7-text-arena-debut-20261022",
    "neg_risk": false,
    "coverage": "4/4",
@@ -1760,7 +1796,7 @@
     },
     {
      "label": "1470+",
-     "ask": 0.039,
+     "ask": 0.048,
      "fee": 0.04,
      "token": "114972943267650395673630027906140555571222655044651299379803276377666501900063"
     }
@@ -1970,11 +2006,11 @@
    "venue": "polymarket",
    "event": "Which countries will join the Mecca Agreement by December 31?",
    "n_legs": 16,
-   "gross": 0.028000000000000025,
+   "gross": 0.026000000000000023,
    "fees": 0.0,
-   "net": 0.028000000000000025,
-   "capital": 0.972,
-   "roi": 0.028806584362139943,
+   "net": 0.026000000000000023,
+   "capital": 0.974,
+   "roi": 0.026694045174538012,
    "url": "https://polymarket.com/event/which-countries-will-join-the-mecca-agreement-by-december-31",
    "neg_risk": false,
    "coverage": "16/16",
@@ -2060,7 +2096,7 @@
     },
     {
      "label": "Syria",
-     "ask": 0.197,
+     "ask": 0.199,
      "fee": 0.0,
      "token": "110423716205980586413454899479921466632109072455516873680195774458335273763038"
     },
@@ -2084,11 +2120,11 @@
    "venue": "polymarket",
    "event": "Who will be arrested before 2027?",
    "n_legs": 24,
-   "gross": 0.06000000000000005,
-   "fees": 0.0354136,
-   "net": 0.02458640000000005,
-   "capital": 0.9754136,
-   "roi": 0.02520612794408449,
+   "gross": 0.06099999999999994,
+   "fees": 0.03537828,
+   "net": 0.025621719999999945,
+   "capital": 0.97437828,
+   "roi": 0.026295454779636452,
    "url": "https://polymarket.com/event/who-will-be-arrested-before-2027",
    "neg_risk": false,
    "coverage": "24/24",
@@ -2168,7 +2204,7 @@
     },
     {
      "label": "Candace Owens",
-     "ask": 0.059,
+     "ask": 0.058,
      "fee": 0.04,
      "token": "47264700355280111220763983503506940668039621201599440140931837330593348899023"
     },
@@ -2586,73 +2622,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "South Korea Annual Inflation 2026",
-   "n_legs": 7,
-   "gross": 0.006000000000000005,
-   "fees": 0.033107000000000004,
-   "net": -0.027107,
-   "capital": 1.027107,
-   "roi": -0.02639160282229602,
-   "url": "https://polymarket.com/event/south-korea-annual-inflation-2026",
-   "neg_risk": true,
-   "coverage": "7/7",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<1.5%",
-     "ask": 0.007,
-     "fee": 0.05,
-     "token": "71525282065182121177376702725462872746584228278774865566588784876566020679580"
-    },
-    {
-     "label": "1.5% to 1.7%",
-     "ask": 0.008,
-     "fee": 0.05,
-     "token": "53560332904374490980426587978114903485003599714229280360809290134467526731570"
-    },
-    {
-     "label": "1.8% to 2.0%",
-     "ask": 0.019,
-     "fee": 0.05,
-     "token": "65740141673669604387453835911458952621672164958650991005655346794597412447188"
-    },
-    {
-     "label": "2.1% to 2.3%",
-     "ask": 0.037,
-     "fee": 0.05,
-     "token": "45336727114415975189262032401486308161908824629898154035751044621776218397469"
-    },
-    {
-     "label": "2.4% to 2.6%",
-     "ask": 0.258,
-     "fee": 0.05,
-     "token": "56490216689928867904061006596647863590571313177777303019096794985636881104014"
-    },
-    {
-     "label": "2.7% to 2.9%",
-     "ask": 0.478,
-     "fee": 0.05,
-     "token": "104416599105845681942169272621534095615547528786669410384486488684163016242991"
-    },
-    {
-     "label": "3.0%+",
-     "ask": 0.187,
-     "fee": 0.05,
-     "token": "61633927546342453884225148481971419565225246459195931002447504386001790385818"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "south-korea-annual-inflation-2026"
-  },
-  {
-   "venue": "polymarket",
    "event": "Brazil GDP Growth in Q3 2026 (QoQ)?",
    "n_legs": 7,
-   "gross": 0.0040000000000000036,
-   "fees": 0.032512900000000004,
-   "net": -0.0285129,
-   "capital": 1.0285129,
-   "roi": -0.027722452484553184,
+   "gross": 0.0030000000000000027,
+   "fees": 0.032559950000000004,
+   "net": -0.02955995,
+   "capital": 1.02955995,
+   "roi": -0.02871124697498189,
    "url": "https://polymarket.com/event/brazil-gdp-growth-in-q3-2026-qoq",
    "neg_risk": true,
    "coverage": "7/7",
@@ -2678,7 +2654,7 @@
     },
     {
      "label": "0.3% to 0.5%",
-     "ask": 0.029,
+     "ask": 0.03,
      "fee": 0.05,
      "token": "71376627309555980313428227425250764433978130157526652349384134099608771887584"
     },
