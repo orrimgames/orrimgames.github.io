@@ -1579,7 +1579,8 @@ function tapSecret(pt){
     if(Math.hypot(pt[0]-p[0], pt[1]-p[2])>sc.r) continue;
     const st=S.secrets[k]||0;
     if(st>=sc.stages.length){ const wn=(S.secrets[k+'_w']||0); S.secrets[k+'_w']=wn+1;
-      const ws=(S.secrets.align&&k==='eye')?sc.whispers.concat(['the count is right. the mountain hums it like a lullaby.','gold motes, gold stones. it is showing off, a little.']):sc.whispers;
+      let ws=(S.secrets.align&&k==='eye')?sc.whispers.concat(['the count is right. the mountain hums it like a lullaby.','gold motes, gold stones. it is showing off, a little.']):sc.whispers;
+      if(S.secrets.ledger&&k==='eye') ws=ws.concat(['the book is closed. the fire is not. the mountain likes it that way.','six witnesses. one name. kept.']);
       toast2(ws[wn%ws.length]); A.say(8); sparkW(p[0],p[1],p[2],6,S.secrets.align?'#ffd98a':'#ffb347'); saveGame(); return true; }
     if(S.secrets[k+'_d']===S.day){ toast2('the eye is still. for now.'); A.say(9); return true; }
     const ST=sc.stages[st]; S.secrets[k]=st+1; S.secrets[k+'_d']=S.day;
@@ -1812,6 +1813,30 @@ function tickAmbience(dt){
     sparkW(L.x,groundH(L.x,L.y)+3.4,L.y,26,'#ffe9a8');
     S.shake=Math.max(S.shake||0,0.22);
     saveGame();
+  }
+  // v132: the ledger closes - all six kingdoms witnessed, the count came right, the book is kept
+  if(S.secrets.align && !S.secrets.ledger && f<0.35){
+    let all6=true; for(const k6 of ['scope','forge','hoard','spore','choir','court']) if(!S.secrets[k6]) all6=false;
+    if(all6){
+      S.secrets.ledger=1;
+      banner2('THE LEDGER CLOSES','six names, six witnesses, one fire. the mountain closes the book - gently.');
+      chron('On the last counted night, six small lights rose from six seats and met above the springs, and the mountain wrote the brood\u2019s name in the only column that matters: kept.', true);
+      A.say(3);
+      const KC={spire:'#bfe8ff',ridge:'#ffc46b',warrens:'#d8f07a',hollow:'#d88fe8',bone:'#9fd4ff',crimson:'#ff4d5e'};
+      for(const lk in KC){ const L2=LANDS.find(l=>l.id===lk); if(L2) sparkW(L2.x,groundH(L2.x,L2.y)+2.6,L2.y,20,KC[lk]); }
+      const L3=LANDS.find(l=>l.id==='spire');
+      sparkW(L3.x,groundH(L3.x,L3.y)+3.6,L3.y,30,'#ffe9a8');
+      const p2=secretPos('eye'); sparkW(p2[0],p2[1]+0.5,p2[2],22,'#ffd98a');
+      S.shake=Math.max(S.shake||0,0.3);
+      saveGame();
+    }
+  }
+  // v132: once the ledger is closed, every kingdom's seat keeps a little of the night
+  if(S.secrets.ledger && f<0.7 && rnd(1)<0.3){
+    const KC2={spire:'#bfe8ff',ridge:'#ffc46b',warrens:'#d8f07a',hollow:'#d88fe8',bone:'#9fd4ff',crimson:'#ff4d5e'};
+    const ks=Object.keys(KC2), lk=ks[(rnd(ks.length))|0], L4=LANDS.find(l=>l.id===lk);
+    if(L4){ const wa2=rnd(TAU), wr2=rnd(2.6,0.8), wx3=L4.x+Math.cos(wa2)*wr2, wz3=L4.y+Math.sin(wa2)*wr2;
+      S.parts.push({x:wx3, y:groundH(wx3,wz3)+rnd(1.0,0.3), z:wz3, vx:0, vy:rnd(0.3,0.15), vz:0, g:-0.015, life:rnd(2.4,1.4), c:KC2[lk], r:rnd(2.0,1.2), star:1}); }
   }
   // v35: bird flocks drift across by day, shelter in the rain
   if(!BIRDS.length && f>0.42 && wet<0.2){
