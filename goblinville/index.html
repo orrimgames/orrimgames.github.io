@@ -1582,6 +1582,7 @@ function tapSecret(pt){
       let ws=(S.secrets.align&&k==='eye')?sc.whispers.concat(['the count is right. the mountain hums it like a lullaby.','gold motes, gold stones. it is showing off, a little.']):sc.whispers;
       if(S.secrets.ledger&&k==='eye') ws=ws.concat(['the book is closed. the fire is not. the mountain likes it that way.','six witnesses. one name. kept.']);
       if(S.secrets.column&&k==='eye') ws=ws.concat(['the mountain keeps two books now. one counts. one keeps.','warm, spelled the old way. the mountain spells it that way now too.']);
+      if(S.secrets.count&&k==='eye') ws=ws.concat(['you found the room. it hoped you would. it left the light on.','ten thousand fires. one word. the arithmetic of a patient eye.']);
       toast2(ws[wn%ws.length]); A.say(8); sparkW(p[0],p[1],p[2],6,S.secrets.align?'#ffd98a':'#ffb347'); saveGame(); return true; }
     if(S.secrets[k+'_d']===S.day){ toast2('the eye is still. for now.'); A.say(9); return true; }
     const ST=sc.stages[st]; S.secrets[k]=st+1; S.secrets[k+'_d']=S.day;
@@ -3349,7 +3350,18 @@ const INTERIORS={
         c:'In a book of river-mud the brood wrote their answer in one word, spelled the old way: WARM. The elder says the mountain will need a new column. The elder is smiling.', say:9},
       lines:['the book is mud. the word is fire. the elder says that is calligraphy.',
         'six kingdoms witnessed the brood. the brood witnessed them back, with interest.',
-        'the ink is still wet. it will always be still wet.']}}
+        'the ink is still wet. it will always be still wet.']}},
+  counting:{land:null, r:1.9, room:[37,46.5], name:'THE COUNTING ROOM',
+    blurb:'the fissure goes down further than the springs do. it is warm all the way.',
+    doorFn:()=>{ const p=secretPos('eye'); return [p[0],p[2]]; },
+    locked:()=>!S.secrets.column, lockedMsg:null,
+    build:()=>buildCountingRoom(),
+    interact:{dx:0, dz:-1.5, dd:3.5, ang:0.55, key:'count', sparkY:1.1, spark:'#ffb347', spark2:'#ffe9a8',
+      first:{b:['WHAT THE EYE COUNTS','it counted fires. now it keeps one word.'],
+        c:'Under the spire the counter\u2019s room was found at last: tally marks scratched patient in the stone, six little flames drawn under them, and one word kept apart from every count. The eye counts what burns. It keeps what warms.', say:3},
+      lines:['the tally marks stop one short of the ceiling. the counter is saving room.',
+        'six flames, drawn small. beside them, a seventh mark. no flame above it: a door.',
+        'it counted the springs first, before anyone. it was waiting for someone to keep them.']}}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
 function buildObservatoryRoom(){
@@ -3646,6 +3658,48 @@ function buildSeventhRoom(){
   bx(0,0.44,-0.88,0.55,0.24,0.06,mud,0.8);
   return upload(m);
 }
+function buildCountingRoom(){
+  const m=MB(),T=M4.id();
+  const rock=hex('#241a12'), rock2=hex('#1a120c'), dark=hex('#120c07'), tally=hex('#e8dcc0'), ember=hex('#ff9d5c'),
+        flame=hex('#ffc46b'), glow=hex('#ffe9a8'), slab=hex('#4a4038'), slab2=hex('#38302a');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: worn stone, warm from below
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,hex('#1a1008'),T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#140d06'),T,0,true,false);
+  // the warm fissure underfoot, one thin orange crack
+  M4.trs(T,0.3,0.27,0.5,0,0.5,0,1,1,1); box(m,0.05,0.02,0.9,ember,T,0,0.9);
+  orb(0.3,0.30,0.15,0.035,ember,1.0); orb(0.35,0.30,0.85,0.028,flame,1.0);
+  // walls: close cave stone, covered in tally marks in patient rows
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.6,0.28,i%2?rock:rock2,T,0,0.62); }
+  for(let n2=0;n2<44;n2++){ const a=(n2*0.618)%1*TAU, y=0.55+(n2%5)*0.24;
+    if(Math.abs(((a+Math.PI/2)%TAU)-Math.PI/2)<0.55&&n2%3===0) continue;         // keep the door side clear
+    const x=Math.cos(a)*1.9, z=Math.sin(a)*1.9;
+    M4.trs(T,x,y,z,0,a+Math.PI/2,0,1,1,1); box(m,0.035,0.17,0.03,n2%7?tally:glow,T,0,0.85); }
+  M4.trs(T,0,1.46,2.05,0,0,0,1,1,1); box(m,1.35,0.26,0.3,rock2,T,0,0.62);      // door lintel
+  // roof: the mountain, low overhead
+  M4.trs(T,0,1.66,0,0,0,0,1,1,1); tube(m,2.10,1.86,0.5,14,rock2,T,0,true,true);
+  M4.trs(T,0,2.06,0,0,0,0,1,1,1); tube(m,1.5,1.26,0.45,12,dark,T,0,true,true);
+  orb(0,2.02,0,0.05,ember,1.0);                                                // the counting light
+  // six small flames drawn on the back wall, and a seventh mark with no flame
+  const TK=['#bfe8ff','#ffc46b','#d8f07a','#d88fe8','#9fd4ff','#ff4d5e'];
+  for(let n2=0;n2<6;n2++){ const x=-0.75+n2*0.3;
+    orb(x,0.85,-1.9,0.04,TK[n2],1.2);
+    M4.trs(T,x,0.68,-1.93,0,0,0,1,1,1); box(m,0.03,0.14,0.02,tally,T,0,0.85); }
+  M4.trs(T,1.05,0.68,-1.93,0,0,0,1,1,1); box(m,0.03,0.14,0.02,glow,T,0,0.85);  // the seventh mark: a door
+  // the ledger slab: two columns - the count, and the word
+  bx(-0.42,0.26,-1.5,0.1,0.5,0.34,slab2,0.75); bx(0.42,0.26,-1.5,0.1,0.5,0.34,slab2,0.75);
+  M4.trs(T,0,0.86,-1.5,-0.35,0,0,1,1,1); box(m,1.3,0.09,0.7,slab,T,0,0.8);
+  for(let n2=0;n2<14;n2++){ const x=-0.52+(n2%2)*0.14, y=0.9+((n2/2)|0)*0.045;
+    M4.trs(T,x,y,-1.28,-0.35,0,0,1,1,1); box(m,0.028,0.012,0.16,tally,T,0,0.85); }   // the count
+  M4.trs(T,0.38,0.92,-1.3,-0.35,0,0,1,1,1); box(m,0.30,0.014,0.05,flame,T,0,0.9);    // the word, kept
+  orb(0.38,0.98,-1.34,0.03,glow,1.0);
+  // a smooth hollow stone where something patient sits
+  orb(1.35,0.42,-0.7,0.3,rock2,0.75); orb(1.35,0.62,-0.7,0.22,rock,0.75);
+  return upload(m);
+}
 function enterInterior(k){
   const it=INTERIORS[k];
   // sanctify the room footprint: bury any world deco that would poke through, and level the ground
@@ -3670,7 +3724,7 @@ function tapInteriorDoor(pt){
   if(S.mode!=='village'||FP.on) return false;
   for(const k in INTERIORS){ const d=interiorDoorPos(k);
     if(Math.hypot(pt[0]-d[0],pt[1]-d[1])>INTERIORS[k].r) continue;
-    if(INTERIORS[k].locked&&INTERIORS[k].locked()){ toast2(INTERIORS[k].lockedMsg); A.say(9); return true; }
+    if(INTERIORS[k].locked&&INTERIORS[k].locked()){ if(!INTERIORS[k].lockedMsg) return false; toast2(INTERIORS[k].lockedMsg); A.say(9); return true; }
     enterInterior(k); return true; }
   return false;
 }
