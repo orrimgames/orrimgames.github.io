@@ -3350,7 +3350,14 @@ const INTERIORS={
         c:'In a book of river-mud the brood wrote their answer in one word, spelled the old way: WARM. The elder says the mountain will need a new column. The elder is smiling.', say:9},
       lines:['the book is mud. the word is fire. the elder says that is calligraphy.',
         'six kingdoms witnessed the brood. the brood witnessed them back, with interest.',
-        'the ink is still wet. it will always be still wet.']}},
+        'the ink is still wet. it will always be still wet.'],
+      linesFn:()=>S.secrets.count?[
+        'the elder does not look up. "sit. the fire does not mind extra shadows."',
+        '"you ask what WARM cost," the elder says. "a word given is a word kept. that is the whole price."',
+        '"i taught the mountain my letters," the elder says. "it taught me patience. i maintain that i won."',
+        '"six kingdoms, one mountain, one brood," the elder counts on stained fingers. "the book balances. have a mushroom."',
+        'the elder licks the pen. "the next word is yours to choose. choose a warm one."'
+      ]:null}},
   counting:{land:null, r:1.9, room:[37,46.5], name:'THE COUNTING ROOM',
     blurb:'the fissure goes down further than the springs do. it is warm all the way.',
     doorFn:()=>{ const p=secretPos('eye'); return [p[0],p[2]]; },
@@ -3656,6 +3663,22 @@ function buildSeventhRoom(){
   // the seventh seat itself: a low bench by the fire, goblin-sized
   bx(0,0.26,-0.75,0.55,0.18,0.3,mud2,0.8);
   bx(0,0.44,-0.88,0.55,0.24,0.06,mud,0.8);
+  // the elder takes the seat, once the word is kept twice
+  if(S.secrets&&S.secrets.count){
+    const skin=hex('#8fae72'), robe=hex('#4a3620'), beard=hex('#e8e0cc');
+    bx(0,0.44,-0.72,0.26,0.22,0.2,robe,0.85);                                     // seated robe
+    bx(0,0.60,-0.74,0.22,0.16,0.17,robe,0.85);                                    // hunched shoulders
+    orb(0,0.83,-0.70,0.115,skin,0.95);                                            // the old head
+    M4.trs(T,-0.15,0.86,-0.70,0,-0.3,0.5,1,1,1); box(m,0.16,0.045,0.03,skin,T,0,0.9);   // ear, left
+    M4.trs(T,0.15,0.86,-0.70,0,0.3,-0.5,1,1,1); box(m,0.16,0.045,0.03,skin,T,0,0.9);    // ear, right
+    M4.trs(T,-0.045,0.87,-0.59,0,0,0,1,1,1); box(m,0.05,0.014,0.02,beard,T,0,0.9);      // brow, left
+    M4.trs(T,0.045,0.87,-0.59,0,0,0,1,1,1); box(m,0.05,0.014,0.02,beard,T,0,0.9);       // brow, right
+    M4.trs(T,0,0.76,-0.60,0.3,0,0,1,1,1); box(m,0.07,0.10,0.03,beard,T,0,0.9);          // the beard
+    bx(0,0.55,-0.55,0.24,0.02,0.18,hex('#4a3822'),0.9);                           // the mud book, on the lap
+    orb(-0.09,0.575,-0.53,0.028,skin,0.9); orb(0.09,0.575,-0.53,0.028,skin,0.9);  // two patient hands
+    M4.trs(T,0.20,0.62,-0.55,0,0,0.5,1,1,1); box(m,0.015,0.22,0.015,hex('#c8b070'),T,0,0.9); // the pen-reed
+    orb(0.42,0.56,-0.72,0.045,flame,1.0); orb(0.42,0.52,-0.72,0.028,ember,1.0);   // the elder's lantern
+  }
   return upload(m);
 }
 function buildCountingRoom(){
@@ -3836,7 +3859,7 @@ function fpTap(x,y){
         if(ia.first.gift){ for(const rk in ia.first.gift) addRes(rk,ia.first.gift[rk]);
           toast2((ia.first.giftText||'returned, with interest: ')+'+'+Object.keys(ia.first.gift).map(rk=>ia.first.gift[rk]+' '+rk).join(', ')); }
         saveGame();
-      } else { const wn=(S.secrets[ia.key+'_w']||0); S.secrets[ia.key+'_w']=wn+1; toast2(ia.lines[wn%ia.lines.length]); A.say(8); }
+      } else { const wn=(S.secrets[ia.key+'_w']||0); S.secrets[ia.key+'_w']=wn+1; const ls=(ia.linesFn&&ia.linesFn())||ia.lines; toast2(ls[wn%ls.length]); A.say(8); }
       return true; }
     return true; }
   if(FP.battle && !S.war.result){
