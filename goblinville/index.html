@@ -3254,7 +3254,23 @@ function sailStop(){
 // v125: interiors - furnished rooms you step into through a landmark door. The first: the observatory above Spirehold.
 const INTERIORS={
   spire:{land:'spire', dx:0, dz:1.0, r:1.7, room:[13,40.5], name:'THE OBSERVATORY',
-    blurb:'the sky-readers left the lens polished and the charts spread'}
+    blurb:'the sky-readers left the lens polished and the charts spread',
+    build:()=>buildObservatoryRoom(),
+    interact:{dx:0, dz:-1.55, dd:3.5, ang:0.55, key:'scope', sparkY:1.9, spark:'#bfe8ff', spark2:'#ffb347',
+      first:{b:['THE STARS ARE ALSO WATCHING','every one of them counted - and below, one amber eye keeps the ledger'],
+        c:'Through the great lens the brood saw it at last: the sky is not empty, and the thing under the mountain is not counting stars. It is counting fires.', say:3},
+      lines:['the captive star above the spire is in no chart. it is new. it is looking.',
+        'the sky-readers wrote: DO NOT COUNT BACK. the margin note, in a smaller hand: too late.',
+        'the fifth constellation is not a constellation. it is an iris.']}},
+  ridge:{land:'ridge', dx:0, dz:0.95, r:1.7, room:[19,40.5], name:'THE IRONBEARD FORGE',
+    blurb:'the coals have not been cold one night since the world was smelted',
+    build:()=>buildForgeRoom(),
+    interact:{dx:0, dz:-1.30, dd:3.5, ang:0.55, key:'forge', sparkY:1.3, spark:'#ffb347', spark2:'#ffd98a',
+      first:{b:['BORROWED FIRE','Ironbeard lit these coals from the mountain\u2019s own hearth. borrowed, the old smith said. everything borrowed is counted.'],
+        c:'The forge of Ironbeard burns on borrowed mountain-fire. The old smith knew about the ledger, and paid his count in finished work.', say:3},
+      lines:['the bellows breathe in their sleep. the fire never asks.',
+        'every blade here was counted before it was quenched.',
+        'Ironbeard\u2019s mark is a small eye. no one has asked him why.']}}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k], L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
 function buildObservatoryRoom(){
@@ -3297,12 +3313,65 @@ function buildObservatoryRoom(){
   for(const c of[[1.7,-0.9],[-1.5,0.9],[-0.9,-1.75]]){ bx(c[0],0.20,c[1],0.07,0.55,0.07,pale,0.9); orb(c[0],0.82,c[1],0.055,glow,1.0); orb(c[0],0.88,c[1],0.03,amber,1.0); }
   return upload(m);
 }
+function buildForgeRoom(){
+  const m=MB(),T=M4.id();
+  const basalt=hex('#332d2a'), basalt2=hex('#282421'), dark=hex('#1b1614'), ember=hex('#ff9e4d'), ember2=hex('#e05c1f'),
+        iron=hex('#8a8f99'), iron2=hex('#5d616b'), gold=hex('#ffd98a'), wood=hex('#5d3f24'), rune=hex('#ffb347');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: a basalt disc thick enough to bury the ground, with the molten channel running to the hearth
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,basalt2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#221d1a'),T,0,true,false);
+  bx(0,0.24,-1.05,0.16,0.04,2.0,dark,0.9);                                  // the channel bed
+  for(let i2=0;i2<6;i2++) orb(0,0.30,-0.25-i2*0.34,0.07,i2%2?ember:gold,0.45);    // the melt, never cold
+  // walls: squat fitted basalt, fully closed to the roof - a smithy holds its smoke
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,0.95,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.5,0.26,i%2?basalt:basalt2,T,0,0.62);
+    if(i%3===0) orb(x*0.97,1.30,z*0.97,0.05,rune,1.0); }                    // the count-marks
+  M4.trs(T,0,1.30,2.05,0,0,0,1,1,1); box(m,1.35,0.24,0.3,basalt2,T,0,0.62); // door lintel - dwarf height
+  // roof: a low smoked dome, no sky gap
+  M4.trs(T,0,1.55,0,0,0,0,1,1,1); tube(m,2.10,1.86,0.5,14,basalt2,T,0,true,true);
+  M4.trs(T,0,1.92,0,0,0,0,1,1,1); tube(m,1.52,1.30,0.45,12,dark,T,0,true,true);
+  M4.trs(T,0,2.26,0,0,0,0,1,1,1); tube(m,0.90,0.70,0.4,10,basalt2,T,0,true,true);
+  // the hearth, north side: stone mouth, hood, and the borrowed fire
+  bx(0,0.28,-1.98,1.15,0.95,0.30,dark,0.9);
+  bx(0,1.28,-1.98,0.85,0.35,0.26,basalt2,0.85);                             // the hood
+  orb(0,0.95,-1.79,0.19,ember,0.75); orb(0.17,0.86,-1.78,0.11,ember2,0.7); orb(-0.16,0.89,-1.78,0.10,gold,0.7);
+  orb(0.05,1.08,-1.79,0.07,gold,0.85); orb(-0.07,0.80,-1.78,0.06,ember2,0.85);
+  orb(0,0.48,-1.80,0.08,ember2,0.7);                                         // low coals at the mouth's foot
+  orb(0,1.55,-1.85,0.06,ember,1.0);                                          // the fire's breath on the hood
+  // the anvil: Ironbeard's count in iron
+  bx(0,0.28,-1.30,0.30,0.34,0.30,dark,0.85);
+  bx(0,0.62,-1.30,0.62,0.14,0.24,iron,0.8);
+  bx(0.36,0.60,-1.30,0.22,0.10,0.16,iron2,0.8);                             // the horn
+  // the bellows, asleep, by the hearth
+  bx(-0.85,0.28,-1.70,0.34,0.16,0.5,wood,0.85);
+  M4.trs(T,-0.85,0.47,-1.70,0.3,0,0,1,1,1); box(m,0.28,0.12,0.44,wood,T,0,0.85);
+  // wall torches: two small patient flames
+  for(const t2 of[[-1.30,-1.30],[1.30,-1.30]]){ bx(t2[0],0.95,t2[1],0.06,0.3,0.06,dark,0.9);
+    orb(t2[0],1.32,t2[1],0.06,ember,1.0); orb(t2[0],1.38,t2[1],0.032,gold,1.0); }
+  // weapon racks: counted blades on the walls
+  for(const s2 of[[-1.45,0.5],[1.45,-0.1]]){
+    bx(s2[0],0.28,s2[1],0.08,1.05,0.5,wood,0.8);
+    for(let k=0;k<3;k++){ M4.trs(T,s2[0],0.9,s2[1]-0.16+k*0.16,0,0,0.5,1,1,1); box(m,0.035,0.85,0.035,iron,T,0,0.75);
+      orb(s2[0],1.36,s2[1]-0.16+k*0.16,0.03,iron2,1.0); } }
+  // ingots: the count, stacked by the door
+  bx(1.35,0.28,1.35,0.22,0.09,0.11,gold,0.85); bx(1.55,0.28,1.15,0.22,0.09,0.11,gold,0.85); bx(1.45,0.28,1.45,0.22,0.09,0.11,gold,0.85);
+  bx(1.45,0.37,1.32,0.22,0.09,0.11,iron,0.85);
+  // a hanging chain over the channel
+  for(let k=0;k<4;k++) orb(0,2.0-k*0.13,-0.9,0.028,iron2,1.4);
+  bx(0,1.48,-0.9,0.05,0.14,0.05,iron2,0.8);
+  // slag-light by the anvil
+  bx(0.55,0.28,-0.95,0.07,0.4,0.07,dark,0.9); orb(0.55,0.72,-0.95,0.055,ember,1.0); orb(0.55,0.78,-0.95,0.03,gold,1.0);
+  return upload(m);
+}
 function enterInterior(k){
   const it=INTERIORS[k];
   FP.iso={tx:CAM.tx,ty:CAM.ty,yaw:CAM.yaw,pitch:CAM.pitch,dist:CAM.dist,zoom:CAM.zoom,gzh:CAM.gzh};
   FP.interior=k;
   const gy=sitY(it.room[0],it.room[1]);
-  PROPS.push({mesh:buildObservatoryRoom(), x:it.room[0], y:it.room[1], r:0, gy:gy, interior:k});
+  PROPS.push({mesh:it.build(), x:it.room[0], y:it.room[1], r:0, gy:gy, interior:k});
   FP.floorY=gy+0.26;
   FP.x=it.room[0]; FP.y=it.room[1]+1.1; FP.a=Math.PI; FP.pitch=0.10; FP.bob=0; FP.mv=null; FP.lk=null; FP.hurt=0;
   FP.on=true; FP.battle=false; CAM.mode='fp'; fpSyncCam();
@@ -3410,20 +3479,17 @@ function fpTap(x,y){
     if(S.sail){ if(sailStop()){ fpExit(); } else { toast2('nothing to stand on out here'); A.deny(); } return true; }
     fpExit(); return true; }
   if(FP.interior){
-    const it=INTERIORS[FP.interior];
+    const it=INTERIORS[FP.interior], ia=it.interact;
     if(Math.hypot(FP.x-it.room[0],FP.y-(it.room[1]+1.9))<0.7){ fpExit(); return true; }
-    const sx=it.room[0], sz=it.room[1]-1.55;
+    const sx=it.room[0]+ia.dx, sz=it.room[1]+ia.dz;
     const txx=sx-FP.x, tzz=sz-FP.y, dd=Math.hypot(txx,tzz);
     const ang=Math.abs(((Math.atan2(txx,tzz)-FP.a+Math.PI*3)%TAU)-Math.PI);
-    if(dd<3.5&&ang<0.55){
-      if(!S.secrets.scope){ S.secrets.scope=1;
-        banner2('THE STARS ARE ALSO WATCHING','every one of them counted - and below, one amber eye keeps the ledger');
-        chron('Through the great lens the brood saw it at last: the sky is not empty, and the thing under the mountain is not counting stars. It is counting fires.', true);
-        A.say(3); sparkW(sx,FP.floorY+1.9,sz,22,'#bfe8ff'); sparkW(sx,FP.floorY+1.6,sz,10,'#ffb347'); saveGame();
-      } else { const lines=['the captive star above the spire is in no chart. it is new. it is looking.',
-          'the sky-readers wrote: DO NOT COUNT BACK. the margin note, in a smaller hand: too late.',
-          'the fifth constellation is not a constellation. it is an iris.'];
-        const wn=(S.secrets.scope_w||0); S.secrets.scope_w=wn+1; toast2(lines[wn%lines.length]); A.say(8); }
+    if(dd<ia.dd&&ang<ia.ang){
+      if(!S.secrets[ia.key]){ S.secrets[ia.key]=1;
+        banner2(ia.first.b[0],ia.first.b[1]);
+        chron(ia.first.c, true);
+        A.say(ia.first.say); sparkW(sx,FP.floorY+ia.sparkY,sz,22,ia.spark); sparkW(sx,FP.floorY+ia.sparkY-0.3,sz,10,ia.spark2); saveGame();
+      } else { const wn=(S.secrets[ia.key+'_w']||0); S.secrets[ia.key+'_w']=wn+1; toast2(ia.lines[wn%ia.lines.length]); A.say(8); }
       return true; }
     return true; }
   if(FP.battle && !S.war.result){
