@@ -3618,6 +3618,7 @@ const INTERIORS={
         if(S.secrets.chart) L.push('the sky-readers watch the sea. this shelf watches what the sea brings back. both counts are kept nightly.');
         if(S.secrets.receipt) L.push('the stamped stone sits on the shelf of honor. it is the only file the Court has ever signed. it is filed under CORRESPONDENCE.');
         if(S.secrets.lostfound) L.push('the stump by the path is the village branch of this shelf. the everyday files itself, eventually. the Court should be so organized.');
+        if(S.secrets.mossden) L.push('the office has opened a second drawer, nearer the subject: DENS, CONTENTS OF: WARM. the drawer moves one drawer closer every week. everyone pretends not to notice. the filing is fond.');
         return L; } }},
   receipt:{land:null, r:2.0, name:'THE RECEIPT', fpDoor:true, outdoor:true, glint:['#e8d9a8',0.6],
     fpHint:'a waxed dispatch tube on the shingle, come back on the tide. beside it, one of the brood\u2019s own files, stamped. face it and tap to read what came back.',
@@ -3717,7 +3718,9 @@ const INTERIORS={
           if(S.secrets.nightdoor) L.push('by morning the saucer holds something small: a dew cup, a berry, a polished pebble. nobody sees the refill happen. the den pays its tab.'); }
         if(S.secrets.nightdoor) L.push('it borrows the key hourly and returns it warm. the door does not mind. the door is family.');
         if(S.secrets.lostfound) L.push('the comforts by the arch were never reported missing. the shelf knows. the shelf says nothing. the third shelf keeps its counsel.');
+        if(S.secrets.mossden) L.push('a second drawer has opened beside the first: DENS, CONTENTS OF: WARM. the handle is a saucer. the saucer is licked clean. the filing is accurate.');
         if(S.secrets.undercount) L.push('the undercount counts the village nightly and finds it one short. the slate has a margin for this. the margin is den-shaped.');
+        if(S.secrets.mossden) L.push('the village has opened a drawer for the den. DENS, CONTENTS OF: WARM. the den has not opened a drawer for the village. the village understands.');
         if(S.secrets.scenicroute) L.push('the shoe rests on its cairn, one ridge over. the shoe and the den have an arrangement about the moon.');
         if(S.secrets.bell) L.push('the bell has rung once at night, softly, at nothing anyone saw. the den did not comment. the bell did not repeat it.');
         return L; } }}
@@ -6102,6 +6105,26 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildDenDrawer(){
+  const m=MB(),T=M4.id();
+  const turf=hex('#3a5a30'), turf2=hex('#2e4a26'), stone=hex('#5a5348'), stone2=hex('#4a4640'),
+        bone=hex('#e0d4b4'), charcoal=hex('#14100a'), berry=hex('#b04858'), leaf=hex('#4a6a38'), dew=hex('#9fb4d8');
+  M4.trs(T,0,0.06,0,0,0,0,1,0.5,1); ball(m,0.50,9,turf,T,0,0.55);                 // the bank, humbler still
+  M4.trs(T,0.08,0.19,-0.05,0,0,0,1,0.5,1); ball(m,0.32,8,turf2,T,0,0.6);
+  M4.trs(T,0,0.16,0.42,-0.18,0,0,1,1,1); box(m,0.48,0.28,0.05,stone,T,0,0.62);    // the drawer front
+  M4.trs(T,0,0.16,0.50,-0.18,0,0,1,1,1); box(m,0.40,0.20,0.02,stone2,T,0,0.7);    // the drawer face, pulled out a finger's width
+  M4.trs(T,0.10,0.13,0.475,-0.18,0,0,1,1,1); box(m,0.14,0.03,0.10,leaf,T,0,0.8);  // inside: one folded leaf blanket, warm
+  M4.trs(T,0,0.35,0.37,0,0,0,1,1,1); box(m,0.56,0.07,0.10,stone2,T,0,0.7);        // the lintel
+  M4.trs(T,0,0.015,0.50,0,0,0,1,1,1); box(m,0.4,0.05,0.20,stone,T,0,0.7);         // the step
+  M4.trs(T,-0.09,0.16,0.50,-0.18,0,0,1,1,1); box(m,0.018,0.04,0.018,bone,T,0,0.85);  // the handle: a saucer, on a stem
+  M4.trs(T,-0.09,0.185,0.52,-0.18,1.35,0,1,1,1); tube(m,0.035,0.035,0.010,9,bone,T,0,true,true);  // licked clean, naturally
+  M4.trs(T,0.10,0.42,0.38,0,0,0,1,1,1); box(m,0.010,0.08,0.010,charcoal,T,0,0.85);   // filed twice:
+  M4.trs(T,0.13,0.44,0.38,0,0,0,1,1,1); box(m,0.05,0.03,0.010,berry,T,0,0.85);
+  M4.trs(T,0.20,0.40,0.38,0,0,0,1,1,1); box(m,0.010,0.06,0.010,charcoal,T,0,0.85);   // once fondly
+  M4.trs(T,0.225,0.415,0.38,0,0,0,1,1,1); box(m,0.04,0.024,0.010,bone,T,0,0.85);
+  M4.trs(T,0.30,0.012,0.62,0,0.9,0,1,0.3,1); ball(m,0.05,7,dew,T,0,0.9);          // one print: the subject filed itself
+  return upload(m);
+}
 function buildRefill(){
   const m=MB(),T=M4.id();
   const bone=hex('#e0d4b4'), water=hex('#7fb4d8'), wine=hex('#a83a4a'), peb=hex('#8a8f98'), leaf=hex('#4a6a38');
@@ -6669,6 +6692,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
+  if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
