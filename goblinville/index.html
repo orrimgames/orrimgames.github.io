@@ -3474,6 +3474,7 @@ const INTERIORS={
         'a velvet purse of buttons, one per soul. the purse is full. the crew is not here. the Choir has them, in order.'];
         if(S.secrets.chart) L.push('the last chart is safe in goblin hands, a world away. this ship was the price of looking. the brood paid nothing and owes everything.');
         if(S.secrets.crate) L.push('the tide took one crate. the brood found it. the ledger allows itself one small smile.');
+        if(S.secrets.bell) L.push('the tide hung the bell on the ship\u2019s own spars. the ship approves. ships are vain about their bells.');
         if(S.secrets.word2) L.push('the mountain wrote STAYED. the crew of the second ship could not. the ledger does not hold it against them. the ledger holds everything else.');
         return L; } }},
   manifest:{land:null, r:2.5, name:'THE MANIFEST', fpDoor:true, outdoor:true, glint:['#9fd4ff',0.7],
@@ -3489,6 +3490,7 @@ const INTERIORS={
         if(S.secrets.choir) L.push('the Choir sang their names in the third voice, as practice. on this shore, the practice is over.');
         if(S.secrets.court) L.push('the Court is still expecting its ship. the Court does not stop. let it come and count the stones itself.');
         if(S.secrets.crate) L.push('the tide gave back what it took. the stones do not gloat. the stones have seen the tide\u2019s ledger.');
+        if(S.secrets.bell) L.push('the bell kept the name the Court struck. the stones hold it in salt. the count is complete in a way the Court did not intend.');
         return L; } }},
   crate:{land:null, r:2.2, name:'THE CARGO', fpDoor:true, outdoor:true, glint:['#d4a94e',0.5],
     fpHint:'a crate the tide kept, the Court\u2019s red wax still whole. face it and tap to read the manifest\u2019s last line.',
@@ -3504,6 +3506,24 @@ const INTERIORS={
         if(S.secrets.manifest) L.push('sixty-one promises, read aloud to seven stones. the smallest stone listened twice.');
         if(S.secrets.choir) L.push('the Choir files intentions too, in the column with no total.');
         if(S.secrets.court) L.push('the Court is still expecting its crate. let it come and read the tide\u2019s receipt.');
+        if(S.secrets.bell) L.push('the bell keeps the name; the crate keeps the promises. the tide\u2019s filing system is better than the Court\u2019s.');
+        return L; } }},
+  bell:{land:null, r:2.0, name:'THE BELL', fpDoor:true, outdoor:true, glint:['#7fd4b4',0.8],
+    fpHint:'a ship\u2019s bell on a tripod of spars, the name struck from the bronze. face it and tap to read what it kept.',
+    blurb:'the tide unsunk the bell and hung it where the beach could hear.',
+    doorFn:()=>[-15.5,-188.55],
+    interact:{dx:0, dz:0, dd:3.2, ang:0.6, key:'bell', sparkY:0.8, spark:'#7fd4b4', spark2:'#e8ecef',
+      tone:[[98,1.8,{type:'sine',vol:0.35}],[146.8,1.4,{type:'sine',vol:0.16,delay:0.06}]],
+      first:{b:['THE BELL KEEPS THE NAME','the bell from the manifest\u2019s ship, hung on a tripod of its own spars. the Court struck the name from the bronze; the salt filled the strike-marks in.'],
+        c:'The tide kept one more thing and hung it where the beach could hear: the second ship\u2019s bell, on spars the wreck gave up. The Court struck the ship\u2019s name from the bronze, but the salt has filled the strike-marks, and at dusk the name reads backward, which the goblins agree is the sea reading it aloud. The bell will not ring - the weed has the clapper fast - and the brood decided that was the point: some things are unsunk only to keep quiet. It keeps the name. That is enough.', say:9},
+      linesFn:()=>{ const L=['the Court strikes names. the salt strikes back, slowly.',
+        'a bell that will not ring is still a bell. the goblins checked twice.',
+        'the weed holds the clapper the way a hand holds a secret.'];
+        if(S.secrets.wreck) L.push('the ship is ribs on the hook. the bell is the voice the ribs remember.');
+        if(S.secrets.manifest) L.push('the manifest counted intentions. the bell keeps one: come home.');
+        if(S.secrets.crate) L.push('the promises sleep under the captain\u2019s stone. the bell keeps the name they were sworn to.');
+        if(S.secrets.choir) L.push('the Choir asked once for the bell\u2019s note. the bell said nothing, which is its note.');
+        if(S.secrets.court) L.push('the Court struck the name. the Court is still expecting its ship. the bell expects nothing. it only keeps.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -4040,7 +4060,7 @@ function fpTap(x,y){
         if(ia.first.gift){ for(const rk in ia.first.gift) addRes(rk,ia.first.gift[rk]);
           toast2((ia.first.giftText||'returned, with interest: ')+'+'+Object.keys(ia.first.gift).map(rk=>ia.first.gift[rk]+' '+rk).join(', ')); }
         saveGame();
-      } else { const wn=(S.secrets[ia.key+'_w']||0); S.secrets[ia.key+'_w']=wn+1; const ls=(ia.linesFn&&ia.linesFn())||ia.lines; toast2(ls[wn%ls.length]); A.say(8); }
+      } else { const wn=(S.secrets[ia.key+'_w']||0); S.secrets[ia.key+'_w']=wn+1; const ls=(ia.linesFn&&ia.linesFn())||ia.lines; toast2(ls[wn%ls.length]); A.say(8); if(ia.tone) ia.tone.forEach(t=>A.tone(t[0],t[1],t[2]||{})); }
       return true; }
     return true; }
   if(FP.battle && !S.war.result){
@@ -4064,6 +4084,7 @@ function fpTap(x,y){
         if(itd.outdoor){ const ia=itd.interact, d2=interiorDoorPos(k);     // v145: shrines you read where they stand
           if(!S.secrets[ia.key]){ S.secrets[ia.key]=1; S.secrets[ia.key+'_d']=S.day;
             banner2(ia.first.b[0],ia.first.b[1]); chron(ia.first.c,true); A.say(ia.first.say);
+            if(ia.tone) ia.tone.forEach(t=>A.tone(t[0],t[1],t[2]||{}));       // v147: shrines with a voice
             const bd=dirOf(d2[0],d2[1],[0,0,0]), br=icoHeight(bd)+ia.sparkY, br2=icoHeight(bd)+ia.sparkY-0.3;
             sparkW(SITE.x+bd[0]*br, WATER-PLANET_R+bd[1]*br, SITE.y+bd[2]*br, 22, ia.spark);
             sparkW(SITE.x+bd[0]*br2, WATER-PLANET_R+bd[1]*br2, SITE.y+bd[2]*br2, 10, ia.spark2);
@@ -5796,18 +5817,40 @@ function buildCrate(){
 function seedWrack(){
   if(PROPS.some(p=>p.wrack)) return;
   let s=8847; const sr=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
-  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0]];   // wreck, manifest, crate
+  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0],[-15.5,-188.55,1.3]];   // wreck, manifest, crate, bell
   let last=null, n=0;
   for(let y=-193.5;y<=-186.5;y+=0.5) for(let x=-26;x<=-12;x+=0.5){
     const h=icoHeight(dirOf(x,y,[0,0,0]))-150;
     if(h<0.07||h>0.34) continue;                                                 // the tide's reach, no higher
     if(keepOut.some(k=>Math.hypot(x-k[0],y-k[1])<k[2])) continue;
-    if(last&&Math.hypot(x-last[0],y-last[1])<1.0) continue;
+    if(last&&Math.hypot(x-last[0],y-last[1])<0.9) continue;
     if(sr()<0.35) continue;                                                      // the tide skips some yards
     last=[x,y];
     PROPS.push({mesh:buildWrackCluster((sr()*1e9)|0), x:x+(sr()-0.5)*0.4, y:y+(sr()-0.5)*0.4, r:1.855+(sr()-0.5)*0.3, far:'wrack'+n, wrack:1, ride:-0.10});
     n++;
   }
+}
+// v147: the second ship's bell - the tide hung it on a tripod of the wreck's own spars.
+// The Court struck the name from the bronze; the salt filled the strike-marks in.
+function buildBell(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#4a3a28'), wood2=hex('#66503a'), rope=hex('#8a7f5c'),
+        bronze=hex('#4e7a6a'), bronze2=hex('#37604f'), weed=hex('#2c4634'), salt=hex('#e8ecef');
+  for(let i=0;i<3;i++){                                                        // three spars, lashed
+    const a=i*TAU/3+0.5, sx=Math.sin(a), cz=Math.cos(a);
+    farBox(m,T, sx*0.19, 0.48, cz*0.19, 0.35*cz, a, -0.35*sx, 0.07,1.12,0.06, i===1?wood2:wood, 0.55);
+  }
+  farOrb(m,T, 0, 1.0, 0, 0.075, rope, 0.7);                                    // the lashing
+  farBox(m,T, 0, 0.88, 0, 0,0,0, 0.035,0.14,0.035, rope, 0.6);                 // the rope stub
+  farOrb(m,T, 0, 0.66, 0, 0.155, bronze, 1.25);                                // the bell
+  farOrb(m,T, 0, 0.545, 0, 0.175, bronze2, 0.45);                              // its rim
+  farOrb(m,T, 0.01, 0.50, 0, 0.042, weed, 0.8);                                // the clapper, weed-fast
+  farBox(m,T, 0, 0.62, 0.148, 0,0,0, 0.09,0.012,0.014, salt, 0.7);             // the strike-marks, in salt
+  farBox(m,T, 0.02, 0.583, 0.152, 0,0,0, 0.07,0.012,0.014, salt, 0.7);
+  farOrb(m,T, 0.14, 0.60, 0.06, 0.022, salt, 0.6);                             // barnacles
+  farOrb(m,T, -0.10, 0.72, -0.09, 0.018, salt, 0.6);
+  farOrb(m,T, 0.30, 0.22, 0.22, 0.02, salt, 0.6);
+  return upload(m);
 }
 function buildShrine(){
   const m=MB(),T=M4.id();
@@ -5944,6 +5987,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='wreck')) PROPS.push({mesh:buildWreck(), x:-12.58, y:-188.1, r:1.57, far:'wreck', ride:-0.02});              // v144: the second ship
   if(!PROPS.some(p=>p.far==='manifest')) PROPS.push({mesh:buildShrine(), x:-13.42, y:-190.98, r:1.855, far:'manifest', ride:-0.06});   // v145: the crew, in order
   if(!PROPS.some(p=>p.far==='crate')) PROPS.push({mesh:buildCrate(), x:-21.6, y:-187.95, r:1.9, far:'crate', ride:-0.05});   // v146: what the tide kept
+  if(!PROPS.some(p=>p.far==='bell')) PROPS.push({mesh:buildBell(), x:-15.5, y:-188.55, r:1.9, far:'bell', ride:-0.08});   // v147: what the tide hung
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
