@@ -5477,8 +5477,9 @@ function drawNightGlow(){
     if(sp[0]<-40||sp[0]>W+40||sp[1]<-40||sp[1]>H+40) continue;
     const fl=0.8+0.2*Math.sin(G.t*5+b.tx*2.7+b.ty*1.9);
     const r=(b.key==='hall'?34:22)*fl*zs;
-    ctx.fillStyle='rgba(255,190,90,'+(0.20*a*fl).toFixed(3)+')';
-    ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill(); }
+    const rr=r*1.9, wg2=ctx.createRadialGradient(sp[0],sp[1],1,sp[0],sp[1],rr);   // soft pool, not a flat disc on the roof
+    wg2.addColorStop(0,'rgba(255,190,90,'+(0.26*a*fl).toFixed(3)+')'); wg2.addColorStop(0.5,'rgba(255,170,70,'+(0.10*a*fl).toFixed(3)+')'); wg2.addColorStop(1,'rgba(255,150,50,0)');
+    ctx.fillStyle=wg2; ctx.beginPath(); ctx.arc(sp[0],sp[1],rr,0,TAU); ctx.fill(); }
   const wg=PROPS.find(p=>p.vprop==='wellglow');
   if(wg&&(!wg.cond||wg.cond())){
     const sp=projPt(wg.x,(wg.gy||0)+0.30,wg.y);
