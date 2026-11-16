@@ -795,6 +795,8 @@ function lampsOut(){ return Math.floor(Date.now()/86400000)%7===0; }        // o
 function companyMorning(){ return Math.floor(Date.now()/86400000)%7===1; }  // the morning after: two fish
 function readingNight(){ return Math.floor(Date.now()/86400000)%7===2; }       // one night a week, the archive is read aloud
 function minutesMorning(){ return Math.floor(Date.now()/86400000)%7===3; }     // the morning after: the minutes, in pebbles
+function marketDay(){ return Math.floor(Date.now()/86400000)%7===4; }          // one day a week, the ferry keeps a stall
+function gratuityMorning(){ return Math.floor(Date.now()/86400000)%7===5; }    // the morning after: somebody overpaid
 
 function COASTR(x,y){ const ca=Math.atan2(y-MAP/2,x-MAP/2);
   const c=Math.cos(ca), sn=Math.sin(ca); let de=1e9;              // v58: the shoreline never leaves the map square
@@ -3754,6 +3756,8 @@ const INTERIORS={
         if(S.secrets.mossden) L.push('some mornings the raft is damp before the dew decides. the ferry does not ask questions. the fare is one berry, payable to any step.');
         L.push('the buoy marks the shoals. the buoy is filed as DESTINATION. the ferry salutes it with the reed.');
         if(nightNow()) L.push('the buoy comes in at night. even destinations sleep. the shoals keep themselves.');
+        if(S.secrets.ferry&&!nightNow()&&marketDay()) L.push('market day at the shoals. PINS, SLIGHTLY. BERRIES, TODAY\'S. CHALK, GOOD. PRICES, FIRM. the till is a dish. the dish does a trade.');
+        if(S.secrets.ferry&&!nightNow()&&gratuityMorning()) L.push('somebody overpaid for the chalk. the difference is on the raft in pebbles, with the berry as interest. it is filed under GRATUITY. GRATUITY is the fullest drawer.');
         return L; } }},
   laundry:{land:null, r:1.5, name:'THE WASHING LINE', fpDoor:true, outdoor:true,
     fpHint:'two posts, one rope with a polite sag, and the enormous shirt. face it and tap to admire the rotation.',
@@ -6205,6 +6209,41 @@ function buildReadingNight(){
     M4.trs(T,mx[0],0.10,mx[1],0,0,0,1,0.6,1); ball(m,0.04,7,cap,T,0,0.85); }
   return upload(m);
 }
+function buildMarketRaft(){
+  const m=MB(),T=M4.id();
+  const leaf=hex('#4a6a38'), leaf2=hex('#3a5a30'), wood=hex('#3a2a1a'), bone=hex('#e0d4b4'),
+        wine=hex('#a83a4a'), slate=hex('#4a4640'), cloth=hex('#b04858'), stone=hex('#7a7266');
+  const base=sitY(30.6,37.9)-0.04, raftY=sitY(30.6,37.9)+0.028-base;    // moored alongside; the tide signs the lease
+  M4.trs(T,0,raftY,0,0,-0.5,0,1,1,1); box(m,0.55,0.04,0.38,leaf,T,0,0.55);        // the stall: one leaf, smaller, prouder
+  M4.trs(T,0,raftY+0.03,-0.17,-0.35,-0.5,0,1,1,1); box(m,0.53,0.026,0.05,leaf2,T,0,0.6);
+  M4.trs(T,0,raftY+0.03,0.17,0.35,-0.5,0,1,1,1); box(m,0.53,0.026,0.05,leaf2,T,0,0.6);
+  // PINS, SLIGHTLY: the laundry's seconds on a cloth
+  M4.trs(T,-0.16,raftY+0.032,-0.06,0,-0.5,0,1,1,1); box(m,0.16,0.014,0.12,cloth,T,0,0.8);
+  for(let i=0;i<3;i++){ M4.trs(T,-0.20+i*0.04,raftY+0.055,-0.06,0,-0.5+i*0.2,0.5,1,1,1); box(m,0.014,0.05,0.010,bone,T,0,0.85); }
+  // BERRIES, TODAY'S
+  M4.trs(T,0.14,raftY+0.035,-0.08,0,0,0,1,1,1); tube(m,0.055,0.045,0.02,9,bone,T,0,true,true);
+  for(let i=0;i<3;i++){ M4.trs(T,0.12+(i%2)*0.04,raftY+0.06,-0.10+(i*0.03),0,0,0,1,1,1); ball(m,0.020,7,wine,T,0,0.9); }
+  // CHALK, GOOD
+  M4.trs(T,0.15,raftY+0.05,0.08,0,0.4,1.35,1,1,1); box(m,0.013,0.013,0.07,bone,T,0,0.9);
+  M4.trs(T,0.17,raftY+0.05,0.10,0,0.9,1.35,1,1,1); box(m,0.013,0.013,0.06,bone,T,0,0.9);
+  // PRICES, FIRM: the slate, on its stick
+  M4.trs(T,-0.24,raftY+0.12,0.10,0,-0.5,0,1,1,1); box(m,0.014,0.17,0.014,wood,T,0,0.7);
+  M4.trs(T,-0.24,raftY+0.21,0.10,0,-0.5,0,1,1,1); box(m,0.13,0.09,0.014,slate,T,0,0.8);
+  M4.trs(T,-0.24,raftY+0.21,0.108,0,-0.5,0,1,1,1); box(m,0.09,0.012,0.006,bone,T,0,0.9);
+  // the till is a dish; the dish does a trade
+  M4.trs(T,-0.02,raftY+0.035,0.10,0,0,0,1,1,1); tube(m,0.045,0.035,0.016,8,stone,T,0,true,true);
+  M4.trs(T,-0.03,raftY+0.055,0.09,0,0,0,1,0.7,1); ball(m,0.018,7,slate,T,0,0.85);
+  M4.trs(T,0.0,raftY+0.055,0.11,0,0,0,1,0.7,1); ball(m,0.018,7,stone,T,0,0.85);
+  return upload(m);
+}
+function buildOverpaid(){
+  const m=MB(),T=M4.id();
+  const wine=hex('#a83a4a'), stone=hex('#7a7266'), slate=hex('#4a4640');
+  M4.trs(T,0,0.02,0,0,0,0,1,0.75,1); ball(m,0.024,7,wine,T,0,0.9);          // the berry, left as interest
+  M4.trs(T,0.055,0.016,0.02,0,0,0,1,0.7,1); ball(m,0.018,7,stone,T,0,0.85); // the difference, in pebbles
+  M4.trs(T,0.09,0.016,-0.015,0,0,0,1,0.7,1); ball(m,0.018,7,slate,T,0,0.85);
+  return upload(m);
+}
 function buildMinutes(){
   const m=MB(),T=M4.id();
   const stone=hex('#7a7266'), stone2=hex('#5c554a'), earth=hex('#4a3a26'), chalk=hex('#e0d4b4');
@@ -6927,6 +6966,8 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='readingnight')) PROPS.push({mesh:buildReadingNight(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'readingnight', cond:()=>!!S.secrets.solstice&&nightNow()&&readingNight()});   // v168: the door stands open
   if(!PROPS.some(p=>p.vprop==='minutes')) PROPS.push({mesh:buildMinutes(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'minutes', cond:()=>!!S.secrets.solstice&&!nightNow()&&minutesMorning()});   // v168: attendance was everyone
   if(!PROPS.some(p=>p.vprop==='shoalbuoy')) PROPS.push({mesh:buildShoalBuoy(), x:32.2, y:38.4, r:0, gy:-0.30, vprop:'shoalbuoy', cond:()=>!nightNow()});   // v166: filed as DESTINATION
+  if(!PROPS.some(p=>p.vprop==='marketraft')) PROPS.push({mesh:buildMarketRaft(), x:30.6, y:37.9, r:-0.785, gy:sitY(30.6,37.9)-0.04, vprop:'marketraft', cond:()=>!!S.secrets.ferry&&!nightNow()&&marketDay()});   // v169: the ferry keeps a stall
+  if(!PROPS.some(p=>p.vprop==='overpaid')) PROPS.push({mesh:buildOverpaid(), x:31.29, y:37.49, r:-0.785, gy:sitY(31.29,37.49)+0.05, vprop:'overpaid', cond:()=>!!S.secrets.ferry&&!nightNow()&&gratuityMorning()});   // v169: filed under GRATUITY
   if(!PROPS.some(p=>p.vprop==='laundryline')) PROPS.push({mesh:buildLaundryLine(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryline'});   // v165: two posts, one rope, a polite sag
   if(!PROPS.some(p=>p.vprop==='laundryshirts')) PROPS.push({mesh:buildLaundryShirts(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryshirts', cond:()=>!nightNow()});   // v165: the shirts sleep inside
   if(!PROPS.some(p=>p.vprop==='ferryraft')) PROPS.push({mesh:buildFerryRaft(), x:30.9, y:37.1, r:-0.785, gy:sitY(30.9,37.1)-0.04, vprop:'ferryraft'});   // v164: the village's first navy
