@@ -797,6 +797,7 @@ function readingNight(){ return Math.floor(Date.now()/86400000)%7===2; }       /
 function minutesMorning(){ return Math.floor(Date.now()/86400000)%7===3; }     // the morning after: the minutes, in pebbles
 function marketDay(){ return Math.floor(Date.now()/86400000)%7===4; }          // one day a week, the ferry keeps a stall
 function gratuityMorning(){ return Math.floor(Date.now()/86400000)%7===5; }    // the morning after: somebody overpaid
+function restDay(){ return Math.floor(Date.now()/86400000)%7===6; }            // the day of rest: the day is filed as EMPTY
 
 function COASTR(x,y){ const ca=Math.atan2(y-MAP/2,x-MAP/2);
   const c=Math.cos(ca), sn=Math.sin(ca); let de=1e9;              // v58: the shoreline never leaves the map square
@@ -3627,6 +3628,7 @@ const INTERIORS={
         if(S.secrets.lostfound) L.push('the stump by the path is the village branch of this shelf. the everyday files itself, eventually. the Court should be so organized.');
         if(S.secrets.mossden) L.push('the office has opened a second drawer, nearer the subject: DENS, CONTENTS OF: WARM. the drawer moves one drawer closer every week. everyone pretends not to notice. the filing is fond.');
         if(S.secrets.solstice) L.push('the low round door is the overflow. the fond labels are kept standing up in there. the drawer is proud of the archive and files the pride under OVERHEAD.');
+        if(S.secrets.counterfiling&&restDay()) L.push('today is the day of rest. the drawer is closed. the day is filed as EMPTY, and the empty day is the fullest one. the filing rests. the resting is also filed.');
         return L; } }},
   receipt:{land:null, r:2.0, name:'THE RECEIPT', fpDoor:true, outdoor:true, glint:['#e8d9a8',0.6],
     fpHint:'a waxed dispatch tube on the shingle, come back on the tide. beside it, one of the brood\u2019s own files, stamped. face it and tap to read what came back.',
@@ -3795,6 +3797,7 @@ const INTERIORS={
         if(S.secrets.ferry) L.push('INFRASTRUCTURE stands by the door. REVENUE has its own hook. the hook is empty. the berries were wages.');
         if(S.secrets.solstice&&nightNow()&&readingNight()) L.push('tonight is the reading. the door stands open and the lamplight comes out to meet you. attendance is everyone. you are everyone. you are already late, and it is fine.');
         if(S.secrets.solstice&&!nightNow()&&minutesMorning()) L.push('the minutes sit on the step in pebbles. six pebbles attended. attendance was everyone. the tally is kept in chalk and in fact.');
+        if(restDay()) L.push('the archive observes the day of rest. the slates stand. nobody reads them. the standing is the reading.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6236,6 +6239,16 @@ function buildMarketRaft(){
   M4.trs(T,0.0,raftY+0.055,0.11,0,0,0,1,0.7,1); ball(m,0.018,7,stone,T,0,0.85);
   return upload(m);
 }
+function buildRestDay(){
+  const m=MB(),T=M4.id();
+  const slate=hex('#4a4640'), chalk=hex('#e0d4b4'), cloth=hex('#7a3040'), wood=hex('#3a2a1a');
+  M4.trs(T,0.34,0.16,0.66,-0.22,0,0,1,1,1); box(m,0.24,0.30,0.018,slate,T,0,0.8);   // the sign: CLOSED, FOR REST
+  M4.trs(T,0.34,0.21,0.674,-0.22,0,0,1,1,1); box(m,0.15,0.016,0.008,chalk,T,0,0.9);
+  M4.trs(T,0.34,0.14,0.663,-0.22,0,0,1,1,1); box(m,0.11,0.016,0.008,chalk,T,0,0.9);
+  M4.trs(T,0.34,0.008,0.72,0,0,0,1,1,1); box(m,0.26,0.016,0.10,wood,T,0,0.7);       // the little stand, also resting
+  M4.trs(T,-0.34,0.026,0.74,0,0.3,0,1,1,1); box(m,0.26,0.05,0.17,cloth,T,0,0.75);   // the cushion, empty, attending the empty day
+  return upload(m);
+}
 function buildOverpaid(){
   const m=MB(),T=M4.id();
   const wine=hex('#a83a4a'), stone=hex('#7a7266'), slate=hex('#4a4640');
@@ -6961,6 +6974,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
+  if(!PROPS.some(p=>p.vprop==='restday')) PROPS.push({mesh:buildRestDay(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'restday', cond:()=>!!S.secrets.counterfiling&&restDay()});   // v170: the empty day is the fullest one
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
   if(!PROPS.some(p=>p.vprop==='annexdoor')) PROPS.push({mesh:buildAnnexDoor(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'annexdoor', cond:()=>!(!!S.secrets.solstice&&nightNow()&&readingNight())});   // v167: the archive's public face
   if(!PROPS.some(p=>p.vprop==='readingnight')) PROPS.push({mesh:buildReadingNight(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'readingnight', cond:()=>!!S.secrets.solstice&&nightNow()&&readingNight()});   // v168: the door stands open
