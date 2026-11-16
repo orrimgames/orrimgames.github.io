@@ -28,6 +28,7 @@ const uic2=document.createElement('canvas'); const ctx2=uic2.getContext('2d'); l
 let W=0,H=0,DPR=1,DPRMAX=(window.__DPRMAX_BOOT||1.25);
 const G={t:0,dt:0,frame:0,fps:60,fpsAcc:0,fpsN:0,dc:0};
 const TAU=Math.PI*2;
+const DAYSTONE_AT=[33.4,31.9];   // v186: the stone by the green
 const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
 const lerp=(a,b,t)=>a+(b-a)*t;
 const rnd=(a,b)=>b===undefined?Math.random()*a:b+Math.random()*(a-b);
@@ -3770,6 +3771,25 @@ const INTERIORS={
         if(gratuityMorning()) L.push('on gratuity mornings one pebble is left on the cairn, beside the shoe. nobody admits to it. the shoe accepts it as rent.');
         if(restDay()) L.push('on the day of rest the whole village walks the long way past the cairn, for the view. the shoe has a good view and no opinions.');
         return L; } }},
+  daystone:{land:null, r:1.7, name:'THE DAY STONE', fpDoor:true, outdoor:true, glint:['#e0d4b4',0.8],
+    fpHint:'a notched stone by the green, seven cuts across its face and one small pebble under one of them. face it and tap to ask what day it is.',
+    blurb:'seven notches, one pebble. the pebble is the day.',
+    doorFn:()=>[DAYSTONE_AT[0],DAYSTONE_AT[1]],
+    interact:{dx:0, dz:0, dd:3.0, ang:0.6, key:'daystone', sparkY:0.6, spark:'#e0d4b4', spark2:'#c8a45c',
+      tone:[[330,0.2,{type:'triangle',vol:0.16}],[247,0.35,{type:'sine',vol:0.14,delay:0.08}]],
+      first:{b:['WHAT DAY IS IT','a notched stone by the green: seven cuts in a row, and one pebble sitting under one of them. someone has been moving the pebble.'],
+        c:'The village had seven kinds of day and no way to tell which one it was in. Lamps went out on one, company came on another, the minutes were read, the market came and went, the gratuity turned up in the well, and one day nothing at all was allowed to happen. The goblins knew each by feel and argued about all of them. So the undercount cut seven notches in a stone by the green and put a pebble under today. The pebble is moved at dawn. Nobody has seen who moves it. The market notch is ochre because the market is the only day anyone paints.', say:9},
+      linesFn:()=>{ const D=Math.floor(Date.now()/86400000)%7;
+        const names=['lamps-out night','company morning','reading night','minutes morning','market day','gratuity morning','the day of rest'];
+        const L=['the pebble sits under '+names[D]+'. the stone has been right about this every day so far.',
+          'seven notches, one pebble. the pebble is the day. the stone does not explain further.',
+          'the notch for market day is ochre. it is the only one anyone painted. the stone approves of the market and says so by holding still.'];
+        if(S.secrets.counterfiling) L.push('the drawer files the days under their notches. the stone does not file. the stone keeps the count the old way, by being a stone.');
+        if(S.secrets.undercount) L.push('the slate counts the goblins. this stone counts the days. between them the village is mostly accounted for.');
+        if(S.secrets.lostfound) L.push('the pebble came from the shelf. it was filed as PEBBLE, ONE, DAILY. it comes back every dawn, one notch along.');
+        if(S.secrets.bell) L.push('the bell has no notch. the bell is every day and none of them. the stone has stopped trying to count it.');
+        if(S.secrets.nightdoor) L.push('there is no notch for the door. the door opens on whichever day it likes. the stone declines to take sides.');
+        return L; } }},
   nightdoor:{land:null, r:1.8, name:'THE NIGHT DOOR', fpDoor:true, outdoor:true, glint:['#c8b46a',1.1],
     fpHint:'a door in a frame, standing alone on the rise south of the green. no wall. no hill. the keyhole is worn bright. face it and tap to knock.',
     blurb:'the key to nothing goes somewhere at night. it goes here. the door will not say what for.',
@@ -6673,6 +6693,22 @@ function buildScenicRoute(){
   M4.trs(T,-0.26,0.045,0.18,0,0.7,0,1,0.6,1); ball(m,0.07,8,moss,T,0,0.7);         // moss, settled in
   return upload(m);
 }
+function buildDayStone(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#b4b0a4'), stone2=hex('#8c887c'), chalk=hex('#f2ead8'), dark=hex('#2a2218'), ochre=hex('#c8a45c'), moss=hex('#4a7a3a'), pebble=hex('#f0e4c4');
+  M4.trs(T,0,0.06,0,0,0,0,1,1,1); box(m,0.62,0.12,0.30,stone2,T,0,0.6);              // the footing
+  M4.trs(T,0,0.38,0,0,0.05,0,1,1,1); box(m,0.50,0.52,0.20,stone,T,0,0.6);            // the stone itself, slightly out of true
+  M4.trs(T,0.03,0.68,0,0,0.12,0,1,1,1); box(m,0.34,0.10,0.16,stone2,T,0,0.6);           // the cap
+  const day=Math.floor(Date.now()/86400000)%7;
+  for(let i=0;i<7;i++){                                                               // seven notches, one per day, cut in a row
+    const nx=-0.165+i*0.055;
+    M4.trs(T,nx,0.46,0.106,0,0.05,0,1,1,1); box(m,0.018,0.17,0.014,i===4?ochre:dark,T,0,0.9);
+  }
+  M4.trs(T,-0.165+day*0.055,0.30,0.12,0,0.05,0,1,1,1); ball(m,0.038,8,pebble,T,0,0.8);   // today's pebble sits under today's notch
+  M4.trs(T,0,0.37,0.108,0,0.05,0,1,1,1); box(m,0.36,0.012,0.008,chalk,T,0,0.9);       // a chalk line, for counting
+  M4.trs(T,0.25,0.035,0.18,0,0.7,0,1,0.6,1); ball(m,0.07,8,moss,T,0,0.7);
+  return upload(m);
+}
 function buildLostFoundStump(){
   const m=MB(),T=M4.id();
   const bark=hex('#4a3a26'), bark2=hex('#3a2c1c'), moss=hex('#3a5a30'), dark=hex('#14100a'),
@@ -7155,6 +7191,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='denglow')) PROPS.push({mesh:buildDenGlow(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'denglow', cond:()=>deepNight()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&!lampsOut()});   // v162: the almost-seeing
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
+  if(!PROPS.some(p=>p.vprop==='daystone')) PROPS.push({mesh:buildDayStone(), x:DAYSTONE_AT[0], y:DAYSTONE_AT[1], r:-0.5, gy:sitY(DAYSTONE_AT[0],DAYSTONE_AT[1])-0.04, vprop:'daystone'});   // v186: what day is it
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
   if(!PROPS.some(p=>p.vprop==='nightprints')) PROPS.push({mesh:buildNightPrints(), x:24, y:38, r:0, gy:sitY(24,38)-0.04, vprop:'nightprints', cond:()=>nightNow()&&!!S.secrets.nightdoor});   // v157: home by moonlight
