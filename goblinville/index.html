@@ -3575,6 +3575,7 @@ const INTERIORS={
         if(S.secrets.court) L.push('when the Court comes it will count twelve, because its paper says twelve. the cellar will say otherwise. the cellar is right.');
         if(S.secrets.audit) L.push('the slate gained a mark the evening the skiff landed, with a small neat flag drawn beside it. twelve plus one. the one does not know he is plus.');
         if(S.secrets.counterfiling) L.push('the second shelf keeps the Court the way the first shelf keeps the brood: nightly, in charcoal, kindly.');
+        if(S.secrets.lostfound) L.push('the third shelf keeps what the village drops. things that come back are the best kind of count.');
         return L; } }},
   audit:{land:null, r:2.2, name:'THE AUDIT', fpDoor:true, outdoor:true, glint:['#f2ead8',1.4],
     fpHint:'a red-sailed skiff on the shingle, a tent in the Court\u2019s colors. face the camp and tap to read the surveyor\u2019s ledger.',
@@ -3616,6 +3617,7 @@ const INTERIORS={
         if(S.secrets.wreck) L.push('the second ship is filed under EVIDENCE, then WEATHER, then STONE. this shelf has a fourth folder: OURS.');
         if(S.secrets.chart) L.push('the sky-readers watch the sea. this shelf watches what the sea brings back. both counts are kept nightly.');
         if(S.secrets.receipt) L.push('the stamped stone sits on the shelf of honor. it is the only file the Court has ever signed. it is filed under CORRESPONDENCE.');
+        if(S.secrets.lostfound) L.push('the stump by the path is the village branch of this shelf. the everyday files itself, eventually. the Court should be so organized.');
         return L; } }},
   receipt:{land:null, r:2.0, name:'THE RECEIPT', fpDoor:true, outdoor:true, glint:['#e8d9a8',0.6],
     fpHint:'a waxed dispatch tube on the shingle, come back on the tide. beside it, one of the brood\u2019s own files, stamped. face it and tap to read what came back.',
@@ -3634,6 +3636,25 @@ const INTERIORS={
         if(S.secrets.bell) L.push('the bell did not ring for the receipt. the bell rings for nothing. the brood rang it themselves, quietly, with a knuckle.');
         if(S.secrets.manifest) L.push('the manifest listed intentions. the receipt is the first intention to come back stamped.');
         if(S.secrets.court) L.push('when the Court comes it will find its stamp on the shelf of honor, filed under CORRESPONDENCE. the shelf has room.');
+        return L; } }},
+  lostfound:{land:null, r:1.7, room:[19,34.5], name:'THE LOST AND FOUND', fpDoor:true,
+    fpHint:'a hollow stump by the path, its roots full of small holes. face it and tap to see what turned up.',
+    blurb:'everything the village mislays comes home, filed. eventually.',
+    doorFn:()=>[34.5,24.5],
+    build:()=>buildLostFoundRoom(),
+    interact:{dx:0, dz:-1.45, dd:3.5, ang:0.55, key:'lostfound', sparkY:1.0, spark:'#e0d4b4', spark2:'#c8a45c',
+      first:{b:['EVERYTHING COMES HOME','a cellar of small shelves, and on every shelf the things the village mislaid: one shoe (left), one button, one spoon, one key to nothing. each one filed. each one waits.'],
+        c:'The village mislays things the way the sea mislays ships: constantly, and without a note. So the undercount opened a third shelf, under the hollow stump by the path, where anything that turns up waits to be recognized. One shoe (left, filed the fourth of the rains). One button (bone, honest). One spoon (claimed twice, by the same goblin, on consecutive mornings). One key, which opens nothing the village will admit to, and is therefore the most popular item on the shelf. The rule is the cellar\u2019s rule: label it kindly, shelve it flat, and it will be there when it is needed. Everything comes home. It just takes the scenic route.', say:9},
+      linesFn:()=>{ const L=['the shoe is filed as ONE (1) SHOE, LEFT. the right shoe is filed as MISSING, PRESUMED HAPPY.',
+        'the spoon has been claimed twice, by the same goblin, on two consecutive mornings. the third claim is the charm.',
+        'the key opens nothing the village will admit to. it is the most popular item on the shelf. it is checked out nightly and returned by dawn.'];
+        if(S.secrets.counterfiling) L.push('the cellar files the Court. this shelf files the everyday. the everyday is harder: it will not hold still to be labeled.');
+        if(S.secrets.undercount) L.push('the slate counts the village. this shelf counts what the village drops. the arithmetic of pockets.');
+        if(S.secrets.receipt) L.push('some of it comes back by tide and waits here, unclaimed. the sea has no pockets. the sea loses nothing.');
+        if(S.secrets.bell) L.push('a clapper was offered once. the bell declined. it is shelved, for now, as SPARE.');
+        if(S.secrets.springs) L.push('things lost at the springs come home wrinkled, like the goblins. they are shelved to dry.');
+        if(S.secrets.audit) L.push('the surveyor lost a pencil. it was returned before he missed it, sharpened. he filed a thank-you. it was filed.');
+        if(S.secrets.vampire) L.push('the count mislaid a cape once. it came back folded, brushed, in daylight, with a polite note. he has been careful ever since.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -5998,6 +6019,86 @@ function buildReceipt(){
   farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
   return upload(m);
 }
+function buildLostFoundStump(){
+  const m=MB(),T=M4.id();
+  const bark=hex('#4a3a26'), bark2=hex('#3a2c1c'), moss=hex('#3a5a30'), dark=hex('#14100a'),
+        chalk=hex('#e0d4b4'), stone=hex('#5a5348'), leather=hex('#5a3a26'), ochre=hex('#c8a45c');
+  M4.trs(T,0,0.24,0,0,0,0,1,1,1); tube(m,0.26,0.32,0.48,10,bark,T,0,true,false);     // the stump, hollow
+  for(let i=0;i<5;i++){ const a=i/5*TAU+0.3;                                          // bark strips, standing
+    M4.trs(T,Math.cos(a)*0.27,0.26,Math.sin(a)*0.27,0,0,0.04*(i%2?1:-1),1,1,1); box(m,0.05,0.5,0.02,bark2,T,0,0.65); }
+  M4.trs(T,0,0.485,0,0,0,0,1,1,1); tube(m,0.24,0.27,0.03,10,bark2,T,0,true,false);    // the rim
+  M4.trs(T,0,0.50,0,0,0,0,1,1,1); tube(m,0.19,0.19,0.012,10,dark,T,0,true,false);     // the hollow's dark
+  for(let i=0;i<5;i++){ const a=i/5*TAU+0.4;                                          // the roots, tucked close
+    M4.trs(T,Math.cos(a)*0.30,0.045,Math.sin(a)*0.30,0.10*Math.sin(a*2),-a,0.08,1,1,1); box(m,0.13,0.07,0.24,bark2,T,0,0.6); }
+  M4.trs(T,0,0.30,0.29,0,0,0,1,1,1); box(m,0.13,0.12,0.02,dark,T,0,0.8);              // the notch, at eye level
+  M4.trs(T,0,0.30,0.315,0,0,0,1,1,1); ball(m,0.020,7,ochre,T,0,0.9);                  // something in it: one bead
+  M4.trs(T,0,0.06,0.38,0,0,0,1,1,1); box(m,0.30,0.05,0.18,stone,T,0,0.65);            // the step stone
+  M4.trs(T,-0.05,0.095,0.38,0,0.25,0,1,1,1); box(m,0.09,0.025,0.16,leather,T,0,0.7); // ONE (1) SHOE, LEFT: the sole
+  M4.trs(T,-0.075,0.125,0.415,0,0.25,0,1,1,1); box(m,0.05,0.045,0.08,leather,T,0,0.7);
+  M4.trs(T,0.09,0.105,0.37,0,0.1,0,1,1,1); box(m,0.10,0.04,0.012,chalk,T,0,0.85);     // its label, polite
+  M4.trs(T,0.09,0.107,0.377,0,0.1,0,1,1,1); box(m,0.07,0.008,0.006,dark,T,0,0.9);
+  M4.trs(T,-0.24,0.06,0.20,0,0.9,0,1,0.6,1); ball(m,0.08,8,moss,T,0,0.7);             // moss, kept politely
+  return upload(m);
+}
+function buildLostFoundRoom(){
+  const m=MB(),T=M4.id();
+  const earth=hex('#2a1e12'), earth2=hex('#221810'), dark=hex('#14100a'), chalk=hex('#e0d4b4'), ochre=hex('#c8a45c'),
+        berry=hex('#b04858'), slate=hex('#4a4640'), stump=hex('#4a3a26'), root=hex('#1a120a'),
+        glow=hex('#ffc46b'), board=hex('#cfc4a8'), charcoal=hex('#14100a'), bone=hex('#e0d4b4'),
+        leather=hex('#5a3a26'), dust=hex('#8a8272'), moss=hex('#2c4634');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: packed earth, swept by whoever lost the broom
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,earth2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#1c140c'),T,0,true,false);
+  // walls with the small shelves: cubbies, three by two, on three faces
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.6,0.28,i%2?earth:earth2,T,0,0.62); }
+  M4.trs(T,0,1.46,2.05,0,0,0,1,1,1); box(m,1.35,0.26,0.3,earth2,T,0,0.62);      // door lintel
+  const FOUND=[                                                   // what turned up, one per ledge
+    (x,ya,z,rot)=>{ M4.trs(T,x,ya+0.035,z,0,rot+0.3,0,1,1,1); box(m,0.09,0.025,0.18,leather,T,0,0.8);      // ONE (1) SHOE, LEFT
+      M4.trs(T,x,ya+0.072,z,0,rot+0.3,0,1,1,1); box(m,0.05,0.05,0.09,leather,T,0,0.8); },
+    (x,ya,z,rot)=>{ M4.trs(T,x,ya+0.03,z,0,0,0,1,1,1); tube(m,0.045,0.045,0.018,9,bone,T,0,true,true);     // ONE (1) BUTTON, BONE, HONEST
+      orb(x-0.012,ya+0.041,z-0.008,0.008,charcoal,0.6); orb(x+0.012,ya+0.041,z+0.008,0.008,charcoal,0.6); },
+    (x,ya,z,rot)=>{ M4.trs(T,x,ya+0.028,z,0,rot+0.5,0,1,1,1); box(m,0.02,0.012,0.16,ochre,T,0,0.85);       // ONE (1) SPOON, claimed twice
+      orb(x-Math.sin(rot+0.5)*0.09,ya+0.032,z-Math.cos(rot+0.5)*0.09,0.032,ochre,0.5); },
+    (x,ya,z,rot)=>{ M4.trs(T,x,ya+0.028,z,0,rot+0.2,0,1,1,1); box(m,0.014,0.012,0.14,slate,T,0,0.8);       // ONE (1) KEY, to nothing
+      M4.trs(T,x-Math.sin(rot+0.2)*0.08,ya+0.028,z-Math.cos(rot+0.2)*0.08,0,rot+0.2,0,1,1,1); tube(m,0.028,0.028,0.012,8,slate,T,0,true,false); },
+    (x,ya,z,rot)=>{ orb(x,ya+0.045,z,0.03,bone,1.0); },                                                    // ONE (1) BEAD, returned with interest
+    (x,ya,z,rot)=>{ M4.trs(T,x,ya+0.04,z,0,rot+0.2,0,1,0.6,1); ball(m,0.055,8,moss,T,0,0.85);              // a knot of something, unclaimed
+      M4.trs(T,x,ya+0.068,z,0,0,0,1,1,1); box(m,0.10,0.008,0.10,dust,T,0,0.9); },                          // dust, filed with the item
+    (x,ya,z,rot)=>{ M4.trs(T,x,ya+0.045,z,0,rot+0.4,0,1,1,1); box(m,0.10,0.05,0.06,hex('#3a2c3c'),T,0,0.85); // a fold of dark cloth, brushed
+      M4.trs(T,x,ya+0.075,z,0,0,0,1,1,1); box(m,0.11,0.006,0.07,dust,T,0,0.9); }];
+  let fnd=0;
+  for(let s2=0;s2<8&&fnd<FOUND.length;s2++){ const a=(s2*0.79)%1*TAU;                 // the ledges, one item each
+    if(Math.abs(((a+Math.PI/2)%TAU)-Math.PI/2)<0.55) continue;                        // keep the door side clear
+    const sx=Math.cos(a)*1.86, sz=Math.sin(a)*1.86, ya=0.66+(s2%3)*0.30, rot=a+Math.PI/2;
+    M4.trs(T,sx,ya,sz,0,rot,0,1,1,1); box(m,0.5,0.03,0.16,stump,T,0,0.7);             // the ledge
+    FOUND[fnd++](sx,ya,sz,rot);
+    M4.trs(T,sx+Math.cos(rot)*0.17,ya-0.045,sz-Math.sin(rot)*0.17,0,rot,0,1,1,1); box(m,0.03,0.05,0.012,charcoal,T,0,0.85);  // the label, polite
+  }
+  // the CLAIMS desk: the book is open, the block is for knocking
+  bx(-0.42,0.26,-1.5,0.12,0.5,0.34,stump,0.75); bx(0.42,0.26,-1.5,0.12,0.5,0.34,stump,0.75);
+  M4.trs(T,0,0.80,-1.5,-0.35,0,0,1,1,1); box(m,1.3,0.09,0.7,slate,T,0,0.8);
+  M4.trs(T,-0.20,0.855,-1.42,-0.35,0,0,1,1,1); box(m,0.55,0.02,0.40,board,T,0,0.85);  // the claim book, open
+  for(let r2=0;r2<3;r2++){ M4.trs(T,-0.34,0.872,-1.55+r2*0.09,-0.35,0,0,1,1,1); box(m,0.20,0.008,0.02,chalk,T,0,0.9);
+    M4.trs(T,-0.06,0.872,-1.55+r2*0.09,-0.35,0,0,1,1,1); box(m,0.06,0.008,0.02,berry,T,0,0.9); }   // claimed, claimed, claimed
+  M4.trs(T,0.42,0.86,-1.42,-0.35,0,0,1,1,1); box(m,0.16,0.10,0.14,stump,T,0,0.75);    // the knock-block
+  M4.trs(T,0.42,0.94,-1.40,-0.35,0,0.3,1,1,1); box(m,0.025,0.14,0.025,ochre,T,0,0.85);
+  // roof, roots, the light
+  M4.trs(T,0,1.66,0,0,0,0,1,1,1); tube(m,2.10,1.86,0.5,14,earth2,T,0,true,true);
+  M4.trs(T,0,2.06,0,0,0,0,1,1,1); tube(m,1.5,1.26,0.45,12,dark,T,0,true,true);
+  for(let i=0;i<14;i++){ const a=i/14*TAU;
+    M4.trs(T,Math.cos(a)*2.72,2.3,Math.sin(a)*2.72,0,a+Math.PI/2,0,1,1,1); box(m,1.35,4.8,0.2,hex('#0e0a06'),T,0,0.55); }
+  M4.trs(T,0,4.7,0,0,0,0,1,1,1); box(m,7.5,0.4,7.5,hex('#0e0a06'),T,0,0.55);
+  for(let n2=0;n2<10;n2++){ const a=(n2*0.783)%1*TAU, rr=1.2+(n2%3)*0.35, len=0.22+(n2%4)*0.12;
+    M4.trs(T,Math.cos(a)*rr,1.64-len/2,Math.sin(a)*rr,0.06*(n2%3-1),0,0.08*(n2%2?1:-1),1,1,1);
+    box(m,0.028,len,0.028,root,T,0,0.7); }
+  M4.trs(T,-0.8,1.45,-0.5,0,0,-0.05,1,1,1); box(m,0.02,0.4,0.02,root,T,0,0.7);
+  orb(-0.8,1.2,-0.52,0.05,glow,1.0); orb(-0.8,1.2,-0.52,0.028,hex('#ffe9a8'),1.0);
+  return upload(m);
+}
 // v150: THE AUDIT - the Court's answer came ashore at the wrong beach: one surveyor, one skiff, one tent,
 // a counting-frame still warm. The goblins counted the surveyor before the keel touched: one.
 function buildCourtCamp(){
@@ -6381,6 +6482,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
+  if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
