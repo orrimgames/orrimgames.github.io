@@ -3473,6 +3473,7 @@ const INTERIORS={
         'the manifest lists one crate the tide took. the crate is listed anyway. the Court counts intentions.',
         'a velvet purse of buttons, one per soul. the purse is full. the crew is not here. the Choir has them, in order.'];
         if(S.secrets.chart) L.push('the last chart is safe in goblin hands, a world away. this ship was the price of looking. the brood paid nothing and owes everything.');
+        if(S.secrets.crate) L.push('the tide took one crate. the brood found it. the ledger allows itself one small smile.');
         if(S.secrets.word2) L.push('the mountain wrote STAYED. the crew of the second ship could not. the ledger does not hold it against them. the ledger holds everything else.');
         return L; } }},
   manifest:{land:null, r:2.5, name:'THE MANIFEST', fpDoor:true, outdoor:true, glint:['#9fd4ff',0.7],
@@ -3487,6 +3488,22 @@ const INTERIORS={
         'the stones face the sea. the sea brought them. whatever the Choir is, it is not unkind about it.'];
         if(S.secrets.choir) L.push('the Choir sang their names in the third voice, as practice. on this shore, the practice is over.');
         if(S.secrets.court) L.push('the Court is still expecting its ship. the Court does not stop. let it come and count the stones itself.');
+        if(S.secrets.crate) L.push('the tide gave back what it took. the stones do not gloat. the stones have seen the tide\u2019s ledger.');
+        return L; } }},
+  crate:{land:null, r:2.2, name:'THE CARGO', fpDoor:true, outdoor:true, glint:['#d4a94e',0.5],
+    fpHint:'a crate the tide kept, the Court\u2019s red wax still whole. face it and tap to read the manifest\u2019s last line.',
+    blurb:'the manifest lists one crate the tide took. the tide keeps its books too.',
+    doorFn:()=>[-21.6,-187.95],
+    interact:{dx:0, dz:0, dd:3.2, ang:0.6, key:'crate', sparkY:0.55, spark:'#d4a94e', spark2:'#e8e2d0',
+      first:{b:['THE COURT COUNTS INTENTIONS','the crate from the manifest, stove at one corner, the wax unbroken. inside, in oilskin: sixty-one promises, stamped, addressed, unsent.'],
+        c:'Past the seven stones the tide-line kept one more thing: the crate the second ship\u2019s manifest lost to the water, half out of the shingle with the Court\u2019s seal whole. Inside, in oilskin, the crew\u2019s intentions - sixty-one promises to be brave, precise, and home by winter, each stamped, each addressed, none sent. The brood read them to the stones, in order, and buried them under the captain\u2019s stone, where the counting is kind. The tide brings everything back. It is only slow.', say:9},
+      linesFn:()=>{ const L=['the wax is the Court\u2019s red. the seal is the captain\u2019s own. the crate was never lost. it was entrusted.',
+        'the oilskin held. the promises are dry. promises keep better than ships.',
+        'the tide sorted the shingle by size and kept the crate. even the sea files things.'];
+        if(S.secrets.wreck) L.push('the manifest lists one crate the tide took. it is found. the count is closer to right.');
+        if(S.secrets.manifest) L.push('sixty-one promises, read aloud to seven stones. the smallest stone listened twice.');
+        if(S.secrets.choir) L.push('the Choir files intentions too, in the column with no total.');
+        if(S.secrets.court) L.push('the Court is still expecting its crate. let it come and read the tide\u2019s receipt.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -5737,6 +5754,61 @@ function buildWreck(){
   orb(-1.42,1.06,0.63,0.04,salt,1.0); orb(0.55,0.80,0.78,0.04,salt,1.0);              // barnacle blooms
   return upload(m);
 }
+// v146: far-shore authoring in upright axes - landMat's frame stands on end out on the
+// shoulder (local X runs down-world), so author (row,up,depth) and let the permutation place it
+function farBox(m,T,x,y,z,rx,ry,rz,w,h,d,c,ao){ M4.trs(T,-y,-z,x, ry,rz,rx, 1,1,1); box(m,h,d,w,c,T,0,ao==null?0.62:ao); }
+function farOrb(m,T,x,y,z,r,c,sy,ao){ M4.trs(T,-y,-z,x,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,ao==null?0.9:ao); }
+// v146: the tide-line keeps what the tide was given - one small cluster of wrack, found by the waterline walk
+function buildWrackCluster(seed){
+  const m=MB(),T=M4.id();
+  let s=(seed>>>0)||1; const sr=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
+  const wood=hex('#4a3a28'), wood2=hex('#66503a'), shell=hex('#e8e2d0'), shell2=hex('#c9c2b2'), weed=hex('#2c4634'), salt=hex('#dfe6ea');
+  const n=2+((sr()*3)|0);
+  for(let i=0;i<n;i++){
+    const x=(sr()-0.5)*0.9, z=(sr()-0.5)*0.7, k=sr();
+    if(k<0.45) farBox(m,T,x,0.03+sr()*0.02,z, 0.015,sr()*TAU,0.02, 0.08+sr()*0.06,0.04,0.4+sr()*0.4, k<0.2?wood2:wood, 0.55);   // driftwood, tide-silvered
+    else if(k<0.75) farOrb(m,T,x,0.025,z,0.035+sr()*0.03, sr()<0.5?shell:shell2, 0.45);                                         // shells, bleached
+    else farBox(m,T,x,0.03,z, 0,sr()*TAU,0, 0.05+sr()*0.05,0.04,0.28+sr()*0.2, weed, 0.5);                                       // weed, salt-stiff
+  }
+  if(sr()<0.3) farOrb(m,T,(sr()-0.5)*0.8,0.03,(sr()-0.5)*0.7,0.028,salt,0.6);                                                    // a salt bloom
+  return upload(m);
+}
+// v146: the crate from the second ship's manifest - what the tide kept
+function buildCrate(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#5d4326'), wood2=hex('#463019'), velvet=hex('#a32436'), gold=hex('#d4a94e'),
+        oilskin=hex('#8a7f5c'), paper=hex('#e8e2d0'), salt=hex('#e8ecef');
+  farBox(m,T,0,0.16,0, 0.14,0.06,0.20, 0.56,0.48,0.56, wood, 0.5);              // the crate, half out of the shingle, canted seaward
+  farBox(m,T,0.24,0.34,0.24, 0.5,0.2,0.35, 0.10,0.30,0.06, wood2, 0.5);         // corner planks, sprung
+  farBox(m,T,0.30,0.20,0.18, 0.9,0.1,0.2, 0.08,0.26,0.05, wood2, 0.5);
+  farBox(m,T,-0.04,0.40,-0.03, -0.07,0.30,0.07, 0.54,0.05,0.54, wood2, 0.55);   // the lid, set back wrong by the tide
+  farBox(m,T,0.01,0.385,0.01, 0,0.3,0, 0.36,0.10,0.36, oilskin, 0.6);           // the oilskin within, just visible
+  farBox(m,T,0.10,0.442,0.08, 0,0.4,0, 0.13,0.006,0.17, paper, 0.75);           // three letters, dry in the oilskin
+  farBox(m,T,-0.08,0.446,-0.06, 0,1.2,0, 0.13,0.006,0.17, paper, 0.75);
+  farBox(m,T,0.03,0.450,-0.13, 0,2.4,0, 0.13,0.006,0.17, paper, 0.75);
+  farOrb(m,T,-0.16,0.435,0.12,0.045,velvet,0.35);                               // the Court's wax, unbroken
+  farOrb(m,T,-0.16,0.443,0.12,0.016,gold,0.6);                                  // the seal's stamp
+  farOrb(m,T,0.28,0.08,-0.10,0.025,salt,0.6); farOrb(m,T,-0.26,0.06,0.18,0.02,salt,0.6);   // barnacles
+  return upload(m);
+}
+// v146: the wrack line - debris found by walking the waterline, never placed by hand. The shore
+// decides what it keeps; if the shore changes, the line moves with it.
+function seedWrack(){
+  if(PROPS.some(p=>p.wrack)) return;
+  let s=8847; const sr=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
+  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0]];   // wreck, manifest, crate
+  let last=null, n=0;
+  for(let y=-193.5;y<=-186.5;y+=0.5) for(let x=-26;x<=-12;x+=0.5){
+    const h=icoHeight(dirOf(x,y,[0,0,0]))-150;
+    if(h<0.07||h>0.34) continue;                                                 // the tide's reach, no higher
+    if(keepOut.some(k=>Math.hypot(x-k[0],y-k[1])<k[2])) continue;
+    if(last&&Math.hypot(x-last[0],y-last[1])<1.0) continue;
+    if(sr()<0.35) continue;                                                      // the tide skips some yards
+    last=[x,y];
+    PROPS.push({mesh:buildWrackCluster((sr()*1e9)|0), x:x+(sr()-0.5)*0.4, y:y+(sr()-0.5)*0.4, r:1.855+(sr()-0.5)*0.3, far:'wrack'+n, wrack:1, ride:-0.10});
+    n++;
+  }
+}
 function buildShrine(){
   const m=MB(),T=M4.id();
   const stone=hex('#7d8694'), stone2=hex('#5d6675'), bone=hex('#e8ecef'), salt=hex('#dfe6ea'),
@@ -5871,6 +5943,8 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='chart')) PROPS.push({mesh:buildChartRuin(), x:-46.7, y:183.38, r:0.72, far:'chart', ride:-0.02});   // v141: the far shore
   if(!PROPS.some(p=>p.far==='wreck')) PROPS.push({mesh:buildWreck(), x:-12.58, y:-188.1, r:1.57, far:'wreck', ride:-0.02});              // v144: the second ship
   if(!PROPS.some(p=>p.far==='manifest')) PROPS.push({mesh:buildShrine(), x:-13.42, y:-190.98, r:1.855, far:'manifest', ride:-0.06});   // v145: the crew, in order
+  if(!PROPS.some(p=>p.far==='crate')) PROPS.push({mesh:buildCrate(), x:-21.6, y:-187.95, r:1.9, far:'crate', ride:-0.05});   // v146: what the tide kept
+  seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
 
