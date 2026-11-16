@@ -3429,9 +3429,11 @@ const INTERIORS={
     interact:{dx:0, dz:-1.5, dd:3.5, ang:0.55, key:'count', sparkY:1.1, spark:'#ffb347', spark2:'#ffe9a8',
       first:{b:['WHAT THE EYE COUNTS','it counted fires. now it keeps one word.'],
         c:'Under the spire the counter\u2019s room was found at last: tally marks scratched patient in the stone, six little flames drawn under them, and one word kept apart from every count. The eye counts what burns. It keeps what warms.', say:3},
-      lines:['the tally marks stop one short of the ceiling. the counter is saving room.',
+      linesFn:()=>{ const L=['the tally marks stop one short of the ceiling. the counter is saving room.',
         'six flames, drawn small. beside them, a seventh mark. no flame above it: a door.',
-        'it counted the springs first, before anyone. it was waiting for someone to keep them.']}},
+        'it counted the springs first, before anyone. it was waiting for someone to keep them.'];
+        if(S.secrets.undercount) L.push('a second count has started under the village, in charcoal, by goblins. the eye approves. goblins are legible.');
+        return L; } }},
   springs:{land:null, r:1.8, room:[25,40.5], name:'THE FIRST SPRING',
     blurb:'the water was warm before anyone thought to thank it',
     doorFn:()=>[SITE.x-3.4, SITE.y+2.8],
@@ -3547,6 +3549,23 @@ const INTERIORS={
         if(S.secrets.bell) L.push('the bell kept the name. the strongbox kept the purpose. the tide reads everything eventually.');
         if(S.secrets.choir) L.push('the Choir filed the ship under weather. it will file the Court under weather too, in time.');
         if(S.secrets.court) L.push('the Court is still expecting its ship. let it come. the goblins will be counted, and the count will be wrong, and that will be the beginning.');
+        if(S.secrets.undercount) L.push('the cellar keeps the true count in charcoal, bundled in fives, kept nightly. the warrant’s twelve is down there too, crossed through once, kindly.');
+        return L; } }},
+  undercount:{land:null, r:1.9, room:[37,40.5], name:'THE UNDERCOUNT', fpDoor:true,
+    fpHint:'a root-cellar hatch behind the mushroom racks, low as a badger’s door. face it and tap to duck inside.',
+    blurb:'the Court has a number. the cellar keeps the other one.',
+    doorFn:()=>[SITE.x-6.6, SITE.y+5.4],
+    build:()=>buildUndercountRoom(),
+    interact:{dx:0, dz:-1.45, dd:3.5, ang:0.55, key:'undercount', sparkY:1.0, spark:'#e0d4b4', spark2:'#c8a45c',
+      first:{b:['THE NUMBER IS WRONG','the warrant says twelve. the slate says otherwise, in charcoal, and the slate is kept nightly.'],
+        c:'Behind the mushroom racks, under a hatch low as a badger’s door, the brood keeps the other count: every goblin in Goblinville, scratched in charcoal on the cellar slate, bundled in fives, kept nightly by whoever is smallest and therefore slowest to bed. The warrant in the strongbox says twelve. It was right once, for one afternoon, in the second spring, by accident. The slate has been right every night since - and it counts what the Court’s arithmetic cannot: the goblins in the walls, the goblins in the warrens, the goblins who are small on purpose. Let the Court come with its number. The cellar keeps the answer.', say:9},
+      linesFn:()=>{ const n=S.gobs.length, L=['the slate says '+n+' tonight. the warrant says twelve. the slate is kept by someone who has to feed them.',
+        'the tally marks stop for no one. they continue on the ceiling. they are thinking about the door.',
+        'whoever shows up for dinner is in the count. the Court counts what it can hold still. dinner wins.'];
+        if(S.secrets.strongbox) L.push('the warrant’s twelve is written out neat in chalk on the little board, and crossed through once, kindly, the way one corrects a child.');
+        if(S.secrets.count) L.push('the eye counts what burns. the brood counts who shows up for dinner. the two counts have never disagreed.');
+        if(S.secrets.manifest) L.push('seven stones keep the crew’s count. the slate keeps the living one. neither asked the Court to check their arithmetic.');
+        if(S.secrets.court) L.push('when the Court comes it will count twelve, because its paper says twelve. the cellar will say otherwise. the cellar is right.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -4336,6 +4355,7 @@ function drawWorldStatics(prog, noCrops){
 }
 function drawGobs(prog, depth){
   if(QNOGOBS) return;
+  if(FP.interior) return;   // v149: interiors are elsewhere in the fiction - the overworld does not walk through them
   if(QOK && !depth){
     gl.useProgram(QPROG.p);
     gl.uniformMatrix4fv(QPROG.u.uVP,false,VP);
@@ -5893,6 +5913,89 @@ function buildBell(){
   farOrb(m,T, 0.30, 0.22, 0.22, 0.02, salt, 0.6);
   return upload(m);
 }
+function buildUnderHatch(){
+  const m=MB(),T=M4.id();
+  const turf=hex('#3a5a30'), turf2=hex('#2e4a26'), wood=hex('#4a3a26'), wood2=hex('#3a2c1c'), stone=hex('#5a5348'),
+        chalk=hex('#e0d4b4'), cap=hex('#a89060'), cap2=hex('#96382e'), stem=hex('#d8cfb0');
+  // the mound: turf over the cellar, low as a badger's door
+  M4.trs(T,0,0.10,0,0,0,0,1,0.55,1); ball(m,0.85,10,turf,T,0,0.55);
+  M4.trs(T,0,0.34,-0.12,0,0,0,1,0.5,1); ball(m,0.62,9,turf2,T,0,0.6);
+  // the hatch door, leaned against the mound's face, open a crack
+  M4.trs(T,0,0.30,0.80,-0.22,0,0,1,1,1); box(m,0.42,0.56,0.06,wood,T,0,0.62);
+  M4.trs(T,0,0.30,0.84,-0.22,0,0,1,1,1); box(m,0.34,0.44,0.02,wood2,T,0,0.7);
+  M4.trs(T,0,0.62,0.70,0,0,0,1,1,1); box(m,0.52,0.08,0.12,stone,T,0,0.7);   // lintel stone
+  M4.trs(T,0,0.02,1.00,0,0,0,1,1,1); box(m,0.44,0.07,0.3,stone,T,0,0.7);    // the step
+  // a tally-stick by the door, three notches in chalk
+  M4.trs(T,0.40,0.16,0.72,0,0,0.3,1,1,1); box(m,0.035,0.42,0.035,wood2,T,0,0.7);
+  for(let i=0;i<3;i++){ M4.trs(T,0.42,0.10+i*0.09,0.74,0,0,0.3,1,1,1); box(m,0.05,0.016,0.012,chalk,T,0,0.85); }
+  // the mushroom racks: tonight's wages for the counter
+  for(const rx of[[-0.80,0.28],[0.74,-0.44]]){
+    M4.trs(T,rx[0],0.17,rx[1],0,0.3,0,1,1,1); box(m,0.5,0.05,0.24,wood,T,0,0.62);
+    for(const sx of[-0.16,0.16]) for(const sz of[-0.07,0.07]){
+      M4.trs(T,rx[0]+sx,0.075,rx[1]+sz,0,0.3,0,1,1,1); box(m,0.04,0.15,0.04,wood2,T,0,0.62); }
+    for(let i=0;i<3;i++){ const mx=rx[0]-0.14+i*0.14;
+      M4.trs(T,mx,0.225,rx[1],0,0.3,0,1,1,1); box(m,0.025,0.06,0.025,stem,T,0,0.8);
+      M4.trs(T,mx,0.27,rx[1],0,0.3,0,1,0.6,1); ball(m,0.045,7,i===1?cap2:cap,T,0,0.85); } }
+  return upload(m);
+}
+function buildUndercountRoom(){
+  const m=MB(),T=M4.id();
+  const earth=hex('#2a1e12'), earth2=hex('#221810'), dark=hex('#14100a'), chalk=hex('#e0d4b4'), ochre=hex('#c8a45c'),
+        berry=hex('#b04858'), slate=hex('#4a4640'), stump=hex('#4a3a26'), root=hex('#1a120a'),
+        glow=hex('#ffc46b'), cap=hex('#a89060'), stem=hex('#d8cfb0'), board=hex('#cfc4a8'), charcoal=hex('#14100a');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: packed earth, swept nightly
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,earth2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#1c140c'),T,0,true,false);
+  // walls: cellar earth, and the count - bundled in fives, chalk and ochre
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.6,0.28,i%2?earth:earth2,T,0,0.62); }
+  M4.trs(T,0,1.46,2.05,0,0,0,1,1,1); box(m,1.35,0.26,0.3,earth2,T,0,0.62);      // door lintel
+  const bundle=(x,y,z,a,c)=>{ for(let s=0;s<4;s++){ M4.trs(T,x-0.05+s*0.033,y,z,0,a,0,1,1,1); box(m,0.016,0.14,0.02,c,T,0,0.85); }
+    M4.trs(T,x+0.005,y,z,0,a,0.55,1,1,1); box(m,0.016,0.17,0.02,c,T,0,0.85); };
+  for(let n2=0;n2<26;n2++){ const a=(n2*0.618)%1*TAU, y=0.62+(n2%4)*0.25;
+    if(Math.abs(((a+Math.PI/2)%TAU)-Math.PI/2)<0.5&&n2%3===0) continue;         // keep the door side clear
+    bundle(Math.cos(a)*1.88,(n2%4)*0.25+0.62,Math.sin(a)*1.88,a+Math.PI/2,n2%3?ochre:chalk); }
+  // one bundle in berry juice beside the slate, signed with dinner
+  bundle(-1.30,0.98,-1.42,Math.atan2(-1.42,-1.30)+Math.PI/2,berry);
+  const ba=Math.atan2(-1.52,-1.48)+Math.PI/2;
+  M4.trs(T,-1.48,0.93,-1.52,0,ba,0,1,1,1); box(m,0.014,0.05,0.016,chalk,T,0,0.85);
+  M4.trs(T,-1.48,0.965,-1.52,0,ba,0,1,1,1); box(m,0.05,0.018,0.016,berry,T,0,0.85);
+  // roof: low cellar boards and hanging roots; one root holds the light
+  M4.trs(T,0,1.66,0,0,0,0,1,1,1); tube(m,2.10,1.86,0.5,14,earth2,T,0,true,true);
+  M4.trs(T,0,2.06,0,0,0,0,1,1,1); tube(m,1.5,1.26,0.45,12,dark,T,0,true,true);
+  for(let i=0;i<14;i++){ const a=i/14*TAU;                                                 // the dark beyond the walls
+    M4.trs(T,Math.cos(a)*2.72,2.3,Math.sin(a)*2.72,0,a+Math.PI/2,0,1,1,1); box(m,1.35,4.8,0.2,hex('#0e0a06'),T,0,0.55); }
+  M4.trs(T,0,4.7,0,0,0,0,1,1,1); box(m,7.5,0.4,7.5,hex('#0e0a06'),T,0,0.55);               // and the earth over the cellar
+  for(let n2=0;n2<14;n2++){ const a=(n2*0.783)%1*TAU, rr=1.3+(n2%3)*0.3, len=0.25+(n2%4)*0.13;
+    M4.trs(T,Math.cos(a)*rr,1.64-len/2,Math.sin(a)*rr,0.06*(n2%3-1),0,0.08*(n2%2?1:-1),1,1,1);
+    box(m,0.028,len,0.028,root,T,0,0.7); }
+  M4.trs(T,0.9,1.45,-0.4,0,0,0.05,1,1,1); box(m,0.02,0.4,0.02,root,T,0,0.7);
+  orb(0.9,1.2,-0.42,0.05,glow,1.0); orb(0.9,1.2,-0.42,0.028,hex('#ffe9a8'),1.0);
+  // the slate: the true count, kept nightly - one stroke per goblin, live
+  bx(-0.42,0.26,-1.5,0.12,0.5,0.34,stump,0.75); bx(0.42,0.26,-1.5,0.12,0.5,0.34,stump,0.75);
+  M4.trs(T,0,0.86,-1.5,-0.35,0,0,1,1,1); box(m,1.3,0.09,0.7,slate,T,0,0.8);
+  const n=(S.gobs&&S.gobs.length)||0, nb=Math.min(12,Math.ceil(n/5)||1);
+  for(let b=0;b<nb;b++){ const bx0=-0.5+(b%6)*0.2, by0=0.895+((b/6)|0)*0.075, inb=Math.min(5,n-b*5);
+    for(let s=0;s<inb;s++){ M4.trs(T,bx0+s*0.032,by0,-1.28,-0.35,0,0,1,1,1); box(m,0.016,0.012,0.14,chalk,T,0,0.85); }
+    if(inb===5){ M4.trs(T,bx0+0.062,by0+0.002,-1.28,-0.35,0.55,0,1,1,1); box(m,0.016,0.012,0.17,chalk,T,0,0.85); } }
+  M4.trs(T,-0.62,0.92,-1.42,-0.35,0,0.2,1,1,1); box(m,0.05,0.04,0.09,charcoal,T,0,0.9);   // the counter's charcoal
+  // the Court's number, written out neat in chalk, corrected kindly
+  bx(1.05,0.26,-1.35,0.1,0.42,0.3,stump,0.75);
+  M4.trs(T,1.05,0.70,-1.35,-0.25,0,0,1,1,1); box(m,0.56,0.05,0.42,board,T,0,0.85);
+  for(let r2=0;r2<2;r2++) for(let s=0;s<6;s++){ M4.trs(T,0.89+s*0.062,0.735+r2*0.05,-1.26,-0.25,0,0,1,1,1); box(m,0.014,0.01,0.09,hex('#f2ead8'),T,0,0.9); }  // twelve, in the Court's neat hand
+  M4.trs(T,1.05,0.775,-1.28,-0.25,0.7,0,1,1,1); box(m,0.02,0.012,0.60,charcoal,T,0,0.9);  // crossed through once, kindly
+  // the counter's wages, in a basket by the slate
+  orb(-0.95,0.36,-1.1,0.16,stump,0.7);
+  for(let i=0;i<4;i++){ const mx=-1.04+i*0.07;
+    M4.trs(T,mx,0.45,-1.1,0,0,0,1,1,1); box(m,0.02,0.05,0.02,stem,T,0,0.85);
+    M4.trs(T,mx,0.485,-1.1,0,0,0,1,0.6,1); ball(m,0.038,7,i===2?hex('#96382e'):cap,T,0,0.9); }
+  // the counter's stone, worn smooth by sitting
+  orb(1.35,0.42,0.3,0.3,earth2,0.75); orb(1.35,0.60,0.3,0.22,earth,0.75);
+  return upload(m);
+}
 function buildShrine(){
   const m=MB(),T=M4.id();
   const stone=hex('#7d8694'), stone2=hex('#5d6675'), bone=hex('#e8ecef'), salt=hex('#dfe6ea'),
@@ -6030,6 +6133,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='crate')) PROPS.push({mesh:buildCrate(), x:-21.6, y:-187.95, r:1.9, far:'crate', ride:-0.05});   // v146: what the tide kept
   if(!PROPS.some(p=>p.far==='bell')) PROPS.push({mesh:buildBell(), x:-15.5, y:-188.55, r:1.9, far:'bell', ride:-0.08});   // v147: what the tide hung
   if(!PROPS.some(p=>p.far==='strongbox')) PROPS.push({mesh:buildStrongbox(), x:-24.2, y:-187.7, r:1.9, far:'strongbox', ride:-0.10});   // v148: what the sea respected
+  if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
