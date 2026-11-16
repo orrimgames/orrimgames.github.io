@@ -3711,7 +3711,8 @@ const INTERIORS={
         'no label survives the night here. the den files nothing. the den is the filing.',
         'it is no bigger than a bootbox. whatever lives in it is smaller. the arithmetic of dens.'];
         if(nightNow()) L.push('the den is empty at night. the saucer is out. the ridge keeps the hour.');
-        else L.push('by day the den is only an arch and a folded blanket. something small is asleep in the walls of the world.');
+        else { L.push('by day the den is only an arch and a folded blanket. something small is asleep in the walls of the world.');
+          if(S.secrets.nightdoor) L.push('by morning the saucer holds something small: a dew cup, a berry, a polished pebble. nobody sees the refill happen. the den pays its tab.'); }
         if(S.secrets.nightdoor) L.push('it borrows the key hourly and returns it warm. the door does not mind. the door is family.');
         if(S.secrets.lostfound) L.push('the comforts by the arch were never reported missing. the shelf knows. the shelf says nothing. the third shelf keeps its counsel.');
         if(S.secrets.undercount) L.push('the undercount counts the village nightly and finds it one short. the slate has a margin for this. the margin is den-shaped.');
@@ -6099,6 +6100,21 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildRefill(){
+  const m=MB(),T=M4.id();
+  const bone=hex('#e0d4b4'), water=hex('#7fb4d8'), wine=hex('#a83a4a'), peb=hex('#8a8f98'), leaf=hex('#4a6a38');
+  const pick=Math.floor(Date.now()/86400000)%3;   // nobody sees the refill happen; the day decides
+  if(pick===0){          // a dew cup
+    M4.trs(T,0,0.058,0,0,0,0,1,1,1); tube(m,0.016,0.013,0.028,8,bone,T,0,false,false);
+    M4.trs(T,0,0.072,0,0,0,0,1,1,1); tube(m,0.014,0.014,0.004,8,water,T,0,true,true);
+  } else if(pick===1){   // a single berry
+    M4.trs(T,0,0.058,0,0,0,0,1,1,1); ball(m,0.020,8,wine,T,0,0.9);
+    M4.trs(T,0.006,0.076,-0.004,0,0.5,0,1,0.5,1); ball(m,0.009,6,leaf,T,0,0.8);
+  } else {               // a polished pebble
+    M4.trs(T,0,0.052,0,0,0.7,0,1,0.55,1); ball(m,0.022,8,peb,T,0,0.55);
+  }
+  return upload(m);
+}
 function buildNightPrints(){
   const m=MB(),T=M4.id();
   const print=hex('#9fb4d8');
@@ -6633,6 +6649,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
   if(!PROPS.some(p=>p.vprop==='nightprints')) PROPS.push({mesh:buildNightPrints(), x:24, y:38, r:0, gy:sitY(24,38)-0.04, vprop:'nightprints', cond:()=>nightNow()&&!!S.secrets.nightdoor});   // v157: home by moonlight
   if(!PROPS.some(p=>p.vprop==='mossden')) PROPS.push({mesh:buildMossDen(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'mossden'});   // v158: declined, politely
+  if(!PROPS.some(p=>p.vprop==='refill')) PROPS.push({mesh:buildRefill(), x:28.296, y:35.877, r:0, gy:sitY(28.296,35.877)-0.04, vprop:'refill', cond:()=>!nightNow()&&!!S.secrets.mossden&&!!S.secrets.nightdoor});   // v159: the saucer pays its tab
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
