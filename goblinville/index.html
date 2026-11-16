@@ -791,6 +791,8 @@ function biomeBase(x,y,c,base){
 }
 function nightNow(){ return S.dayT<0.24||S.dayT>0.76; }
 function deepNight(){ return S.dayT<0.08||S.dayT>0.92; }   // the small hours, when lamps get honest
+function lampsOut(){ return Math.floor(Date.now()/86400000)%7===0; }        // one night a week, the den is visiting
+function companyMorning(){ return Math.floor(Date.now()/86400000)%7===1; }  // the morning after: two fish
 
 function COASTR(x,y){ const ca=Math.atan2(y-MAP/2,x-MAP/2);
   const c=Math.cos(ca), sn=Math.sin(ca); let de=1e9;              // v58: the shoreline never leaves the map square
@@ -3701,6 +3703,7 @@ const INTERIORS={
         L.push('something left a thank-you on the step: a parcel, three beads, a note. the note says only: WORTH IT. the shelf has filed it under GRATEFUL, HOURLY.');
         if(S.secrets.mossden) L.push('the prints go up the ridge to the moss rocks. the door knows where its key sleeps. the door sleeps better.');
         if(S.secrets.mossden) L.push('on fishing nights a small fish appears on the step, wet and apologetic. the door has no mouth. the door keeps it anyway.');
+        if(S.secrets.mossden&&companyMorning()) L.push('two fish on the step this morning, side by side on a leaf, apologetic in duplicate. the door files the second under COMPANY. the door is quietly very pleased.');
         return L; } }},
   mossden:{land:null, r:1.6, name:'THE MOSS DEN', fpDoor:true, outdoor:true, glint:['#a8c4d8',0.8],
     fpHint:'where the prints end: a low arch beside the moss rocks, a folded leaf blanket, a saucer licked clean. face it and tap to say goodnight.',
@@ -3713,7 +3716,9 @@ const INTERIORS={
       linesFn:()=>{ const L=['the saucer is licked clean. the blanket is folded. the comforts are arranged by moonlight. house rules.',
         'no label survives the night here. the den files nothing. the den is the filing.',
         'it is no bigger than a bootbox. whatever lives in it is smaller. the arithmetic of dens.'];
-        if(deepNight()&&S.secrets.nightdoor) L.push('the hollow is warm in the small hours. the curtain is mostly drawn. the village has agreed, in writing, never to look directly. looking directly is how you lose a neighbor.');
+        if(deepNight()&&S.secrets.nightdoor) L.push(lampsOut()
+          ? 'tonight the hollow is dark and the curtain is open. the den is visiting. the village pretends not to know there is anyone to visit.'
+          : 'the hollow is warm in the small hours. the curtain is mostly drawn. the village has agreed, in writing, never to look directly. looking directly is how you lose a neighbor.');
         if(nightNow()) { L.push('the den is empty at night. the saucer is out. the ridge keeps the hour.');
           L.push('on fishing nights the dew prints go down to the river. the errand is simple: catch two, eat one, leave one on the doorstep of a friend.'); }
         else { L.push('by day the den is only an arch and a folded blanket. something small is asleep in the walls of the world.');
@@ -6107,6 +6112,14 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildTwoFish(){
+  const m=MB(),T=M4.id();
+  const dew=hex('#9fb4d8'), leaf=hex('#4a6a38');
+  M4.trs(T,0,0.016,0,0,0.4,0,1,1,1); box(m,0.26,0.018,0.16,leaf,T,0,0.8);         // served on a leaf
+  M4.trs(T,-0.065,0.045,0,0,0.4,0,1,0.4,1); ball(m,0.062,7,dew,T,0,0.85);         // two fish, side by side
+  M4.trs(T,0.065,0.045,0,0,0.4,0,1,0.4,1); ball(m,0.062,7,dew,T,0,0.85);          // apologetic in duplicate
+  return upload(m);
+}
 function buildDenGlow(){
   const m=MB(),T=M4.id();
   const ember=hex('#ffb347'), ember2=hex('#c87a2a'), cloth=hex('#7a3040');
@@ -6704,7 +6717,8 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
-  if(!PROPS.some(p=>p.vprop==='denglow')) PROPS.push({mesh:buildDenGlow(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'denglow', cond:()=>deepNight()&&!!S.secrets.mossden&&!!S.secrets.nightdoor});   // v162: the almost-seeing
+  if(!PROPS.some(p=>p.vprop==='twofish')) PROPS.push({mesh:buildTwoFish(), x:23.85, y:37.75, r:0, gy:sitY(23.85,37.75)-0.04, vprop:'twofish', cond:()=>!nightNow()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&companyMorning()});   // v163: the visitor had a friend
+  if(!PROPS.some(p=>p.vprop==='denglow')) PROPS.push({mesh:buildDenGlow(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'denglow', cond:()=>deepNight()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&!lampsOut()});   // v162: the almost-seeing
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
