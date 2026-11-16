@@ -1335,7 +1335,7 @@ function buildWell(){
   for(let i=0;i<9;i++){ const a=i/9*TAU;   // stone ring
     M4.trs(T,Math.cos(a)*0.30,0.10,Math.sin(a)*0.30,0.3,a*3,0.2,1,0.85,1);
     ball(m,0.09,6,hex(i%2?'#8b929c':'#767d88'),T,0,0.8); }
-  M4.trs(T,0,0.02,0,0,0,0,1,1,1); ball(m,0.24,8,hex('#2a3540'),T,0,1);          // dark water
+  M4.trs(T,0,0.02,0,0,0,0,1,1,1); ball(m,0.24,8,hex('#2e4a52'),T,0,1);          // dark water
   for(const sx of[-1,1]){ M4.trs(T,sx*0.34,0.34,0,0,0,0,1,1,1); tube(m,0.03,0.028,0.62,5,hex('#6b4a2c'),T,0,true,true); }
   M4.trs(T,0,0.62,0,0,0,Math.PI/2,1,1,1); tube(m,0.028,0.026,0.72,5,hex('#7a5730'),T,0,true,true);  // crossbar
   M4.trs(T,0,0.50,0,0,0,0,1,1,1); ball(m,0.07,6,hex('#5d616b'),T,0,1);          // bucket
@@ -3584,6 +3584,8 @@ const INTERIORS={
         if(S.secrets.audit) L.push('the slate gained a mark the evening the skiff landed, with a small neat flag drawn beside it. twelve plus one. the one does not know he is plus.');
         if(S.secrets.counterfiling) L.push('the second shelf keeps the Court the way the first shelf keeps the brood: nightly, in charcoal, kindly.');
         if(S.secrets.lostfound) L.push('the third shelf keeps what the village drops. things that come back are the best kind of count.');
+        if(nightNow()) L.push('the well glows faintly at night. it is counting its former things. the count is confidential. the well is discreet, and so is the filing.');
+        if(!nightNow()) L.push('a pebble sits on the well rim. the well paid for something overnight and left the change. take it and the well files YOU under FORMER. nobody takes it. the pebble is the longest-serving clerk.');
         return L; } }},
   audit:{land:null, r:2.2, name:'THE AUDIT', fpDoor:true, outdoor:true, glint:['#f2ead8',1.4],
     fpHint:'a red-sailed skiff on the shingle, a tent in the Court\u2019s colors. face the camp and tap to read the surveyor\u2019s ledger.',
@@ -5404,6 +5406,17 @@ function drawNightGlow(){
     const r=(b.key==='hall'?34:22)*fl*zs;
     ctx.fillStyle='rgba(255,190,90,'+(0.20*a*fl).toFixed(3)+')';
     ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill(); }
+  const wg=PROPS.find(p=>p.vprop==='wellglow');
+  if(wg&&(!wg.cond||wg.cond())){
+    const sp=projPt(wg.x,(wg.gy||0)+0.30,wg.y);
+    if(sp){
+      const fl=0.8+0.2*Math.sin(G.t*2.3);  // the counting is slow
+      const r=34*fl*zs;
+      const g=ctx.createRadialGradient(sp[0],sp[1],2,sp[0],sp[1],r);
+      g.addColorStop(0,'rgba(190,220,255,'+(0.34*a*fl).toFixed(3)+')'); g.addColorStop(1,'rgba(140,180,255,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
+    }
+  }
   ctx.restore();
 }
 function drawGhostHint(){
@@ -6239,6 +6252,28 @@ function buildMarketRaft(){
   M4.trs(T,0.0,raftY+0.055,0.11,0,0,0,1,0.7,1); ball(m,0.018,7,stone,T,0,0.85);
   return upload(m);
 }
+function buildWellDressing(){
+  const m=MB(),T=M4.id();
+  const slate=hex('#4a4640'), chalk=hex('#e0d4b4'), bone=hex('#e0d4b4'), wood=hex('#6b4a2c');
+  M4.trs(T,0.34,0.14,-0.34,-0.24,2.36,0,1,1,1); box(m,0.16,0.22,0.014,slate,T,0,0.8);  // the slate: FORMER THINGS, BELOW
+  M4.trs(T,0.34,0.185,-0.326,-0.24,2.36,0,1,1,1); box(m,0.10,0.014,0.006,chalk,T,0,0.9);
+  M4.trs(T,0.15,0.575,0.03,0,0,0,1,1,1); box(m,0.012,0.09,0.012,wood,T,0,0.8);      // the ladle, bowed to by envoys
+  M4.trs(T,0.15,0.52,0.03,0,0,0,1,1,1); tube(m,0.028,0.020,0.024,7,bone,T,0,true,true);
+  return upload(m);
+}
+function buildWellGlow(){
+  const m=MB(),T=M4.id();
+  const glow=hex('#b8ccea'), core=hex('#e8f0fc');  // dew-silver: the light of counted things
+  M4.trs(T,0,0.24,0,0,0,0,1,0.45,1); ball(m,0.16,9,glow,T,0,1);                   // the well counts its former things
+  M4.trs(T,0,0.27,0,0,0,0,1,0.45,1); ball(m,0.10,9,core,T,0,1);                   // the counting glows faintly, as counting does
+  return upload(m);
+}
+function buildWellPebble(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#7a7266');
+  M4.trs(T,0.31,0.185,0.03,0,0,0,1,0.7,1); ball(m,0.018,7,stone,T,0,0.85);         // the change, unclaimed
+  return upload(m);
+}
 function buildRestDay(){
   const m=MB(),T=M4.id();
   const slate=hex('#4a4640'), chalk=hex('#e0d4b4'), cloth=hex('#7a3040'), wood=hex('#3a2a1a');
@@ -6975,6 +7010,10 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='restday')) PROPS.push({mesh:buildRestDay(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'restday', cond:()=>!!S.secrets.counterfiling&&restDay()});   // v170: the empty day is the fullest one
+  { const w=PROPS.find(p=>p.well);
+    if(w&&!PROPS.some(p=>p.vprop==='welldress')) PROPS.push({mesh:buildWellDressing(), x:w.x, y:w.y, r:0, gy:w.gy, vprop:'welldress'});              // v171: FORMER THINGS, BELOW
+    if(w&&!PROPS.some(p=>p.vprop==='wellglow')) PROPS.push({mesh:buildWellGlow(), x:w.x, y:w.y, r:0, gy:w.gy, vprop:'wellglow', cond:()=>nightNow()});   // v171: the well counts its former things
+    if(w&&!PROPS.some(p=>p.vprop==='wellpaid')) PROPS.push({mesh:buildWellPebble(), x:w.x, y:w.y, r:0, gy:w.gy, vprop:'wellpaid', cond:()=>!nightNow()}); }   // v171: the well is a customer
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
   if(!PROPS.some(p=>p.vprop==='annexdoor')) PROPS.push({mesh:buildAnnexDoor(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'annexdoor', cond:()=>!(!!S.secrets.solstice&&nightNow()&&readingNight())});   // v167: the archive's public face
   if(!PROPS.some(p=>p.vprop==='readingnight')) PROPS.push({mesh:buildReadingNight(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'readingnight', cond:()=>!!S.secrets.solstice&&nightNow()&&readingNight()});   // v168: the door stands open
