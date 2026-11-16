@@ -3434,6 +3434,7 @@ const INTERIORS={
         'six flames, drawn small. beside them, a seventh mark. no flame above it: a door.',
         'it counted the springs first, before anyone. it was waiting for someone to keep them.'];
         if(S.secrets.undercount) L.push('a second count has started under the village, in charcoal, by goblins. the eye approves. goblins are legible.');
+        if(S.secrets.counterfiling) L.push('the eye counts what burns. the brood files what counts. the eye is filed under WATCHES, fondly.');
         return L; } }},
   springs:{land:null, r:1.8, room:[25,40.5], name:'THE FIRST SPRING',
     blurb:'the water was warm before anyone thought to thank it',
@@ -3572,6 +3573,7 @@ const INTERIORS={
         if(S.secrets.manifest) L.push('seven stones keep the crew’s count. the slate keeps the living one. neither asked the Court to check their arithmetic.');
         if(S.secrets.court) L.push('when the Court comes it will count twelve, because its paper says twelve. the cellar will say otherwise. the cellar is right.');
         if(S.secrets.audit) L.push('the slate gained a mark the evening the skiff landed, with a small neat flag drawn beside it. twelve plus one. the one does not know he is plus.');
+        if(S.secrets.counterfiling) L.push('the second shelf keeps the Court the way the first shelf keeps the brood: nightly, in charcoal, kindly.');
         return L; } }},
   audit:{land:null, r:2.2, name:'THE AUDIT', fpDoor:true, outdoor:true, glint:['#f2ead8',1.4],
     fpHint:'a red-sailed skiff on the shingle, a tent in the Court\u2019s colors. face the camp and tap to read the surveyor\u2019s ledger.',
@@ -3590,6 +3592,27 @@ const INTERIORS={
         if(S.secrets.wreck) L.push('the surveyor paced the wreck twice and filed it under EVIDENCE, then under WEATHER, then under STONE.');
         if(S.secrets.undercount) L.push('the cellar slate gained a mark the evening the skiff landed, with a small neat flag beside it. twelve plus one. the one does not know he is plus.');
         if(S.secrets.chart) L.push('the surveyor\u2019s map shows a blank where the watch-post stands. the sky-readers are filed under MYTH. the iris is not.');
+        if(S.secrets.counterfiling) L.push('some mornings the camp is one peg short, filed neatly under NOTHING MISSING. the surveyor has not noticed. the surveyor is thorough.');
+        return L; } }},
+  counterfiling:{land:null, r:1.7, room:[31,34.5], name:'THE COUNTER-FILING', fpDoor:true,
+    fpHint:'a low stone drawer in the bank past the hatch, a bead for a handle. face it and tap to pull the file.',
+    blurb:'the surveyor files the beach. the brood files the surveyor.',
+    doorFn:()=>[SITE.x-3.9, SITE.y+5.9],
+    build:()=>buildCounterFilingRoom(),
+    interact:{dx:0, dz:-1.45, dd:3.5, ang:0.55, key:'counterfiling', sparkY:1.0, spark:'#d8cfb0', spark2:'#b04858',
+      first:{b:['THE COUNTER-FILING','the surveyor files the beach. the brood files the surveyor. the shelf is new; the habit is not.'],
+        c:'Three nights after the skiff first grounded, the undercount opened a second shelf, because the brood does not argue with audits - it files them. Filed, in charcoal and kindness: one tent peg (pulled up, kept politely), one bead from the counting-frame (THE COUNT), one rubbing of the warrant\u2019s seal (THE WARRANT, AGAIN), one page copied in charcoal and corrected once, kindly (POPULATION), and one knot of weed (WEATHER). The Court counts the world. The brood counts the Court. Everyone is filed. Everyone is fine.', say:9},
+      linesFn:()=>{ const L=['the files are flat stones, swept, stacked, and labeled in charcoal. the labels are polite. the labels are always polite.',
+        'the tent peg is tagged: ONE (1), PEG, COURT-ISSUE, RETURNED BY. the brood keeps what the tide brings. the brood files it.',
+        'the bead is filed as THE COUNT. it is one bead. it is the only honest number the Court has landed yet.'];
+        if(S.secrets.undercount) L.push('the undercount keeps the living count one shelf up. this shelf keeps the Court. two shelves, one arithmetic.');
+        if(S.secrets.audit) L.push('the surveyor counted the stones and filed the stones as population. the brood counted the surveyor and filed him under PLUS ONE. the flag is drawn beside the mark, politely.');
+        if(S.secrets.strongbox) L.push('the rubbing of the warrant\u2019s seal is labeled THE WARRANT, AGAIN. the brood has read it. the brood has filed it. the brood has filed the filing.');
+        if(S.secrets.bell) L.push('the knot of weed is filed as WEATHER. the bell approves. the bell has been weather for years.');
+        if(S.secrets.manifest) L.push('the stones are filed by the sea. the sea is filed by the Court. the Court is filed here. the drawer is small but it is complete.');
+        if(S.secrets.court) L.push('when the Court comes it will count twelve and be counted once. the shelf has room. the shelf always has room.');
+        if(S.secrets.wreck) L.push('the second ship is filed under EVIDENCE, then WEATHER, then STONE. this shelf has a fourth folder: OURS.');
+        if(S.secrets.chart) L.push('the sky-readers watch the sea. this shelf watches what the sea brings back. both counts are kept nightly.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6086,6 +6109,99 @@ function buildUndercountRoom(){
   orb(1.35,0.42,0.3,0.3,earth2,0.75); orb(1.35,0.60,0.3,0.22,earth,0.75);
   return upload(m);
 }
+// v151: THE COUNTER-FILING - the brood does not argue with audits; it files them.
+// A second shelf off the undercount: the Court, filed nightly, in charcoal, kindly.
+function buildFilingDrawer(){
+  const m=MB(),T=M4.id();
+  const turf=hex('#3a5a30'), turf2=hex('#2e4a26'), stone=hex('#5a5348'), stone2=hex('#4a4640'),
+        bone=hex('#e0d4b4'), charcoal=hex('#14100a'), berry=hex('#b04858'), stem=hex('#d8cfb0'), cap=hex('#a89060');
+  // the bank: a low turf bump, humbler than the hatch's mound
+  M4.trs(T,0,0.08,0,0,0,0,1,0.5,1); ball(m,0.62,9,turf,T,0,0.55);
+  M4.trs(T,0.1,0.24,-0.06,0,0,0,1,0.5,1); ball(m,0.4,8,turf2,T,0,0.6);
+  // the drawer front, stone, set square into the bank
+  M4.trs(T,0,0.20,0.52,-0.18,0,0,1,1,1); box(m,0.60,0.34,0.06,stone,T,0,0.62);
+  M4.trs(T,0,0.20,0.555,-0.18,0,0,1,1,1); box(m,0.50,0.24,0.02,stone2,T,0,0.7);   // the drawer face
+  M4.trs(T,0,0.42,0.46,0,0,0,1,1,1); box(m,0.70,0.08,0.12,stone2,T,0,0.7);        // the lintel
+  M4.trs(T,0,0.02,0.62,0,0,0,1,1,1); box(m,0.5,0.06,0.24,stone,T,0,0.7);          // the step
+  // a bead for a handle: THE COUNT, on a stem
+  M4.trs(T,0,0.20,0.60,-0.18,0,0,1,1,1); box(m,0.02,0.05,0.02,stem,T,0,0.85);
+  M4.trs(T,0,0.24,0.615,0,0,0,1,1,1); ball(m,0.035,8,bone,T,0,0.9);
+  // the small polite flag, drawn above the lintel - the mark of the counter-filing
+  M4.trs(T,0.14,0.50,0.47,0,0,0.0,1,1,1); box(m,0.012,0.09,0.012,charcoal,T,0,0.85);
+  M4.trs(T,0.175,0.525,0.47,0,0,0,1,1,1); box(m,0.06,0.035,0.012,berry,T,0,0.85);
+  // two mushrooms for the night clerk
+  for(const mx of[[-0.42,0.30],[0.44,0.18]]){
+    M4.trs(T,mx[0],0.06,mx[1],0,0,0,1,1,1); box(m,0.025,0.07,0.025,stem,T,0,0.8);
+    M4.trs(T,mx[0],0.115,mx[1],0,0,0,1,0.6,1); ball(m,0.045,7,cap,T,0,0.85); }
+  return upload(m);
+}
+function buildCounterFilingRoom(){
+  const m=MB(),T=M4.id();
+  const earth=hex('#2a1e12'), earth2=hex('#221810'), dark=hex('#14100a'), chalk=hex('#e0d4b4'), ochre=hex('#c8a45c'),
+        berry=hex('#b04858'), slate=hex('#4a4640'), stump=hex('#4a3a26'), root=hex('#1a120a'),
+        glow=hex('#ffc46b'), board=hex('#cfc4a8'), charcoal=hex('#14100a'), bone=hex('#e0d4b4'),
+        iron=hex('#2e3134'), weed=hex('#2c4634'), bark=hex('#6b4a32'), wax=hex('#a32436');
+  const bx=(x,y,z,w,h,d,c,ao)=>{ M4.trs(T,x,y+h/2,z,0,0,0,1,1,1); box(m,w,h,d,c,T,0,ao===undefined?0.62:ao); };
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: packed earth, swept nightly
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,earth2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#1c140c'),T,0,true,false);
+  // walls: cellar earth, with FILE SHELVES - ledges and stacked flat stones
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.6,0.28,i%2?earth:earth2,T,0,0.62); }
+  M4.trs(T,0,1.46,2.05,0,0,0,1,1,1); box(m,1.35,0.26,0.3,earth2,T,0,0.62);      // door lintel
+  for(let s2=0;s2<10;s2++){ const a=(s2*0.63)%1*TAU;                              // the shelves, ten of them
+    if(Math.abs(((a+Math.PI/2)%TAU)-Math.PI/2)<0.55) continue;                    // keep the door side clear
+    const sx=Math.cos(a)*1.86, sz=Math.sin(a)*1.86, ya=0.66+(s2%3)*0.30, rot=a+Math.PI/2;
+    M4.trs(T,sx,ya,sz,0,rot,0,1,1,1); box(m,0.5,0.03,0.16,stump,T,0,0.7);         // the ledge
+    const nf=2+(s2%3);
+    for(let f2=0;f2<nf;f2++){ M4.trs(T,sx-0.14+f2*0.11,ya+0.045+f2*0.004,sz,0.06*(f2%2?1:-1),rot,0,1,1,1); box(m,0.09,0.025,0.13,f2%2?slate:board,T,0,0.8); }
+    M4.trs(T,sx+0.17,ya+0.05,sz,0,rot,0,1,1,1); box(m,0.03,0.05,0.012,charcoal,T,0,0.85);  // the label, polite
+  }
+  // roof: low cellar boards and hanging roots; one root holds the light
+  M4.trs(T,0,1.66,0,0,0,0,1,1,1); tube(m,2.10,1.86,0.5,14,earth2,T,0,true,true);
+  M4.trs(T,0,2.06,0,0,0,0,1,1,1); tube(m,1.5,1.26,0.45,12,dark,T,0,true,true);
+  for(let i=0;i<14;i++){ const a=i/14*TAU;
+    M4.trs(T,Math.cos(a)*2.72,2.3,Math.sin(a)*2.72,0,a+Math.PI/2,0,1,1,1); box(m,1.35,4.8,0.2,hex('#0e0a06'),T,0,0.55); }
+  M4.trs(T,0,4.7,0,0,0,0,1,1,1); box(m,7.5,0.4,7.5,hex('#0e0a06'),T,0,0.55);
+  for(let n2=0;n2<10;n2++){ const a=(n2*0.783)%1*TAU, rr=1.2+(n2%3)*0.35, len=0.22+(n2%4)*0.12;
+    M4.trs(T,Math.cos(a)*rr,1.64-len/2,Math.sin(a)*rr,0.06*(n2%3-1),0,0.08*(n2%2?1:-1),1,1,1);
+    box(m,0.028,len,0.028,root,T,0,0.7); }
+  M4.trs(T,-0.8,1.45,-0.5,0,0,-0.05,1,1,1); box(m,0.02,0.4,0.02,root,T,0,0.7);
+  orb(-0.8,1.2,-0.52,0.05,glow,1.0); orb(-0.8,1.2,-0.52,0.028,hex('#ffe9a8'),1.0);
+  // THE FILE TABLE: the Court, filed nightly
+  bx(-0.42,0.26,-1.5,0.12,0.5,0.34,stump,0.75); bx(0.42,0.26,-1.5,0.12,0.5,0.34,stump,0.75);
+  M4.trs(T,0,0.80,-1.5,-0.35,0,0,1,1,1); box(m,1.3,0.09,0.7,slate,T,0,0.8);
+  // the current file, open: POPULATION, copied in charcoal, corrected once, kindly
+  M4.trs(T,-0.28,0.855,-1.42,-0.35,0,0,1,1,1); box(m,0.56,0.02,0.42,board,T,0,0.85);
+  for(let r2=0;r2<2;r2++) for(let s=0;s<6;s++){ M4.trs(T,-0.44+s*0.062,0.872+r2*0.045,-1.33,-0.35,0,0,1,1,1); box(m,0.014,0.01,0.09,chalk,T,0,0.9); }
+  M4.trs(T,-0.28,0.905,-1.35,-0.35,0.7,0,1,1,1); box(m,0.02,0.012,0.60,charcoal,T,0,0.9);   // crossed through once, kindly
+  M4.trs(T,-0.50,0.885,-1.55,-0.35,0,0.3,1,1,1); box(m,0.012,0.008,0.07,charcoal,T,0,0.9);  // the small polite flag, drawn beside
+  M4.trs(T,-0.485,0.895,-1.55,-0.35,0,0.3,1,1,1); box(m,0.05,0.008,0.03,berry,T,0,0.9);
+  // the stack of closed files, fanned and labeled
+  for(let f2=0;f2<5;f2++){ M4.trs(T,0.34,0.855+f2*0.022,-1.52+f2*0.012,-0.35,0.05*(f2-2),0,1,1,1); box(m,0.42,0.02,0.3,f2%2?board:slate,T,0,0.85); }
+  M4.trs(T,0.34,0.97,-1.38,-0.35,0,0,1,1,1); box(m,0.05,0.012,0.02,berry,T,0,0.9);           // the top file's tab
+  // THE COUNT: one bead, on its own little plinth
+  bx(-0.95,0.26,-1.05,0.14,0.42,0.14,stump,0.75);
+  M4.trs(T,-0.95,0.50,-1.05,0,0,0,1,1,1); box(m,0.10,0.03,0.10,slate,T,0,0.8);
+  orb(-0.95,0.545,-1.05,0.035,bone,1.0);
+  // the TENT PEG, kept politely, with its tag
+  M4.trs(T,1.25,0.35,-0.9,0,0,0.3,1,1,1); box(m,0.035,0.7,0.035,iron,T,0,0.6);
+  M4.trs(T,1.25,0.66,-0.99,0,0,0.3,1,1,1); box(m,0.012,0.14,0.012,bone,T,0,0.85);            // the string
+  M4.trs(T,1.25,0.60,-1.02,0,0,0.35,1,1,1); box(m,0.06,0.045,0.012,board,T,0,0.85);          // the tag
+  M4.trs(T,1.25,0.60,-1.028,0,0,0.35,1,1,1); box(m,0.03,0.012,0.008,charcoal,T,0,0.9);
+  // THE WARRANT, AGAIN: the rubbing, bark and wax
+  M4.trs(T,1.05,0.55,-1.5,-0.3,0,0,1,1,1); tube(m,0.24,0.24,0.03,10,bark,T,0,true,true);
+  M4.trs(T,1.05,0.585,-1.47,-0.3,0,0,1,0.4,1); ball(m,0.075,8,wax,T,0,0.85);
+  // WEATHER: one knot of weed, dried, in a stone cup
+  M4.trs(T,1.5,0.34,-0.35,0,0,0,1,1,1); tube(m,0.13,0.10,0.16,9,slate,T,0,true,false);
+  orb(1.5,0.42,-0.35,0.075,weed,0.8); orb(1.47,0.46,-0.33,0.045,weed,0.8);
+  // the night clerk's stool, worn smooth
+  orb(1.35,0.38,0.3,0.26,earth2,0.75); orb(1.35,0.52,0.3,0.19,earth,0.75);
+  return upload(m);
+}
+
 function buildShrine(){
   const m=MB(),T=M4.id();
   const stone=hex('#7d8694'), stone2=hex('#5d6675'), bone=hex('#e8ecef'), salt=hex('#dfe6ea'),
@@ -6225,6 +6341,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='strongbox')) PROPS.push({mesh:buildStrongbox(), x:-24.2, y:-187.7, r:1.9, far:'strongbox', ride:-0.10});   // v148: what the sea respected
   if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
+  if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
