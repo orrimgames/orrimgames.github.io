@@ -3697,6 +3697,26 @@ const INTERIORS={
         if(S.secrets.scenicroute) L.push('the shoe walked past it once, at night. the shoe declines to elaborate. the shoe is learning from the door.');
         if(S.secrets.receipt) L.push('the sea loses nothing. the door admits nothing. between them, the world keeps its accounts.');
         L.push('something left a thank-you on the step: a parcel, three beads, a note. the note says only: WORTH IT. the shelf has filed it under GRATEFUL, HOURLY.');
+        if(S.secrets.mossden) L.push('the prints go up the ridge to the moss rocks. the door knows where its key sleeps. the door sleeps better.');
+        return L; } }},
+  mossden:{land:null, r:1.6, name:'THE MOSS DEN', fpDoor:true, outdoor:true, glint:['#a8c4d8',0.8],
+    fpHint:'where the prints end: a low arch beside the moss rocks, a folded leaf blanket, a saucer licked clean. face it and tap to say goodnight.',
+    blurb:'whatever uses the night door lives here. it does not file things. the label was folded into the bedding, which everyone agrees is an answer.',
+    doorFn:()=>[28.3,35.6],
+    interact:{dx:0, dz:0, dd:2.8, ang:0.6, key:'mossden', sparkY:0.4, spark:'#a8c4d8', spark2:'#6a7c94',
+      tone:[[262,0.3,{type:'sine',vol:0.16}],[131,0.8,{type:'sine',vol:0.12,delay:0.06}]],
+      first:{b:['DECLINED, POLITELY','the prints end at a small den beside the moss rocks: a low arch, a leaf blanket, a spool, a saucer licked clean. someone small lives here. the undercount left a label once. by morning it was folded into the bedding.'],
+        c:'Whatever uses the night door lives here, in a den no bigger than a bootbox, beside the moss rocks on the rise. It is house-proud in the small ways: the leaf blanket is folded, the saucer is licked clean, and the comforts by the arch - one spool, one button, one bead - are arranged by how much they catch the moon. It does not file things. The undercount left a label once, neatly, where labels go; by morning it was folded into the bedding, which everyone agrees is an answer. The village has stopped asking what it is. It returns the key by dawn, it says thank you in parcels, and it walks home up the ridge by moonlight. Some things the shelf cannot hold. The shelf has made its peace. The shelf leaves the good chalk out, in case.', say:9},
+      linesFn:()=>{ const L=['the saucer is licked clean. the blanket is folded. the comforts are arranged by moonlight. house rules.',
+        'no label survives the night here. the den files nothing. the den is the filing.',
+        'it is no bigger than a bootbox. whatever lives in it is smaller. the arithmetic of dens.'];
+        if(nightNow()) L.push('the den is empty at night. the saucer is out. the ridge keeps the hour.');
+        else L.push('by day the den is only an arch and a folded blanket. something small is asleep in the walls of the world.');
+        if(S.secrets.nightdoor) L.push('it borrows the key hourly and returns it warm. the door does not mind. the door is family.');
+        if(S.secrets.lostfound) L.push('the comforts by the arch were never reported missing. the shelf knows. the shelf says nothing. the third shelf keeps its counsel.');
+        if(S.secrets.undercount) L.push('the undercount counts the village nightly and finds it one short. the slate has a margin for this. the margin is den-shaped.');
+        if(S.secrets.scenicroute) L.push('the shoe rests on its cairn, one ridge over. the shoe and the den have an arrangement about the moon.');
+        if(S.secrets.bell) L.push('the bell has rung once at night, softly, at nothing anyone saw. the den did not comment. the bell did not repeat it.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6061,6 +6081,24 @@ function buildReceipt(){
   farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
   return upload(m);
 }
+function buildMossDen(){
+  const m=MB(),T=M4.id();
+  const stone2=hex('#6d7490'), dark=hex('#14100a'), moss=hex('#3a5a30'), leaf=hex('#4a6a38'),
+        bone=hex('#e0d4b4'), ochre=hex('#c8a45c'), brass=hex('#d8a94f');
+  M4.trs(T,-0.14,0.14,0,0,0,0,1,1,1); box(m,0.05,0.28,0.07,stone2,T,0,0.6);        // the arch, low
+  M4.trs(T,0.14,0.14,0,0,0,0,1,1,1); box(m,0.05,0.28,0.07,stone2,T,0,0.6);
+  M4.trs(T,0,0.31,0,0,0,0,1,1,1); box(m,0.36,0.06,0.08,stone2,T,0,0.6);
+  M4.trs(T,0,0.15,0.028,0,0,0,1,1,1); box(m,0.24,0.26,0.02,dark,T,0,0.85);          // the hollow
+  M4.trs(T,0,0.035,0.16,0,0.15,0,1,1,1); box(m,0.22,0.03,0.16,leaf,T,0,0.8);        // the leaf blanket, folded
+  M4.trs(T,0.02,0.058,0.16,0,0.15,0,1,1,1); box(m,0.14,0.02,0.12,leaf,T,0,0.8);
+  M4.trs(T,0.24,0.025,0.14,0,0,0,1,1,1); tube(m,0.07,0.07,0.012,9,bone,T,0,true,true);  // the saucer, licked clean
+  M4.trs(T,-0.24,0.045,0.12,0,0,0,1,1,1); tube(m,0.028,0.028,0.07,8,ochre,T,0,true,false); // one spool
+  M4.trs(T,-0.24,0.095,0.12,0,0,0,1,1,1); tube(m,0.030,0.030,0.010,8,brass,T,0,true,false); // one button, borrowed, never reported
+  M4.trs(T,-0.13,0.02,0.24,0,0,0,1,1,1); ball(m,0.022,7,bone,T,0,0.9);              // one bead
+  M4.trs(T,-0.17,0.30,0,0,0.4,0,1,0.6,1); ball(m,0.055,8,moss,T,0,0.7);             // moss, at home
+  M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
+  return upload(m);
+}
 function buildNightPrints(){
   const m=MB(),T=M4.id();
   const print=hex('#9fb4d8');
@@ -6594,6 +6632,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
   if(!PROPS.some(p=>p.vprop==='nightprints')) PROPS.push({mesh:buildNightPrints(), x:24, y:38, r:0, gy:sitY(24,38)-0.04, vprop:'nightprints', cond:()=>nightNow()&&!!S.secrets.nightdoor});   // v157: home by moonlight
+  if(!PROPS.some(p=>p.vprop==='mossden')) PROPS.push({mesh:buildMossDen(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'mossden'});   // v158: declined, politely
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
