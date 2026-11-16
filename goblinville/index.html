@@ -3702,6 +3702,7 @@ const INTERIORS={
         'it is always locked by morning. whatever visits is punctual, polite, and not saying.'];
         if(nightNow()) L.push('tonight the seam around the door is warm to the touch. the key is out. the ledger says: back by dawn.');
         if(nightNow()) L.push('by moonlight, small prints lead home from the step. they are not goblin prints. they are not unkind.');
+        if(nightNow()) L.push('watch long enough and the moon walks the prints one at a time, uphill, home. the moon is in no hurry. neither is the moon.');
         else L.push('by daylight the door is only a door. the keyhole glints. the glint is smug.');
         if(S.secrets.lostfound) L.push('the key is filed TO NOTHING. the door is filed NOTHING, ADMITTED BY NO ONE. the filing agrees with itself.');
         if(S.secrets.undercount) L.push('the undercount counted the door once. one door, zero walls, zero admissions. the slate was pleased with the arithmetic.');
@@ -5426,6 +5427,20 @@ function drawNightGlow(){
       const r=44*fl*zs;                          // bootbox-scale, but it carries
       const g=ctx.createRadialGradient(sp[0],sp[1],2,sp[0],sp[1],r);
       g.addColorStop(0,'rgba(255,196,110,'+(0.55*a*fl).toFixed(3)+')'); g.addColorStop(1,'rgba(255,150,60,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
+    }
+  }
+  const np=PROPS.find(p=>p.vprop==='nightprints');
+  if(np&&(!np.cond||np.cond())){
+    const ndx=0.894, ndy=-0.447, npx=-ndy, npy=ndx;              // the trail's own arithmetic
+    for(let i=0;i<10;i++){ const k=0.45+i*0.45, side=(i%2?1:-1)*0.08;
+      const wx=np.x+0.4+ndx*k+npx*side, wz=np.y-0.45+ndy*k+npy*side;
+      const sp=projPt(wx,sitY(wx,wz)+0.06,wz); if(!sp) continue;
+      const ph=0.5+0.5*Math.sin(G.t*0.9-i*0.7);                  // the moon walks them home, one at a time
+      if(ph<0.25) continue;
+      const r=(10+10*ph)*zs;
+      const g=ctx.createRadialGradient(sp[0],sp[1],1,sp[0],sp[1],r);
+      g.addColorStop(0,'rgba(196,220,255,'+(0.30*a*ph).toFixed(3)+')'); g.addColorStop(1,'rgba(150,190,255,0)');
       ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
     }
   }
