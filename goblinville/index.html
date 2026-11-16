@@ -3695,6 +3695,7 @@ const INTERIORS={
         if(S.secrets.vampire) L.push('the count knows the door. he will not admit to it either. it is the one thing he and the village agree on.');
         if(S.secrets.scenicroute) L.push('the shoe walked past it once, at night. the shoe declines to elaborate. the shoe is learning from the door.');
         if(S.secrets.receipt) L.push('the sea loses nothing. the door admits nothing. between them, the world keeps its accounts.');
+        L.push('something left a thank-you on the step: a parcel, three beads, a note. the note says only: WORTH IT. the shelf has filed it under GRATEFUL, HOURLY.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -4474,7 +4475,7 @@ function drawWorldStatics(prog, noCrops){
   if(RIMLIP) drawStatic(prog, RIMLIP, MODEL);
   if(BOATM&&S.boat){ ballMat(MODEL,S.boat.x,S.boat.y,0.10+Math.sin(G.t*1.2)*0.05,S.boat.yaw+Math.sin(G.t*0.5)*0.05); drawStatic(prog,BOATM,MODEL); }
   if(BOATM&&S.sail){ const ss2=S.sail; ballMat(MODEL,ss2.x,ss2.y,0.10+Math.sin(G.t*1.4)*0.05,ss2.hdg); drawStatic(prog,BOATM,MODEL); }
-  for(const p of PROPS){ if(!p.mesh) continue; if(p.far){ landMat(MODEL,p.x,p.y,p.ride||0,p.r||0); drawStatic(prog,p.mesh,MODEL); continue; } M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
+  for(const p of PROPS){ if(!p.mesh||(p.cond&&!p.cond())) continue; if(p.far){ landMat(MODEL,p.x,p.y,p.ride||0,p.r||0); drawStatic(prog,p.mesh,MODEL); continue; } M4.trs(MODEL,p.x,p.gy||0,p.y,0,p.r||0,0,1,1,1); drawStatic(prog,p.mesh,MODEL); }
   if(S.wilds) for(const w of S.wilds){ if(w.hide||w.den) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v43 giants & wolves
   if(S.peoples) for(const w of S.peoples){ if(w.hide) continue; M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,w.tl||0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v48: the peoples keep their seats
   if(S.savages) for(const w of S.savages){ M4.trs(MODEL,w.x,(w.gy||0)+(w.bob||0),w.y,0,w.a||0,0,1,1,1); drawStatic(prog,w.mesh,MODEL); }   // v68: savages roam, seat on the same surface
@@ -6059,6 +6060,19 @@ function buildReceipt(){
   farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
   return upload(m);
 }
+function buildDoorGift(){
+  const m=MB(),T=M4.id();
+  const cloth=hex('#7a3040'), ochre=hex('#c8a45c'), bone=hex('#e0d4b4'), chalk=hex('#e0d4b4'), dark=hex('#14100a'), berry=hex('#b04858');
+  M4.trs(T,0,0.045,0,0,0.3,0,1,1,1); box(m,0.10,0.07,0.08,cloth,T,0,0.8);          // a parcel, small
+  M4.trs(T,0,0.082,0,0,0.3,0,1,1,1); box(m,0.105,0.012,0.02,ochre,T,0,0.85);       // tied with string
+  M4.trs(T,0,0.045,0,0,0.3,0,1,1,1); box(m,0.02,0.075,0.085,ochre,T,0,0.85);
+  M4.trs(T,0.11,0.025,0.06,0,0,0,1,1,1); ball(m,0.026,7,bone,T,0,0.9);             // three beads
+  M4.trs(T,0.15,0.025,0.02,0,0,0,1,1,1); ball(m,0.026,7,berry,T,0,0.9);
+  M4.trs(T,0.11,0.025,-0.03,0,0,0,1,1,1); ball(m,0.026,7,ochre,T,0,0.9);
+  M4.trs(T,-0.10,0.015,0.05,0,0.5,0,1,1,1); box(m,0.09,0.008,0.07,chalk,T,0,0.9);  // a note, folded once
+  M4.trs(T,-0.10,0.021,0.056,0,0.5,0,1,1,1); box(m,0.06,0.005,0.008,dark,T,0,0.9);
+  return upload(m);
+}
 function buildNightDoor(){
   const m=MB(),T=M4.id();
   const stone=hex('#8d94ac'), stone2=hex('#6d7490'), wood=hex('#3a2a1a'), iron=hex('#232527'),
@@ -6565,6 +6579,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
+  if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
