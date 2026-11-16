@@ -3688,6 +3688,7 @@ const INTERIORS={
         'the key checks out at dusk and returns by dawn, slightly warm. the shelf does not ask. the shelf is learning.',
         'it is always locked by morning. whatever visits is punctual, polite, and not saying.'];
         if(nightNow()) L.push('tonight the seam around the door is warm to the touch. the key is out. the ledger says: back by dawn.');
+        if(nightNow()) L.push('by moonlight, small prints lead home from the step. they are not goblin prints. they are not unkind.');
         else L.push('by daylight the door is only a door. the keyhole glints. the glint is smug.');
         if(S.secrets.lostfound) L.push('the key is filed TO NOTHING. the door is filed NOTHING, ADMITTED BY NO ONE. the filing agrees with itself.');
         if(S.secrets.undercount) L.push('the undercount counted the door once. one door, zero walls, zero admissions. the slate was pleased with the arithmetic.');
@@ -6060,6 +6061,18 @@ function buildReceipt(){
   farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
   return upload(m);
 }
+function buildNightPrints(){
+  const m=MB(),T=M4.id();
+  const print=hex('#9fb4d8');
+  const dx=0.894, dy=-0.447, px=-dy, py=dx;                                   // up the dry ridge, northeast
+  const base=sitY(24,38)-0.04;                                                // the prop's gy, known at build time
+  for(let i=0;i<10;i++){ const k=0.45+i*0.45, side=(i%2?1:-1)*0.08;
+    const wx=0.4+dx*k+px*side, wz=-0.45+dy*k+py*side;
+    M4.trs(T,wx,sitY(24+wx,38+wz)+0.004-base,wz,0,Math.atan2(dx,dy),0,1,0.3,1);
+    ball(m,0.062,7,print,T,0,0.95);                                           // small prints, silvered with dew
+  }
+  return upload(m);
+}
 function buildDoorGift(){
   const m=MB(),T=M4.id();
   const cloth=hex('#7a3040'), ochre=hex('#c8a45c'), bone=hex('#e0d4b4'), chalk=hex('#e0d4b4'), dark=hex('#14100a'), berry=hex('#b04858');
@@ -6580,6 +6593,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
+  if(!PROPS.some(p=>p.vprop==='nightprints')) PROPS.push({mesh:buildNightPrints(), x:24, y:38, r:0, gy:sitY(24,38)-0.04, vprop:'nightprints', cond:()=>nightNow()&&!!S.secrets.nightdoor});   // v157: home by moonlight
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
