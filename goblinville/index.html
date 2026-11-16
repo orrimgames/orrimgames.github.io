@@ -3622,6 +3622,7 @@ const INTERIORS={
         if(S.secrets.receipt) L.push('the stamped stone sits on the shelf of honor. it is the only file the Court has ever signed. it is filed under CORRESPONDENCE.');
         if(S.secrets.lostfound) L.push('the stump by the path is the village branch of this shelf. the everyday files itself, eventually. the Court should be so organized.');
         if(S.secrets.mossden) L.push('the office has opened a second drawer, nearer the subject: DENS, CONTENTS OF: WARM. the drawer moves one drawer closer every week. everyone pretends not to notice. the filing is fond.');
+        if(S.secrets.solstice) L.push('the low round door is the overflow. the fond labels are kept standing up in there. the drawer is proud of the archive and files the pride under OVERHEAD.');
         return L; } }},
   receipt:{land:null, r:2.0, name:'THE RECEIPT', fpDoor:true, outdoor:true, glint:['#e8d9a8',0.6],
     fpHint:'a waxed dispatch tube on the shingle, come back on the tide. beside it, one of the brood\u2019s own files, stamped. face it and tap to read what came back.',
@@ -3768,6 +3769,24 @@ const INTERIORS={
         if(S.secrets.undercount) L.push('TEXTILES, ONGOING. NOBODY\'S, CEREMONIAL. both entries are read aloud at the solstice. the solstice is well attended.');
         if(S.secrets.scenicroute) L.push('the shoe watches the line from its cairn. the shoe and the enormous shirt are the village\'s two great singletons. they have never met. the village respects this.');
         if(S.secrets.lostfound) L.push('the third shelf once held a second enormous shirt, briefly. it was claimed by nobody, instantly, with great ceremony.');
+        return L; } }},
+  solstice:{land:null, r:1.7, room:[24,30.5], name:'THE SOLSTICE ARCHIVE', fpDoor:true,
+    fpHint:'a low round door in the bank by the drawers, its label standing up. face it and tap to read the archive.',
+    blurb:'the counter-filing\'s overflow: the labels too fond to keep flat. they are read aloud at the solstice.',
+    doorFn:()=>[24.0,34.1],
+    build:()=>buildSolsticeRoom(),
+    interact:{dx:0, dz:-1.45, dd:3.5, ang:0.55, key:'solstice', sparkY:1.0, spark:'#cfc4a8', spark2:'#e0d4b4',
+      tone:[[294,0.4,{type:'sine',vol:0.14}],[147,0.9,{type:'sine',vol:0.11,delay:0.06}]],
+      first:{b:['THE SOLSTICE ARCHIVE','the labels too fond to keep flat in a drawer are copied onto slate and kept standing up. attendance at the reading is mandatory. attendance is everyone.'],
+        c:'Every filing system has an overflow, and the counter-filing\'s is this: a low round door in the bank, and behind it the archive, where the labels too fond to keep flat are copied onto slate and kept standing up. TEXTILES, ONGOING is here. NOBODY\'S, CEREMONIAL is here, with its own cushion - the cushion is also NOBODY\'S. On the reading stump the solstice slate waits its turn: once a year the archive is read aloud, in full, with great ceremony; attendance is mandatory, attendance is everyone, and it is the best night of the year. By the door, on its plinth: the seventh pin. Four is structural. Six is respect. Seven is the solstice, and it is never, ever used.', say:9},
+      linesFn:()=>{ const L=['the labels too fond for the drawer are copied onto slate and kept standing up. the archive is the drawer\'s memory of being kind.',
+        'the solstice slate waits on the stump. once a year it is read aloud. attendance is everyone. it is the best night of the year.',
+        'four is structural. six is respect. seven is the solstice. the seventh pin is never used.'];
+        if(S.secrets.counterfiling) L.push('the drawer keeps the Court. the archive keeps the fond ones. both shelves are dusted. the dusting is also filed.');
+        if(S.secrets.laundry) L.push('TEXTILES, ONGOING stands on the second shelf. NOBODY\'S, CEREMONIAL has its own cushion. the cushion is also NOBODY\'S.');
+        if(S.secrets.undercount) L.push('the archive counts its slates nightly. the count is always right. the slates have been coached.');
+        if(S.secrets.nightdoor) L.push('one shelf is labeled VISITORS, HOURLY. it is empty. the label is kept anyway. the archive is an optimist.');
+        if(S.secrets.ferry) L.push('INFRASTRUCTURE stands by the door. REVENUE has its own hook. the hook is empty. the berries were wages.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6150,6 +6169,73 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildAnnexDoor(){
+  const m=MB(),T=M4.id();
+  const turf=hex('#2e2418'), stone=hex('#7a7266'), stone2=hex('#5c554a'), bone=hex('#e0d4b4'), stem=hex('#d8cfb0'), cap=hex('#a89060');
+  M4.trs(T,0,0.10,-0.1,0,0,0,1,0.6,1); ball(m,0.55,9,turf,T,0,0.55);              // the bank bump
+  M4.trs(T,0,0.26,0.28,0,0,0,1,1,1); tube(m,0.26,0.26,0.06,12,stone2,T,0,true,true); // the round door, low
+  M4.trs(T,0,0.26,0.315,0,0,0,1,1,1); tube(m,0.20,0.20,0.02,12,stone,T,0,true,true);
+  M4.trs(T,0,0.27,0.33,1.5708,0,0,1,1,1); box(m,0.09,0.34,0.010,bone,T,0,0.92);   // the label, standing up (it is fond)
+  M4.trs(T,0,0.55,0.26,0,0,0,1,1,1); box(m,0.62,0.07,0.12,stone,T,0,0.7);         // the slate lintel
+  M4.trs(T,0,0.02,0.42,0,0,0,1,1,1); box(m,0.44,0.05,0.2,stone,T,0,0.7);          // the step
+  for(const mx of[[-0.36,0.22],[0.38,0.14]]){
+    M4.trs(T,mx[0],0.05,mx[1],0,0,0,1,1,1); box(m,0.022,0.06,0.022,stem,T,0,0.8);
+    M4.trs(T,mx[0],0.10,mx[1],0,0,0,1,0.6,1); ball(m,0.04,7,cap,T,0,0.85); }
+  return upload(m);
+}
+function buildSolsticeRoom(){
+  const m=MB(),T=M4.id();
+  const earth=hex('#2a1e12'), earth2=hex('#221810'), dark=hex('#14100a'), chalk=hex('#e0d4b4'),
+        slate=hex('#4a4640'), stump=hex('#4a3a26'), root=hex('#1a120a'), glow=hex('#ffc46b'),
+        board=hex('#cfc4a8'), berry=hex('#b04858'), bone=hex('#e0d4b4');
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.35,2.35,0.7,14,earth2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.16,2.16,0.07,14,hex('#1c140c'),T,0,true,false);
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,1.0,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.6,0.28,i%2?earth:earth2,T,0,0.62); }
+  M4.trs(T,0,1.46,2.05,0,0,0,1,1,1); box(m,1.35,0.26,0.3,earth2,T,0,0.62);      // door lintel
+  // the slates, standing up: the fond labels, copied and kept
+  for(let s2=0;s2<8;s2++){ const a=(s2*0.79)%1*TAU;
+    if(Math.abs(((a+Math.PI/2)%TAU)-Math.PI/2)<0.55) continue;
+    const sx=Math.cos(a)*1.86, sz=Math.sin(a)*1.86, ya=0.68+(s2%2)*0.42, rot=a+Math.PI/2;
+    M4.trs(T,sx,ya,sz,0,rot,0,1,1,1); box(m,0.55,0.03,0.16,stump,T,0,0.7);        // the ledge
+    const ns=2+(s2%2);
+    for(let f2=0;f2<ns;f2++){ M4.trs(T,sx-0.12+f2*0.13,ya+0.16,sz,0.12,rot,0,1,1,1); box(m,0.11,0.28,0.022,f2%2?slate:board,T,0,0.8); }  // standing, fond
+    M4.trs(T,sx+0.19,ya+0.05,sz,0,rot,0,1,1,1); box(m,0.03,0.05,0.012,dark,T,0,0.85); }
+  // NOBODY'S, CEREMONIAL: its own cushion
+  M4.trs(T,-1.55,0.72,1.05,0,0.98,0,1,1,1); box(m,0.55,0.03,0.18,stump,T,0,0.7);
+  M4.trs(T,-1.55,0.775,1.05,0,0.98,0,1,1,1); box(m,0.30,0.05,0.20,berry,T,0,0.8);  // the cushion, also NOBODY'S
+  M4.trs(T,-1.55,0.95,1.05,0.10,0.98,0,1,1,1); box(m,0.20,0.30,0.024,board,T,0,0.85);
+  M4.trs(T,-1.55,0.95,1.04,0.10,0.98,0,1,1,1); box(m,0.14,0.02,0.010,chalk,T,0,0.9);
+  // roof, roots, two lights
+  M4.trs(T,0,1.66,0,0,0,0,1,1,1); tube(m,2.10,1.86,0.5,14,earth2,T,0,true,true);
+  M4.trs(T,0,2.06,0,0,0,0,1,1,1); tube(m,1.5,1.26,0.45,12,dark,T,0,true,true);
+  for(let i=0;i<14;i++){ const a=i/14*TAU;
+    M4.trs(T,Math.cos(a)*2.72,2.3,Math.sin(a)*2.72,0,a+Math.PI/2,0,1,1,1); box(m,1.35,4.8,0.2,hex('#0e0a06'),T,0,0.55); }
+  M4.trs(T,0,4.7,0,0,0,0,1,1,1); box(m,7.5,0.4,7.5,hex('#0e0a06'),T,0,0.55);
+  for(let n2=0;n2<8;n2++){ const a=(n2*0.91)%1*TAU, rr=1.0+(n2%3)*0.4, len=0.2+(n2%4)*0.1;
+    M4.trs(T,Math.cos(a)*rr,1.64-len/2,Math.sin(a)*rr,0.06*(n2%3-1),0,0.08*(n2%2?1:-1),1,1,1);
+    box(m,0.028,len,0.028,root,T,0,0.7); }
+  M4.trs(T,-0.7,1.45,-0.4,0,0,-0.05,1,1,1); box(m,0.02,0.4,0.02,root,T,0,0.7);
+  orb(-0.7,1.2,-0.42,0.05,glow,1.0); orb(-0.7,1.2,-0.42,0.028,hex('#ffe9a8'),1.0);
+  M4.trs(T,0.9,1.42,0.6,0,0,0.04,1,1,1); box(m,0.02,0.35,0.02,root,T,0,0.7);
+  orb(0.9,1.2,0.62,0.05,glow,1.0); orb(0.9,1.2,0.62,0.028,hex('#ffe9a8'),1.0);
+  // THE READING STUMP: the solstice slate waits its turn
+  M4.trs(T,0,0.25,-1.3,0,0,0,1,1,1); tube(m,0.42,0.46,0.50,10,stump,T,0,true,true);
+  M4.trs(T,0,0.52,-1.3,0,0,0,1,1,1); tube(m,0.40,0.40,0.05,10,hex('#5a4630'),T,0,true,false);
+  M4.trs(T,0,0.62,-1.42,-0.4,0,0,1,1,1); box(m,0.72,0.05,0.50,slate,T,0,0.8);     // the solstice slate
+  for(let r2=0;r2<3;r2++) for(let s3=0;s3<5;s3++){ M4.trs(T,-0.24+s3*0.12,0.665+r2*0.028,-1.30+r2*0.0,-0.4,0,0,1,1,1); box(m,0.02,0.008,0.10,chalk,T,0,0.9); }
+  // the good chalk, in a dish, left out in case
+  M4.trs(T,0.34,0.545,-1.15,0,0,0,1,1,1); tube(m,0.09,0.07,0.03,8,bone,T,0,true,true);
+  for(let c2=0;c2<3;c2++){ M4.trs(T,0.31+c2*0.03,0.575,-1.16,0,0.4*c2,1.2,1,1,1); box(m,0.014,0.014,0.07,chalk,T,0,0.9); }
+  // the seventh pin, on its plinth, never used
+  M4.trs(T,1.15,0.20,1.35,0,0,0,1,1,1); box(m,0.14,0.40,0.14,slate,T,0,0.7);
+  M4.trs(T,1.15,0.45,1.35,0,0,0,1,1,1); box(m,0.20,0.05,0.20,slate,T,0,0.7);
+  M4.trs(T,1.12,0.55,1.35,0,0,0.10,1,1,1); box(m,0.030,0.13,0.018,bone,T,0,0.85);
+  M4.trs(T,1.19,0.55,1.35,0,0,-0.10,1,1,1); box(m,0.030,0.13,0.018,bone,T,0,0.85);
+  return upload(m);
+}
 function buildShoalBuoy(){
   const m=MB(),T=M4.id();
   const berry=hex('#b04858'), bone=hex('#e0d4b4'), wood=hex('#3a2a1a');
@@ -6807,6 +6893,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
+  if(!PROPS.some(p=>p.vprop==='annexdoor')) PROPS.push({mesh:buildAnnexDoor(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'annexdoor'});   // v167: the archive's public face
   if(!PROPS.some(p=>p.vprop==='shoalbuoy')) PROPS.push({mesh:buildShoalBuoy(), x:32.2, y:38.4, r:0, gy:-0.30, vprop:'shoalbuoy', cond:()=>!nightNow()});   // v166: filed as DESTINATION
   if(!PROPS.some(p=>p.vprop==='laundryline')) PROPS.push({mesh:buildLaundryLine(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryline'});   // v165: two posts, one rope, a polite sag
   if(!PROPS.some(p=>p.vprop==='laundryshirts')) PROPS.push({mesh:buildLaundryShirts(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryshirts', cond:()=>!nightNow()});   // v165: the shirts sleep inside
