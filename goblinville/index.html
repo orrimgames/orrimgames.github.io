@@ -2174,6 +2174,7 @@ function updateWorld(dt){
   glTick(dt);   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
     chron('Day '+S.day+' dawned over Goblinville.');
+    if((S.secrets.gl_days||0)>=7){ addRes('gold',3); toast2('the seven lanterns leave a little behind: +3 gold'); }   // v199: the ring pays
     if(S.day===1&&!S.dawnSeen){ S.dawnSeen=1; banner2('MORNING COMES','the wilds sniff the wind'); }
     // v30: weather - a rainy spell can roll in at dawn
     if(rnd(1)<0.30){ S.wx.want=1; S.wx.left=rnd(95,45);   // v116: countdown, not an S.t wall-clock
@@ -6799,6 +6800,7 @@ function seedGlimmers(){
   }
 }
 function glTick(dt){
+  if((S.secrets.gl_days||0)>=7&&nightNow()&&Math.random()<dt*3){ const L=PROPS.filter(p=>p.gllantern!=null); const p=L[Math.floor(Math.random()*L.length)]; if(p) S.parts.push({x:p.x+rnd(0.5,-0.5),y:p.gy+1.0+rnd(0.4),z:p.y+rnd(0.5,-0.5),vx:rnd(0.3,-0.3),vy:rnd(0.35,0.1),vz:rnd(0.3,-0.3),g:-0.02,life:rnd(2.4,1.4),c:'#ffe98a',r:rnd(3,1.6),star:1}); }   // the ring at night: slow lights
   for(const p of PROPS) if(p.glimmer!=null){ p.r+=dt*1.1; p.gy=p.gy0+0.10+0.07*Math.sin(G.t*2.2+p.glimmer); if(Math.random()<dt*1.4&&p.cond()) sparkW(p.x,p.gy+0.45,p.y,1,'#ffe98a'); }
 }
 function glTake(p,amt,far){
@@ -6811,7 +6813,7 @@ function glTake(p,amt,far){
   toast2((far?'a glimmer, called in from afar: +':'a glimmer, picked up: +')+amt+' '+k+'  ('+n+'/8 today)');
   if(!S.secrets.glimmers){ S.secrets.glimmers=1; banner2('GLIMMERS','something small shines on the ground. eight a day. walk into one.'); chron('Small lights turned up on the ground today, the size of a thumb, warm. The goblins are not calling it magic. They are calling it "the day\'s gleaning".', true); }
   if(n>=8){ addRes('gold',10);
-    let lit=''; if(S.secrets.gl_done!==glDay()){ S.secrets.gl_done=glDay(); S.secrets.gl_days=(S.secrets.gl_days||0)+1; if(S.secrets.gl_days<=7) lit=' lantern '+S.secrets.gl_days+' of 7 is lit at the edge of the green.'; }
+    let lit=''; if(S.secrets.gl_done!==glDay()){ S.secrets.gl_done=glDay(); S.secrets.gl_days=(S.secrets.gl_days||0)+1; if(S.secrets.gl_days<7) lit=' lantern '+S.secrets.gl_days+' of 7 is lit at the edge of the green.'; else if(S.secrets.gl_days===7){ lit=' the seventh lantern is lit. the green is ringed.'; chron('The seventh lantern burns. The green is ringed in small gold lights, and each dawn they leave a little behind. The goblins call it the Gleaner\'s Wage. Nobody remembers who is meant to be paid.', true); } }
     banner2('THE DAY\'S GLEANING','all eight, in one day. +10 gold.'+(lit||' the ground is out of lights until tomorrow.')); sparkW(p.x,p.gy+1.0,p.y,30,'#fff6c8'); A.cheer(); }
   saveGame();
 }
