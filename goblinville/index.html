@@ -2569,6 +2569,14 @@ function drawVets(){
 }
 function drawLaundry(){
   if(!S.started) return;
+  if(FP.on){ drawLaundryInner(); return; }
+  // iso: keep lines and cloths out from under the HUD (resource pills, objective bar, side buttons, build bar)
+  ctx.save(); ctx.beginPath(); ctx.rect(0,0,W,H);
+  ctx.rect(0,0,Math.min(W,580),100); ctx.rect(0,290,125,215); ctx.rect(Math.max(0,W/2-385),H-100,770,100);
+  ctx.clip('evenodd'); drawLaundryInner(); ctx.restore();
+}
+function drawLaundryInner(){
+  if(!S.started) return;
   for(const L of PROPS){ if(!L.laundry) continue;
     const p1=projPt(L.ax, groundH(L.ax,L.az)+1.25, L.az), p2=projPt(L.bx, groundH(L.bx,L.bz)+1.25, L.bz);
     if(!p1||!p2) continue;
