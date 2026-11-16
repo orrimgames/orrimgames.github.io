@@ -866,7 +866,8 @@ const FAR_SHAPES=[[-46.7,183.38,5.2,0.55,1.6],           // the Last Chart terra
                   [-12.58,-188.1,5.2,0.42,1.6],          // the Second Ship: the shingle where the Court's expedition came to rest
                   [-13.42,-190.98,3.4,0.38,1.5],         // the Manifest: a shelf above the wrack line for the crew the Choir filed
                   [-24.2,-187.7,2.2,0.38,1.6],           // the Warrant: the sea set it down square - a pad of settled shingle
-                  [-4.5,-188.2,3.4,0.35,1.6]];           // the Audit: a surveyor's flat - pegged, leveled, and filed
+                  [-4.5,-188.2,3.4,0.35,1.6],           // the Audit: a surveyor's flat - pegged, leveled, and filed
+                  [-19.8,-189.0,2.0,0.36,1.6]];   // the Receipt: the tide's own in-tray
 function icoHeight(d){          // unit dir -> surface radius
   const p=invOf(d);
   const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
@@ -3593,6 +3594,7 @@ const INTERIORS={
         if(S.secrets.undercount) L.push('the cellar slate gained a mark the evening the skiff landed, with a small neat flag beside it. twelve plus one. the one does not know he is plus.');
         if(S.secrets.chart) L.push('the surveyor\u2019s map shows a blank where the watch-post stands. the sky-readers are filed under MYTH. the iris is not.');
         if(S.secrets.counterfiling) L.push('some mornings the camp is one peg short, filed neatly under NOTHING MISSING. the surveyor has not noticed. the surveyor is thorough.');
+        if(S.secrets.receipt) L.push('the surveyor\u2019s own stamp is entered as MISSING, PRESUMED DIPLOMATIC. the tide\u2019s deliveries are filed under SOMEONE ELSE\u2019S PROBLEM.');
         return L; } }},
   counterfiling:{land:null, r:1.7, room:[31,34.5], name:'THE COUNTER-FILING', fpDoor:true,
     fpHint:'a low stone drawer in the bank past the hatch, a bead for a handle. face it and tap to pull the file.',
@@ -3613,6 +3615,25 @@ const INTERIORS={
         if(S.secrets.court) L.push('when the Court comes it will count twelve and be counted once. the shelf has room. the shelf always has room.');
         if(S.secrets.wreck) L.push('the second ship is filed under EVIDENCE, then WEATHER, then STONE. this shelf has a fourth folder: OURS.');
         if(S.secrets.chart) L.push('the sky-readers watch the sea. this shelf watches what the sea brings back. both counts are kept nightly.');
+        if(S.secrets.receipt) L.push('the stamped stone sits on the shelf of honor. it is the only file the Court has ever signed. it is filed under CORRESPONDENCE.');
+        return L; } }},
+  receipt:{land:null, r:2.0, name:'THE RECEIPT', fpDoor:true, outdoor:true, glint:['#e8d9a8',0.6],
+    fpHint:'a waxed dispatch tube on the shingle, come back on the tide. beside it, one of the brood\u2019s own files, stamped. face it and tap to read what came back.',
+    blurb:'the Court answers all correspondence. the sea delivers, both ways now.',
+    doorFn:()=>[-19.8,-189.0],
+    interact:{dx:0, dz:0, dd:3.2, ang:0.6, key:'receipt', sparkY:0.5, spark:'#e8d9a8', spark2:'#a32436',
+      tone:[[196,0.35,{type:'triangle',vol:0.22}],[98,0.9,{type:'sine',vol:0.18,delay:0.05}]],
+      first:{b:['RECEIVED AND FILED','the dispatch tube came back on the morning tide, the Court\u2019s wax on the cap. inside: the brood\u2019s own counter-filing, returned, stamped. the stamp says RECEIVED AND FILED. the Court files too.'],
+        c:'The tide has started delivering both ways. The dispatch tube came back this morning, cap waxed with the Court\u2019s own seal, and inside it the brood\u2019s counter-filing - returned, stamped, in a hand that stayed up late being official: RECEIVED AND FILED. The brood held a small ceremony. The stamped stone was carried to the cellar and given the shelf of honor, because this is the first thing the Court has ever sent that was not a demand, and also because the stamp is very neat. The tube was refilled (one bead, counted; one flag, drawn; one knot of weed, WEATHER) and given back to the tide. The sea delivers, both ways now. Everyone is filed. Everyone is fine.', say:9},
+      linesFn:()=>{ const L=['the stamp says RECEIVED AND FILED. it is very neat. the brood has begun practicing stamps.',
+        'the Court answers all correspondence. eventually. by sea.',
+        'the tide used to only take. now it runs errands.'];
+        if(S.secrets.counterfiling) L.push('the stamped stone is on the cellar\u2019s shelf of honor. the labels are polite. the stamp is polite. everyone is very polite now.');
+        if(S.secrets.audit) L.push('the surveyor stamped his own ledger once, experimentally. the stamp came back RECEIVED AND FILED. he has stopped experimenting.');
+        if(S.secrets.strongbox) L.push('the warrant counted the goblins. the receipt files the warrant\u2019s answer. the paperwork is complete. the paperwork is never complete.');
+        if(S.secrets.bell) L.push('the bell did not ring for the receipt. the bell rings for nothing. the brood rang it themselves, quietly, with a knuckle.');
+        if(S.secrets.manifest) L.push('the manifest listed intentions. the receipt is the first intention to come back stamped.');
+        if(S.secrets.court) L.push('when the Court comes it will find its stamp on the shelf of honor, filed under CORRESPONDENCE. the shelf has room.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -5960,6 +5981,23 @@ function buildBell(){
   farOrb(m,T, 0.30, 0.22, 0.22, 0.02, salt, 0.6);
   return upload(m);
 }
+function buildReceipt(){
+  const m=MB(),T=M4.id();
+  const canvas=hex('#6b5a3a'), iron=hex('#2e3134'), wax=hex('#a32436'), paper=hex('#e8d9a8'),
+        charcoal=hex('#14100a'), berry=hex('#b04858'), slate=hex('#4a4640'), salt=hex('#e8ecef');
+  farBox(m,T, 0.0,0.055,0.0, 0.06,0,0, 0.09,0.09,0.50, canvas, 0.6);            // the dispatch tube, home again
+  farBox(m,T, 0.0,0.055,0.26, 0,0,0, 0.105,0.105,0.03, iron, 0.65);             // its near cap, still on
+  farBox(m,T, 0.0,0.05,-0.29, 0.2,0,0, 0.05,0.05,0.09, paper, 0.7);             // the returned filing, peeking
+  farOrb(m,T, 0.16,0.02,0.30, 0.055, iron, 0.35);                               // the far cap, off and set down square
+  farBox(m,T, -0.19,0.025,0.05, 0,0.35,0, 0.22,0.035,0.16, slate, 0.65);        // the brood's own file, returned
+  farOrb(m,T, -0.19,0.058,0.05, 0.046, wax, 0.45);                              // the Court's stamp, in wax
+  farBox(m,T, -0.19,0.070,0.05, 0,0.35,0, 0.05,0.006,0.008, charcoal, 0.9);     // the stamp's mark
+  farBox(m,T, -0.19,0.070,0.05, 0,0.35,0, 0.008,0.006,0.05, charcoal, 0.9);
+  farBox(m,T, -0.19,0.066,0.118, 0,0.35,0, 0.03,0.005,0.02, berry, 0.9);        // the small polite flag, drawn beside
+  farOrb(m,T, 0.09,0.03,0.42, 0.02, salt, 0.6);                                 // the tide's signature
+  farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
+  return upload(m);
+}
 // v150: THE AUDIT - the Court's answer came ashore at the wrong beach: one surveyor, one skiff, one tent,
 // a counting-frame still warm. The goblins counted the surveyor before the keel touched: one.
 function buildCourtCamp(){
@@ -6339,6 +6377,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='crate')) PROPS.push({mesh:buildCrate(), x:-21.6, y:-187.95, r:1.9, far:'crate', ride:-0.05});   // v146: what the tide kept
   if(!PROPS.some(p=>p.far==='bell')) PROPS.push({mesh:buildBell(), x:-15.5, y:-188.55, r:1.9, far:'bell', ride:-0.08});   // v147: what the tide hung
   if(!PROPS.some(p=>p.far==='strongbox')) PROPS.push({mesh:buildStrongbox(), x:-24.2, y:-187.7, r:1.9, far:'strongbox', ride:-0.10});   // v148: what the sea respected
+  if(!PROPS.some(p=>p.far==='receipt')) PROPS.push({mesh:buildReceipt(), x:-19.8, y:-189.0, r:1.9, far:'receipt', ride:-0.09});   // v152: what the tide brought back
   if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
