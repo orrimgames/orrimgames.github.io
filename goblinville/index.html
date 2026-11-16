@@ -3688,6 +3688,7 @@ const INTERIORS={
         if(S.secrets.bell) L.push('the bell did not ring for the shoe\u2019s return. it is a shoe. the bell has standards. so does the shoe.');
         if(S.secrets.vampire) L.push('the count asked, politely, whether the shoe had been anywhere interesting. the shoe declined to elaborate.');
         if(S.secrets.audit) L.push('the surveyor paced the route: three hundred and eleven steps, one shoe\u2019s worth of scenery. he is filing it as a walk.');
+        if(nightNow()&&readingNight()) L.push('on reading nights the shoe catches the moon on its toe and holds it steady until the archive lets out. the den reads by it. the arrangement holds.');
         return L; } }},
   nightdoor:{land:null, r:1.8, name:'THE NIGHT DOOR', fpDoor:true, outdoor:true, glint:['#c8b46a',1.1],
     fpHint:'a door in a frame, standing alone on the rise south of the green. no wall. no hill. the keyhole is worn bright. face it and tap to knock.',
@@ -5441,6 +5442,17 @@ function drawNightGlow(){
       const r=(10+10*ph)*zs;
       const g=ctx.createRadialGradient(sp[0],sp[1],1,sp[0],sp[1],r);
       g.addColorStop(0,'rgba(196,220,255,'+(0.30*a*ph).toFixed(3)+')'); g.addColorStop(1,'rgba(150,190,255,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
+    }
+  }
+  const sr=PROPS.find(p=>p.vprop==='scenicroute');
+  if(sr&&nightNow()&&S.secrets.scenicroute&&readingNight()){
+    const sp=projPt(sr.x,(sr.gy||0)+0.40,sr.y);
+    if(sp){
+      const fl=0.9+0.1*Math.sin(G.t*1.1);                        // the arrangement is steady
+      const r=26*fl*zs;
+      const g=ctx.createRadialGradient(sp[0],sp[1],1,sp[0],sp[1],r);
+      g.addColorStop(0,'rgba(206,228,255,'+(0.30*a*fl).toFixed(3)+')'); g.addColorStop(1,'rgba(160,200,255,0)');
       ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
     }
   }
