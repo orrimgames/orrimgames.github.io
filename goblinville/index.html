@@ -3577,6 +3577,13 @@ const INTERIORS={
       linesFn:()=>{ const n=S.gobs.length, L=['the slate says '+n+' tonight. the warrant says twelve. the slate is kept by someone who has to feed them.',
         'the tally marks stop for no one. they continue on the ceiling. they are thinking about the door.',
         'whoever shows up for dinner is in the count. the Court counts what it can hold still. dinner wins.'];
+        if(lampsOut()) L.push('on lamps-out night the slate counts the lamps instead. none lit. all accounted for. the dark is punctual.');
+        if(companyMorning()) L.push('on company mornings the count includes whoever the count brings home. guests are filed under PLUS, TEMPORARY. the slate hopes.');
+        if(readingNight()) L.push('on reading nights the slate counts who is listening. attendance is everyone. the charcoal listens too.');
+        if(minutesMorning()) L.push('the morning the minutes are posted, the slate recounts. nothing changed. the slate recounts anyway. arithmetic is a kind of tidying.');
+        if(marketDay()) L.push('on market days the slate counts pebbles twice and goblins once. the pebbles come and go. the goblins stay counted.');
+        if(gratuityMorning()) L.push('on gratuity mornings the slate adds a mark that is not a goblin: the tip. it is filed under MORE THAN ASKED. the slate approves.');
+        if(restDay()) L.push('on the rest day the slate rests too. the count keeps itself. the charcoal sits down.');
         if(S.secrets.strongbox) L.push('the warrant’s twelve is written out neat in chalk on the little board, and crossed through once, kindly, the way one corrects a child.');
         if(S.secrets.count) L.push('the eye counts what burns. the brood counts who shows up for dinner. the two counts have never disagreed.');
         if(S.secrets.manifest) L.push('seven stones keep the crew’s count. the slate keeps the living one. neither asked the Court to check their arithmetic.');
