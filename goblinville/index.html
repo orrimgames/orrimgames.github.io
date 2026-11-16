@@ -862,7 +862,8 @@ function icoBilerp(x,y){
 function sitY(x,y){ const d=dirOf(x,y,[0,0,0]); return d[1]*icoHeight(d)+WATER-PLANET_R; }
 // v141: the far shore - authored land on the procedural ball: [x, y, radius, height, strength]
 // every surface read (far mesh, walking, sailing, seats) flows through icoHeight, so one list shapes them all
-const FAR_SHAPES=[[-46.7,183.38,5.2,0.55,1.6]];      // the Last Chart terrace: a flat pad above the wrack line
+const FAR_SHAPES=[[-46.7,183.38,5.2,0.55,1.6],           // the Last Chart terrace: a flat pad above the wrack line
+                  [-12.58,-188.1,5.2,0.42,1.6]];         // the Second Ship: the shingle where the Court's expedition came to rest
 function icoHeight(d){          // unit dir -> surface radius
   const p=invOf(d);
   const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
@@ -1899,12 +1900,11 @@ function tickAmbience(dt){
     S._birdT=(S._birdT===undefined?14:S._birdT)-0.22;
     if(S._birdT<=0){ S._birdT=rnd(80,30); spawnFlock(); }
   }
-  // v142: the far-shore beacon glints for sailors - a lamp lit for ships that never came
-  if(S.sail && rnd(1)<0.055){
-    const bd=dirOf(-46.7,183.38,[0,0,0]), br=icoHeight(bd)+2.45;
-    if(Math.hypot(FP.x+46.7,FP.y-183.38)<52)
-      sparkW(SITE.x+bd[0]*br, WATER-PLANET_R+bd[1]*br, SITE.y+bd[2]*br, 7, '#d8ecff');
-  }
+  // v142/v144: far-shore lamps glint for sailors - lights lit for ships, kept for whoever sails
+  if(S.sail && rnd(1)<0.055) for(const gk in INTERIORS){ const g=INTERIORS[gk]; if(!g.fpDoor||!g.glint) continue;
+    const dp=g.doorFn(); if(Math.hypot(FP.x-dp[0],FP.y-dp[1])<52){
+      const bd=dirOf(dp[0],dp[1],[0,0,0]), br=icoHeight(bd)+g.glint[1];
+      sparkW(SITE.x+bd[0]*br, WATER-PLANET_R+bd[1]*br, SITE.y+bd[2]*br, 7, g.glint[0]); } }
 }
 
 // v30: light rainy spells
@@ -3446,7 +3446,7 @@ const INTERIORS={
         'the spring does not bubble for visitors. it bubbled once for the mountain, long ago. once.',
         'the water is older than the fire. the elder says the fire knows it. the fire pops, embarrassed.'
       ]}},
-  chart:{land:null, r:2.3, room:[43,46.5], name:'THE LAST CHART', fpDoor:true,
+  chart:{land:null, r:2.3, room:[43,46.5], name:'THE LAST CHART', fpDoor:true, glint:['#d8ecff',2.45],
     fpHint:'a doorway of sea-worn stone stands above the wrack line. face it and tap to duck inside.',
     blurb:'the sky-readers sailed until the stars were wrong. they kept reading.',
     doorFn:()=>[-46.7,183.38],
@@ -3459,6 +3459,20 @@ const INTERIORS={
         'they drew the eye over and over, smaller each time, as if distance could be practiced.'];
         if(S.secrets.iris) L.push('you have seen it too, hanging over the springs on a clear night. the chart is not a warning. it is a letter that arrived early.');
         if(S.secrets.word2) L.push('the mountain wrote STAYED. the sky-readers wrote it first, in salt, and went home to keep the fire. everyone stays. that is the whole finding.');
+        return L; } }},
+  wreck:{land:null, r:2.3, room:[43,40.5], name:'THE SECOND SHIP', fpDoor:true, glint:['#ffb347',1.75],
+    fpHint:'a hatch of velvet-black wood, barnacled but sound. face it and tap to duck inside.',
+    blurb:'the Court sent a ship to count what the sky-readers saw. the ship is still counting.',
+    doorFn:()=>[-12.58,-188.1],
+    build:()=>buildWreckRoom(),
+    interact:{dx:0, dz:-1.25, dd:3.5, ang:0.55, key:'wreck', sparkY:1.1, spark:'#ffb347', spark2:'#ff4d5e',
+      first:{b:['WE ARE COUNTED BACK','sixty-one days out, in a precise hand. the sixty-second page says only this. the pen lies where it fell.'],
+        c:'On a far shore the brood found the Crimson Court\u2019s second ship, stove in on the rocks, its lamp still burning, its ledger still counting: sixty-one days of precise hope, and on the sixty-second page, in the same hand, four words - WE ARE COUNTED BACK. The elder read it twice and closed the book gently, the way one closes eyes.', say:9},
+      linesFn:()=>{ const L=['the lamp is full. the oil is counted. the count never goes down.',
+        'the manifest lists one crate the tide took. the crate is listed anyway. the Court counts intentions.',
+        'a velvet purse of buttons, one per soul. the purse is full. the crew is not here. the Choir has them, in order.'];
+        if(S.secrets.chart) L.push('the last chart is safe in goblin hands, a world away. this ship was the price of looking. the brood paid nothing and owes everything.');
+        if(S.secrets.word2) L.push('the mountain wrote STAYED. the crew of the second ship could not. the ledger does not hold it against them. the ledger holds everything else.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -5646,6 +5660,114 @@ function buildChartRuin(){
   orb(-1.05,0.46,-0.3,0.055,salt,1.0); orb(1.15,0.44,0.5,0.05,salt,1.0);
   return upload(m);
 }
+function buildWreck(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#6b4530'), wood2=hex('#523524'), dark=hex('#16121a'), velvet=hex('#a32436'),
+        gold=hex('#d4a94e'), salt=hex('#e8ecef'), glow=hex('#ffb347'), stone2=hex('#4a5264');
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // she lies pitched bow-up on the rocks: every hull piece rides the same pitch about her long axis
+  const P=0.22, cP=Math.cos(P), sP=Math.sin(P);
+  const hp=(x,y,z,rx,ry,rz,sx,sy,sz,c,w,h,d)=>{ const xx=x*cP-y*sP, yy=x*sP+y*cP;
+    M4.trs(T,xx,yy,z,rx,ry,rz+P,sx,sy,sz); box(m,w,h,d,c,T,0,0.62); };
+  const op=(x,y,z,r,c,sy)=>{ const xx=x*cP-y*sP, yy=x*sP+y*cP; orb(xx,yy,z,r,c,sy); };
+  // keel and bottom
+  hp(0,0.30,0,0,0,0,1,1,1,wood2,4.2,0.22,0.5);
+  hp(0,0.46,0,0,0,0,1,1,1,wood,3.95,0.16,1.45);
+  // strakes: the landward side whole, the seaward side breached amidships
+  hp(0,0.72,-0.66,-0.38,0,0,1,1,1,wood,3.9,0.42,0.12);
+  hp(-1.45,0.72,0.66,0.38,0,0,1,1,1,wood,1.15,0.42,0.12);      // aft of the breach
+  hp(1.42,0.72,0.66,0.38,0,0,1,1,1,wood,1.2,0.42,0.12);        // fore of the breach
+  for(const [rx2,rh] of [[-0.42,0.5],[0.12,0.62],[0.62,0.44]])   // sprung ribs showing through the breach
+    hp(rx2,0.80,0.60,0.55,0,0,1,1,1,wood2,0.09,rh,0.10);
+  // transom and stern castle, Court velvet on the beam-ends
+  hp(-1.92,0.70,0,0,0,0,1,1,1,wood,0.16,0.5,1.42);
+  hp(-1.42,0.98,0,0,0,0,1,1,1,wood2,1.05,0.5,1.15);
+  hp(-1.42,1.28,0,0,0,0,1,1,1,velvet,1.18,0.10,1.26);
+  hp(-1.92,0.92,0,0,0,0,1,1,1,velvet,0.10,0.24,1.30);          // velvet transom board
+  // the hatch: velvet-black and barnacled, but sound - the way in, facing the landing
+  hp(-1.42,0.92,0.585,0,0,0,1,1,1,dark,0.52,0.58,0.07);
+  hp(-1.42,1.25,0.585,0,0,0,1,1,1,gold,0.62,0.07,0.10);         // gold lintel, Court work
+  for(const s of[-1,1]) hp(-1.42+s*0.31,0.92,0.585,0,0,0,1,1,1,gold,0.06,0.62,0.10);
+  // deck and the stump of the mast; the mast itself lies out through the breach
+  hp(0.15,0.66,0,0,0,0,1,1,1,wood2,3.3,0.07,1.15);
+  hp(0.35,0.92,0,0,0,0,1,1,1,wood,0.14,0.5,0.14);
+  M4.trs(T,0.82,0.72,1.25,-0.336,-0.29,0,1,1,1); box(m,0.11,0.11,2.35,wood,T,0,0.62);   // the fallen mast
+  M4.trs(T,1.28,0.56,2.32,0.15,0.25,0.1,1,1,1); box(m,0.44,0.32,0.05,velvet,T,0,0.62);  // the rag of the Court, still red
+  // the stern lantern, burning yet - the counted lamp
+  op(-1.95,1.50,0,0.075,glow,1.0);
+  hp(-1.95,1.38,0,0,0,0,1,1,1,gold,0.05,0.22,0.05);
+  // the rocks that took her, under the raised bow
+  for(const [bx,bz,bs] of [[2.15,-0.4,0.42],[2.5,0.35,0.34],[1.75,0.55,0.28]]){
+    M4.trs(T,bx,0.20+bs*0.4,bz,0,bx*3,0,1,1,1); box(m,bs*2,bs*1.5,bs*2,stone2,T,0,0.7); }
+  // her counted cargo, still in her: what shows through the breach is what the sea left
+  M4.trs(T,0.3,0.85,0.25,0,0.35,0,1,1,1); box(m,0.4,0.26,0.28,wood,T,0,0.62);        // the chest, on deck
+  M4.trs(T,0.3,1.03,0.13,-0.7,0.35,0,1,1,1); box(m,0.4,0.05,0.28,wood,T,0,0.62);     // its lid, sprung
+  orb(0.38,0.90,0.45,0.05,gold,0.8); orb(0.18,0.89,0.38,0.045,gold,0.8); orb(0.30,0.88,0.12,0.045,gold,0.8);
+  M4.trs(T,0.55,0.60,0.78,0,0.5,0,1,1,1); box(m,0.34,0.34,0.34,wood2,T,0,0.62);      // a crate half out of the breach
+  orb(-1.42,1.06,0.63,0.04,salt,1.0); orb(0.55,0.80,0.78,0.04,salt,1.0);              // barnacle blooms
+  return upload(m);
+}
+function buildWreckRoom(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#4a3020'), wood2=hex('#33200f'), dark=hex('#0e0c10'), velvet=hex('#42101c'),
+        gold=hex('#b8964a'), glow=hex('#ffb347'), paper=hex('#e8e2d0'), ink=hex('#181818'),
+        nightsea=hex('#101420'), salt=hex('#e8ecef'), runner=hex('#26131a');
+  const orb=(x,y,z,r,c,sy)=>{ M4.trs(T,x,y,z,0,0,0,1,sy||1,1); ball(m,r,8,c,T,0,0.9); };
+  // floor: dark ship's timber, a worn runner down the middle
+  M4.trs(T,0,-0.15,0,0,0,0,1,1,1); tube(m,2.75,2.75,0.7,14,wood2,T,0,true,true);
+  M4.trs(T,0,0.22,0,0,0,0,1,1,1); tube(m,2.56,2.56,0.07,14,wood,T,0,true,false);
+  M4.trs(T,0,0.27,0,0,0,0,1,1,1); box(m,0.9,0.014,3.6,runner,T,0,0.62);
+  // the outer shell: night-sea dark beyond the hull
+  for(let i=0;i<14;i++){ const a=i/14*TAU;
+    M4.trs(T,Math.cos(a)*2.72,1.45,Math.sin(a)*2.72,0,a+Math.PI/2,0,1,1,1); box(m,1.35,3.1,0.2,nightsea,T,0,0.55); }
+  // full hull walls: a cabin, sound and tight - i=3 stays open for the hatch, i=9 holds the stern window
+  for(let i=0;i<12;i++){ const a=i/12*TAU; if(i===3||i===9) continue;
+    const x=Math.cos(a)*2.05, z=Math.sin(a)*2.05;
+    M4.trs(T,x,0.95,z,0,a+Math.PI/2,0,1,1,1); box(m,1.44,1.5,0.26,i%2?wood:wood2,T,0,0.62); }
+  M4.trs(T,0,1.36,2.05,0,0,0,1,1,1); box(m,1.35,0.24,0.3,wood,T,0,0.62);   // hatch lintel
+  // the stern window over the desk: a small night looking out where the sea was
+  M4.trs(T,0,1.05,-2.05,0,0,0,1,1,1); box(m,1.44,0.9,0.26,wood2,T,0,0.62);
+  M4.trs(T,0,0.62,-2.03,0,0,0,1,1,1); box(m,0.9,0.14,0.3,wood,T,0,0.62);
+  M4.trs(T,0,1.06,-2.05,0,0,0,1,1,1); box(m,0.76,0.62,0.27,nightsea,T,0,0.55);
+  M4.trs(T,0,1.40,-2.03,0,0,0,1,1,1); box(m,0.9,0.10,0.3,wood,T,0,0.62);
+  orb(-0.18,1.10,-1.88,0.05,glow,1.0);                                     // a single star, kept
+  // deckhead: a low timbered ceiling, beams athwart
+  M4.trs(T,0,1.82,0,0,0,0,1,1,1); box(m,4.7,0.1,4.7,wood2,T,0,0.62);
+  for(const s of[-1,0,1]){ M4.trs(T,s*1.1,1.70,0,0,0,0,1,1,1); box(m,0.16,0.14,4.1,wood,T,0,0.62); }
+  // the captain's desk: the ledger lies open on it
+  for(const s of[-0.42,0.42]){ M4.trs(T,s,0.55,-1.35,0,0,0,1,1,1); box(m,0.09,0.26,0.6,wood2,T,0,0.62); }
+  M4.trs(T,0,0.815,-1.35,0,0,0,1,1,1); box(m,1.2,0.07,0.85,wood,T,0,0.62);
+  M4.trs(T,-0.16,0.862,-1.35,0,0,0.10,1,1,1); box(m,0.30,0.016,0.42,paper,T,0,0.62);  // left page
+  M4.trs(T,0.16,0.862,-1.35,0,0,-0.10,1,1,1); box(m,0.30,0.016,0.42,paper,T,0,0.62); // right page: four words
+  for(const ly of[-1.45,-1.38,-1.31]){ M4.trs(T,-0.16,0.874,ly,0,0,0,1,1,1); box(m,0.22,0.006,0.028,ink,T,0,0.62); }
+  M4.trs(T,0.16,0.874,-1.42,0,0,0,1,1,1); box(m,0.20,0.007,0.035,ink,T,0,0.62);       // the last line, shorter
+  orb(0.44,0.875,-1.15,0.035,ink,0.7);                                                  // the ink pot
+  M4.trs(T,0.34,0.868,-1.52,0,0.5,0,1,1,1); box(m,0.018,0.008,0.16,dark,T,0,0.62);    // the pen, where it fell
+  // the counted lamp on its bracket, full and burning
+  M4.trs(T,-0.52,0.98,-1.62,0,0,0,1,1,1); tube(m,0.05,0.04,0.34,6,gold,T,0.5,true,true);
+  orb(-0.52,1.18,-1.62,0.085,glow,1.0);
+  // the captain's chair, pushed back as if he only stepped out
+  M4.trs(T,0.62,0.54,-0.72,0,0.85,0,1,1,1); box(m,0.42,0.07,0.36,velvet,T,0,0.62);
+  M4.trs(T,0.79,0.80,-0.55,0,0.85,0,1,1,1); box(m,0.42,0.5,0.08,velvet,T,0,0.62);
+  for(const s of[-1,1]){ M4.trs(T,0.62+s*0.16,0.42,-0.72+s*0.06,0,0.85,0,1,1,1); box(m,0.06,0.22,0.06,wood2,T,0,0.62); }
+  // pinned charts along the west wall, ink coastlines half-finished
+  M4.trs(T,-1.88,0.98,-0.45,0,Math.PI/2,0.02,1,1,1); box(m,0.02,0.5,0.7,paper,T,0,0.62);
+  M4.trs(T,-1.88,1.08,0.45,0,Math.PI/2,-0.02,1,1,1); box(m,0.02,0.5,0.7,paper,T,0,0.62);
+  M4.trs(T,-1.865,0.98,-0.45,0,Math.PI/2,0.4,1,1,1); box(m,0.012,0.03,0.45,ink,T,0,0.62);
+  M4.trs(T,-1.865,1.10,0.42,0,Math.PI/2,-0.3,1,1,1); box(m,0.012,0.025,0.38,ink,T,0,0.62);
+  // the bunk along the east wall, made up and never slept in
+  M4.trs(T,1.62,0.5,0.75,0,0,0,1,1,1); box(m,0.75,0.16,1.7,wood2,T,0,0.62);
+  M4.trs(T,1.62,0.60,0.75,0,0,0,1,1,1); box(m,0.68,0.09,1.55,velvet,T,0,0.62);
+  M4.trs(T,1.62,0.64,1.35,0,0,0,1,1,1); box(m,0.4,0.08,0.3,paper,T,0,0.62);           // the pillow
+  // the velvet purse of buttons, spilled on the desk's edge: one per soul
+  orb(0.28,0.87,-1.62,0.07,velvet,0.8);
+  for(const [bx2,bz2] of [[0.12,-1.58],[0.20,-1.70],[0.36,-1.55],[0.24,-1.47]]) orb(bx2,0.862,bz2,0.022,salt,0.6);
+  // a sea-chest against the south wall, locked, the Court's seal still stamped
+  M4.trs(T,-0.9,0.52,1.55,0,0.35,0,1,1,1); box(m,0.6,0.4,0.42,wood2,T,0,0.62);
+  M4.trs(T,-0.9,0.74,1.55,0,0.35,0,1,1,1); box(m,0.62,0.06,0.44,wood,T,0,0.62);
+  orb(-0.72,0.58,1.42,0.05,velvet,0.7);
+  return upload(m);
+}
 function buildChartRoom(){
   const m=MB(),T=M4.id();
   const stone=hex('#6a7280'), stone2=hex('#4e5563'), dark=hex('#141824'), salt=hex('#e8ecef'),
@@ -5693,6 +5815,7 @@ function seedLandmarks(){
   const B={bone:buildBoneSpire,crimson:buildVampCourt,spire:buildWizardSpire,crag:buildOgreCrag,warrens:buildWarrens,hollow:buildHollow,ridge:buildRidge,bedlam:buildBedlam,vulkarrax:buildDragonCoil,orcs:buildOrcHold,men:buildMenCity,elves:buildElfGrove};
   for(const L of LANDS) PROPS.push({mesh:B[L.id](), x:L.x, y:L.y, r:0, gy:sitY(L.x,L.y)-0.03, land:L.id});
   if(!PROPS.some(p=>p.far==='chart')) PROPS.push({mesh:buildChartRuin(), x:-46.7, y:183.38, r:0.72, far:'chart', ride:-0.02});   // v141: the far shore
+  if(!PROPS.some(p=>p.far==='wreck')) PROPS.push({mesh:buildWreck(), x:-12.58, y:-188.1, r:1.57, far:'wreck', ride:-0.02});              // v144: the second ship
   seedBoneYard();
 }
 
