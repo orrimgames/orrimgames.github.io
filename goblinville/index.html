@@ -3730,6 +3730,25 @@ const INTERIORS={
         if(S.secrets.mossden) L.push('the village has opened a drawer for the den. DENS, CONTENTS OF: WARM. the den has not opened a drawer for the village. the village understands.');
         if(S.secrets.scenicroute) L.push('the shoe rests on its cairn, one ridge over. the shoe and the den have an arrangement about the moon.');
         if(S.secrets.bell) L.push('the bell has rung once at night, softly, at nothing anyone saw. the den did not comment. the bell did not repeat it.');
+        return L; } }},
+  ferry:{land:null, r:1.8, name:'THE FERRY', fpDoor:true, outdoor:true, glint:['#7fb4d8',0.4],
+    fpHint:'a leaf raft at the reed bend, a saucer nailed to a post. face it and tap to ask about the far side.',
+    blurb:'out to the shoals and back, all day, one berry. the far side is the ferry\'s business.',
+    doorFn:()=>[30.9,37.1],
+    interact:{dx:0, dz:0.4, dd:2.6, ang:0.6, key:'ferry', sparkY:0.3, spark:'#7fb4d8', spark2:'#4a6a38',
+      tone:[[220,0.5,{type:'sine',vol:0.15}],[110,0.9,{type:'sine',vol:0.12,delay:0.05}]],
+      first:{b:['THE FERRY','a leaf raft, a push pole, a saucer nailed to a post. the fare is one berry. the schedule is a shrug. the shrug is reliable.'],
+        c:'The village\'s first navy is one leaf raft, one push pole, and a saucer nailed to a post: the fare is one berry, the schedule is a shrug, and the route is out to the fishing shoals and back. The raft does not leak - it is a leaf. The pole does not bend - it is a stick. The saucer does not accumulate - berries are eaten immediately, by the ferrygoblin, as wages. Where the ferry goes between fares is the ferry\'s business; it comes back damp and pleased. The undercount has filed the raft as INFRASTRUCTURE, the saucer as REVENUE, and the ferrygoblin as PLUS ONE, PERMANENT - the same shelf the surveyor is on. Nobody has told the surveyor.', say:9},
+      linesFn:()=>{ const L=['the fare is one berry. the change is none. the ferry has never lost a passenger to arithmetic.',
+        'out to the shoals and back. the far side is the ferry\'s business. the ferry is discreet.',
+        'the raft does not leak. it is a leaf. this took the village a week to verify.'];
+        if(nightNow()) L.push('the ferry is parked at night, damp and pleased. the pole sleeps in its fork. even the water rests.');
+        else L.push('the ferry runs all day. the schedule is a shrug. the shrug is reliable.');
+        if(S.secrets.scenicroute) L.push('the shoe watches from its cairn, one ridge over. the shoe was transport once. the shoe is rooting for the raft.');
+        if(S.secrets.counterfiling) L.push('the raft is filed as INFRASTRUCTURE. the saucer is filed as REVENUE. the audit is ongoing. the berries are gone.');
+        if(S.secrets.undercount) L.push('the ferrygoblin is filed PLUS ONE, PERMANENT. the surveyor is on the same shelf. nobody has told the surveyor.');
+        if(S.secrets.bell) L.push('the ferry asked the bell for a horn. the bell said nothing, which is its note. the ferry toots a reed instead.');
+        if(S.secrets.mossden) L.push('some mornings the raft is damp before the dew decides. the ferry does not ask questions. the fare is one berry, payable to any step.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6112,6 +6131,21 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildFerryRaft(){
+  const m=MB(),T=M4.id();
+  const leaf=hex('#4a6a38'), leaf2=hex('#3a5a30'), wood=hex('#3a2a1a'), bone=hex('#e0d4b4'), wine=hex('#a83a4a'), rope=hex('#6a5a3a');
+  const base=sitY(30.9,37.1)-0.04, raftY=sitY(31.29,37.49)+0.028-base;    // rests on the shallows; floats when the tide says so
+  M4.trs(T,0,raftY,0.55,0,0.3,0,1,1,1); box(m,0.70,0.045,0.45,leaf,T,0,0.55);      // the raft: one leaf, verified
+  M4.trs(T,0,raftY+0.035,0.33,-0.35,0.3,0,1,1,1); box(m,0.68,0.03,0.06,leaf2,T,0,0.6); // the near edge curls, as leaves do
+  M4.trs(T,0,raftY+0.035,0.77,0.35,0.3,0,1,1,1); box(m,0.68,0.03,0.06,leaf2,T,0,0.6);  // the far edge agrees
+  M4.trs(T,-0.35,0.11,0.1,0,0,0,1,1,1); box(m,0.035,0.24,0.035,wood,T,0,0.7);     // the fare post
+  M4.trs(T,-0.35,0.24,0.1,0,0,0,1,1,1); tube(m,0.055,0.055,0.014,9,bone,T,0,true,true);  // the saucer: REVENUE
+  M4.trs(T,-0.35,0.26,0.1,0,0,0,1,1,1); ball(m,0.022,7,wine,T,0,0.9);             // today's fare, uncollected as wages
+  M4.trs(T,0.30,0.16,0.18,0,0,0.5,1,1,1); box(m,0.02,0.02,0.85,wood,T,0,0.7);     // the push pole, asleep in its fork
+  M4.trs(T,0.30,0.05,0.02,0,0,0,1,1,1); box(m,0.05,0.10,0.03,wood,T,0,0.7);       // the fork
+  M4.trs(T,0,0.02,0.28,0,0.3,0.05,1,1,1); box(m,0.012,0.012,0.34,rope,T,0,0.8);   // the mooring rope, unhurried
+  return upload(m);
+}
 function buildTwoFish(){
   const m=MB(),T=M4.id();
   const dew=hex('#9fb4d8'), leaf=hex('#4a6a38');
@@ -6717,6 +6751,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
+  if(!PROPS.some(p=>p.vprop==='ferryraft')) PROPS.push({mesh:buildFerryRaft(), x:30.9, y:37.1, r:-0.785, gy:sitY(30.9,37.1)-0.04, vprop:'ferryraft'});   // v164: the village's first navy
   if(!PROPS.some(p=>p.vprop==='twofish')) PROPS.push({mesh:buildTwoFish(), x:23.85, y:37.75, r:0, gy:sitY(23.85,37.75)-0.04, vprop:'twofish', cond:()=>!nightNow()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&companyMorning()});   // v163: the visitor had a friend
   if(!PROPS.some(p=>p.vprop==='denglow')) PROPS.push({mesh:buildDenGlow(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'denglow', cond:()=>deepNight()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&!lampsOut()});   // v162: the almost-seeing
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
