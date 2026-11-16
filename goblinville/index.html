@@ -864,7 +864,8 @@ function sitY(x,y){ const d=dirOf(x,y,[0,0,0]); return d[1]*icoHeight(d)+WATER-P
 // every surface read (far mesh, walking, sailing, seats) flows through icoHeight, so one list shapes them all
 const FAR_SHAPES=[[-46.7,183.38,5.2,0.55,1.6],           // the Last Chart terrace: a flat pad above the wrack line
                   [-12.58,-188.1,5.2,0.42,1.6],          // the Second Ship: the shingle where the Court's expedition came to rest
-                  [-13.42,-190.98,3.4,0.38,1.5],];        // the Manifest: a shelf above the wrack line for the crew the Choir filed
+                  [-13.42,-190.98,3.4,0.38,1.5],         // the Manifest: a shelf above the wrack line for the crew the Choir filed
+                  [-24.2,-187.7,2.2,0.38,1.6]];          // the Warrant: the sea set it down square - a pad of settled shingle
 function icoHeight(d){          // unit dir -> surface radius
   const p=invOf(d);
   const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
@@ -3475,6 +3476,7 @@ const INTERIORS={
         if(S.secrets.chart) L.push('the last chart is safe in goblin hands, a world away. this ship was the price of looking. the brood paid nothing and owes everything.');
         if(S.secrets.crate) L.push('the tide took one crate. the brood found it. the ledger allows itself one small smile.');
         if(S.secrets.bell) L.push('the tide hung the bell on the ship\u2019s own spars. the ship approves. ships are vain about their bells.');
+        if(S.secrets.strongbox) L.push('the captain knew what he carried. ribs keep no secrets from the tide. the tide keeps them for whoever walks.');
         if(S.secrets.word2) L.push('the mountain wrote STAYED. the crew of the second ship could not. the ledger does not hold it against them. the ledger holds everything else.');
         return L; } }},
   manifest:{land:null, r:2.5, name:'THE MANIFEST', fpDoor:true, outdoor:true, glint:['#9fd4ff',0.7],
@@ -3491,6 +3493,7 @@ const INTERIORS={
         if(S.secrets.court) L.push('the Court is still expecting its ship. the Court does not stop. let it come and count the stones itself.');
         if(S.secrets.crate) L.push('the tide gave back what it took. the stones do not gloat. the stones have seen the tide\u2019s ledger.');
         if(S.secrets.bell) L.push('the bell kept the name the Court struck. the stones hold it in salt. the count is complete in a way the Court did not intend.');
+        if(S.secrets.strongbox) L.push('the warrant names a number. the stones counted themselves in answer. the numbers do not agree. the stones are right.');
         return L; } }},
   crate:{land:null, r:2.2, name:'THE CARGO', fpDoor:true, outdoor:true, glint:['#d4a94e',0.5],
     fpHint:'a crate the tide kept, the Court\u2019s red wax still whole. face it and tap to read the manifest\u2019s last line.',
@@ -3507,6 +3510,7 @@ const INTERIORS={
         if(S.secrets.choir) L.push('the Choir files intentions too, in the column with no total.');
         if(S.secrets.court) L.push('the Court is still expecting its crate. let it come and read the tide\u2019s receipt.');
         if(S.secrets.bell) L.push('the bell keeps the name; the crate keeps the promises. the tide\u2019s filing system is better than the Court\u2019s.');
+        if(S.secrets.strongbox) L.push('sixty-one promises and one warrant, washed up in the same week. the tide does not choose sides. it chooses order.');
         return L; } }},
   bell:{land:null, r:2.0, name:'THE BELL', fpDoor:true, outdoor:true, glint:['#7fd4b4',0.8],
     fpHint:'a ship\u2019s bell on a tripod of spars, the name struck from the bronze. face it and tap to read what it kept.',
@@ -3524,6 +3528,25 @@ const INTERIORS={
         if(S.secrets.crate) L.push('the promises sleep under the captain\u2019s stone. the bell keeps the name they were sworn to.');
         if(S.secrets.choir) L.push('the Choir asked once for the bell\u2019s note. the bell said nothing, which is its note.');
         if(S.secrets.court) L.push('the Court struck the name. the Court is still expecting its ship. the bell expects nothing. it only keeps.');
+        if(S.secrets.strongbox) L.push('the strongbox says what the ship was FOR. the bell is glad it cannot ring. some news should arrive quietly.');
+        return L; } }},
+  strongbox:{land:null, r:2.0, name:'THE WARRANT', fpDoor:true, outdoor:true, glint:['#c04a5a',0.5],
+    fpHint:'an ironbound strongbox, the Court\u2019s wax whole over the lock. face it and tap to read what the ship was for.',
+    blurb:'the sea respected the Court\u2019s seal and set it down square. the sea respects nothing else.',
+    doorFn:()=>[-24.2,-187.7],
+    interact:{dx:0, dz:0, dd:3.2, ang:0.6, key:'strongbox', sparkY:0.45, spark:'#c04a5a', spark2:'#e8e2d0',
+      tone:[[65.4,1.6,{type:'sine',vol:0.38}],[98,1.1,{type:'sine',vol:0.15,delay:0.08}]],
+      first:{b:['WHAT THE SHIP WAS FOR','an ironbound strongbox, the Court\u2019s wax whole over the lock. inside, sealed against the sea: the warrant. the ship was not coming to trade. the ship was coming to count.'],
+        c:'The tide\u2019s last file (for now): the Court\u2019s own strongbox, set down square, the wax over its lock unbroken. Inside, sealed against the sea, the warrant - and the warrant says the second ship was never coming to trade. It was coming to count: the village, the springs, the goblins, down to a number the Court believes. The brood read it to the stones twice. The number is wrong now. Three more rows of trees went in that same evening, and the springs were shown to two goblins who had not known where they were.', say:9},
+      linesFn:()=>{ const L=['the Court counts intentions. the warrant counts goblins. one of these can be fooled.',
+        'the wax was whole. the sea respected the Court\u2019s seal. the sea respects nothing else.',
+        'it is not spying if the tide brings it to you.'];
+        if(S.secrets.wreck) L.push('the ship carried the warrant. the ship is ribs. the warrant is dry. file that.');
+        if(S.secrets.manifest) L.push('the manifest lists one strongbox, unmanifested. the captain knew what he carried. the crew did not.');
+        if(S.secrets.crate) L.push('the promises were for the crew\u2019s families. the warrant was for the Court. the tide delivered both to the same beach.');
+        if(S.secrets.bell) L.push('the bell kept the name. the strongbox kept the purpose. the tide reads everything eventually.');
+        if(S.secrets.choir) L.push('the Choir filed the ship under weather. it will file the Court under weather too, in time.');
+        if(S.secrets.court) L.push('the Court is still expecting its ship. let it come. the goblins will be counted, and the count will be wrong, and that will be the beginning.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -5817,7 +5840,7 @@ function buildCrate(){
 function seedWrack(){
   if(PROPS.some(p=>p.wrack)) return;
   let s=8847; const sr=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
-  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0],[-15.5,-188.55,1.3]];   // wreck, manifest, crate, bell
+  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0],[-15.5,-188.55,1.3],[-24.2,-187.7,1.6]];   // wreck, manifest, crate, bell, strongbox
   let last=null, n=0;
   for(let y=-193.5;y<=-186.5;y+=0.5) for(let x=-26;x<=-12;x+=0.5){
     const h=icoHeight(dirOf(x,y,[0,0,0]))-150;
@@ -5829,6 +5852,24 @@ function seedWrack(){
     PROPS.push({mesh:buildWrackCluster((sr()*1e9)|0), x:x+(sr()-0.5)*0.4, y:y+(sr()-0.5)*0.4, r:1.855+(sr()-0.5)*0.3, far:'wrack'+n, wrack:1, ride:-0.10});
     n++;
   }
+}
+// v148: the Court's strongbox - the sea respected the seal and set it down square. Inside: the
+// warrant. The ship was not coming to trade. The ship was coming to count.
+function buildStrongbox(){
+  const m=MB(),T=M4.id();
+  const oak=hex('#4a3f30'), iron=hex('#2e3134'), iron2=hex('#232527'), rust=hex('#6b4a32'),
+        velvet=hex('#a32436'), gold=hex('#d4a94e'), salt=hex('#e8ecef');
+  farBox(m,T,0,0.22,0, 0,0,0, 0.52,0.28,0.36, oak, 0.5);                      // the strongbox, set down square
+  for(const bx of [-0.17,0,0.17]) farBox(m,T,bx,0.22,0, 0,0,0, 0.05,0.29,0.37, iron, 0.55);     // iron ribs, proud of the oak
+  farBox(m,T,0,0.37,0, 0,0,0, 0.55,0.06,0.39, iron2, 0.55);                   // the lid, iron-shod
+  farBox(m,T,0,0.32,0.19, 0,0,0, 0.10,0.13,0.03, iron, 0.6);                  // the hasp
+  farOrb(m,T,0,0.30,0.215,0.06,velvet,0.4);                                   // the Court's wax over the lock, whole
+  farOrb(m,T,0,0.305,0.228,0.018,gold,0.6);                                   // the seal's stamp
+  farBox(m,T,0.20,0.19,0.185, 0,0,0, 0.03,0.14,0.012, rust, 0.5);             // rust weeps
+  farBox(m,T,-0.24,0.16,0.10, 0,0,0, 0.012,0.09,0.03, rust, 0.5);
+  farOrb(m,T,0.24,0.12,-0.14,0.02,salt,0.6);                                  // barnacles, respectful, few
+  farOrb(m,T,-0.20,0.115,-0.16,0.016,salt,0.6);
+  return upload(m);
 }
 // v147: the second ship's bell - the tide hung it on a tripod of the wreck's own spars.
 // The Court struck the name from the bronze; the salt filled the strike-marks in.
@@ -5988,6 +6029,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='manifest')) PROPS.push({mesh:buildShrine(), x:-13.42, y:-190.98, r:1.855, far:'manifest', ride:-0.06});   // v145: the crew, in order
   if(!PROPS.some(p=>p.far==='crate')) PROPS.push({mesh:buildCrate(), x:-21.6, y:-187.95, r:1.9, far:'crate', ride:-0.05});   // v146: what the tide kept
   if(!PROPS.some(p=>p.far==='bell')) PROPS.push({mesh:buildBell(), x:-15.5, y:-188.55, r:1.9, far:'bell', ride:-0.08});   // v147: what the tide hung
+  if(!PROPS.some(p=>p.far==='strongbox')) PROPS.push({mesh:buildStrongbox(), x:-24.2, y:-187.7, r:1.9, far:'strongbox', ride:-0.10});   // v148: what the sea respected
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
