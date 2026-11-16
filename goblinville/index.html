@@ -3728,6 +3728,7 @@ const INTERIORS={
         if(deepNight()&&S.secrets.nightdoor) L.push(lampsOut()
           ? 'tonight the hollow is dark and the curtain is open. the den is visiting. the village pretends not to know there is anyone to visit.'
           : 'the hollow is warm in the small hours. the curtain is mostly drawn. the village has agreed, in writing, never to look directly. looking directly is how you lose a neighbor.');
+        if(deepNight()&&S.secrets.nightdoor&&!lampsOut()) L.push('from the path bend you can see the little window lit, if you stand exactly there. the village stands exactly there. the village looks at its feet.');
         if(nightNow()) { L.push('the den is empty at night. the saucer is out. the ridge keeps the hour.');
           L.push('on fishing nights the dew prints go down to the river. the errand is simple: catch two, eat one, leave one on the doorstep of a friend.'); }
         else { L.push('by day the den is only an arch and a folded blanket. something small is asleep in the walls of the world.');
@@ -5417,6 +5418,17 @@ function drawNightGlow(){
       ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
     }
   }
+  const dg=PROPS.find(p=>p.vprop==='denglow');
+  if(dg&&(!dg.cond||dg.cond())){
+    const sp=projPt(dg.x,(dg.gy||0)+0.18,dg.y);
+    if(sp){
+      const fl=0.82+0.18*Math.sin(G.t*3.1+0.7);  // the lamp is honest, not steady
+      const r=44*fl*zs;                          // bootbox-scale, but it carries
+      const g=ctx.createRadialGradient(sp[0],sp[1],2,sp[0],sp[1],r);
+      g.addColorStop(0,'rgba(255,196,110,'+(0.55*a*fl).toFixed(3)+')'); g.addColorStop(1,'rgba(255,150,60,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
+    }
+  }
   ctx.restore();
 }
 function drawGhostHint(){
@@ -5511,7 +5523,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawFPUI(); drawToasts2(); drawBanner2();
+    drawParts(); drawFloats2(); drawNightGlow(); drawFPUI(); drawToasts2(); drawBanner2();  // the night keeps its lights in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -6416,8 +6428,8 @@ function buildTwoFish(){
 function buildDenGlow(){
   const m=MB(),T=M4.id();
   const ember=hex('#ffb347'), ember2=hex('#c87a2a'), cloth=hex('#7a3040');
-  M4.trs(T,0,0.15,0.042,0,0,0,1,1,1); box(m,0.15,0.17,0.012,ember2,T,0,0.4);      // the warm room, dim rim
-  M4.trs(T,0,0.145,0.048,0,0,0,1,1,1); box(m,0.10,0.12,0.012,ember,T,0,0.3);      // the lamp, honest
+  M4.trs(T,0,0.15,0.042,0,0,0,1,1,1); box(m,0.15,0.17,0.012,ember2,T,0,0.75);     // the warm room, dim rim
+  M4.trs(T,0,0.145,0.048,0,0,0,1,1,1); box(m,0.10,0.12,0.012,ember,T,0,0.9);      // the lamp, honest
   M4.trs(T,0.085,0.15,0.052,0,0,0.12,1,1,1); box(m,0.055,0.24,0.014,cloth,T,0,0.7); // the curtain, mostly drawn
   M4.trs(T,-0.02,0.045,0.06,0,0.3,0,1,1,1); box(m,0.05,0.028,0.04,cloth,T,0,0.75);  // a cushion by the lamp
   return upload(m);
