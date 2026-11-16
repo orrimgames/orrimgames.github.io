@@ -6746,6 +6746,20 @@ function buildMinutesBoard(){
   M4.trs(T,0.17,0.60,0.03,0,0,0.5,1,1,1); box(m,0.03,0.05,0.01,ribbon,T,0,0.9);       // a ribbon, because it is official
   return upload(m);
 }
+function buildRestHammock(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#7d5a30'), cloth=hex('#9ec27a'), cloth2=hex('#c8a45c'), hat=hex('#a83a4a'), rope=hex('#d8cfb0'), dark=hex('#2a2218');
+  M4.trs(T,-0.55,0.30,0,0,0,0.05,1,1,1); box(m,0.06,0.62,0.06,wood,T,0,0.6);          // two posts, a little out of true
+  M4.trs(T,0.55,0.30,0,0,0,-0.05,1,1,1); box(m,0.06,0.62,0.06,wood,T,0,0.6);
+  const seg=5;                                                                          // the hammock: a sagging row of cloth strips
+  for(let i=0;i<seg;i++){ const t=i/(seg-1), x=-0.50+t*1.0, y=0.52-0.20*Math.sin(Math.PI*t), tilt=Math.atan(-0.628*Math.cos(Math.PI*t));
+    M4.trs(T,x,y,0,0,0,tilt,1,1,1); box(m,0.30,0.028,0.30,i%2?cloth:cloth2,T,0,0.8); }
+  M4.trs(T,-0.58,0.545,0,0,0,0,1,1,1); box(m,0.03,0.02,0.02,rope,T,0,0.9);
+  M4.trs(T,0.58,0.545,0,0,0,0,1,1,1); box(m,0.03,0.02,0.02,rope,T,0,0.9);
+  M4.trs(T,0.12,0.40,0.0,0,0,0,1,1,1); box(m,0.18,0.07,0.16,hat,T,0,0.8);              // a hat, left to rest
+  M4.trs(T,0.12,0.44,0.0,0,0,0,1,1,1); box(m,0.10,0.05,0.10,dark,T,0,0.9);
+  return upload(m);
+}
 function buildLostFoundStump(){
   const m=MB(),T=M4.id();
   const bark=hex('#4a3a26'), bark2=hex('#3a2c1c'), moss=hex('#3a5a30'), dark=hex('#14100a'),
@@ -7229,6 +7243,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
   if(!PROPS.some(p=>p.vprop==='minutesboard')) PROPS.push({mesh:buildMinutesBoard(), x:28.2, y:33.3, r:0.15, gy:sitY(28.2,33.3)-0.04, vprop:'minutesboard', cond:()=>minutesMorning()&&!nightNow()});   // v191: the minutes, posted
+  if(!PROPS.some(p=>p.vprop==='resthammock')) PROPS.push({mesh:buildRestHammock(), x:32.8, y:34.4, r:0, gy:sitY(32.8,34.4)-0.04, vprop:'resthammock', cond:()=>restDay()&&!nightNow()});   // v192: the day of rest, in person
   if(!PROPS.some(p=>p.vprop==='daystone')) PROPS.push({mesh:buildDayStone(), x:DAYSTONE_AT[0], y:DAYSTONE_AT[1], r:-0.5, gy:sitY(DAYSTONE_AT[0],DAYSTONE_AT[1])-0.04, vprop:'daystone'});   // v186: what day is it
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
