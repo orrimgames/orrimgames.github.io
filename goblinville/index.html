@@ -1960,14 +1960,29 @@ function drawBirds(){
 function drawWeather(){
   const r=S.wx?S.wx.rain:0; if(r<0.02) return;
   // puddle glints on open ground near the village heart
-  const pn=6;
-  for(let i=0;i<pn;i++){
-    const px=SITE.x+hash2(i*7.7,S.day*3.1)*14-7, py=SITE.y+hash2(i*13.1,S.day*1.7)*12-6;
+  // in person the puddles are anchored to a world grid around the walker, so they stay put as you move
+  const spots=[];
+  if(FP.on){
+    const gx0=Math.floor(FP.x/2.5), gy0=Math.floor(FP.y/2.5);
+    for(let cy=gy0-4;cy<=gy0+4;cy++) for(let cx=gx0-4;cx<=gx0+4;cx++){
+      const hh=hash2(cx*5.1+S.day*1.3,cy*9.7); if(hh<0.42) continue;
+      const px=(cx+0.2+0.6*hash2(cx*2.3,cy*4.1))*2.5, py=(cy+0.2+0.6*hash2(cx*6.7,cy*1.9))*2.5;
+      if(HGT(px,py)<WATER+0.12) continue;
+      if(S.buildings.some(o=>px>o.tx-0.6&&px<o.tx+o.w+0.6&&py>o.ty-0.6&&py<o.ty+o.h+0.6)) continue;
+      const dd=Math.hypot(px-FP.x,py-FP.y); if(dd<1.4||dd>9) continue;
+      let seen=true; for(let k=1;k<=7&&seen;k++){ const qx=FP.x+(px-FP.x)*k/8, qy=FP.y+(py-FP.y)*k/8;
+        if(S.buildings.some(o=>qx>o.tx&&qx<o.tx+o.w&&qy>o.ty&&qy<o.ty+o.h)) seen=false; }
+      if(!seen) continue;   // no puddle drawn through a wall
+      spots.push([px,py,hh]);
+    }
+  } else for(let i=0;i<6;i++) spots.push([SITE.x+hash2(i*7.7,S.day*3.1)*14-7, SITE.y+hash2(i*13.1,S.day*1.7)*12-6, hash2(i,S.day)]);
+  for(let i=0;i<spots.length;i++){
+    const px=spots[i][0], py=spots[i][1];
     const p=projPt(px,groundH(px,py)+0.02,py); if(!p) continue;
     if(p[0]<-30||p[0]>W+30||p[1]<60||p[1]>H-40) continue;
-    const w=(10+hash2(i,S.day)*14)*(0.4+0.6*r), tw=Math.sin(G.t*2.1+i)*0.12+1;
-    ctx.globalAlpha=0.30*r;
-    ctx.fillStyle='#aec6dd';
+    const w=(10+spots[i][2]*14)*(0.4+0.6*r)*(FP.on?clamp(26/Math.max(2,Math.hypot(px-FP.x,py-FP.y)),0.5,3.2):1), tw=Math.sin(G.t*2.1+i)*0.12+1;
+    ctx.globalAlpha=(FP.on?0.5:0.30)*r;
+    ctx.fillStyle=FP.on?'#86a6c8':'#aec6dd';
     ellp(p[0],p[1],w,w*0.30*tw); ctx.fill();
     ctx.globalAlpha=0.5*r;
     ctx.fillStyle='#e8f2ff';
@@ -1975,7 +1990,8 @@ function drawWeather(){
     ctx.globalAlpha=1;
   }
   const n=Math.floor(24+r*80), t=G.t;
-  ctx.strokeStyle='rgba(178,198,232,'+(0.34*r+0.10)+')'; ctx.lineWidth=1.2;
+  for(let pass=0;pass<(FP.on?2:1);pass++){   // in person: a darker underlay so streaks read against bright sky and grass
+  ctx.strokeStyle=pass===0&&FP.on?'rgba(60,84,128,'+(0.22*r+0.06)+')':'rgba(178,198,232,'+(0.34*r+0.10)+')'; ctx.lineWidth=pass===0&&FP.on?2.4:1.2;
   ctx.beginPath();
   for(let i=0;i<n;i++){
     const h1=hash2(i*13.7,Math.floor(t*3.2+i*0.7)*7.3);
@@ -1985,6 +2001,7 @@ function drawWeather(){
     if(h1<0.05){ const sx=x-4, sy=y+11+r*4; ctx.moveTo(sx-2.5,sy); ctx.lineTo(sx+2.5,sy); }  // splash tick
   }
   ctx.stroke();
+  }
 }
 /* ------------------------------ resource nodes ------------------------- */
 function findTile(pred, fromX, fromY){
