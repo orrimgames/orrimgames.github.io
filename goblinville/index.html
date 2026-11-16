@@ -3782,7 +3782,7 @@ const INTERIORS={
         if(gratuityMorning()) L.push('on gratuity mornings one pebble is left on the cairn, beside the shoe. nobody admits to it. the shoe accepts it as rent.');
         if(restDay()) L.push('on the day of rest the whole village walks the long way past the cairn, for the view. the shoe has a good view and no opinions.');
         return L; } }},
-  daystone:{land:null, r:1.7, name:'THE DAY STONE', fpDoor:true, outdoor:true, glint:['#e0d4b4',0.8],
+  daystone:{land:null, r:2.0, name:'THE DAY STONE', fpDoor:true, outdoor:true, glint:['#e0d4b4',0.8],
     fpHint:'a notched stone by the green, seven cuts across its face and one small pebble under one of them. face it and tap to ask what day it is.',
     blurb:'seven notches, one pebble. the pebble is the day.',
     doorFn:()=>[DAYSTONE_AT[0],DAYSTONE_AT[1]],
@@ -3794,6 +3794,8 @@ const INTERIORS={
         const names=['lamps-out night','company morning','reading night','minutes morning','market day','gratuity morning','the day of rest'];
         const L=['the pebble sits under '+names[D]+'. the stone has been right about this every day so far.',
           'seven notches, one pebble. the pebble is the day. the stone does not explain further.',
+          'tomorrow the pebble moves to '+names[(D+1)%7]+'. it will be there before anyone is up. nobody has seen it move. nobody has seen it not move.',
+          'the notch for '+names[(D+6)%7]+' is still warm, a little. the stone does not take this personally.',
           'the notch for market day is ochre. it is the only one anyone painted. the stone approves of the market and says so by holding still.'];
         if(S.secrets.counterfiling) L.push('the drawer files the days under their notches. the stone does not file. the stone keeps the count the old way, by being a stone.');
         if(S.secrets.undercount) L.push('the slate counts the goblins. this stone counts the days. between them the village is mostly accounted for.');
