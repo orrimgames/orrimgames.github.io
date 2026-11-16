@@ -3749,6 +3749,8 @@ const INTERIORS={
         if(S.secrets.undercount) L.push('the ferrygoblin is filed PLUS ONE, PERMANENT. the surveyor is on the same shelf. nobody has told the surveyor.');
         if(S.secrets.bell) L.push('the ferry asked the bell for a horn. the bell said nothing, which is its note. the ferry toots a reed instead.');
         if(S.secrets.mossden) L.push('some mornings the raft is damp before the dew decides. the ferry does not ask questions. the fare is one berry, payable to any step.');
+        L.push('the buoy marks the shoals. the buoy is filed as DESTINATION. the ferry salutes it with the reed.');
+        if(nightNow()) L.push('the buoy comes in at night. even destinations sleep. the shoals keep themselves.');
         return L; } }},
   laundry:{land:null, r:1.5, name:'THE WASHING LINE', fpDoor:true, outdoor:true,
     fpHint:'two posts, one rope with a polite sag, and the enormous shirt. face it and tap to admire the rotation.',
@@ -6148,6 +6150,15 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildShoalBuoy(){
+  const m=MB(),T=M4.id();
+  const berry=hex('#b04858'), bone=hex('#e0d4b4'), wood=hex('#3a2a1a');
+  M4.trs(T,0,0.05,0,0,0,0,1,1,1); tube(m,0.09,0.07,0.10,9,berry,T,0,true,true);     // the float, striped
+  M4.trs(T,0,0.10,0,0,0,0,1,1,1); tube(m,0.085,0.075,0.035,9,bone,T,0,true,false);
+  M4.trs(T,0,0.20,0,0,0,0,1,1,1); box(m,0.018,0.22,0.018,wood,T,0,0.7);            // the mast
+  M4.trs(T,0.05,0.28,0,0,0,0,1,1,1); box(m,0.08,0.045,0.010,berry,T,0,0.85);       // the flag: DESTINATION
+  return upload(m);
+}
 function buildLaundryLine(){
   const m=MB(),T=M4.id();
   const wood=hex('#3a2a1a'), rope=hex('#d8cfb0'), bone=hex('#e0d4b4');
@@ -6796,6 +6807,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
+  if(!PROPS.some(p=>p.vprop==='shoalbuoy')) PROPS.push({mesh:buildShoalBuoy(), x:32.2, y:38.4, r:0, gy:-0.30, vprop:'shoalbuoy', cond:()=>!nightNow()});   // v166: filed as DESTINATION
   if(!PROPS.some(p=>p.vprop==='laundryline')) PROPS.push({mesh:buildLaundryLine(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryline'});   // v165: two posts, one rope, a polite sag
   if(!PROPS.some(p=>p.vprop==='laundryshirts')) PROPS.push({mesh:buildLaundryShirts(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryshirts', cond:()=>!nightNow()});   // v165: the shirts sleep inside
   if(!PROPS.some(p=>p.vprop==='ferryraft')) PROPS.push({mesh:buildFerryRaft(), x:30.9, y:37.1, r:-0.785, gy:sitY(30.9,37.1)-0.04, vprop:'ferryraft'});   // v164: the village's first navy
