@@ -5534,6 +5534,12 @@ function drawNightGlow(){
     const rr=r*1.9, wg2=ctx.createRadialGradient(sp[0],sp[1],1,sp[0],sp[1],rr);   // soft pool, not a flat disc on the roof
     wg2.addColorStop(0,'rgba(255,190,90,'+(0.26*a*fl).toFixed(3)+')'); wg2.addColorStop(0.5,'rgba(255,170,70,'+(0.10*a*fl).toFixed(3)+')'); wg2.addColorStop(1,'rgba(255,150,50,0)');
     ctx.fillStyle=wg2; ctx.beginPath(); ctx.arc(sp[0],sp[1],rr,0,TAU); ctx.fill(); }
+  for(const p of PROPS){ if(p.gllantern==null||!p.cond()) continue;   // v198: the gleaning lanterns burn at night
+    const sp=projPt(p.x,(p.gy||0)+1.0,p.y); if(!sp) continue;
+    const fl=0.88+0.12*Math.sin(G.t*2.6+p.gllantern*1.7), r=52*fl*zs;
+    const g=ctx.createRadialGradient(sp[0],sp[1],2,sp[0],sp[1],r);
+    g.addColorStop(0,'rgba(255,214,120,'+(0.5*a*fl).toFixed(3)+')'); g.addColorStop(1,'rgba(255,170,60,0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill(); }
   const wg=PROPS.find(p=>p.vprop==='wellglow');
   if(wg&&(!wg.cond||wg.cond())){
     const sp=projPt(wg.x,(wg.gy||0)+0.30,wg.y);
@@ -6804,7 +6810,9 @@ function glTake(p,amt,far){
   const n=glCount();
   toast2((far?'a glimmer, called in from afar: +':'a glimmer, picked up: +')+amt+' '+k+'  ('+n+'/8 today)');
   if(!S.secrets.glimmers){ S.secrets.glimmers=1; banner2('GLIMMERS','something small shines on the ground. eight a day. walk into one.'); chron('Small lights turned up on the ground today, the size of a thumb, warm. The goblins are not calling it magic. They are calling it "the day\'s gleaning".', true); }
-  if(n>=8){ addRes('gold',10); banner2('THE DAY\'S GLEANING','all eight, in one day. +10 gold. the ground is out of lights until tomorrow.'); sparkW(p.x,p.gy+1.0,p.y,30,'#fff6c8'); A.cheer(); }
+  if(n>=8){ addRes('gold',10);
+    let lit=''; if(S.secrets.gl_done!==glDay()){ S.secrets.gl_done=glDay(); S.secrets.gl_days=(S.secrets.gl_days||0)+1; if(S.secrets.gl_days<=7) lit=' lantern '+S.secrets.gl_days+' of 7 is lit at the edge of the green.'; }
+    banner2('THE DAY\'S GLEANING','all eight, in one day. +10 gold.'+(lit||' the ground is out of lights until tomorrow.')); sparkW(p.x,p.gy+1.0,p.y,30,'#fff6c8'); A.cheer(); }
   saveGame();
 }
 function glCollect(){
@@ -6818,6 +6826,30 @@ function glTapIso(sx,sy){   // v197: from the map you can call one in, but only 
     const q=projPt(p.x,p.gy+0.3,p.y); if(!q) continue;
     if(Math.hypot(sx-q[0],sy-q[1])<38){ glTake(p,1,true); return true; } }
   return false;
+}
+function buildGlLantern(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#6b4a28'), gold=hex('#ffd34d'), core=hex('#fff6c8'), roof=hex('#4a3a26');
+  M4.trs(T,0,0.45,0,0,0,0,1,1,1); box(m,0.07,0.9,0.07,wood,T,0,0.6);
+  M4.trs(T,0,0.98,0,0,0,0,1,1,1); box(m,0.22,0.22,0.22,gold,T,0,1.0);
+  M4.trs(T,0,0.98,0,0,0.78,0,1,1,1); box(m,0.13,0.13,0.13,core,T,0,1.0);
+  M4.trs(T,0,1.14,0,0,0,0,1,1,1); box(m,0.30,0.05,0.30,roof,T,0,0.6);
+  return upload(m);
+}
+function seedGlLanterns(){
+  if(PROPS.some(p=>p.gllantern!=null)) return;
+  const mesh=buildGlLantern(); let seed=7197, got=0, tries=0; const pts=[];
+  const rn=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
+  while(got<7&&tries<6000){ tries++;
+    const a=rn()*TAU, rr=7+rn()*5, x=30+Math.cos(a)*rr, y=32+Math.sin(a)*rr;
+    let ok=true; for(let dx=-1;dx<=1&&ok;dx++) for(let dy=-1;dy<=1;dy++){ const t=tiles[Math.floor(y)+dy]&&tiles[Math.floor(y)+dy][Math.floor(x)+dx]; if(!t||t.t===2){ ok=false; break; } }
+    if(!ok) continue;
+    if(pts.some(q=>Math.hypot(q[0]-x,q[1]-y)<4)) continue;
+    if(S.buildings.some(b=>x>b.tx-2.2&&x<b.tx+b.w+2.2&&y>b.ty-2.2&&y<b.ty+b.h+2.2)) continue;
+    if(PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x,p.y-y)<2.0)) continue;
+    pts.push([x,y]); const i=got++;
+    PROPS.push({mesh, x, y, r:i*1.3, gy:sitY(x,y)-0.02, gllantern:i, vprop:'gllantern'+i, cond:()=>(S.secrets.gl_days||0)>i&&fpWalkable(x,y)});
+  }
 }
 function buildRestHammock(){
   const m=MB(),T=M4.id();
@@ -7319,6 +7351,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='resthammock')) PROPS.push({mesh:buildRestHammock(), x:32.8, y:34.4, r:0, gy:sitY(32.8,34.4)-0.04, vprop:'resthammock', cond:()=>restDay()&&!nightNow()});   // v192: the day of rest, in person
   if(!PROPS.some(p=>p.vprop==='tipjar')) PROPS.push({mesh:buildTipJar(), x:30.2, y:34.8, r:0.2, gy:sitY(30.2,34.8)-0.02, vprop:'tipjar', cond:()=>gratuityMorning()&&!nightNow()});   // v193: more than asked
   seedGlimmers();   // v196
+  seedGlLanterns();   // v198
   if(!PROPS.some(p=>p.vprop==='daystone')) PROPS.push({mesh:buildDayStone(), x:DAYSTONE_AT[0], y:DAYSTONE_AT[1], r:-0.5, gy:sitY(DAYSTONE_AT[0],DAYSTONE_AT[1])-0.04, vprop:'daystone'});   // v186: what day is it
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
