@@ -3780,6 +3780,7 @@ const INTERIORS={
         if(minutesMorning()) L.push('the minutes were read at the shoe once. it was recorded as ABSENT, PRESENT IN SPIRIT. it was not offended.');
         if(marketDay()) L.push('on market days the stalls are set up in sight of the cairn. the shoe has been offered three prices. the shoe is not for sale and has said so, by staying.');
         if(gratuityMorning()) L.push('on gratuity mornings one pebble is left on the cairn, beside the shoe. nobody admits to it. the shoe accepts it as rent.');
+        if(restDay()&&!nightNow()) L.push('on the day of rest a hammock goes up by the hut, and a hat is left in it to hold the place. from the cairn the shoe can see the hat. the shoe approves of anything that stays put.');
         if(restDay()) L.push('on the day of rest the whole village walks the long way past the cairn, for the view. the shoe has a good view and no opinions.');
         return L; } }},
   daystone:{land:null, r:2.0, name:'THE DAY STONE', fpDoor:true, outdoor:true, glint:['#e0d4b4',0.8],
@@ -3833,6 +3834,7 @@ const INTERIORS={
         if(minutesMorning()) L.push('the minutes list the door under OLD BUSINESS and move on. the door does not mind being old. it minds being business.');
         if(marketDay()) L.push('on market days a stall offers keys to nothing, three beads each. the door has never bought one. the door has the original.');
         if(gratuityMorning()) L.push('on gratuity mornings a pebble sits on the step, wet from the well. the door cannot thank anyone. the step is warm where it sits.');
+        if(gratuityMorning()&&!nightNow()) L.push('on gratuity mornings a jar stands by the hut with a berry beside it. the door was not consulted about the jar. it would have said yes.');
         if(restDay()) L.push('on the day of rest the door is shut and the step is swept. WORTH IT is still there, under a leaf, dry. it will keep.');
         return L; } }},
   mossden:{land:null, r:1.6, name:'THE MOSS DEN', fpDoor:true, outdoor:true, glint:['#a8c4d8',0.8],
