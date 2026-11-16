@@ -6784,6 +6784,7 @@ function seedGlimmers(){
     let ok=true; for(let dx=-1;dx<=1&&ok;dx++) for(let dy=-1;dy<=1;dy++){ const t=tiles[Math.floor(y)+dy]&&tiles[Math.floor(y)+dy][Math.floor(x)+dx]; if(!t||t.t===2){ ok=false; break; } }
     if(!ok) continue;
     if(pts.some(q=>Math.hypot(q[0]-x,q[1]-y)<6)) continue;
+    if(x<13&&y>24&&y<38) continue;   // the ruin rocks
     if(S.buildings.some(b=>x>b.tx-2.6&&x<b.tx+b.w+2.6&&y>b.ty-2.6&&y<b.ty+b.h+2.6)) continue;
     if(PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x,p.y-y)<2.2)) continue;
     pts.push([x,y]);
@@ -6794,20 +6795,29 @@ function seedGlimmers(){
 function glTick(dt){
   for(const p of PROPS) if(p.glimmer!=null){ p.r+=dt*1.1; p.gy=p.gy0+0.10+0.07*Math.sin(G.t*2.2+p.glimmer); if(Math.random()<dt*1.4&&p.cond()) sparkW(p.x,p.gy+0.45,p.y,1,'#ffe98a'); }
 }
+function glTake(p,amt,far){
+  const i=p.glimmer;
+  if(S.secrets.gl_d!==glDay()){ S.secrets.gl_d=glDay(); S.secrets.gl_m=0; }
+  S.secrets.gl_m=(S.secrets.gl_m||0)|(1<<i);
+  const kinds=['food','wood','stone','gold'], k=kinds[i%4];
+  addRes(k,amt); sparkW(p.x,p.gy+0.35,p.y,16,'#ffd34d'); A.say(8);
+  const n=glCount();
+  toast2((far?'a glimmer, called in from afar: +':'a glimmer, picked up: +')+amt+' '+k+'  ('+n+'/8 today)');
+  if(!S.secrets.glimmers){ S.secrets.glimmers=1; banner2('GLIMMERS','something small shines on the ground. eight a day. walk into one.'); chron('Small lights turned up on the ground today, the size of a thumb, warm. The goblins are not calling it magic. They are calling it "the day\'s gleaning".', true); }
+  if(n>=8){ addRes('gold',10); banner2('THE DAY\'S GLEANING','all eight, in one day. +10 gold. the ground is out of lights until tomorrow.'); sparkW(p.x,p.gy+1.0,p.y,30,'#fff6c8'); A.cheer(); }
+  saveGame();
+}
 function glCollect(){
   if(FP.interior||FP.battle||S.sail) return;
   for(const p of PROPS){ if(p.glimmer==null||!p.cond()) continue;
     if(Math.hypot(p.x-FP.x,p.y-FP.y)>0.9) continue;
-    const i=p.glimmer;
-    if(S.secrets.gl_d!==glDay()){ S.secrets.gl_d=glDay(); S.secrets.gl_m=0; }
-    S.secrets.gl_m=(S.secrets.gl_m||0)|(1<<i);
-    const kinds=['food','wood','stone','gold'], k=kinds[i%4];
-    addRes(k,3); sparkW(p.x,p.gy+0.35,p.y,16,'#ffd34d'); A.say(8);
-    const n=glCount();
-    toast2('a glimmer, picked up: +3 '+k+'  ('+n+'/8 today)');
-    if(!S.secrets.glimmers){ S.secrets.glimmers=1; banner2('GLIMMERS','something small shines on the ground. eight a day. walk into one.'); chron('Small lights turned up on the ground today, the size of a thumb, warm. The goblins are not calling it magic. They are calling it "the day\'s gleaning".', true); }
-    if(n>=8){ addRes('gold',10); banner2('THE DAY\'S GLEANING','all eight, in one day. +10 gold. the ground is out of lights until tomorrow.'); sparkW(FP.x,FP.floorY!=null?FP.floorY+1:p.gy+1,FP.y,30,'#fff6c8'); A.cheer(); }
-    saveGame(); return; }
+    glTake(p,3,false); return; }
+}
+function glTapIso(sx,sy){   // v197: from the map you can call one in, but only for a third of the walk-up reward
+  for(const p of PROPS){ if(p.glimmer==null||!p.cond()) continue;
+    const q=projPt(p.x,p.gy+0.3,p.y); if(!q) continue;
+    if(Math.hypot(sx-q[0],sy-q[1])<38){ glTake(p,1,true); return true; } }
+  return false;
 }
 function buildRestHammock(){
   const m=MB(),T=M4.id();
@@ -7834,6 +7844,7 @@ function handleTap3(x,y){
     } else { A.blip(); ghostArmed=false; }
     return;
   }
+  if(!FP.on&&glTapIso(x,y)) return;
   const g=hitGob3(x,y);
   if(g){ S.inspect={g,t:3.4}; S.metGob=1; A.blip(); g.emote='!'; g.emoteT=1.2; g.squash=0.6; return; }
   const pt=rayGround(x,y);
