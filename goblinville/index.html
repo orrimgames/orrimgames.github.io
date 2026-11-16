@@ -6931,11 +6931,28 @@ function chatTarget(){
   return best;
 }
 function chatGiven(g){ return S.secrets.gt_d===glDay() && (S.secrets.gt_n||'').split(',').includes(g.name); }
+function chatCtx(g){   // v203: some answers are about the day, not the goblin
+  const L=[];
+  if(S.wx&&S.wx.rain>0.3) L.push('it is raining on my head. i am told this is good for the mud. the mud is not consulted either.','the rain is loud. i am pretending it is applause.');
+  if(nightNow()) L.push('you are out late. so am i. we are both here for different reasons and neither of us will say.','the dark is fine. the dark is just the day with its eyes shut.');
+  if(restDay()) L.push('it is the day of rest. i am resting extremely hard.');
+  if(marketDay()) L.push('the ferry has a stall today. i have looked at it for a while. looking is free.');
+  if(minutesMorning()) L.push('the minutes are posted. i was in the minutes. i do not remember being at the meeting.');
+  if(gratuityMorning()) L.push('somebody overpaid for something. the whole village is being very polite about it.');
+  if(lampsOut()) L.push('the lamps are out tonight at the den. we do not talk about why. we do not talk about why very loudly.');
+  if(readingNight()) L.push('the archive is read aloud tonight. i have the good spot. the good spot is the back, by the door.');
+  if(companyMorning()) L.push('two fish arrived last night. nobody asked for fish. we are being brave about it.');
+  const n=glCount(); if(n>=8) L.push('all eight lights today? the ground is out of lights. so am i, of ideas.'); else if(n>0) L.push('i saw you pick up a light. i did not see you. the light saw you.');
+  if(rareLive()) L.push('there is a pale light way out past the green today. i have not gone. you look like someone who goes.');
+  if(g.mood<0.5) L.push('i am a little low. a chat is cheap and it works. that is the whole secret.');
+  return L.length?L[(g.talk+glDay())%L.length]:null;
+}
 function chatTap(){
   const g=chatTarget(); if(!g) return false;
   const k=(g.trait&&g.trait.k)||'Cheerful', ls=CHAT[k]||CHAT.Cheerful;
   g.talk=(g.talk||0)+1; g.emote='~'; g.emoteT=1.2; g.squash=0.4; g.mood=Math.min(1,(g.mood||0.7)+0.05);
-  toast2(g.name+': '+ls[g.talk%ls.length]); A.say(8);
+  const cl=(g.talk%2===0)?chatCtx(g):null;
+  toast2(g.name+': '+(cl||ls[g.talk%ls.length])); A.say(8);
   if(S.secrets.gt_d!==glDay()){ S.secrets.gt_d=glDay(); S.secrets.gt_n=''; }
   if(!chatGiven(g)){
     S.secrets.gt_n=(S.secrets.gt_n?S.secrets.gt_n+',':'')+g.name;
