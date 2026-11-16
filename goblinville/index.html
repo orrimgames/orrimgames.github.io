@@ -3698,6 +3698,7 @@ const INTERIORS={
         if(S.secrets.receipt) L.push('the sea loses nothing. the door admits nothing. between them, the world keeps its accounts.');
         L.push('something left a thank-you on the step: a parcel, three beads, a note. the note says only: WORTH IT. the shelf has filed it under GRATEFUL, HOURLY.');
         if(S.secrets.mossden) L.push('the prints go up the ridge to the moss rocks. the door knows where its key sleeps. the door sleeps better.');
+        if(S.secrets.mossden) L.push('on fishing nights a small fish appears on the step, wet and apologetic. the door has no mouth. the door keeps it anyway.');
         return L; } }},
   mossden:{land:null, r:1.6, name:'THE MOSS DEN', fpDoor:true, outdoor:true, glint:['#a8c4d8',0.8],
     fpHint:'where the prints end: a low arch beside the moss rocks, a folded leaf blanket, a saucer licked clean. face it and tap to say goodnight.',
@@ -3710,7 +3711,8 @@ const INTERIORS={
       linesFn:()=>{ const L=['the saucer is licked clean. the blanket is folded. the comforts are arranged by moonlight. house rules.',
         'no label survives the night here. the den files nothing. the den is the filing.',
         'it is no bigger than a bootbox. whatever lives in it is smaller. the arithmetic of dens.'];
-        if(nightNow()) L.push('the den is empty at night. the saucer is out. the ridge keeps the hour.');
+        if(nightNow()) { L.push('the den is empty at night. the saucer is out. the ridge keeps the hour.');
+          L.push('on fishing nights the dew prints go down to the river. the errand is simple: catch two, eat one, leave one on the doorstep of a friend.'); }
         else { L.push('by day the den is only an arch and a folded blanket. something small is asleep in the walls of the world.');
           if(S.secrets.nightdoor) L.push('by morning the saucer holds something small: a dew cup, a berry, a polished pebble. nobody sees the refill happen. the den pays its tab.'); }
         if(S.secrets.nightdoor) L.push('it borrows the key hourly and returns it warm. the door does not mind. the door is family.');
@@ -6115,6 +6117,30 @@ function buildRefill(){
   }
   return upload(m);
 }
+function buildErrandTrail(){
+  const m=MB(),T=M4.id();
+  const print=hex('#9fb4d8'), wood=hex('#3a2a1a'), peb=hex('#8a8f98');
+  const dx=0.855, dy=0.520, px=-dy, py=dx;                                      // down to the waterline, northeast
+  const base=sitY(28.3,35.6)-0.04;
+  for(let i=0;i<6;i++){ const k=0.35+i*0.42, side=(i%2?1:-1)*0.07;
+    const wx=dx*k+px*side, wz=dy*k+py*side;
+    M4.trs(T,wx,sitY(28.3+wx,35.6+wz)+0.004-base,wz,0,Math.atan2(dx,dy),0,1,0.3,1);
+    ball(m,0.058,7,print,T,0,0.95);                                             // the errand, in dew
+  }
+  M4.trs(T,2.4,sitY(30.7,37.0)+0.035-base,1.4,0,0,0,1,0.5,1); ball(m,0.095,8,peb,T,0,0.6);   // the pebble seat, at the water
+  M4.trs(T,2.52,sitY(30.7,37.0)+0.20-base,1.45,-0.9,1.107,0,1,1,1); box(m,0.014,0.014,0.55,wood,T,0,0.7); // the rod, out over the river
+  M4.trs(T,2.55,sitY(30.7,37.0)+0.03-base,1.24,0,0.4,0,1,0.4,1); ball(m,0.038,7,print,T,0,0.85);  // the catch: two small fish
+  M4.trs(T,2.63,sitY(30.7,37.0)+0.03-base,1.33,0,1.2,0,1,0.4,1); ball(m,0.038,7,print,T,0,0.85);
+  return upload(m);
+}
+function buildFishBone(){
+  const m=MB(),T=M4.id();
+  const bone=hex('#e0d4b4');
+  M4.trs(T,0,0.022,0,0,0.5,0,1,1,1); box(m,0.16,0.012,0.028,bone,T,0,0.9);        // the spine
+  for(let i=0;i<3;i++){ M4.trs(T,-0.04+i*0.04,0.028,0.028,0,0.5,0.5,1,1,1); box(m,0.009,0.009,0.044,bone,T,0,0.9); }  // ribs
+  M4.trs(T,0.10,0.026,-0.016,0,0.5,0,1,1,1); ball(m,0.026,6,bone,T,0,0.9);        // the head, picked clean
+  return upload(m);
+}
 function buildNightPrints(){
   const m=MB(),T=M4.id();
   const print=hex('#9fb4d8');
@@ -6650,6 +6676,8 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='nightprints')) PROPS.push({mesh:buildNightPrints(), x:24, y:38, r:0, gy:sitY(24,38)-0.04, vprop:'nightprints', cond:()=>nightNow()&&!!S.secrets.nightdoor});   // v157: home by moonlight
   if(!PROPS.some(p=>p.vprop==='mossden')) PROPS.push({mesh:buildMossDen(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'mossden'});   // v158: declined, politely
   if(!PROPS.some(p=>p.vprop==='refill')) PROPS.push({mesh:buildRefill(), x:28.296, y:35.877, r:0, gy:sitY(28.296,35.877)-0.04, vprop:'refill', cond:()=>!nightNow()&&!!S.secrets.mossden&&!!S.secrets.nightdoor});   // v159: the saucer pays its tab
+  if(!PROPS.some(p=>p.vprop==='errandtrail')) PROPS.push({mesh:buildErrandTrail(), x:28.3, y:35.6, r:0, gy:sitY(28.3,35.6)-0.04, vprop:'errandtrail', cond:()=>nightNow()&&!!S.secrets.mossden});   // v160: the errand, in dew
+  if(!PROPS.some(p=>p.vprop==='fishbone')) PROPS.push({mesh:buildFishBone(), x:30.7, y:36.9, r:0, gy:sitY(30.7,36.9)-0.04, vprop:'fishbone', cond:()=>!nightNow()&&!!S.secrets.mossden&&!!S.secrets.nightdoor});   // v160: the errand leaves evidence
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
