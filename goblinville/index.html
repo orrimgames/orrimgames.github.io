@@ -6750,10 +6750,11 @@ function buildMinutesBoard(){
 }
 function buildTipJar(){
   const m=MB(),T=M4.id();
-  const glass=hex('#bfe0d8'), lid=hex('#7d5a30'), peb=hex('#8a8478'), peb2=hex('#c9c2b0'), tag=hex('#f2ead8'), dark=hex('#2a2218'), berry=hex('#a83a4a');
+  const glass=hex('#7fb8b0'), lid=hex('#7d5a30'), peb=hex('#8a8478'), peb2=hex('#c9c2b0'), tag=hex('#f2ead8'), dark=hex('#2a2218'), berry=hex('#a83a4a');
   M4.trs(T,0,0.11,0,0,0,0,1,1,1); box(m,0.20,0.22,0.20,glass,T,0,0.7);                // the jar
   for(let i=0;i<6;i++){ M4.trs(T,-0.05+(i%3)*0.05,0.04+Math.floor(i/3)*0.05,(i%2?0.03:-0.03),0,i,0,1,1,1); box(m,0.045,0.04,0.045,i%2?peb:peb2,T,0,0.9); }   // pebbles inside
   M4.trs(T,0,0.235,0,0,0,0,1,1,1); box(m,0.22,0.03,0.22,lid,T,0,0.6);                 // the lid
+  for(let i=0;i<3;i++){ M4.trs(T,-0.04+i*0.045,0.27+(i===1?0.035:0),0,0,i*0.7,0,1,1,1); box(m,0.05,0.04,0.05,i%2?peb:peb2,T,0,0.9); }   // the tip, left on the lid
   M4.trs(T,0.02,0.15,0.105,0,0,0,1,1,1); box(m,0.11,0.07,0.01,tag,T,0,0.9);           // the label
   M4.trs(T,0.02,0.15,0.112,0,0,0,1,1,1); box(m,0.07,0.012,0.004,dark,T,0,0.9);
   M4.trs(T,0.17,0.03,0.05,0,0,0,1,1,1); box(m,0.05,0.05,0.05,berry,T,0,0.9);          // a berry, as interest
