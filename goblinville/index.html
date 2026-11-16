@@ -2552,6 +2552,26 @@ function drawLaundry(){
       ctx.restore();
     }
   }
+  const mr=PROPS.find(p=>p.vprop==='marketraft');
+  if(mr&&(!mr.cond||mr.cond())){
+    const q1=projPt(29.81,groundH(29.81,36.79)+0.47,36.79), q2=projPt(30.75,groundH(30.75,38.05)+0.44,38.05);
+    if(q1&&q2){
+      const mx=(q1[0]+q2[0])/2, my=(q1[1]+q2[1])/2+8+Math.sin(G.t*1.9+2.2)*1.6;
+      ctx.strokeStyle='rgba(216,207,176,0.9)'; ctx.lineWidth=1.4;
+      ctx.beginPath(); ctx.moveTo(q1[0],q1[1]); ctx.quadraticCurveTo(mx,my,q2[0],q2[1]); ctx.stroke();
+      const cols=['#a83a4a','#c8a45c','#7a9cc8','#4a6a38','#e0d4b4'];
+      for(let i=1;i<=6;i++){
+        const t=i/7, u=1-t;
+        const cx=u*u*q1[0]+2*u*t*mx+t*t*q2[0], cy=u*u*q1[1]+2*u*t*my+t*t*q2[1];
+        const sway=Math.sin(G.t*1.9+i)*2.4;
+        ctx.save(); ctx.translate(cx,cy); ctx.rotate(sway*0.06);
+        ctx.fillStyle=cols[(i-1)%5];
+        ctx.beginPath(); ctx.moveTo(-4.6,0); ctx.lineTo(4.6,0); ctx.lineTo(0,9); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle='rgba(60,44,28,0.5)'; ctx.lineWidth=0.7; ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
 }
 
 /* ---------------------------- initial village --------------------------- */
@@ -3785,6 +3805,7 @@ const INTERIORS={
         'four pins is structural. six is respect.'];
         if(nightNow()) L.push('the line is bare at night. the shirts sleep inside. the clothespins hold each other. it is none of anybody\'s business.');
         else L.push('today is a '+['striped','good','patched'][Math.floor(Date.now()/86400000)%3]+' day. the line approves.');
+        if(!nightNow()&&marketDay()&&S.secrets.ferry) L.push('on market days the line lends the stall its good pole and its best sag: bunting. the enormous shirt supervises. supervision is ceremonial.');
         if(S.secrets.ferry) L.push('the ferrygoblin does the heavy washing on the way to the shoals. the raft doubles as the rinse bucket. the fish do not mind. the fish are filed.');
         if(S.secrets.undercount) L.push('TEXTILES, ONGOING. NOBODY\'S, CEREMONIAL. both entries are read aloud at the solstice. the solstice is well attended.');
         if(S.secrets.scenicroute) L.push('the shoe watches the line from its cairn. the shoe and the enormous shirt are the village\'s two great singletons. they have never met. the village respects this.');
@@ -5557,7 +5578,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawNightGlow(); drawFPUI(); drawToasts2(); drawBanner2();  // the night keeps its lights in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawNightGlow(); drawFPUI(); drawToasts2(); drawBanner2();  // the night keeps its lights in person too; the line keeps its sag
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
