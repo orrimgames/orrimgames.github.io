@@ -5564,6 +5564,19 @@ function drawNightGlow(){
       ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
     }
   }
+  const ds=PROPS.find(p=>p.vprop==='daystone');
+  if(ds&&S.secrets.daystone){
+    const dd=Math.floor(Date.now()/86400000)%7, lx=-0.165+dd*0.055, lz=0.12, cr=Math.cos(ds.r), sr_=Math.sin(ds.r);   // today's pebble, rotated into the world
+    const wx=ds.x+lx*cr-lz*sr_, wz=ds.y+lx*sr_+lz*cr;
+    const sp=projPt(wx,(ds.gy||0)+0.34,wz);
+    if(sp){
+      const fl=0.92+0.08*Math.sin(G.t*0.8);                       // the pebble keeps the day quietly
+      const r=17*fl*zs;
+      const g=ctx.createRadialGradient(sp[0],sp[1],1,sp[0],sp[1],r);
+      g.addColorStop(0,'rgba(240,228,196,'+(0.50*a*fl).toFixed(3)+')'); g.addColorStop(1,'rgba(230,214,170,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
+    }
+  }
   const sr=PROPS.find(p=>p.vprop==='scenicroute');
   if(sr&&nightNow()&&S.secrets.scenicroute&&readingNight()){
     const sp=projPt(sr.x,(sr.gy||0)+0.40,sr.y);
