@@ -4554,7 +4554,7 @@ function drawFPUI(){
       ctx.fillStyle='rgba(20,52,80,0.88)'; rrp(r.x,r.y,r.w,r.h,13); ctx.fill();
       txt3(S.boat&&Math.hypot(S.boat.x-FP.x,S.boat.y-FP.y)<6?'SET SAIL':'MAKE A RAFT',r.x+r.w/2,r.y+26,13,'#cdeaff','center',900); }
   }
-  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8', W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
+  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
   if(FP.hurt>0){ ctx.fillStyle='rgba(190,30,30,'+(FP.hurt*0.5)+')'; ctx.fillRect(0,0,W,H); }
 }
 
@@ -6799,8 +6799,43 @@ function seedGlimmers(){
     PROPS.push({mesh, x, y, r:i*0.9, gy, gy0:gy, glimmer:i, vprop:'glimmer'+i, cond:()=>glActive(i)&&!glGot(i)&&fpWalkable(x,y)});
   }
 }
+/* ---- v200: the Moon Glimmer - one rare light, on the day of rest, far from the green ---- */
+function rareLive(){ return restDay() && S.secrets.gl_rw!==Math.floor(glDay()/7); }
+function buildRareGlimmer(){
+  const m=MB(),T=M4.id();
+  const ice=hex('#bfe4ff'), core=hex('#ffffff'), base=hex('#6f7a8a');
+  M4.trs(T,0,0.04,0,0,0,0,1,1,1); box(m,0.34,0.07,0.34,base,T,0,0.7);
+  M4.trs(T,0,0.50,0,0.78,0.0,0.78,1,1,1); box(m,0.26,0.26,0.26,ice,T,0,1.0);
+  M4.trs(T,0,0.50,0,0.78,0.78,0.78,1,1,1); box(m,0.16,0.16,0.16,core,T,0,1.0);
+  M4.trs(T,0,0.50,0,0,0,0,1,1,1); box(m,0.03,0.9,0.03,ice,T,0,1.0);
+  return upload(m);
+}
+function seedRareGlimmer(){
+  if(PROPS.some(p=>p.rareGl)) return;
+  let seed=9100, tries=0, best=null;
+  const rn=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
+  while(tries<6000){ tries++;
+    const x=5+rn()*50, y=5+rn()*50, d=Math.hypot(x-30,y-32);
+    if(d<20) continue;
+    if(x>44&&y<18) continue;   // the dragon's perch
+    let ok=true; for(let dx=-2;dx<=2&&ok;dx++) for(let dy=-2;dy<=2;dy++){ const t=tiles[Math.floor(y)+dy]&&tiles[Math.floor(y)+dy][Math.floor(x)+dx]; if(!t||t.t===2){ ok=false; break; } }
+    if(!ok) continue;
+    if(PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x,p.y-y)<3)) continue;
+    if(!best||d>best.d) best={x,y,d};
+  }
+  if(!best) return;
+  PROPS.push({mesh:buildRareGlimmer(), x:best.x, y:best.y, r:0, gy:sitY(best.x,best.y), gy0:sitY(best.x,best.y), rareGl:1, vprop:'moonglimmer', cond:()=>rareLive()&&fpWalkable(best.x,best.y)});
+}
+function rareTake(p,far){
+  S.secrets.gl_rw=Math.floor(glDay()/7); S.secrets.gl_moon=(S.secrets.gl_moon||0)+1;
+  addRes('gold',15); addRes('stone',15); sparkW(p.x,p.gy+0.5,p.y,40,'#bfe4ff'); sparkW(p.x,p.gy+0.9,p.y,20,'#ffffff'); A.cheer();
+  banner2('THE MOON GLIMMER',far?'called in from the map. +15 gold, +15 stone. it did not mind.':'+15 gold, +15 stone. it was waiting at the far edge of the green. one a week.');
+  chron('A pale light sat out past the green on the day of rest, and somebody walked all the way to it. It has not said why. It left gold and stone and the feeling of having been expected.', true);
+  saveGame();
+}
 function glTick(dt){
   if((S.secrets.gl_days||0)>=7&&nightNow()&&Math.random()<dt*3){ const L=PROPS.filter(p=>p.gllantern!=null); const p=L[Math.floor(Math.random()*L.length)]; if(p) S.parts.push({x:p.x+rnd(0.5,-0.5),y:p.gy+1.0+rnd(0.4),z:p.y+rnd(0.5,-0.5),vx:rnd(0.3,-0.3),vy:rnd(0.35,0.1),vz:rnd(0.3,-0.3),g:-0.02,life:rnd(2.4,1.4),c:'#ffe98a',r:rnd(3,1.6),star:1}); }   // the ring at night: slow lights
+  for(const p of PROPS) if(p.rareGl){ p.r+=dt*0.7; p.gy=p.gy0+0.14+0.08*Math.sin(G.t*1.6); if(Math.random()<dt*2&&p.cond()) sparkW(p.x,p.gy+0.55,p.y,1,'#d8eeff'); }
   for(const p of PROPS) if(p.glimmer!=null){ p.r+=dt*1.1; p.gy=p.gy0+0.10+0.07*Math.sin(G.t*2.2+p.glimmer); if(Math.random()<dt*1.4&&p.cond()) sparkW(p.x,p.gy+0.45,p.y,1,'#ffe98a'); }
 }
 function glTake(p,amt,far){
@@ -6822,8 +6857,10 @@ function glCollect(){
   for(const p of PROPS){ if(p.glimmer==null||!p.cond()) continue;
     if(Math.hypot(p.x-FP.x,p.y-FP.y)>0.9) continue;
     glTake(p,3,false); return; }
+  for(const p of PROPS){ if(!p.rareGl||!p.cond()) continue; if(Math.hypot(p.x-FP.x,p.y-FP.y)<1.1){ rareTake(p,false); return; } }
 }
-function glTapIso(sx,sy){   // v197: from the map you can call one in, but only for a third of the walk-up reward
+function glTapIso(sx,sy){   // v197
+  for(const p of PROPS){ if(!p.rareGl||!p.cond()) continue; const q=projPt(p.x,p.gy+0.4,p.y); if(q&&Math.hypot(sx-q[0],sy-q[1])<42){ rareTake(p,true); return true; } }   // from the map you can call one in, but only for a third of the walk-up reward
   for(const p of PROPS){ if(p.glimmer==null||!p.cond()) continue;
     const q=projPt(p.x,p.gy+0.3,p.y); if(!q) continue;
     if(Math.hypot(sx-q[0],sy-q[1])<38){ glTake(p,1,true); return true; } }
@@ -7354,6 +7391,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='tipjar')) PROPS.push({mesh:buildTipJar(), x:30.2, y:34.8, r:0.2, gy:sitY(30.2,34.8)-0.02, vprop:'tipjar', cond:()=>gratuityMorning()&&!nightNow()});   // v193: more than asked
   seedGlimmers();   // v196
   seedGlLanterns();   // v198
+  seedRareGlimmer();   // v200
   if(!PROPS.some(p=>p.vprop==='daystone')) PROPS.push({mesh:buildDayStone(), x:DAYSTONE_AT[0], y:DAYSTONE_AT[1], r:-0.5, gy:sitY(DAYSTONE_AT[0],DAYSTONE_AT[1])-0.04, vprop:'daystone'});   // v186: what day is it
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   if(!PROPS.some(p=>p.vprop==='doorgift')) PROPS.push({mesh:buildDoorGift(), x:24.24, y:37.62, r:0.6, gy:sitY(24.24,37.62)-0.04, vprop:'doorgift', cond:()=>!!S.secrets.nightdoor});   // v156: worth it
