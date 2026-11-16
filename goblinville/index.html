@@ -2514,8 +2514,8 @@ function drawPennants(){
   if(!S.started||S.mode!=='village') return;
   const h=hallB(); if(!h||h.pop<1) return;
   const bn=S.war.banners; if(!bn||!bn.length) return;
-  const x0=h.tx, x1=h.tx+h.w, ty=h.ty+0.35;
-  const p0=projPt(x0,(h.gy||0)+2.35,ty), p1=projPt(x1,(h.gy||0)+2.35,ty);
+  const x0=h.tx+0.1, x1=h.tx+h.w-0.1, ty=h.ty+h.h+0.02;   // along the front eave, where the pennants hang
+  const p0=projPt(x0,(h.gy||0)+0.66,ty), p1=projPt(x1,(h.gy||0)+0.66,ty);
   if(!p0||!p1) return;
   if((p0[0]<-60&&p1[0]<-60)||(p0[0]>W+60&&p1[0]>W+60)) return;
   const zs=clamp(14/CAM.dist,0.6,1.5);
