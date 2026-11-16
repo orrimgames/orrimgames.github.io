@@ -2494,6 +2494,21 @@ function syncLaundry(){
     if(blocked) continue;   // a line strung through the hall is not laundry
     PROPS.push({laundry:1, ax,az,bx,bz, seed:a.seed});
   }
+  // an occupied hut with no neighbour to string to gets a short line on its own side, away from the hall
+  const strung=new Set(PROPS.filter(p=>p.laundry).map(p=>p.ax+','+p.az));
+  let extra=0;
+  for(const h of huts){ if(extra>=2) break;
+    const ax=h.tx+h.w/2, az=h.ty+h.h/2; if(strung.has(ax+','+az)) continue;
+    let dx=ax-SITE.x, dz=az-SITE.y; const dl=Math.hypot(dx,dz)||1; dx/=dl; dz/=dl;
+    const px=-dz, pz=dx;               // run the line sideways, across the hut's outer face
+    const sx=ax+dx*(h.w/2+0.9), sz=az+dz*(h.h/2+0.9);
+    const L1x=sx-px*1.3, L1z=sz-pz*1.3, L2x=sx+px*1.3, L2z=sz+pz*1.3;
+    let hit=false;
+    for(let k=0;k<=4&&!hit;k++){ const t=k/4, qx=L1x+(L2x-L1x)*t, qz=L1z+(L2z-L1z)*t;
+      for(const o of S.buildings){ if(o===h) continue; if(qx>=o.tx-0.3&&qx<=o.tx+o.w+0.3&&qz>=o.ty-0.3&&qz<=o.ty+o.h+0.3){ hit=true; break; } } }
+    if(hit) continue;
+    PROPS.push({laundry:1, ax:L1x,az:L1z,bx:L2x,bz:L2z, seed:h.seed||1.7, posts:1}); extra++;
+  }
 }
 function drawPennants(){
   if(!S.started||S.mode!=='village') return;
@@ -2541,6 +2556,9 @@ function drawLaundry(){
     if(!p1||!p2) continue;
     if((p1[0]<-60&&p2[0]<-60)||(p1[0]>W+60&&p2[0]>W+60)) continue;
     ctx.strokeStyle='rgba(120,98,70,0.9)'; ctx.lineWidth=1.6;
+    if(L.posts){ ctx.strokeStyle='rgba(96,72,48,0.95)'; ctx.lineCap='round'; ctx.lineWidth=clamp(0.09*Math.hypot(p2[0]-p1[0],p2[1]-p1[1])/Math.max(1,Math.hypot(L.bx-L.ax,L.bz-L.az)),2,6);
+      for(const [px_,pz_,pp] of [[L.ax,L.az,p1],[L.bx,L.bz,p2]]){ const g=projPt(px_,groundH(px_,pz_),pz_); if(!g) continue; ctx.beginPath(); ctx.moveTo(g[0],g[1]); ctx.lineTo(pp[0],pp[1]); ctx.stroke(); }
+      ctx.lineCap='butt'; ctx.lineWidth=1.6; ctx.strokeStyle='rgba(120,98,70,0.9)'; }
     const span=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]), wd=Math.hypot(L.bx-L.ax,L.bz-L.az)||1, ps=span/wd; // px per world unit
     ctx.beginPath(); ctx.moveTo(p1[0],p1[1]);
     const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2+clamp(span*0.07,6,40)+Math.sin(G.t*1.7+L.seed)*1.5;
