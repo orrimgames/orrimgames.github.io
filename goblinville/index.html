@@ -3697,6 +3697,13 @@ const INTERIORS={
         if(S.secrets.vampire) L.push('the count mislaid a cape once. it came back folded, brushed, in daylight, with a polite note. he has been careful ever since.');
         if(S.secrets.scenicroute) L.push('the right shoe is sighted on the high path, sole down, at rest. the ledger says LOCATED, UNREPENTANT. the left shoe says nothing.');
         if(S.secrets.nightdoor) L.push('the key is checked out nightly. the ledger now knows where to. the ledger is not saying where to.');
+        if(lampsOut()) L.push('on lamps-out night the shelf keeps the dark in a labeled space of its own. it is returned by morning, unused.');
+        if(companyMorning()) L.push('on company mornings the shelf sets out the good labels. guests mislay things twice as kindly.');
+        if(readingNight()) L.push('on reading nights the shelf listens from under the stump. the fond labels are read aloud across the path. the plain ones wait their turn.');
+        if(minutesMorning()) L.push('the morning the minutes are posted, the shelf files them: ONE (1) MEETING, OUTCOME OF. somebody leaves one behind every week. the shelf is ready.');
+        if(marketDay()) L.push('on market days the shelf gains three things and loses two. everything comes home. some things come home sold.');
+        if(gratuityMorning()) L.push('on gratuity mornings a pebble turns up here instead of the well rim, mislaid by kindness. it is filed UNDER TIP, and put back exactly where it was found.');
+        if(restDay()) L.push('on the day of rest the shelf takes nothing in. what turns up waits on the stump, unfiled, patient. it keeps.');
         return L; } }},
   scenicroute:{land:null, r:2.0, name:'THE SCENIC ROUTE', fpDoor:true, outdoor:true, glint:['#d8c9a8',0.9],
     fpHint:'a waystone on the rise west of the green. something rests on it, sole down, in no hurry. face it and tap to see what came home by the long way.',
