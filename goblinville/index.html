@@ -3749,6 +3749,23 @@ const INTERIORS={
         if(S.secrets.undercount) L.push('the ferrygoblin is filed PLUS ONE, PERMANENT. the surveyor is on the same shelf. nobody has told the surveyor.');
         if(S.secrets.bell) L.push('the ferry asked the bell for a horn. the bell said nothing, which is its note. the ferry toots a reed instead.');
         if(S.secrets.mossden) L.push('some mornings the raft is damp before the dew decides. the ferry does not ask questions. the fare is one berry, payable to any step.');
+        return L; } }},
+  laundry:{land:null, r:1.5, name:'THE WASHING LINE', fpDoor:true, outdoor:true,
+    fpHint:'two posts, one rope with a polite sag, and the enormous shirt. face it and tap to admire the rotation.',
+    blurb:'the enormous shirt belongs to nobody. it is washed with great ceremony.',
+    doorFn:()=>[30.2,36.4],
+    interact:{dx:0, dz:0.3, dd:2.4, ang:0.6, key:'laundry', sparkY:0.5, spark:'#e8ecef', spark2:'#4a6a38',
+      tone:[[330,0.3,{type:'triangle',vol:0.14}],[165,0.7,{type:'sine',vol:0.1,delay:0.05}]],
+      first:{b:['THE WASHING LINE','two posts, one rope, and the enormous shirt. the enormous shirt is ceremonial. it belongs to nobody. it is washed with great ceremony.'],
+        c:'Every village has a washing line; this one has two posts, a rope with a polite sag, and the enormous shirt. The enormous shirt belongs to nobody. It has always belonged to nobody. It is washed on rotation with great ceremony, pegged with six clothespins - four is structural, six is respect - and admired while it dries. Beside it, on a rotation kept by whoever gets there first: the striped shirt (somebody\'s), the good shirt (somebody\'s best), and the small shirt with the patched elbow (everybody\'s favorite). At night the line is bare: the shirts sleep inside, and the clothespins hold each other, which the village agrees is none of anybody\'s business. The undercount filed the line as TEXTILES, ONGOING and the enormous shirt as NOBODY\'S, CEREMONIAL, and both entries are read aloud at the solstice.', say:9},
+      linesFn:()=>{ const L=['the enormous shirt belongs to nobody. it has always belonged to nobody. the washing of it is everybody\'s.',
+        'four pins is structural. six is respect.'];
+        if(nightNow()) L.push('the line is bare at night. the shirts sleep inside. the clothespins hold each other. it is none of anybody\'s business.');
+        else L.push('today is a '+['striped','good','patched'][Math.floor(Date.now()/86400000)%3]+' day. the line approves.');
+        if(S.secrets.ferry) L.push('the ferrygoblin does the heavy washing on the way to the shoals. the raft doubles as the rinse bucket. the fish do not mind. the fish are filed.');
+        if(S.secrets.undercount) L.push('TEXTILES, ONGOING. NOBODY\'S, CEREMONIAL. both entries are read aloud at the solstice. the solstice is well attended.');
+        if(S.secrets.scenicroute) L.push('the shoe watches the line from its cairn. the shoe and the enormous shirt are the village\'s two great singletons. they have never met. the village respects this.');
+        if(S.secrets.lostfound) L.push('the third shelf once held a second enormous shirt, briefly. it was claimed by nobody, instantly, with great ceremony.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6131,6 +6148,34 @@ function buildMossDen(){
   M4.trs(T,0.19,0.335,0.01,0,0.8,0,1,0.5,1); ball(m,0.045,8,moss,T,0,0.7);
   return upload(m);
 }
+function buildLaundryLine(){
+  const m=MB(),T=M4.id();
+  const wood=hex('#3a2a1a'), rope=hex('#d8cfb0'), bone=hex('#e0d4b4');
+  for(const px of[-0.55,0.55]) M4.trs(T,px,0.25,0,0,0,0,1,1,1), box(m,0.035,0.50,0.035,wood,T,0,0.7);   // two posts
+  M4.trs(T,-0.275,0.45,0,0,0,-0.109,1,1,1); box(m,0.58,0.010,0.010,rope,T,0,0.85);                     // the rope, politely sagging
+  M4.trs(T,0.275,0.45,0,0,0,0.109,1,1,1); box(m,0.58,0.010,0.010,rope,T,0,0.85);
+  for(const px of[-0.44,-0.35,-0.26,0.10,0.40]) M4.trs(T,px,0.455,0,0,0,0,1,1,1), box(m,0.014,0.032,0.014,bone,T,0,0.9);  // the clothespins hold the line
+  return upload(m);
+}
+function buildLaundryShirts(){
+  const m=MB(),T=M4.id();
+  const big=hex('#e0d4b4'), stripe=hex('#b04858'), good=hex('#7a9cc8'), patch=hex('#c8a45c'), wood=hex('#3a2a1a');
+  M4.trs(T,-0.35,0.30,0,0,0,0.03,1,1,1); box(m,0.24,0.28,0.02,big,T,0,0.75);       // the enormous shirt: NOBODY'S, CEREMONIAL
+  M4.trs(T,-0.485,0.36,0,0,0,0.5,1,1,1); box(m,0.08,0.05,0.02,big,T,0,0.75);       // its sleeves, outspread
+  M4.trs(T,-0.215,0.36,0,0,0,-0.5,1,1,1); box(m,0.08,0.05,0.02,big,T,0,0.75);
+  const pick=Math.floor(Date.now()/86400000)%3;                                   // the rotation, kept by whoever gets there first
+  const companions=pick===0?[['stripe',0.10],['good',0.40]]:pick===1?[['good',0.10],['patch',0.40]]:[['patch',0.10],['stripe',0.40]];
+  for(const [kind,cx] of companions){
+    const col=kind==='stripe'?stripe:kind==='good'?good:patch;
+    M4.trs(T,cx,0.355,0,0,0,-0.03,1,1,1); box(m,0.13,0.15,0.018,col,T,0,0.78);
+    M4.trs(T,cx-0.085,0.40,0,0,0,0.5,1,1,1); box(m,0.045,0.028,0.018,col,T,0,0.78);
+    M4.trs(T,cx+0.085,0.40,0,0,0,-0.5,1,1,1); box(m,0.045,0.028,0.018,col,T,0,0.78);
+    if(kind==='stripe'){ M4.trs(T,cx,0.355,0.011,0,0,-0.03,1,1,1); box(m,0.13,0.030,0.004,big,T,0,0.85);
+      M4.trs(T,cx,0.40,0.011,0,0,-0.03,1,1,1); box(m,0.13,0.030,0.004,big,T,0,0.85); }
+    if(kind==='patch'){ M4.trs(T,cx+0.03,0.325,0.011,0,0,0.2,1,1,1); box(m,0.04,0.04,0.004,wood,T,0,0.85); }
+  }
+  return upload(m);
+}
 function buildFerryRaft(){
   const m=MB(),T=M4.id();
   const leaf=hex('#4a6a38'), leaf2=hex('#3a5a30'), wood=hex('#3a2a1a'), bone=hex('#e0d4b4'), wine=hex('#a83a4a'), rope=hex('#6a5a3a');
@@ -6751,6 +6796,8 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
+  if(!PROPS.some(p=>p.vprop==='laundryline')) PROPS.push({mesh:buildLaundryLine(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryline'});   // v165: two posts, one rope, a polite sag
+  if(!PROPS.some(p=>p.vprop==='laundryshirts')) PROPS.push({mesh:buildLaundryShirts(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryshirts', cond:()=>!nightNow()});   // v165: the shirts sleep inside
   if(!PROPS.some(p=>p.vprop==='ferryraft')) PROPS.push({mesh:buildFerryRaft(), x:30.9, y:37.1, r:-0.785, gy:sitY(30.9,37.1)-0.04, vprop:'ferryraft'});   // v164: the village's first navy
   if(!PROPS.some(p=>p.vprop==='twofish')) PROPS.push({mesh:buildTwoFish(), x:23.85, y:37.75, r:0, gy:sitY(23.85,37.75)-0.04, vprop:'twofish', cond:()=>!nightNow()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&companyMorning()});   // v163: the visitor had a friend
   if(!PROPS.some(p=>p.vprop==='denglow')) PROPS.push({mesh:buildDenGlow(), x:28.3, y:35.6, r:1.06, gy:sitY(28.3,35.6)-0.04, vprop:'denglow', cond:()=>deepNight()&&!!S.secrets.mossden&&!!S.secrets.nightdoor&&!lampsOut()});   // v162: the almost-seeing
