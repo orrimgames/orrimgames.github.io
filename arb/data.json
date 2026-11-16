@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-16T18:41:04Z",
-  "ts": 1794854464.3005776,
-  "scan_seconds": 19.7,
+  "generated_at": "2026-11-16T18:54:40Z",
+  "ts": 1794855280.5819287,
+  "scan_seconds": 14.4,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 296 binary + 1689 multi | kalshi: 5000 events -> 71 binary + 4765 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 289 binary + 1686 multi | kalshi: 5000 events -> 70 binary + 4765 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -18,51 +18,45 @@
  "intra_event": [
   {
    "venue": "polymarket",
-   "event": "Pro Football: Jayden Reed 2026-27 Regular Season Receiving Yards",
-   "n_legs": 5,
-   "gross": 0.879,
-   "fees": 0.00589775,
-   "net": 0.87310225,
-   "capital": 0.12689775,
-   "roi": 6.880360368879669,
-   "url": "https://polymarket.com/event/jayden-reed-receiving-yards-2026-27",
+   "event": "Makina FDV above ___ one day after launch?",
+   "n_legs": 4,
+   "gross": 0.85,
+   "fees": 0.009950780000000001,
+   "net": 0.8400492199999999,
+   "capital": 0.15995078,
+   "roi": 5.251923247889132,
+   "url": "https://polymarket.com/event/makina-fdv-above-one-day-after-launch",
    "neg_risk": false,
-   "coverage": "5/5",
+   "coverage": "4/4",
    "tier": 2,
    "legs": [
     {
-     "label": "249.5+ receiving yards",
+     "label": "$80M",
+     "ask": 0.053,
+     "fee": 0.07,
+     "token": "98219980679999429916226639686761979665421897797777040099602713686824802810254"
+    },
+    {
+     "label": "$100M",
+     "ask": 0.067,
+     "fee": 0.07,
+     "token": "96249263453107233115352955844803350309071456313480667272642789710792596579437"
+    },
+    {
+     "label": "$200M",
      "ask": 0.022,
-     "fee": 0.05,
-     "token": "99842012605388002651278662481264609016099655648563319131019513005814535778676"
+     "fee": 0.07,
+     "token": "5002552579727082234417543840751231363710972961715613982747934893417670200181"
     },
     {
-     "label": "449.5+ receiving yards",
-     "ask": 0.03,
-     "fee": 0.05,
-     "token": "63000427138401663500551319084506445871243289982904238505011685856562739119845"
-    },
-    {
-     "label": "649.5+ receiving yards",
-     "ask": 0.03,
-     "fee": 0.05,
-     "token": "82325780202164718543327219836321853210110491060296845772291353780400852649342"
-    },
-    {
-     "label": "849.5+ receiving yards",
-     "ask": 0.019,
-     "fee": 0.05,
-     "token": "76084887436950302204082448660426822977460980671478515212432316780434035624334"
-    },
-    {
-     "label": "1,049.5+ receiving yards",
-     "ask": 0.02,
-     "fee": 0.05,
-     "token": "74627845109975757733994155327390695427028372316091643769762862576683334836845"
+     "label": "$300M",
+     "ask": 0.008,
+     "fee": 0.07,
+     "token": "94041054826948094458516807909608237662754077816958616769196799633242970299956"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "jayden-reed-receiving-yards-2026-27"
+   "event_slug": "makina-fdv-above-one-day-after-launch"
   },
   {
    "venue": "polymarket",
@@ -93,48 +87,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "melania-trump-meets-with-by-december-31-2026"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Makina FDV above ___ one day after launch?",
-   "n_legs": 4,
-   "gross": 0.797,
-   "fees": 0.013099170000000002,
-   "net": 0.78390083,
-   "capital": 0.21609916999999998,
-   "roi": 3.627505047798194,
-   "url": "https://polymarket.com/event/makina-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "4/4",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$80M",
-     "ask": 0.102,
-     "fee": 0.07,
-     "token": "98219980679999429916226639686761979665421897797777040099602713686824802810254"
-    },
-    {
-     "label": "$100M",
-     "ask": 0.07,
-     "fee": 0.07,
-     "token": "96249263453107233115352955844803350309071456313480667272642789710792596579437"
-    },
-    {
-     "label": "$200M",
-     "ask": 0.022,
-     "fee": 0.07,
-     "token": "5002552579727082234417543840751231363710972961715613982747934893417670200181"
-    },
-    {
-     "label": "$300M",
-     "ask": 0.009,
-     "fee": 0.07,
-     "token": "94041054826948094458516807909608237662754077816958616769196799633242970299956"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "makina-fdv-above-one-day-after-launch"
   },
   {
    "venue": "polymarket",
@@ -188,11 +140,11 @@
    "venue": "polymarket",
    "event": "Theo FDV above ___ one day after launch?",
    "n_legs": 4,
-   "gross": 0.771,
-   "fees": 0.01459773,
-   "net": 0.75640227,
-   "capital": 0.24359773,
-   "roi": 3.1051285658532204,
+   "gross": 0.773,
+   "fees": 0.01447033,
+   "net": 0.75852967,
+   "capital": 0.24147033,
+   "roi": 3.1412955372198317,
    "url": "https://polymarket.com/event/theo-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "4/4",
@@ -206,7 +158,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.046,
+     "ask": 0.044,
      "fee": 0.07,
      "token": "91158762527671757275775133030342712930173330694511875688235548824297494679121"
     },
@@ -230,11 +182,11 @@
    "venue": "polymarket",
    "event": "StandX FDV above ___ one day after launch?",
    "n_legs": 11,
-   "gross": 0.751,
-   "fees": 0.01698417,
-   "net": 0.73401583,
-   "capital": 0.26598417,
-   "roi": 2.759622236165408,
+   "gross": 0.753,
+   "fees": 0.01685033,
+   "net": 0.73614967,
+   "capital": 0.26385033,
+   "roi": 2.7900274750461747,
    "url": "https://polymarket.com/event/standx-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "11/11",
@@ -254,7 +206,7 @@
     },
     {
      "label": "$800M ",
-     "ask": 0.037,
+     "ask": 0.036,
      "fee": 0.07,
      "token": "27593724022764100685887234049256040746913331911665804076211692878748328505706"
     },
@@ -290,7 +242,7 @@
     },
     {
      "label": "$10B",
-     "ask": 0.008,
+     "ask": 0.007,
      "fee": 0.07,
      "token": "95534434999296497184506608723915109703063669617513491421335057715681127323952"
     },
@@ -314,11 +266,11 @@
    "venue": "polymarket",
    "event": "Next Google Gemini Pro Model: Humanity\u2019s Last Exam Debut?",
    "n_legs": 4,
-   "gross": 0.679,
-   "fees": 0.01173596,
-   "net": 0.6672640400000001,
-   "capital": 0.33273596,
-   "roi": 2.0053860123805074,
+   "gross": 0.6779999999999999,
+   "fees": 0.01176784,
+   "net": 0.66623216,
+   "capital": 0.33376784,
+   "roi": 1.9960945308571372,
    "url": "https://polymarket.com/event/next-google-gemini-pro-model-humanitys-last-exam-debut-20260729192434644",
    "neg_risk": false,
    "coverage": "4/4",
@@ -326,7 +278,7 @@
    "legs": [
     {
      "label": "40%+",
-     "ask": 0.101,
+     "ask": 0.102,
      "fee": 0.04,
      "token": "61626396936135534387255598822072032822427356046085661886191264067533617653935"
     },
@@ -416,11 +368,11 @@
    "venue": "polymarket",
    "event": "Metamask FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.644,
-   "fees": 0.02376962,
-   "net": 0.62023038,
-   "capital": 0.37976962,
-   "roi": 1.6331753445681094,
+   "gross": 0.645,
+   "fees": 0.02370697,
+   "net": 0.62129303,
+   "capital": 0.37870697,
+   "roi": 1.6405640223627256,
    "url": "https://polymarket.com/event/metamask-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -470,7 +422,7 @@
     },
     {
      "label": "$300M",
-     "ask": 0.053,
+     "ask": 0.052,
      "fee": 0.07,
      "token": "100463364281600463917162923535716593254627752680239892527128357625123655869336"
     }
@@ -594,13 +546,61 @@
   },
   {
    "venue": "polymarket",
-   "event": "Which countries will recognize Israel by December 31?",
-   "n_legs": 16,
+   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
+   "n_legs": 5,
    "gross": 0.577,
    "fees": 0.0,
    "net": 0.577,
    "capital": 0.423,
    "roi": 1.3640661938534278,
+   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "10+",
+     "ask": 0.18,
+     "fee": 0.0,
+     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
+    },
+    {
+     "label": "20+",
+     "ask": 0.1,
+     "fee": 0.0,
+     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
+    },
+    {
+     "label": "30+",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
+    },
+    {
+     "label": "40+",
+     "ask": 0.049,
+     "fee": 0.0,
+     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
+    },
+    {
+     "label": "50+",
+     "ask": 0.044,
+     "fee": 0.0,
+     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Which countries will recognize Israel by December 31?",
+   "n_legs": 16,
+   "gross": 0.5760000000000001,
+   "fees": 0.0,
+   "net": 0.5760000000000001,
+   "capital": 0.424,
+   "roi": 1.358490566037736,
    "url": "https://polymarket.com/event/which-countries-will-recognize-israel-by-december-31",
    "neg_risk": false,
    "coverage": "16/16",
@@ -626,7 +626,7 @@
     },
     {
      "label": "Lebanon",
-     "ask": 0.046,
+     "ask": 0.047,
      "fee": 0.0,
      "token": "57296275132860207464910469086912664176153776071835315700063526910474840238866"
     },
@@ -710,11 +710,11 @@
    "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.583,
-   "fees": 0.027468630000000004,
-   "net": 0.55553137,
-   "capital": 0.44446863000000003,
-   "roi": 1.249877567287482,
+   "gross": 0.586,
+   "fees": 0.027283760000000004,
+   "net": 0.55871624,
+   "capital": 0.44128376,
+   "roi": 1.2661155715315695,
    "url": "https://polymarket.com/event/opensea-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -728,7 +728,7 @@
     },
     {
      "label": "$1B",
-     "ask": 0.064,
+     "ask": 0.06,
      "fee": 0.07,
      "token": "55736535775539231856682158017890031261644294952589300517957218393676136917293"
     },
@@ -752,7 +752,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.068,
+     "ask": 0.069,
      "fee": 0.07,
      "token": "38175379283808228327034811002747441529537312086974479792536732908990840238523"
     },
@@ -771,54 +771,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "opensea-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Will __ ships transit the Strait of Hormuz on any day by November 30?",
-   "n_legs": 5,
-   "gross": 0.546,
-   "fees": 0.0,
-   "net": 0.546,
-   "capital": 0.454,
-   "roi": 1.2026431718061674,
-   "url": "https://polymarket.com/event/will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "10+",
-     "ask": 0.18,
-     "fee": 0.0,
-     "token": "32392763822753473124035928136248806020616344873491087876352214614828043589225"
-    },
-    {
-     "label": "20+",
-     "ask": 0.131,
-     "fee": 0.0,
-     "token": "77149103690936155414360089094600396120035482016154796376059230176777580870459"
-    },
-    {
-     "label": "30+",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "97949906043954856682348804158350028597347020654943082186277450618580462687962"
-    },
-    {
-     "label": "40+",
-     "ask": 0.049,
-     "fee": 0.0,
-     "token": "87870856857215626171139135461200113023183039210104508864141633554096962953465"
-    },
-    {
-     "label": "50+",
-     "ask": 0.044,
-     "fee": 0.0,
-     "token": "39321982943077422245276219662018921170048434971670287854669775998885973424480"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "will-ships-transit-the-strait-of-hormuz-on-any-day-by-november-30"
   },
   {
    "venue": "polymarket",
@@ -956,11 +908,11 @@
    "venue": "polymarket",
    "event": "Next Google Gemini Pro Model: Arena Debut?",
    "n_legs": 6,
-   "gross": 0.516,
-   "fees": 0.01778888,
-   "net": 0.49821112,
-   "capital": 0.50178888,
-   "roi": 0.9928699894664864,
+   "gross": 0.511,
+   "fees": 0.01795468,
+   "net": 0.49304532,
+   "capital": 0.50695468,
+   "roi": 0.972562912329757,
    "url": "https://polymarket.com/event/next-google-gemini-pro-model-arena-debut",
    "neg_risk": false,
    "coverage": "6/6",
@@ -968,13 +920,13 @@
    "legs": [
     {
      "label": "1480+",
-     "ask": 0.084,
+     "ask": 0.087,
      "fee": 0.04,
      "token": "37228355403085489631690834179158267510372738945596020309386005794735726177993"
     },
     {
      "label": "1490+",
-     "ask": 0.091,
+     "ask": 0.092,
      "fee": 0.04,
      "token": "5717213777158991755851161671784735239176114853982045661511655513077951811855"
     },
@@ -986,7 +938,7 @@
     },
     {
      "label": "1510+",
-     "ask": 0.079,
+     "ask": 0.08,
      "fee": 0.04,
      "token": "3253266438640589916367220273721046444105089880635011272452961047056509745530"
     },
@@ -1046,11 +998,11 @@
    "venue": "polymarket",
    "event": "How low will 2-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.473,
-   "fees": 0.02475395,
-   "net": 0.44824604999999995,
-   "capital": 0.55175395,
-   "roi": 0.8124020679870074,
+   "gross": 0.476,
+   "fees": 0.024631300000000002,
+   "net": 0.45136869999999996,
+   "capital": 0.5486313,
+   "roi": 0.8227177341139668,
    "url": "https://polymarket.com/event/how-low-will-2-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1064,13 +1016,13 @@
     },
     {
      "label": "Below 4.41%",
-     "ask": 0.062,
+     "ask": 0.061,
      "fee": 0.05,
      "token": "107490010253497397976164331719508377456038962843804428298946212328962106493931"
     },
     {
      "label": "Below 4.38%",
-     "ask": 0.075,
+     "ask": 0.068,
      "fee": 0.05,
      "token": "105375787518010389544274868444464083006340897134990847134939150403543063115769"
     },
@@ -1082,19 +1034,19 @@
     },
     {
      "label": "Below 4.32%",
-     "ask": 0.057,
+     "ask": 0.061,
      "fee": 0.05,
      "token": "100272506155546346681570520241724562573453765637949558337396133296060803666440"
     },
     {
      "label": "Below 4.29%",
-     "ask": 0.052,
+     "ask": 0.051,
      "fee": 0.05,
      "token": "50275652512525713179896793810571955489887772817338606121983794902632388932855"
     },
     {
      "label": "Below 4.26%",
-     "ask": 0.051,
+     "ask": 0.053,
      "fee": 0.05,
      "token": "94175445878688648004345750188029346464395814347644395060807254146775183435927"
     },
@@ -1116,61 +1068,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Pro Football: Drake Maye 2026-27 Regular Season Passing Touchdowns",
-   "n_legs": 5,
-   "gross": 0.43999999999999995,
-   "fees": 0.024830000000000005,
-   "net": 0.41516999999999993,
-   "capital": 0.5848300000000001,
-   "roi": 0.7098986030128411,
-   "url": "https://polymarket.com/event/drake-maye-passing-touchdowns-2026-27",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "20.5+ passing TDs",
-     "ask": 0.11,
-     "fee": 0.05,
-     "token": "99420250156695044221590078431879765707889932311826411891799737571507214402273"
-    },
-    {
-     "label": "23.5+ passing TDs",
-     "ask": 0.12,
-     "fee": 0.05,
-     "token": "79226957054421316706885026717718663486013271861278761988524661894320644501331"
-    },
-    {
-     "label": "26.5+ passing TDs",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "100261895883859948179114716652733865626132471231910147647743991002913569548612"
-    },
-    {
-     "label": "29.5+ passing TDs",
-     "ask": 0.13,
-     "fee": 0.05,
-     "token": "28571341428576052175078713557865251371489017877908722740105087053874962466521"
-    },
-    {
-     "label": "32.5+ passing TDs",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "29630515334680409185292658208375898165642740947697188173601245005410622340126"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "drake-maye-passing-touchdowns-2026-27"
-  },
-  {
-   "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.44599999999999995,
-   "fees": 0.03259494,
-   "net": 0.41340505999999994,
-   "capital": 0.58659494,
-   "roi": 0.7047538800794974,
+   "gross": 0.44699999999999995,
+   "fees": 0.03253733,
+   "net": 0.4144626699999999,
+   "capital": 0.5855373300000001,
+   "roi": 0.70783304285655,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1184,7 +1088,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.089,
+     "ask": 0.088,
      "fee": 0.07,
      "token": "81505928167465582135437939904267397892955333157917327277765424799202971801043"
     },
@@ -1238,11 +1142,11 @@
    "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.377,
+   "gross": 0.367,
    "fees": 0.0,
-   "net": 0.377,
-   "capital": 0.623,
-   "roi": 0.6051364365971108,
+   "net": 0.367,
+   "capital": 0.633,
+   "roi": 0.5797788309636651,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -1316,7 +1220,7 @@
     },
     {
      "label": "Somaliland",
-     "ask": 0.11,
+     "ask": 0.12,
      "fee": 0.0,
      "token": "70026524713009669538763377800911903794570186848119999786864842995489783143838"
     }
@@ -1328,11 +1232,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Ashton Jeanty 2026-27 Regular Season Rushing Touchdowns",
    "n_legs": 5,
-   "gross": 0.386,
-   "fees": 0.0247183,
-   "net": 0.36128170000000004,
-   "capital": 0.6387183,
-   "roi": 0.5656354295782664,
+   "gross": 0.387,
+   "fees": 0.02467805,
+   "net": 0.36232195,
+   "capital": 0.63767805,
+   "roi": 0.568189464887493,
    "url": "https://polymarket.com/event/ashton-jeanty-rushing-touchdowns-2026-27",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1352,7 +1256,7 @@
     },
     {
      "label": "7.5+ rushing TDs",
-     "ask": 0.098,
+     "ask": 0.097,
      "fee": 0.05,
      "token": "60922106435328024935825528874312839706887086191300842150649497636091649719505"
     },
@@ -1586,11 +1490,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Drake Maye 2026-27 Regular Season Passing Yards",
    "n_legs": 5,
-   "gross": 0.21099999999999997,
-   "fees": 0.03245995000000001,
-   "net": 0.17854004999999995,
-   "capital": 0.82145995,
-   "roi": 0.21734480177639814,
+   "gross": 0.241,
+   "fees": 0.03133495000000001,
+   "net": 0.20966505,
+   "capital": 0.79033495,
+   "roi": 0.26528631942697206,
    "url": "https://polymarket.com/event/drake-maye-passing-yards-2026-27",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1622,7 +1526,7 @@
     },
     {
      "label": "4,299.5+ passing yards",
-     "ask": 0.14,
+     "ask": 0.11,
      "fee": 0.05,
      "token": "76994720588766511034505347345716352424022081824955157411551032881175484326114"
     }
@@ -1632,13 +1536,61 @@
   },
   {
    "venue": "polymarket",
+   "event": "Pro Football: Drake Maye 2026-27 Regular Season Passing Touchdowns",
+   "n_legs": 5,
+   "gross": 0.17999999999999994,
+   "fees": 0.031070000000000004,
+   "net": 0.14892999999999992,
+   "capital": 0.8510700000000001,
+   "roi": 0.17499148131176037,
+   "url": "https://polymarket.com/event/drake-maye-passing-touchdowns-2026-27",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "20.5+ passing TDs",
+     "ask": 0.39,
+     "fee": 0.05,
+     "token": "99420250156695044221590078431879765707889932311826411891799737571507214402273"
+    },
+    {
+     "label": "23.5+ passing TDs",
+     "ask": 0.12,
+     "fee": 0.05,
+     "token": "79226957054421316706885026717718663486013271861278761988524661894320644501331"
+    },
+    {
+     "label": "26.5+ passing TDs",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "100261895883859948179114716652733865626132471231910147647743991002913569548612"
+    },
+    {
+     "label": "29.5+ passing TDs",
+     "ask": 0.11,
+     "fee": 0.05,
+     "token": "28571341428576052175078713557865251371489017877908722740105087053874962466521"
+    },
+    {
+     "label": "32.5+ passing TDs",
+     "ask": 0.1,
+     "fee": 0.05,
+     "token": "29630515334680409185292658208375898165642740947697188173601245005410622340126"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "drake-maye-passing-touchdowns-2026-27"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which countries will join the Mecca Agreement by December 31?",
    "n_legs": 16,
-   "gross": 0.14300000000000002,
+   "gross": 0.135,
    "fees": 0.0,
-   "net": 0.14300000000000002,
-   "capital": 0.857,
-   "roi": 0.16686114352392067,
+   "net": 0.135,
+   "capital": 0.865,
+   "roi": 0.15606936416184972,
    "url": "https://polymarket.com/event/which-countries-will-join-the-mecca-agreement-by-december-31",
    "neg_risk": false,
    "coverage": "16/16",
@@ -1682,7 +1634,7 @@
     },
     {
      "label": "Kuwait",
-     "ask": 0.042,
+     "ask": 0.04,
      "fee": 0.0,
      "token": "88360002116463706956855461717863218906677039269312773374637265396371322592151"
     },
@@ -1706,7 +1658,7 @@
     },
     {
      "label": "Qatar",
-     "ask": 0.08,
+     "ask": 0.09,
      "fee": 0.0,
      "token": "74672712251238887391117977761107663473493368332822228550115427179991638350360"
     },
@@ -1746,13 +1698,91 @@
   },
   {
    "venue": "polymarket",
+   "event": "What kind of product will OpenAI announce in 2026?",
+   "n_legs": 10,
+   "gross": 0.15900000000000003,
+   "fees": 0.029141399999999998,
+   "net": 0.12985860000000005,
+   "capital": 0.8701414,
+   "roi": 0.14923850307547723,
+   "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
+   "neg_risk": false,
+   "coverage": "10/10",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Earbuds/Headphones",
+     "ask": 0.09,
+     "fee": 0.04,
+     "token": "16040470176590332178266575986841073712697460370218768293287706373316090538021"
+    },
+    {
+     "label": "Clip-on device for clothing",
+     "ask": 0.22,
+     "fee": 0.04,
+     "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
+    },
+    {
+     "label": "Necklace",
+     "ask": 0.17,
+     "fee": 0.04,
+     "token": "20826236952766096458839542076301237144154160218855573686197597978501264662054"
+    },
+    {
+     "label": "Watch",
+     "ask": 0.06,
+     "fee": 0.04,
+     "token": "77120919023569550198628906932983149373349506964926056595149258435958662028903"
+    },
+    {
+     "label": "Glasses",
+     "ask": 0.049,
+     "fee": 0.04,
+     "token": "38445023851151660993666237267712981362686626593721378545175263940037718392453"
+    },
+    {
+     "label": "Ring",
+     "ask": 0.127,
+     "fee": 0.04,
+     "token": "105793471410600103279818302661836433120260173055196756819977205026613295786512"
+    },
+    {
+     "label": "Phone",
+     "ask": 0.051,
+     "fee": 0.04,
+     "token": "4967389004560237148087059097306936016483726557350463241288661442119258090198"
+    },
+    {
+     "label": "Tablet",
+     "ask": 0.017,
+     "fee": 0.04,
+     "token": "17404766932259944299339052130465690929883335900321910320466617668484369055750"
+    },
+    {
+     "label": "Head-mounted display",
+     "ask": 0.014,
+     "fee": 0.04,
+     "token": "24535511360909789070465577593343267401226583512825755634755701071660338255675"
+    },
+    {
+     "label": "Computer (Laptop/Desktop)",
+     "ask": 0.043,
+     "fee": 0.04,
+     "token": "15596881315836367767699003429490212721537835348949574643253042524587080151396"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "what-kind-of-product-will-openai-announce-in-2026"
+  },
+  {
+   "venue": "polymarket",
    "event": "Highest 7-day average ship traffic through the Strait of Hormuz by December 31?",
    "n_legs": 6,
-   "gross": 0.15800000000000003,
-   "fees": 0.0352507,
-   "net": 0.12274930000000003,
-   "capital": 0.8772506999999999,
-   "roi": 0.13992499521516488,
+   "gross": 0.14900000000000002,
+   "fees": 0.035550950000000005,
+   "net": 0.11344905000000002,
+   "capital": 0.88655095,
+   "roi": 0.127966757014924,
    "url": "https://polymarket.com/event/highest-7-day-average-ship-traffic-through-the-strait-of-hormuz-by-december-31",
    "neg_risk": false,
    "coverage": "6/6",
@@ -1778,13 +1808,13 @@
     },
     {
      "label": "40+",
-     "ask": 0.176,
+     "ask": 0.184,
      "fee": 0.05,
      "token": "6889640507384164539108127346386784390995977787762138959028855245870098940530"
     },
     {
      "label": "50+",
-     "ask": 0.057,
+     "ask": 0.058,
      "fee": 0.05,
      "token": "15648359035676759648124809354994608714630847904047486609223130189988336485842"
     },
@@ -1904,11 +1934,11 @@
    "venue": "polymarket",
    "event": "Pro Football: Patriots 2026 Win Total",
    "n_legs": 5,
-   "gross": 0.08099999999999996,
-   "fees": 0.02947475,
-   "net": 0.05152524999999996,
-   "capital": 0.94847475,
-   "roi": 0.05432432439556241,
+   "gross": 0.06699999999999995,
+   "fees": 0.02992175,
+   "net": 0.03707824999999995,
+   "capital": 0.96292175,
+   "roi": 0.038505984520549,
    "url": "https://polymarket.com/event/pro-football-new-england-patriots-2026-win-total",
    "neg_risk": false,
    "coverage": "5/5",
@@ -1922,7 +1952,7 @@
     },
     {
      "label": "8.5+ Wins",
-     "ask": 0.23,
+     "ask": 0.24,
      "fee": 0.05,
      "token": "82695944342323043085713339874885474607591814170104730337364271263963026339627"
     },
@@ -1934,7 +1964,7 @@
     },
     {
      "label": "10.5+ Wins",
-     "ask": 0.043,
+     "ask": 0.047,
      "fee": 0.05,
      "token": "95896161095904174734381582161674484992606538115426678531209583263632612967050"
     },
@@ -2000,11 +2030,11 @@
    "venue": "polymarket",
    "event": "Which parties will be in the next Berlin state government?",
    "n_legs": 8,
-   "gross": 0.050999999999999934,
-   "fees": 0.02753364,
-   "net": 0.023466359999999933,
-   "capital": 0.9765336400000001,
-   "roi": 0.024030262797705496,
+   "gross": 0.051999999999999935,
+   "fees": 0.027428160000000004,
+   "net": 0.02457183999999993,
+   "capital": 0.9754281600000001,
+   "roi": 0.025190824919387123,
    "url": "https://polymarket.com/event/which-parties-will-be-in-next-berlin-state-government",
    "neg_risk": false,
    "coverage": "8/8",
@@ -2030,13 +2060,13 @@
     },
     {
      "label": "SPD",
-     "ask": 0.448,
+     "ask": 0.45,
      "fee": 0.04,
      "token": "53692983533610571873025514595602369226223440912331734299400442249891721559197"
     },
     {
      "label": "FDP",
-     "ask": 0.028,
+     "ask": 0.025,
      "fee": 0.04,
      "token": "27276160253692277268764267884225207845726086465358158747090025961244262769561"
     },
@@ -2064,91 +2094,61 @@
   },
   {
    "venue": "polymarket",
-   "event": "What kind of product will OpenAI announce in 2026?",
-   "n_legs": 10,
-   "gross": 0.04799999999999993,
-   "fees": 0.0313048,
-   "net": 0.01669519999999993,
-   "capital": 0.9833048000000001,
-   "roi": 0.01697866216050194,
-   "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
-   "neg_risk": false,
-   "coverage": "10/10",
-   "tier": 2,
+   "event": "Bank of Brazil decision in December?",
+   "n_legs": 5,
+   "gross": 0.03200000000000003,
+   "fees": 0.013518500000000003,
+   "net": 0.018481500000000026,
+   "capital": 0.9815185,
+   "roi": 0.01882949735537336,
+   "url": "https://polymarket.com/event/bank-of-brazil-decision-in-december-20260918",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
    "legs": [
     {
-     "label": "Earbuds/Headphones",
-     "ask": 0.09,
-     "fee": 0.04,
-     "token": "16040470176590332178266575986841073712697460370218768293287706373316090538021"
-    },
-    {
-     "label": "Clip-on device for clothing",
-     "ask": 0.32,
-     "fee": 0.04,
-     "token": "14297574727087523604876851617000352443381479544462660285614372795163263811991"
-    },
-    {
-     "label": "Necklace",
-     "ask": 0.17,
-     "fee": 0.04,
-     "token": "20826236952766096458839542076301237144154160218855573686197597978501264662054"
-    },
-    {
-     "label": "Watch",
-     "ask": 0.06,
-     "fee": 0.04,
-     "token": "77120919023569550198628906932983149373349506964926056595149258435958662028903"
-    },
-    {
-     "label": "Glasses",
-     "ask": 0.049,
-     "fee": 0.04,
-     "token": "38445023851151660993666237267712981362686626593721378545175263940037718392453"
-    },
-    {
-     "label": "Ring",
-     "ask": 0.138,
-     "fee": 0.04,
-     "token": "105793471410600103279818302661836433120260173055196756819977205026613295786512"
-    },
-    {
-     "label": "Phone",
-     "ask": 0.051,
-     "fee": 0.04,
-     "token": "4967389004560237148087059097306936016483726557350463241288661442119258090198"
-    },
-    {
-     "label": "Tablet",
+     "label": "50+ bps increase",
      "ask": 0.017,
-     "fee": 0.04,
-     "token": "17404766932259944299339052130465690929883335900321910320466617668484369055750"
+     "fee": 0.05,
+     "token": "30195904220375335194125356574073101897040709003172941794939105447116405699995"
     },
     {
-     "label": "Head-mounted display",
+     "label": "25 bps increase",
+     "ask": 0.018,
+     "fee": 0.05,
+     "token": "41198242470253749962432838432926634303889494719212403349631761283499090544513"
+    },
+    {
+     "label": "No Change",
+     "ask": 0.83,
+     "fee": 0.05,
+     "token": "67229367617858153249105054589104548461331275253138487917870065113219641428440"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.089,
+     "fee": 0.05,
+     "token": "56157995303115559326792157616050491782775058260850031123564922550470220648714"
+    },
+    {
+     "label": "50+ bps decrease",
      "ask": 0.014,
-     "fee": 0.04,
-     "token": "24535511360909789070465577593343267401226583512825755634755701071660338255675"
-    },
-    {
-     "label": "Computer (Laptop/Desktop)",
-     "ask": 0.043,
-     "fee": 0.04,
-     "token": "15596881315836367767699003429490212721537835348949574643253042524587080151396"
+     "fee": 0.05,
+     "token": "3599746693130494674810755655990285715573294671198477484061065758661253433434"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "what-kind-of-product-will-openai-announce-in-2026"
+   "event_slug": "bank-of-brazil-decision-in-december-20260918"
   },
   {
    "venue": "polymarket",
    "event": "Pro Football: Dolphins 2026 Win Total",
    "n_legs": 5,
-   "gross": 0.04299999999999993,
-   "fees": 0.02989075,
-   "net": 0.013109249999999927,
-   "capital": 0.98689075,
-   "roi": 0.013283385217664596,
+   "gross": 0.04399999999999993,
+   "fees": 0.0298425,
+   "net": 0.014157499999999927,
+   "capital": 0.9858425000000001,
+   "roi": 0.014360813213063877,
    "url": "https://polymarket.com/event/pro-football-miami-dolphins-2026-win-total",
    "neg_risk": false,
    "coverage": "5/5",
@@ -2174,13 +2174,13 @@
     },
     {
      "label": "5.5+ Wins",
-     "ask": 0.029,
+     "ask": 0.027,
      "fee": 0.05,
      "token": "32900451444249442037075447786878670902905916935185311316118890650319516340068"
     },
     {
      "label": "6.5+ Wins",
-     "ask": 0.038,
+     "ask": 0.039,
      "fee": 0.05,
      "token": "94215037314751311741360173167825036703134504179986551807275033005576064340539"
     }
@@ -2190,61 +2190,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Bank of Brazil decision in December?",
-   "n_legs": 5,
-   "gross": 0.02400000000000002,
-   "fees": 0.013101100000000003,
-   "net": 0.010898900000000019,
-   "capital": 0.9891011,
-   "roi": 0.011018994923774748,
-   "url": "https://polymarket.com/event/bank-of-brazil-decision-in-december-20260918",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "50+ bps increase",
-     "ask": 0.017,
-     "fee": 0.05,
-     "token": "30195904220375335194125356574073101897040709003172941794939105447116405699995"
-    },
-    {
-     "label": "25 bps increase",
-     "ask": 0.018,
-     "fee": 0.05,
-     "token": "41198242470253749962432838432926634303889494719212403349631761283499090544513"
-    },
-    {
-     "label": "No Change",
-     "ask": 0.84,
-     "fee": 0.05,
-     "token": "67229367617858153249105054589104548461331275253138487917870065113219641428440"
-    },
-    {
-     "label": "25 bps decrease",
-     "ask": 0.087,
-     "fee": 0.05,
-     "token": "56157995303115559326792157616050491782775058260850031123564922550470220648714"
-    },
-    {
-     "label": "50+ bps decrease",
-     "ask": 0.014,
-     "fee": 0.05,
-     "token": "3599746693130494674810755655990285715573294671198477484061065758661253433434"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "bank-of-brazil-decision-in-december-20260918"
-  },
-  {
-   "venue": "polymarket",
    "event": "South African Reserve Bank Decision in March?",
    "n_legs": 5,
-   "gross": 0.03700000000000003,
-   "fees": 0.027498750000000002,
-   "net": 0.00950125000000003,
-   "capital": 0.99049875,
-   "roi": 0.009592389692566528,
+   "gross": 0.031000000000000028,
+   "fees": 0.028278350000000004,
+   "net": 0.0027216500000000234,
+   "capital": 0.99727835,
+   "roi": 0.0027290775940338255,
    "url": "https://polymarket.com/event/south-african-reserve-bank-decision-in-march-2027",
    "neg_risk": true,
    "coverage": "5/5",
@@ -2258,13 +2210,13 @@
     },
     {
      "label": "25 bps decrease",
-     "ask": 0.091,
+     "ask": 0.117,
      "fee": 0.05,
      "token": "77546288596773329709336612549798628007838111565722475727736914402006000612219"
     },
     {
      "label": "No Change",
-     "ask": 0.61,
+     "ask": 0.6,
      "fee": 0.05,
      "token": "66177855937218292633942897136307785223088771604922519025717350461434323320487"
     },
@@ -2276,7 +2228,7 @@
     },
     {
      "label": "50+ bps increase",
-     "ask": 0.15,
+     "ask": 0.14,
      "fee": 0.05,
      "token": "3068344122837014088356399062089895989875579381527524900741791945034561389730"
     }
@@ -2504,11 +2456,11 @@
    "venue": "polymarket",
    "event": "OpenAI IPO Closing Market Cap",
    "n_legs": 7,
-   "gross": 0.015000000000000013,
-   "fees": 0.03107412,
-   "net": -0.016074119999999987,
-   "capital": 1.01607412,
-   "roi": -0.01581983015176096,
+   "gross": 0.016000000000000014,
+   "fees": 0.03105928,
+   "net": -0.015059279999999987,
+   "capital": 1.01505928,
+   "roi": -0.014835862591197617,
    "url": "https://polymarket.com/event/openai-ipo-closing-market-cap-554",
    "neg_risk": true,
    "coverage": "7/7",
@@ -2522,7 +2474,7 @@
     },
     {
      "label": "500\u2013750B",
-     "ask": 0.033,
+     "ask": 0.034,
      "fee": 0.04,
      "token": "16431849415858885456221049616384331828049053247914187859344012689995986679551"
     },
@@ -2534,7 +2486,7 @@
     },
     {
      "label": "1T\u20131.25T",
-     "ask": 0.175,
+     "ask": 0.173,
      "fee": 0.04,
      "token": "52275706593137793319318925926177756496204385627147209958254016456013188034724"
     },
@@ -2562,165 +2514,39 @@
   },
   {
    "venue": "polymarket",
-   "event": "Who will be arrested before 2027?",
-   "n_legs": 24,
-   "gross": 0.014000000000000012,
-   "fees": 0.0368672,
-   "net": -0.02286719999999999,
-   "capital": 1.0228672,
-   "roi": -0.02235598130431789,
-   "url": "https://polymarket.com/event/who-will-be-arrested-before-2027",
-   "neg_risk": false,
-   "coverage": "24/24",
-   "tier": 2,
+   "event": "Next NVIDIA CEO: internal or external?",
+   "n_legs": 3,
+   "gross": 0.001000000000000112,
+   "fees": 0.02291836,
+   "net": -0.021918359999999887,
+   "capital": 1.02191836,
+   "roi": -0.02144824954510054,
+   "url": "https://polymarket.com/event/next-nvidia-ceo-internal-or-external",
+   "neg_risk": true,
+   "coverage": "3/3",
+   "tier": 1,
    "legs": [
     {
-     "label": "James Comey",
-     "ask": 0.074,
+     "label": "Internal",
+     "ask": 0.24,
      "fee": 0.04,
-     "token": "37402144954850617129812050761925969911921591769193320779877026196822903941852"
+     "token": "87354479091069827603919090507674948673956485620355655172351900829308650811379"
     },
     {
-     "label": "Anthony Fauci",
-     "ask": 0.032,
+     "label": "External",
+     "ask": 0.58,
      "fee": 0.04,
-     "token": "62664988686544541004962241557013553766520681768858444478309305931894695537107"
+     "token": "104262791208724846341018108878000442129569199516927989222403452465430866378436"
     },
     {
-     "label": "John Brennan",
-     "ask": 0.11,
+     "label": "No new permanent CEO",
+     "ask": 0.179,
      "fee": 0.04,
-     "token": "52237802307682603480730971326661128666830204155629238033804488082727873604632"
-    },
-    {
-     "label": "Mahmoud Khalil",
-     "ask": 0.09,
-     "fee": 0.04,
-     "token": "71599559707881844514497320999880502070365800738965301415619244485690306972251"
-    },
-    {
-     "label": "James Clapper",
-     "ask": 0.06,
-     "fee": 0.04,
-     "token": "74091869724089710488270648353789145218457851880773279383999098316230780589734"
-    },
-    {
-     "label": "Jos\u00e9 Luis Rodr\u00edguez Zapatero",
-     "ask": 0.024,
-     "fee": 0.04,
-     "token": "9748918111047171291668915428928220741057051517923697241459807635775222131283"
-    },
-    {
-     "label": "Adam Schiff",
-     "ask": 0.02,
-     "fee": 0.04,
-     "token": "89927690970866432638583725236459419388263927903641808909198263362524997727072"
-    },
-    {
-     "label": "Letitia James",
-     "ask": 0.023,
-     "fee": 0.04,
-     "token": "28212667953529002478343133040539592607389931010606492769111349258660573616766"
-    },
-    {
-     "label": "Hillary Clinton",
-     "ask": 0.014,
-     "fee": 0.04,
-     "token": "77886043686904669353038045910688496171684395999056641079178277517931779123468"
-    },
-    {
-     "label": "Bill Clinton",
-     "ask": 0.015,
-     "fee": 0.04,
-     "token": "18705337405881575484640803080658348476503354571030500717803293882362100037639"
-    },
-    {
-     "label": "Loretta Lynch",
-     "ask": 0.021,
-     "fee": 0.04,
-     "token": "25801742510091304276847608056994310409417936155086302405488362105112854984675"
-    },
-    {
-     "label": "Susan Rice",
-     "ask": 0.075,
-     "fee": 0.04,
-     "token": "80900015016854907187658369982812966075092278734149475013805922884274394551623"
-    },
-    {
-     "label": "Candace Owens",
-     "ask": 0.056,
-     "fee": 0.04,
-     "token": "47264700355280111220763983503506940668039621201599440140931837330593348899023"
-    },
-    {
-     "label": "Gavin Newsom",
-     "ask": 0.014,
-     "fee": 0.04,
-     "token": "81926437499375408929787207529000604100026014614447276020598559062677731079426"
-    },
-    {
-     "label": "Benjamin Netanyahu",
-     "ask": 0.019,
-     "fee": 0.04,
-     "token": "18611732449678098700931668464338449245178399189890817886367682429276057083402"
-    },
-    {
-     "label": "John Kerry",
-     "ask": 0.018,
-     "fee": 0.04,
-     "token": "62740301822204817709812724010902679507094947232718384001335528786360701874057"
-    },
-    {
-     "label": "Barack Obama",
-     "ask": 0.018,
-     "fee": 0.04,
-     "token": "33428360253534978212559209778778692481592503265991528085861037294251487931202"
-    },
-    {
-     "label": "Pam Bondi",
-     "ask": 0.029,
-     "fee": 0.04,
-     "token": "26934085125725177762664219476941561969958241680852989189606979810699222055319"
-    },
-    {
-     "label": "Tom Homan",
-     "ask": 0.042,
-     "fee": 0.04,
-     "token": "68573038148377142897679188886918535473939642314197309810135827411166768194472"
-    },
-    {
-     "label": "Kash Patel",
-     "ask": 0.03,
-     "fee": 0.04,
-     "token": "7538105294122584986969066586363113751247291532613206185845657009338333920847"
-    },
-    {
-     "label": "Brandon Johnson",
-     "ask": 0.041,
-     "fee": 0.04,
-     "token": "65897846141056836650122600618767660354347846016826934249977334629448203609444"
-    },
-    {
-     "label": "Lisa Cook",
-     "ask": 0.02,
-     "fee": 0.04,
-     "token": "43998842652212364537638319361586392564525188913156394212538748564941443108406"
-    },
-    {
-     "label": "Lee Jun-seok",
-     "ask": 0.126,
-     "fee": 0.04,
-     "token": "40509049808387523915856542863931989788066066974260505108538437520002318794359"
-    },
-    {
-     "label": "Joe Biden",
-     "ask": 0.015,
-     "fee": 0.04,
-     "token": "7419097585278710524602822809980025252565421819008088573594501547271640918800"
+     "token": "9237392001586130097481986984995541463836473378924719745585025979233028871776"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "who-will-be-arrested-before-2027"
+   "event_slug": "next-nvidia-ceo-internal-or-external"
   },
   {
    "venue": "kalshi",
