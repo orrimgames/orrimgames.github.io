@@ -793,6 +793,8 @@ function nightNow(){ return S.dayT<0.24||S.dayT>0.76; }
 function deepNight(){ return S.dayT<0.08||S.dayT>0.92; }   // the small hours, when lamps get honest
 function lampsOut(){ return Math.floor(Date.now()/86400000)%7===0; }        // one night a week, the den is visiting
 function companyMorning(){ return Math.floor(Date.now()/86400000)%7===1; }  // the morning after: two fish
+function readingNight(){ return Math.floor(Date.now()/86400000)%7===2; }       // one night a week, the archive is read aloud
+function minutesMorning(){ return Math.floor(Date.now()/86400000)%7===3; }     // the morning after: the minutes, in pebbles
 
 function COASTR(x,y){ const ca=Math.atan2(y-MAP/2,x-MAP/2);
   const c=Math.cos(ca), sn=Math.sin(ca); let de=1e9;              // v58: the shoreline never leaves the map square
@@ -3787,6 +3789,8 @@ const INTERIORS={
         if(S.secrets.undercount) L.push('the archive counts its slates nightly. the count is always right. the slates have been coached.');
         if(S.secrets.nightdoor) L.push('one shelf is labeled VISITORS, HOURLY. it is empty. the label is kept anyway. the archive is an optimist.');
         if(S.secrets.ferry) L.push('INFRASTRUCTURE stands by the door. REVENUE has its own hook. the hook is empty. the berries were wages.');
+        if(S.secrets.solstice&&nightNow()&&readingNight()) L.push('tonight is the reading. the door stands open and the lamplight comes out to meet you. attendance is everyone. you are everyone. you are already late, and it is fine.');
+        if(S.secrets.solstice&&!nightNow()&&minutesMorning()) L.push('the minutes sit on the step in pebbles. six pebbles attended. attendance was everyone. the tally is kept in chalk and in fact.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6183,6 +6187,32 @@ function buildAnnexDoor(){
     M4.trs(T,mx[0],0.10,mx[1],0,0,0,1,0.6,1); ball(m,0.04,7,cap,T,0,0.85); }
   return upload(m);
 }
+function buildReadingNight(){
+  const m=MB(),T=M4.id();
+  const turf=hex('#2e2418'), stone=hex('#7a7266'), stone2=hex('#5c554a'), bone=hex('#e0d4b4'),
+        stem=hex('#d8cfb0'), cap=hex('#a89060'), hole=hex('#0e0a06'), glow=hex('#ffd98a'), core=hex('#fff6dc');
+  M4.trs(T,0,0.10,-0.1,0,0,0,1,0.6,1); ball(m,0.55,9,turf,T,0,0.55);              // the bank bump
+  M4.trs(T,0,0.26,0.24,-0.55,0,0,1,1,1); tube(m,0.26,0.26,0.03,12,hole,T,0,true,true);  // the door stands open: the dark inside
+  M4.trs(T,0,0.265,0.245,-0.55,0,0,1,1,1); tube(m,0.19,0.19,0.025,12,glow,T,0,true,true); // the lamplight
+  M4.trs(T,0,0.27,0.25,-0.55,0,0,1,1,1); tube(m,0.12,0.12,0.02,12,core,T,0,true,true);
+  M4.trs(T,0.68,0.06,-0.10,1.25,0,0.3,1,1,1); tube(m,0.22,0.22,0.05,12,stone2,T,0,true,true); // the round door, leaned aside
+  M4.trs(T,0,0.55,0.26,0,0,0,1,1,1); box(m,0.62,0.07,0.12,stone,T,0,0.7);         // the slate lintel
+  M4.trs(T,0,0.02,0.42,0,0,0,1,1,1); box(m,0.44,0.05,0.2,stone,T,0,0.7);          // the step
+  M4.trs(T,0,0.045,0.52,0,0,0,1,1,1); box(m,0.44,0.015,0.38,glow,T,0,0.9);        // the light comes out to meet you
+  M4.trs(T,0,0.055,0.48,0,0,0,1,1,1); box(m,0.26,0.012,0.22,core,T,0,0.95);
+  for(const mx of[[-0.36,0.22],[0.38,0.14]]){
+    M4.trs(T,mx[0],0.05,mx[1],0,0,0,1,1,1); box(m,0.022,0.06,0.022,stem,T,0,0.8);
+    M4.trs(T,mx[0],0.10,mx[1],0,0,0,1,0.6,1); ball(m,0.04,7,cap,T,0,0.85); }
+  return upload(m);
+}
+function buildMinutes(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#7a7266'), stone2=hex('#5c554a'), earth=hex('#4a3a26'), chalk=hex('#e0d4b4');
+  const peb=[[-0.14,0.40,stone],[ -0.07,0.41,stone2],[0.0,0.40,earth],[0.07,0.41,stone],[-0.10,0.48,stone2],[-0.03,0.49,stone]];
+  for(const p of peb){ M4.trs(T,p[0],0.075,p[1],0,0,0,1,0.7,1); ball(m,0.030,7,p[2],T,0,0.85); }  // the minutes, in pebbles
+  M4.trs(T,0.09,0.075,0.47,0,0.3,0,1,1,1); box(m,0.11,0.012,0.022,chalk,T,0,0.9);                 // the tally, in chalk and in fact
+  return upload(m);
+}
 function buildSolsticeRoom(){
   const m=MB(),T=M4.id();
   const earth=hex('#2a1e12'), earth2=hex('#221810'), dark=hex('#14100a'), chalk=hex('#e0d4b4'),
@@ -6893,7 +6923,9 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='dendrawer')) PROPS.push({mesh:buildDenDrawer(), x:26.9, y:35.55, r:-0.5, gy:sitY(26.9,35.55)-0.04, vprop:'dendrawer', cond:()=>!!S.secrets.mossden});   // v161: DENS, CONTENTS OF: WARM
-  if(!PROPS.some(p=>p.vprop==='annexdoor')) PROPS.push({mesh:buildAnnexDoor(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'annexdoor'});   // v167: the archive's public face
+  if(!PROPS.some(p=>p.vprop==='annexdoor')) PROPS.push({mesh:buildAnnexDoor(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'annexdoor', cond:()=>!(!!S.secrets.solstice&&nightNow()&&readingNight())});   // v167: the archive's public face
+  if(!PROPS.some(p=>p.vprop==='readingnight')) PROPS.push({mesh:buildReadingNight(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'readingnight', cond:()=>!!S.secrets.solstice&&nightNow()&&readingNight()});   // v168: the door stands open
+  if(!PROPS.some(p=>p.vprop==='minutes')) PROPS.push({mesh:buildMinutes(), x:24.0, y:34.1, r:Math.PI-0.3, gy:sitY(24.0,34.1)-0.04, vprop:'minutes', cond:()=>!!S.secrets.solstice&&!nightNow()&&minutesMorning()});   // v168: attendance was everyone
   if(!PROPS.some(p=>p.vprop==='shoalbuoy')) PROPS.push({mesh:buildShoalBuoy(), x:32.2, y:38.4, r:0, gy:-0.30, vprop:'shoalbuoy', cond:()=>!nightNow()});   // v166: filed as DESTINATION
   if(!PROPS.some(p=>p.vprop==='laundryline')) PROPS.push({mesh:buildLaundryLine(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryline'});   // v165: two posts, one rope, a polite sag
   if(!PROPS.some(p=>p.vprop==='laundryshirts')) PROPS.push({mesh:buildLaundryShirts(), x:30.2, y:36.4, r:-0.785, gy:sitY(30.2,36.4)-0.04, vprop:'laundryshirts', cond:()=>!nightNow()});   // v165: the shirts sleep inside
