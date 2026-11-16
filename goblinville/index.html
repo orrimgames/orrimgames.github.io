@@ -865,7 +865,8 @@ function sitY(x,y){ const d=dirOf(x,y,[0,0,0]); return d[1]*icoHeight(d)+WATER-P
 const FAR_SHAPES=[[-46.7,183.38,5.2,0.55,1.6],           // the Last Chart terrace: a flat pad above the wrack line
                   [-12.58,-188.1,5.2,0.42,1.6],          // the Second Ship: the shingle where the Court's expedition came to rest
                   [-13.42,-190.98,3.4,0.38,1.5],         // the Manifest: a shelf above the wrack line for the crew the Choir filed
-                  [-24.2,-187.7,2.2,0.38,1.6]];          // the Warrant: the sea set it down square - a pad of settled shingle
+                  [-24.2,-187.7,2.2,0.38,1.6],           // the Warrant: the sea set it down square - a pad of settled shingle
+                  [-4.5,-188.2,3.4,0.35,1.6]];           // the Audit: a surveyor's flat - pegged, leveled, and filed
 function icoHeight(d){          // unit dir -> surface radius
   const p=invOf(d);
   const dx=p[0]-SITE.x, dy=p[1]-SITE.y, r=Math.hypot(dx,dy);
@@ -3479,6 +3480,7 @@ const INTERIORS={
         if(S.secrets.crate) L.push('the tide took one crate. the brood found it. the ledger allows itself one small smile.');
         if(S.secrets.bell) L.push('the tide hung the bell on the ship\u2019s own spars. the ship approves. ships are vain about their bells.');
         if(S.secrets.strongbox) L.push('the captain knew what he carried. ribs keep no secrets from the tide. the tide keeps them for whoever walks.');
+        if(S.secrets.audit) L.push('a skiff in the Court\u2019s colors grounds on the shingle some mornings, counts, and is gone by tide. the ribs do not worry about one skiff.');
         if(S.secrets.word2) L.push('the mountain wrote STAYED. the crew of the second ship could not. the ledger does not hold it against them. the ledger holds everything else.');
         return L; } }},
   manifest:{land:null, r:2.5, name:'THE MANIFEST', fpDoor:true, outdoor:true, glint:['#9fd4ff',0.7],
@@ -3496,6 +3498,7 @@ const INTERIORS={
         if(S.secrets.crate) L.push('the tide gave back what it took. the stones do not gloat. the stones have seen the tide\u2019s ledger.');
         if(S.secrets.bell) L.push('the bell kept the name the Court struck. the stones hold it in salt. the count is complete in a way the Court did not intend.');
         if(S.secrets.strongbox) L.push('the warrant names a number. the stones counted themselves in answer. the numbers do not agree. the stones are right.');
+        if(S.secrets.audit) L.push('the surveyor filed the seven stones as population. the stones did not object. the stones have been filed before.');
         return L; } }},
   crate:{land:null, r:2.2, name:'THE CARGO', fpDoor:true, outdoor:true, glint:['#d4a94e',0.5],
     fpHint:'a crate the tide kept, the Court\u2019s red wax still whole. face it and tap to read the manifest\u2019s last line.',
@@ -3531,6 +3534,7 @@ const INTERIORS={
         if(S.secrets.choir) L.push('the Choir asked once for the bell\u2019s note. the bell said nothing, which is its note.');
         if(S.secrets.court) L.push('the Court struck the name. the Court is still expecting its ship. the bell expects nothing. it only keeps.');
         if(S.secrets.strongbox) L.push('the strongbox says what the ship was FOR. the bell is glad it cannot ring. some news should arrive quietly.');
+        if(S.secrets.audit) L.push('the surveyor tried the rope once, at noon. the bell declined. it was entered as WEATHER.');
         return L; } }},
   strongbox:{land:null, r:2.0, name:'THE WARRANT', fpDoor:true, outdoor:true, glint:['#c04a5a',0.5],
     fpHint:'an ironbound strongbox, the Court\u2019s wax whole over the lock. face it and tap to read what the ship was for.',
@@ -3550,6 +3554,7 @@ const INTERIORS={
         if(S.secrets.choir) L.push('the Choir filed the ship under weather. it will file the Court under weather too, in time.');
         if(S.secrets.court) L.push('the Court is still expecting its ship. let it come. the goblins will be counted, and the count will be wrong, and that will be the beginning.');
         if(S.secrets.undercount) L.push('the cellar keeps the true count in charcoal, bundled in fives, kept nightly. the warrant’s twelve is down there too, crossed through once, kindly.');
+        if(S.secrets.audit) L.push('the surveyor counts the beach one stone at a time, professionally, at length. the warrant said goblins. the goblins are patient.');
         return L; } }},
   undercount:{land:null, r:1.9, room:[37,40.5], name:'THE UNDERCOUNT', fpDoor:true,
     fpHint:'a root-cellar hatch behind the mushroom racks, low as a badger’s door. face it and tap to duck inside.',
@@ -3566,6 +3571,25 @@ const INTERIORS={
         if(S.secrets.count) L.push('the eye counts what burns. the brood counts who shows up for dinner. the two counts have never disagreed.');
         if(S.secrets.manifest) L.push('seven stones keep the crew’s count. the slate keeps the living one. neither asked the Court to check their arithmetic.');
         if(S.secrets.court) L.push('when the Court comes it will count twelve, because its paper says twelve. the cellar will say otherwise. the cellar is right.');
+        if(S.secrets.audit) L.push('the slate gained a mark the evening the skiff landed, with a small neat flag drawn beside it. twelve plus one. the one does not know he is plus.');
+        return L; } }},
+  audit:{land:null, r:2.2, name:'THE AUDIT', fpDoor:true, outdoor:true, glint:['#f2ead8',1.4],
+    fpHint:'a red-sailed skiff on the shingle, a tent in the Court\u2019s colors. face the camp and tap to read the surveyor\u2019s ledger.',
+    blurb:'the Court sent one surveyor to the wrong beach. the goblins counted him first.',
+    doorFn:()=>[-4.5,-188.2],
+    interact:{dx:0, dz:0, dd:3.0, ang:0.7, key:'audit', sparkY:1.0, spark:'#f2ead8', spark2:'#c04a5a',
+      tone:[[880,0.05,{type:'square',vol:0.09}],[880,0.05,{type:'square',vol:0.07,delay:0.14}]],
+      first:{b:['THE AUDIT BEGINS','a red-sailed skiff on the shingle, a tent in the Court\u2019s colors, a counting-frame still warm. someone has been counting the stones.'],
+        c:'On the morning tide the Court\u2019s answer came ashore at the wrong beach: one surveyor, one skiff, one tent, and a counting-frame whose beads still smell of the cargo. The surveyor has counted the shingle (2,148 stones, approximate), the wrack line (six items, filed), and the seven stones of the manifest (filed twice - once as POPULATION). It has not counted one goblin. The goblins counted the surveyor before the keel touched: one. The undercount was updated that evening, in charcoal, with a small neat flag drawn beside the mark.', say:9},
+      linesFn:()=>{ const L=['the ledger says the village is 4.2 miles inland, population twelve. both numbers are in the same ink.',
+        'marker flags in a grid, each labeled in a neat hand: STONE, STONE, TREE, STONE, OTHER. the OTHER is a crab.',
+        'the counting-frame\u2019s beads are mid-count. the surveyor is thorough the way the tide is thorough.'];
+        if(S.secrets.strongbox) L.push('the warrant says count the goblins. the surveyor counts everything else first, professionally, at length. the goblins approve of thoroughness.');
+        if(S.secrets.manifest) L.push('the seven stones are filed as population. the stones did not object. the stones have been filed before.');
+        if(S.secrets.bell) L.push('the surveyor tried the bell\u2019s rope once, at noon. the bell declined. it was entered as WEATHER.');
+        if(S.secrets.wreck) L.push('the surveyor paced the wreck twice and filed it under EVIDENCE, then under WEATHER, then under STONE.');
+        if(S.secrets.undercount) L.push('the cellar slate gained a mark the evening the skiff landed, with a small neat flag beside it. twelve plus one. the one does not know he is plus.');
+        if(S.secrets.chart) L.push('the surveyor\u2019s map shows a blank where the watch-post stands. the sky-readers are filed under MYTH. the iris is not.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -5860,7 +5884,7 @@ function buildCrate(){
 function seedWrack(){
   if(PROPS.some(p=>p.wrack)) return;
   let s=8847; const sr=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
-  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0],[-15.5,-188.55,1.3],[-24.2,-187.7,1.6]];   // wreck, manifest, crate, bell, strongbox
+  const keepOut=[[-12.58,-188.1,2.4],[-13.42,-190.98,1.8],[-21.6,-187.95,2.0],[-15.5,-188.55,1.3],[-24.2,-187.7,1.6],[-4.5,-188.2,3.2]];   // wreck, manifest, crate, bell, strongbox, audit
   let last=null, n=0;
   for(let y=-193.5;y<=-186.5;y+=0.5) for(let x=-26;x<=-12;x+=0.5){
     const h=icoHeight(dirOf(x,y,[0,0,0]))-150;
@@ -5913,6 +5937,72 @@ function buildBell(){
   farOrb(m,T, 0.30, 0.22, 0.22, 0.02, salt, 0.6);
   return upload(m);
 }
+// v150: THE AUDIT - the Court's answer came ashore at the wrong beach: one surveyor, one skiff, one tent,
+// a counting-frame still warm. The goblins counted the surveyor before the keel touched: one.
+function buildCourtCamp(){
+  const m=MB(),T=M4.id();
+  const canvas=hex('#6e2430'), canvas2=hex('#571c26'), pale=hex('#e8e2d0'), gold=hex('#d4a94e'),
+        wood=hex('#4a3a28'), wood2=hex('#3a2c1c'), bead=hex('#e0d4b4'), bead2=hex('#c8a45c'),
+        ink=hex('#1c1a18'), red=hex('#a32436'), crab=hex('#a34a2e'), glow=hex('#f2ead8'),
+        hull=hex('#5d3f24'), hull2=hex('#4a3020');
+  // the lectern, and the ledger, open (camp origin)
+  farBox(m,T,0,0.35,0, 0,0,0, 0.08,0.7,0.08, wood2, 0.55);                    // the post
+  farBox(m,T,0,0.72,0.02, -0.5,0,0, 0.44,0.05,0.32, wood, 0.6);               // the desk, tilted to the work
+  farBox(m,T,0,0.775,0.03, -0.5,0,0, 0.36,0.02,0.26, pale, 0.85);             // the open pages
+  for(let i=0;i<4;i++) farBox(m,T,-0.08+i*0.045,0.788,0.03, -0.5,0,0, 0.016,0.008,0.18-i*0.03, ink, 0.9);  // the neat hand, in lines
+  farBox(m,T,0.14,0.83,0.05, -0.5,0,0.35, 0.012,0.13,0.012, pale, 0.85);      // the quill, set down mid-word
+  // the lantern on its pole - the camp's cold little light (matches the glint)
+  farBox(m,T,-0.45,0.75,0.45, 0,0,0, 0.035,1.5,0.035, wood2, 0.6);
+  farBox(m,T,-0.45,1.50,0.45, 0,0,0, 0.12,0.04,0.12, wood, 0.6);               // the cap
+  farBox(m,T,-0.45,1.37,0.45, 0,0,0, 0.10,0.03,0.10, wood, 0.6);               // the base
+  farOrb(m,T,-0.45,1.435,0.45,0.048,glow,0.9);                                 // the flame, visible in its cage
+  // the tent: ridge canvas in the Court's oxblood, pale valance, the gold stamp on the flap
+  farBox(m,T,-1.1,0.02,0.6, 0,0,0, 1.1,0.05,1.3, canvas2, 0.55);              // groundsheet
+  farBox(m,T,-1.1,0.55,-0.03, 0,0,0, 0.04,1.1,0.04, wood2, 0.55);             // poles
+  farBox(m,T,-1.1,0.55,1.23, 0,0,0, 0.04,1.1,0.04, wood2, 0.55);
+  farBox(m,T,-1.1,1.12,0.6, 0,0,0, 0.05,0.05,1.35, wood2, 0.55);              // the ridge
+  farBox(m,T,-1.39,0.88,0.6, 0,0,0.72, 0.80,0.06,1.34, canvas, 0.6);          // canvas, sloped
+  farBox(m,T,-0.81,0.88,0.6, 0,0,-0.72, 0.80,0.06,1.34, canvas, 0.6);         // canvas, sloped
+  for(const gz of[-0.03,1.23]) for(let gi=0;gi<3;gi++)                          // the gable ends, stepped
+    farBox(m,T,-1.1,0.22+gi*0.30,gz, 0,0,0, 0.92-gi*0.30,0.32,0.05, gi===1?canvas:canvas2, 0.6);
+  farBox(m,T,-1.1,0.98,0.6, 0,0,0, 0.20,0.14,1.32, canvas2, 0.6);              // the ridge cap
+  farOrb(m,T,-1.1,0.62,-0.085,0.035,gold,0.7);                                // the Court's stamp on the flap
+  for(const a of[0.8,2.3,3.9,5.5]){                                            // guy ropes, bell-leg idiom
+    const sx=Math.sin(a), cz=Math.cos(a);
+    farBox(m,T,-1.1+sx*0.62,0.32,0.6+cz*0.78, 0.5*cz, a, -0.5*sx, 0.018,0.78,0.018, pale, 0.7);
+  }
+  // the counting-frame, mid-count: three rails, the beads left where the hand left them
+  farBox(m,T,0.62,0.33,-0.9, 0,0,0, 0.05,0.66,0.05, wood2, 0.55);
+  farBox(m,T,1.12,0.33,-0.9, 0,0,0, 0.05,0.66,0.05, wood2, 0.55);
+  for(let r2=0;r2<3;r2++){
+    farBox(m,T,0.87,0.28+r2*0.17,-0.9, 0,0,0, 0.56,0.025,0.025, wood, 0.6);
+    for(let b2=0;b2<7;b2++){ const off=(b2<3+r2? -0.20+b2*0.055 : 0.06+(b2-3-r2)*0.055);
+      farOrb(m,T,0.87+off,0.28+r2*0.17,-0.9,0.028,(b2+r2)%4?bead:bead2,0.85); }
+  }
+  // the skiff, grounded at the tide's edge, red sail furled, heeled on the shingle
+  farBox(m,T,2.6,-0.35,0.5, 0,0.15,0.12, 0.44,0.14,1.35, hull2, 0.55);        // keel and garboard, dug in
+  farBox(m,T,2.6,-0.25,0.5, 0,0.15,0.12, 0.56,0.12,1.6, hull, 0.6);           // the hull band
+  farBox(m,T,2.6,-0.18,0.5, 0,0.15,0.12, 0.62,0.05,1.7, wood, 0.65);          // the gunwale
+  farBox(m,T,2.6,-0.12,1.15, 0.5,0.15,0.12, 0.42,0.24,0.34, hull, 0.6);       // the rising bow
+  farBox(m,T,2.6,-0.15,-0.35, 0,0.15,0.12, 0.34,0.2,0.24, hull2, 0.6);        // the transom
+  farBox(m,T,2.6,0.10,0.55, 0,0.15,0.12, 0.05,0.85,0.05, wood2, 0.6);         // the mast, bare
+  farBox(m,T,2.6,0.43,0.55, 0,0.15,0.12, 0.075,0.5,0.075, red, 0.7);          // the sail, furled tight
+  // the marker flags: STONE, STONE, TREE, STONE...
+  for(const f of[[-1.8,-0.6],[-1.6,1.3],[1.6,-1.4],[1.9,0.8],[-0.2,-1.7]]){
+    farBox(m,T,f[0],0.28,f[1], 0,0,0, 0.022,0.56,0.022, wood2, 0.6);
+    farBox(m,T,f[0]+0.085,0.47,f[1], 0,0,0, 0.15,0.09,0.015, pale, 0.8);
+  }
+  // ...and OTHER: the crab, counted, unbothered, with its small polite flag
+  farOrb(m,T,2.05,0.05,-0.55,0.075,crab,0.55);
+  for(const s of[-1,1]) for(let l2=0;l2<3;l2++)
+    farBox(m,T,2.05+s*0.10,0.035,-0.62+l2*0.06, 0,0,s*0.55, 0.08,0.014,0.014, crab, 0.7);
+  farBox(m,T,1.96,0.055,-0.46, 0,0.4,0.35, 0.05,0.02,0.035, crab, 0.7);       // claws, politely raised
+  farBox(m,T,2.14,0.055,-0.46, 0,-0.4,-0.35, 0.05,0.02,0.035, crab, 0.7);
+  farBox(m,T,2.05,0.28,-0.78, 0,0,0, 0.022,0.56,0.022, wood2, 0.6);           // the OTHER flag
+  farBox(m,T,2.135,0.47,-0.78, 0,0,0, 0.15,0.09,0.015, pale, 0.8);
+  return upload(m);
+}
+
 function buildUnderHatch(){
   const m=MB(),T=M4.id();
   const turf=hex('#3a5a30'), turf2=hex('#2e4a26'), wood=hex('#4a3a26'), wood2=hex('#3a2c1c'), stone=hex('#5a5348'),
@@ -6134,6 +6224,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='bell')) PROPS.push({mesh:buildBell(), x:-15.5, y:-188.55, r:1.9, far:'bell', ride:-0.08});   // v147: what the tide hung
   if(!PROPS.some(p=>p.far==='strongbox')) PROPS.push({mesh:buildStrongbox(), x:-24.2, y:-187.7, r:1.9, far:'strongbox', ride:-0.10});   // v148: what the sea respected
   if(!PROPS.some(p=>p.vprop==='undercount')) PROPS.push({mesh:buildUnderHatch(), x:SITE.x-6.6, y:SITE.y+5.4, r:0.4, gy:sitY(SITE.x-6.6,SITE.y+5.4)-0.04, vprop:'undercount'});   // v149: the other count
+  if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
