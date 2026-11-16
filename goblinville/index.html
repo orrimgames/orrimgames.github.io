@@ -3656,6 +3656,7 @@ const INTERIORS={
         if(S.secrets.audit) L.push('the surveyor lost a pencil. it was returned before he missed it, sharpened. he filed a thank-you. it was filed.');
         if(S.secrets.vampire) L.push('the count mislaid a cape once. it came back folded, brushed, in daylight, with a polite note. he has been careful ever since.');
         if(S.secrets.scenicroute) L.push('the right shoe is sighted on the high path, sole down, at rest. the ledger says LOCATED, UNREPENTANT. the left shoe says nothing.');
+        if(S.secrets.nightdoor) L.push('the key is checked out nightly. the ledger now knows where to. the ledger is not saying where to.');
         return L; } }},
   scenicroute:{land:null, r:2.0, name:'THE SCENIC ROUTE', fpDoor:true, outdoor:true, glint:['#d8c9a8',0.9],
     fpHint:'a waystone on the rise west of the green. something rests on it, sole down, in no hurry. face it and tap to see what came home by the long way.',
@@ -3674,6 +3675,26 @@ const INTERIORS={
         if(S.secrets.bell) L.push('the bell did not ring for the shoe\u2019s return. it is a shoe. the bell has standards. so does the shoe.');
         if(S.secrets.vampire) L.push('the count asked, politely, whether the shoe had been anywhere interesting. the shoe declined to elaborate.');
         if(S.secrets.audit) L.push('the surveyor paced the route: three hundred and eleven steps, one shoe\u2019s worth of scenery. he is filing it as a walk.');
+        return L; } }},
+  nightdoor:{land:null, r:1.8, name:'THE NIGHT DOOR', fpDoor:true, outdoor:true, glint:['#c8b46a',1.1],
+    fpHint:'a door in a frame, standing alone on the rise south of the green. no wall. no hill. the keyhole is worn bright. face it and tap to knock.',
+    blurb:'the key to nothing goes somewhere at night. it goes here. the door will not say what for.',
+    doorFn:()=>[24,38],
+    interact:{dx:0, dz:0, dd:3.0, ang:0.6, key:'nightdoor', sparkY:0.5, spark:'#c8b46a', spark2:'#8a7434',
+      tone:[[147,0.4,{type:'sine',vol:0.2}],[73.5,1.0,{type:'sine',vol:0.14,delay:0.06}]],
+      first:{b:['BORROWED, HOURLY','a door in a frame, standing alone on the rise. no wall. no hill. no reason. the keyhole is worn bright, the way a step is worn, by use. the label says BORROWED, HOURLY.'],
+        c:'On the far side of the rise south of the green there is a door. There is no wall around it, no hill behind it, and no villager who will admit it exists, which the undercount says is three facts and a chorus. The key to it lives on the lost-and-found\u2019s third shelf, filed as ONE (1) KEY, TO NOTHING, and it checks out nightly and returns by dawn, slightly warm. Where it goes at night is now known: here. What it opens remains filed under NOTHING, THE VILLAGE WILL NOT ADMIT TO, because the door is always locked by morning and nobody has stayed up to watch, on the grounds that some things are private, even from shelves. The label has been updated. It says BORROWED, HOURLY. The door has not commented.', say:9},
+      linesFn:()=>{ const L=['the door opens on nothing the village will admit to. the keyhole is worn bright. nothing gets a lot of use.',
+        'the key checks out at dusk and returns by dawn, slightly warm. the shelf does not ask. the shelf is learning.',
+        'it is always locked by morning. whatever visits is punctual, polite, and not saying.'];
+        if(nightNow()) L.push('tonight the seam around the door is warm to the touch. the key is out. the ledger says: back by dawn.');
+        else L.push('by daylight the door is only a door. the keyhole glints. the glint is smug.');
+        if(S.secrets.lostfound) L.push('the key is filed TO NOTHING. the door is filed NOTHING, ADMITTED BY NO ONE. the filing agrees with itself.');
+        if(S.secrets.undercount) L.push('the undercount counted the door once. one door, zero walls, zero admissions. the slate was pleased with the arithmetic.');
+        if(S.secrets.bell) L.push('the bell has never rung for the door. the door has never asked. they have an understanding.');
+        if(S.secrets.vampire) L.push('the count knows the door. he will not admit to it either. it is the one thing he and the village agree on.');
+        if(S.secrets.scenicroute) L.push('the shoe walked past it once, at night. the shoe declines to elaborate. the shoe is learning from the door.');
+        if(S.secrets.receipt) L.push('the sea loses nothing. the door admits nothing. between them, the world keeps its accounts.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6038,6 +6059,25 @@ function buildReceipt(){
   farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
   return upload(m);
 }
+function buildNightDoor(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#8d94ac'), stone2=hex('#6d7490'), wood=hex('#3a2a1a'), iron=hex('#232527'),
+        brass=hex('#d8a94f'), chalk=hex('#e0d4b4'), dark=hex('#14100a'), moss=hex('#3a5a30');
+  M4.trs(T,0,0.03,0.05,0,0,0,1,1,1); box(m,0.5,0.06,0.3,stone,T,0,0.6);             // the threshold, worn
+  M4.trs(T,-0.21,0.37,0,0,0,0,1,1,1); box(m,0.07,0.62,0.09,stone2,T,0,0.6);         // the frame
+  M4.trs(T,0.21,0.37,0,0,0,0,1,1,1); box(m,0.07,0.62,0.09,stone2,T,0,0.6);
+  M4.trs(T,0,0.71,0,0,0,0,1,1,1); box(m,0.5,0.08,0.1,stone2,T,0,0.6);               // the lintel
+  M4.trs(T,0,0.34,0.01,0,0,0,1,1,1); box(m,0.34,0.56,0.045,wood,T,0,0.7);           // the door, shut
+  for(let i=0;i<3;i++){ M4.trs(T,0,0.16+i*0.18,0.035,0,0,0,1,1,1); box(m,0.30,0.03,0.012,iron,T,0,0.75); }  // the bands
+  M4.trs(T,0.10,0.36,0.04,0,0,0,1,1,1); box(m,0.035,0.05,0.014,brass,T,0,0.95);     // the keyhole, worn bright
+  M4.trs(T,0.10,0.355,0.048,0,0,0,1,1,1); box(m,0.012,0.02,0.006,dark,T,0,0.9);
+  M4.trs(T,0,0.615,0.055,0,0,0,1,1,1); box(m,0.22,0.05,0.012,chalk,T,0,0.85);       // the label: BORROWED, HOURLY
+  M4.trs(T,0,0.618,0.062,0,0,0,1,1,1); box(m,0.17,0.008,0.006,dark,T,0,0.9);
+  M4.trs(T,0,0.628,0.062,0,0,0,1,1,1); box(m,0.12,0.008,0.006,dark,T,0,0.9);
+  M4.trs(T,-0.28,0.05,0.14,0,0.6,0,1,0.6,1); ball(m,0.06,8,moss,T,0,0.7);           // moss, discreet
+  M4.trs(T,0.30,0.04,-0.10,0,0.2,0,1,0.5,1); ball(m,0.05,8,moss,T,0,0.7);
+  return upload(m);
+}
 function buildScenicRoute(){
   const m=MB(),T=M4.id();
   const stone=hex('#8d94ac'), stone2=hex('#6d7490'), leather=hex('#5a3a26'), chalk=hex('#e0d4b4'),
@@ -6524,6 +6564,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
   if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
+  if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
