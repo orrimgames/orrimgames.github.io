@@ -3655,6 +3655,25 @@ const INTERIORS={
         if(S.secrets.springs) L.push('things lost at the springs come home wrinkled, like the goblins. they are shelved to dry.');
         if(S.secrets.audit) L.push('the surveyor lost a pencil. it was returned before he missed it, sharpened. he filed a thank-you. it was filed.');
         if(S.secrets.vampire) L.push('the count mislaid a cape once. it came back folded, brushed, in daylight, with a polite note. he has been careful ever since.');
+        if(S.secrets.scenicroute) L.push('the right shoe is sighted on the high path, sole down, at rest. the ledger says LOCATED, UNREPENTANT. the left shoe says nothing.');
+        return L; } }},
+  scenicroute:{land:null, r:2.0, name:'THE SCENIC ROUTE', fpDoor:true, outdoor:true, glint:['#d8c9a8',0.9],
+    fpHint:'a waystone on the rise west of the green. something rests on it, sole down, in no hurry. face it and tap to see what came home by the long way.',
+    blurb:'the right shoe was filed MISSING, PRESUMED HAPPY. it has been located. it declines to elaborate.',
+    doorFn:()=>[18,20],
+    interact:{dx:0, dz:0, dd:3.0, ang:0.6, key:'scenicroute', sparkY:0.6, spark:'#d8c9a8', spark2:'#b8955c',
+      tone:[[220,0.3,{type:'triangle',vol:0.2}],[110,0.8,{type:'sine',vol:0.16,delay:0.05}]],
+      first:{b:['LOCATED, UNREPENTANT','a waystone cairn on the rise, and on it, sole down, at rest: ONE (1) SHOE, RIGHT. it has seen things. it is not saying what. the label has already been written.'],
+        c:'The right shoe went missing in the second week of the world and was filed MISSING, PRESUMED HAPPY, which is the shelf\u2019s way of saying godspeed. It has been found on the rise west of the green, sole down on a waystone, pointed at the horizon, in excellent spirits. It did not come home itself. It sent word by way of a button, a marble, and a thimble, laid out along the path like a sentence. The undercount made the walk, confirmed the shoe, and declined to move it: a shoe that has seen the world is owed its view. It was filed LOCATED, UNREPENTANT, and the left shoe was told. The left shoe said nothing. The cairn keeps the shoe; the village keeps the story; and anything else out there taking the scenic route now knows there is a shelf waiting, and a label, and that nobody will be angry about the time it took.', say:9},
+      linesFn:()=>{ const L=['the shoe is filed LOCATED, UNREPENTANT. it is not lost. it is elsewhere, on purpose.',
+        'the trail it left spells a sentence, if you read buttons. the undercount reads buttons.',
+        'the cairn was already there. the shoe improved it. this is filed under IMPROVEMENTS, NATURAL.'];
+        if(S.secrets.lostfound) L.push('the left shoe was told. the left shoe said nothing. the shelf keeps its counsel.');
+        if(S.secrets.receipt) L.push('the sea loses nothing. the land loses things briefly, then arranges them nicely.');
+        if(S.secrets.springs) L.push('the shoe is not wrinkled. it took the dry way. nobody knows the dry way.');
+        if(S.secrets.bell) L.push('the bell did not ring for the shoe\u2019s return. it is a shoe. the bell has standards. so does the shoe.');
+        if(S.secrets.vampire) L.push('the count asked, politely, whether the shoe had been anywhere interesting. the shoe declined to elaborate.');
+        if(S.secrets.audit) L.push('the surveyor paced the route: three hundred and eleven steps, one shoe\u2019s worth of scenery. he is filing it as a walk.');
         return L; } }}
 };
 function interiorDoorPos(k){ const it=INTERIORS[k]; if(it.doorFn) return it.doorFn(); const L=LANDS.find(l=>l.id===it.land); return [L.x+it.dx, L.y+it.dz]; }
@@ -6019,6 +6038,27 @@ function buildReceipt(){
   farOrb(m,T, -0.30,0.02,-0.14, 0.016, salt, 0.6);
   return upload(m);
 }
+function buildScenicRoute(){
+  const m=MB(),T=M4.id();
+  const stone=hex('#8d94ac'), stone2=hex('#6d7490'), leather=hex('#5a3a26'), chalk=hex('#e0d4b4'),
+        dark=hex('#14100a'), bone=hex('#e0d4b4'), ochre=hex('#c8a45c'), moss=hex('#3a5a30'), slate=hex('#4a4640');
+  M4.trs(T,0,0.05,0,0,0,0,1,1,1); box(m,0.42,0.10,0.42,stone2,T,0,0.6);            // the waystone: first tier
+  M4.trs(T,0,0.145,0,0,0.4,0,1,1,1); box(m,0.34,0.09,0.34,stone,T,0,0.6);
+  M4.trs(T,0,0.23,0,0,0.9,0,1,1,1); box(m,0.26,0.08,0.26,stone2,T,0,0.6);
+  M4.trs(T,0,0.30,0,0,1.3,0,1,1,1); box(m,0.18,0.08,0.18,stone,T,0,0.6);
+  M4.trs(T,0,0.37,0,0,0,0,1,0.8,1); ball(m,0.055,8,stone2,T,0,0.65);               // the peak pebble
+  M4.trs(T,0,0.345,0.05,0.32,-0.3,0,1,1,1); box(m,0.09,0.025,0.16,leather,T,0,0.7); // ONE (1) SHOE, RIGHT: the sole, at rest
+  M4.trs(T,0.01,0.385,0.015,0.32,-0.3,0,1,1,1); box(m,0.05,0.045,0.08,leather,T,0,0.7); // toe up, pointed at the horizon
+  M4.trs(T,0,0.075,0.24,-0.25,0,0,1,1,1); box(m,0.16,0.05,0.012,chalk,T,0,0.85);   // the label, already written
+  M4.trs(T,0,0.077,0.247,-0.25,0,0,1,1,1); box(m,0.12,0.008,0.006,dark,T,0,0.9);
+  M4.trs(T,0,0.088,0.243,-0.25,0,0,1,1,1); box(m,0.09,0.008,0.006,dark,T,0,0.9);
+  // the sentence it sent ahead, laid out along the path
+  M4.trs(T,0.77,0.02,0.64,0,0,0,1,1,1); tube(m,0.035,0.035,0.014,9,bone,T,0,true,true);   // a button
+  M4.trs(T,1.46,0.025,1.22,0,0,0,1,1,1); ball(m,0.028,8,slate,T,0,0.85);                   // a marble
+  M4.trs(T,2.23,0.035,1.86,0,0,0,1,1,1); tube(m,0.030,0.022,0.07,8,ochre,T,0,true,false); // a thimble
+  M4.trs(T,-0.26,0.045,0.18,0,0.7,0,1,0.6,1); ball(m,0.07,8,moss,T,0,0.7);         // moss, settled in
+  return upload(m);
+}
 function buildLostFoundStump(){
   const m=MB(),T=M4.id();
   const bark=hex('#4a3a26'), bark2=hex('#3a2c1c'), moss=hex('#3a5a30'), dark=hex('#14100a'),
@@ -6483,6 +6523,7 @@ function seedLandmarks(){
   if(!PROPS.some(p=>p.far==='audit')) PROPS.push({mesh:buildCourtCamp(), x:-4.5, y:-188.2, r:1.9, far:'audit', ride:-0.05});   // v150: the Court's answer, at the wrong beach
   if(!PROPS.some(p=>p.vprop==='counterfiling')) PROPS.push({mesh:buildFilingDrawer(), x:SITE.x-3.9, y:SITE.y+5.9, r:-0.5, gy:sitY(SITE.x-3.9,SITE.y+5.9)-0.04, vprop:'counterfiling'});   // v151: the brood files the surveyor
   if(!PROPS.some(p=>p.vprop==='lostfound')) PROPS.push({mesh:buildLostFoundStump(), x:34.5, y:24.5, r:0.8, gy:sitY(34.5,24.5)-0.04, vprop:'lostfound'});   // v153: everything comes home
+  if(!PROPS.some(p=>p.vprop==='scenicroute')) PROPS.push({mesh:buildScenicRoute(), x:18, y:20, r:-0.88, gy:sitY(18,20)-0.04, vprop:'scenicroute'});   // v154: the long way home
   seedWrack();   // v146: the wrack line
   seedBoneYard();
 }
