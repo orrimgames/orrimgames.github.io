@@ -1678,6 +1678,7 @@ const S={
   secrets:{}
 };
 const BT={
+  market:{name:'Trading Post',w:2,h:2,cost:{wood:60,stone:25},hp:250,desc:'Trade gold for supplies, or sell spare timber. Select to trade'},
   road:{name:'Stone Path',w:1,h:1,cost:{stone:2},hp:120,desc:'Everyone walks 35% faster on finished paths, including you in first person'},
   hall:   {name:'Great Hall', w:3,h:3, cost:{}, hp:900, desc:'The heart of Goblinville', max:1},
   hut:    {name:'Hut',        w:2,h:2, cost:{wood:20}, hp:220, pop:3, desc:'+3 goblins'},
@@ -1693,7 +1694,7 @@ const BT={
   wall:   {name:'Wall',       w:1,h:1, cost:{stone:12}, hp:400, desc:'Slows the enemy down'},
   shrine: {name:'Ember Shrine',w:2,h:2,cost:{stone:60,gold:30}, hp:300, desc:'Burn offerings to the dragon'}
 };
-const BKEYS=['road','hut','farm','kitchen','lumber','forester','quarry','mine','store','barracks','shrine'];   // v109: tower/wall unlisted until a defense system exists - BT and meshes intact, re-add to this one line to restore
+const BKEYS=['road','hut','farm','kitchen','lumber','forester','quarry','mine','store','market','barracks','shrine'];   // v109: tower/wall unlisted until a defense system exists - BT and meshes intact, re-add to this one line to restore
 const NAMES=['Grib','Snag','Muk','Ziff','Blort','Pib','Wug','Krunk','Nib','Thump','Grot','Squig','Fen','Boz','Yark','Dribb','Mog','Tuk','Vex','Plop','Gruzz','Wibble','Chomp','Zog','Nubb','Skree'];
 const TRAITS=[{k:'Speedy',d:'zooms everywhere',spd:1.3},{k:'Strong',d:'carries extra',carry:2},
   {k:'Lazy',d:'naps a lot',spd:0.85},{k:'Tiny',d:'smol but mighty',size:0.85},
@@ -2418,6 +2419,70 @@ function buildKitchenMesh(){
   for(let i=0;i<3;i++)at(-.73+i*.20,.56,-.65,.12,.12,.12,hex('#ddbb8a'));
   return upload(m);
 }
+const MARKET_DEALS=[
+  {from:'gold',pay:5,to:'food',gain:20},
+  {from:'gold',pay:5,to:'wood',gain:20},
+  {from:'gold',pay:5,to:'stone',gain:20},
+  {from:'wood',pay:20,to:'gold',gain:3}
+];
+function marketBuilding(){const b=S.pick;return b&&b.key==='market'&&S.buildings.includes(b)&&S.mode==='village'&&!S.sel&&!FP.battle&&!FP.interior&&!S.sail?b:null;}
+function marketReason(b,d){
+  if(b.pop<1)return 'Under construction';
+  if(S.res[d.from]<d.pay)return 'Need '+d.pay+' '+d.from;
+  if(capOf(d.to)-S.res[d.to]<d.gain)return 'Need room for '+d.gain+' '+d.to;
+  return '';
+}
+function marketTrade(b,i){
+  const d=MARKET_DEALS[i];if(!d||!b||b.key!=='market'||!S.buildings.includes(b))return false;
+  const why=marketReason(b,d);if(why){A.deny();toast2(why);return false;}
+  S.res[d.from]-=d.pay;addRes(d.to,d.gain);saveGame();A.pop(2);toast2('Traded '+d.pay+' '+d.from+' for '+d.gain+' '+d.to);return true;
+}
+function marketR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-290,w,h:290};}
+function marketDealR(i){const r=marketR();return {x:r.x+12,y:r.y+64+i*53,w:r.w-24,h:46};}
+function marketPanelTap(x,y){
+  const b=marketBuilding();if(!b)return false;const r=marketR();if(!inR(x,y,r))return false;
+  if(x>r.x+r.w-42&&y<r.y+40){S.pick=null;A.blip();return true;}
+  for(let i=0;i<MARKET_DEALS.length;i++)if(inR(x,y,marketDealR(i))){marketTrade(b,i);return true;}
+  return true;
+}
+function marketTargetFP(){
+  if(FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
+  let best=null,dist=4.2;for(const b of S.buildings){if(b.key!=='market')continue;
+    const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
+    if(d<dist&&a<.55){best=b;dist=d;}}
+  return best;
+}
+function marketOpenFP(){const b=marketTargetFP();if(!b)return false;S.pick=b;A.blip();return true;}
+function drawMarketUI(){
+  if(S.mode!=='village'||S.story||S.chronOpen)return;
+  const b=marketBuilding();
+  if(!b){if(FP.on&&marketTargetFP()){
+    const w=Math.min(300,W-24);ctx.fillStyle='rgba(45,32,20,.94)';rrp((W-w)/2,H-154,w,34,9);ctx.fill();
+    txt3('TRADING POST - '+TAPW()+' to trade',W/2,H-132,12,'#ffe5ac','center',800,false);
+  }return;}
+  const r=marketR();ctx.save();ctx.fillStyle='rgba(34,28,23,.96)';rrp(r.x,r.y,r.w,r.h,13);ctx.fill();
+  ctx.strokeStyle='#c1a56f';ctx.lineWidth=1.5;ctx.stroke();
+  txt3('TRADING POST',r.x+14,r.y+23,15,'#ffe5ac','left',900,false);
+  txt3('X',r.x+r.w-22,r.y+23,15,'#ddd','center',800,false);
+  txt3('Fixed prices - each tap makes one trade',r.x+14,r.y+46,11,'#e3d8c3','left',700,false);
+  MARKET_DEALS.forEach((d,i)=>{const q=marketDealR(i),why=marketReason(b,d);
+    ctx.fillStyle=why?'#45413a':'#65613b';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
+    txt3(d.pay+' '+d.from+'  ->  '+d.gain+' '+d.to,q.x+q.w/2,q.y+18,13,why?'#bdb7aa':'#fff0c9','center',800,false);
+    txt3(why||('Have '+Math.floor(S.res[d.from])+' '+d.from+' / '+Math.floor(S.res[d.to])+' '+d.to),q.x+q.w/2,q.y+35,10,why?'#c6b7a5':'#d2e3b7','center',700,false);
+  });ctx.restore();
+}
+function buildMarketMesh(){
+  const m=MB(),T=M4.id(),wood=hex('#956739');
+  const at=(x,y,z,w,h,d,c)=>{M4.trs(T,x,y,z,0,0,0,1,1,1);box(m,w,h,d,c,T,0,.9);};
+  at(0,.08,0,1.9,.16,1.9,hex('#796d52'));
+  for(const x of [-.83,.83])for(const z of [-.65,.65])at(x,.9,z,.10,1.8,.10,wood);
+  for(let i=0;i<6;i++)at(-.75+i*.30,1.82,0,.30,.09,1.8,hex(i%2?'#e2bd78':'#975c73'));
+  at(0,.50,.48,1.7,.75,.45,wood);at(0,.92,.48,1.85,.12,.60,hex('#b89358'));
+  for(let i=0;i<3;i++)at(-.55+i*.50,1.06,.48,.32,.20,.30,hex(['#d4b359','#819c48','#b4b8ad'][i]));
+  at(.5,.32,-.4,.55,.5,.5,hex('#b88d51'));at(-.5,.28,-.4,.4,.42,.4,hex('#8e7759'));
+  return upload(m);
+}
+
 function kitchenPanelBuilding(){
   const b=S.pick;
   return b&&b.key==='kitchen'&&S.buildings.includes(b)&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.sel?b:null;
@@ -2596,7 +2661,7 @@ function buildShrineMesh(){
   M4.trs(T,0,0.34,0.88,0,0,0,1,1,1); box(m,0.4,0.05,0.18,gold,T,0);            // offering step
   return upload(m);
 }
-const BUILDERS={ road:buildRoadMesh, hall:buildHall, hut:buildHut, farm:buildFarmMesh, kitchen:buildKitchenMesh, forester:buildForesterMesh, lumber:buildLumberMesh,
+const BUILDERS={ market:buildMarketMesh, road:buildRoadMesh, hall:buildHall, hut:buildHut, farm:buildFarmMesh, kitchen:buildKitchenMesh, forester:buildForesterMesh, lumber:buildLumberMesh,
   quarry:buildQuarryMesh, mine:buildMineMesh, store:buildStoreMesh, barracks:buildBarracksMesh,
   tower:buildTowerMesh, wall:buildWallMesh, shrine:buildShrineMesh };
 
@@ -4624,7 +4689,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
-  if(kitchenPanelTap(x,y))return true;
+  if(marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -4682,7 +4747,7 @@ function fpTap(x,y){
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
   if(starTap(x,y)) return true;
   if(fishTap()) return true;
-  if(kitchenOpenFP())return true;
+  if(marketOpenFP()||kitchenOpenFP())return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
 }
@@ -5911,7 +5976,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -5929,7 +5994,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -8388,7 +8453,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
-  if(kitchenPanelTap(x,y))return true;
+  if(marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
