@@ -6902,6 +6902,11 @@ function fishTap(){
   if(FISH.st===2){ FISH.st=0; const n=(S.secrets.fish_n=(S.secrets.fish_n||0)+1);
     const wet=S.wx&&S.wx.rain>0.3, rare=Math.random()<(wet?0.3:0.1); /* v218: the fish bite in the rain */ if(rare){ addRes('gold',8); addRes('food',4); toast2('a silver one! +4 food, +8 gold  ('+n+' fish)'); A.cheer(); }
     else { addRes('food',2); toast2('caught a fish: +2 food  ('+n+' fish)'); A.say(8); }
+    { const dp=S.dayT<0.24||S.dayT>0.76?3:S.dayT<0.34?0:S.dayT>0.66?2:1;
+      const SP=['dawn dace','noon carp','dusk eel','night lantern-fish'][dp], bit=1<<dp, had=(S.secrets.fish_sp||0)&bit;
+      if(!had){ S.secrets.fish_sp=(S.secrets.fish_sp||0)|bit; let c=0; for(let i=0;i<4;i++) if(S.secrets.fish_sp&(1<<i)) c++;
+        addRes('gold',4); toast2('new species: '+SP+'  ('+c+'/4 kinds)');
+        if(c===4){ ['food','wood','stone','gold'].forEach(k=>addRes(k,30)); banner2('THE FISH BOOK','four kinds, four hours of the day. +30 of everything. the river is on the record now.'); chron('The goblins started a little book of fish, one for each part of the day. It is full now. They are very quiet about it, the way people are when they are proud.', true); } } }
     const w=fishWater(); if(w) sparkW(w[0],sitY(w[0],w[1])+0.2,w[1],12,'#bfe4ff');
     if(n===1) banner2('FISHING','tap the water to cast. when it bobs, tap again.');
     if(n===25){ addRes('wood',25); banner2('25 FISH','the goblins have started bringing you the ones that got away. +25 wood from somewhere.'); }
