@@ -5517,21 +5517,21 @@ function drawBuildMenu(){
 }
 // v26: inhabited nights - campfire light pool + warm window glow
 function drawRareBeacon(){   // v201: the Moon Glimmer shows itself: a pulsing pale ring, and an edge arrow when it is off the map view
-  const p=PROPS.find(p=>(p.rareGl||p.errandItem!=null)&&p.cond()); if(!p) return;
+  const p=PROPS.find(p=>(p.rareGl||p.wisp||p.errandItem!=null)&&p.cond()); if(!p) return; const wc=p.wisp?['170,255,215','120,255,190']:['210,235,255','150,200,255'];
   const sp=projPt(p.x,p.gy+0.5,p.y); if(!sp) return;
   const pul=0.5+0.5*Math.sin(G.t*2.4), zs=clamp(14/CAM.dist,0.6,1.5);
   const inView=sp[0]>20&&sp[0]<W-20&&sp[1]>110&&sp[1]<H-110;
   ctx.save();
   if(inView){
     ctx.globalCompositeOperation='lighter';
-    const r=(34+22*pul)*zs, g=ctx.createRadialGradient(sp[0],sp[1],3,sp[0],sp[1],r);
-    g.addColorStop(0,'rgba(210,235,255,'+(0.30+0.2*pul).toFixed(3)+')'); g.addColorStop(1,'rgba(150,200,255,0)');
+    const r=(34+22*pul)*zs*(p.wisp?1.5:1), g=ctx.createRadialGradient(sp[0],sp[1],3,sp[0],sp[1],r);
+    g.addColorStop(0,'rgba('+wc[0]+','+((p.wisp?0.5:0.30)+0.25*pul).toFixed(3)+')'); g.addColorStop(1,'rgba('+wc[1]+',0)');
     ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
   } else if(!FP.on){
     const cx=W/2, cy=H/2, dx=sp[0]-cx, dy=sp[1]-cy, k=Math.min((W/2-40)/Math.abs(dx||1),(H/2-130)/Math.abs(dy||1));
     const ax=cx+dx*k, ay=cy+dy*k, ang=Math.atan2(dy,dx);
     ctx.translate(ax,ay); ctx.rotate(ang);
-    ctx.globalAlpha=0.55+0.4*pul; ctx.fillStyle='#cfe8ff'; ctx.strokeStyle='rgba(20,40,70,0.7)'; ctx.lineWidth=2;
+    ctx.globalAlpha=0.55+0.4*pul; ctx.fillStyle=p.wisp?'#b8ffe0':'#cfe8ff'; ctx.strokeStyle='rgba(20,40,70,0.7)'; ctx.lineWidth=2;
     ctx.beginPath(); ctx.moveTo(16,0); ctx.lineTo(-10,-11); ctx.lineTo(-4,0); ctx.lineTo(-10,11); ctx.closePath(); ctx.fill(); ctx.stroke();
   }
   ctx.restore();
