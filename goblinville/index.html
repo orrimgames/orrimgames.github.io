@@ -2043,7 +2043,7 @@ function updateGob(g,dt){
   // v27: bedtime - civilians turn in when it gets properly dark
   if(S.mode==='village'){
     const dk=dayLight();
-    if(dk<0.30 && g.state!=='sleep' && g.state!=='toBed' && !g.carry){
+    if(dk<(fireLive()?0.12:0.30) && g.state!=='sleep' && g.state!=='toBed' && !g.carry){
       g.state='toBed'; g.bed=g.bed||null; }
     else if(dk>0.52 && (g.state==='sleep'||g.state==='toBed')){
       g.state='idle'; g.st=rnd(1.2,0.3); g.emote='!'; g.emoteT=1.1; g.squash=0.5;
@@ -2085,7 +2085,9 @@ function updateGob(g,dt){
       if(g._seek){ g._seek=0; recount(); g.st=rnd(0.8,0.2); break; }   // v39: colonists seek work - unworkable jobs re-slot instead of standing idle
       if(g.st<=0){
         g.state='wander'; g.st=rnd(3,1.2);
-        if(rnd(1)<0.22){ const w=PROPS.find(p=>p.well);
+        const bf=fireLive()?PROPS.find(p=>p.bonfire):null;   // v214: on bonfire night the idle goblins drift to the fire
+        if(bf&&rnd(1)<0.6){ const aa=rnd(TAU),rr=rnd(2.3,1.3); g.tx=clamp(bf.x+Math.cos(aa)*rr,1,MAP-2); g.ty=clamp(bf.y+Math.sin(aa)*rr,1,MAP-2); g.st=rnd(5,3); }
+        else if(rnd(1)<0.22){ const w=PROPS.find(p=>p.well);
           if(w){ g.tx=clamp(w.x+rnd(0.8,-0.8),1,MAP-2); g.ty=clamp(w.y+rnd(0.8,-0.8),1,MAP-2); g.wellVisit=1; }
           else { const h=hallPos(); g.tx=clamp(h[0]+rnd(6,-6),1,MAP-2); g.ty=clamp(h[1]+rnd(6,-6),1,MAP-2); } }
         else { const h=hallPos(); g.tx=clamp(h[0]+rnd(6,-6),1,MAP-2); g.ty=clamp(h[1]+rnd(6,-6),1,MAP-2); }
