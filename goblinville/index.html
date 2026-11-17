@@ -2357,19 +2357,28 @@ function kitchenPanelBuilding(){
   const b=S.pick;
   return b&&b.key==='kitchen'&&S.buildings.includes(b)&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.sel?b:null;
 }
+function kitchenYield(b){return b.level>=2?6:4;}
+function kitchenUpgrade(b){
+  if(!b||b.key!=='kitchen'||!S.buildings.includes(b)||b.pop<1||b.level>=2)return false;
+  const cost={stone:40,gold:20};
+  if(!canPay(cost)){A.deny();toast2('Need 40 stone and 20 gold to upgrade');return false;}
+  pay(cost);b.level=2;saveGame();A.build();toast2('Big soup pot: 1 wood makes 6 food now');return true;
+}
+function kitchenUpgradeR(){const r=kitchenPanelR();return {x:r.x+12,y:r.y+158,w:r.w-24,h:40};}
 function kitchenStatus(b){
   if(b.pop<1) return 'Under construction';
   if(b.kpaused) return 'Paused - wood saved for other work';
   if(S.res.wood<1) return 'Waiting for wood';
-  if(capOf('food')-S.res.food<4) return 'Pantry full - no wood used';
+  if(capOf('food')-S.res.food<kitchenYield(b)) return 'Pantry full - no wood used';
   return 'Cooking - '+Math.ceil(20-(b.kt||0))+'s to next bowl';
 }
-function kitchenPanelR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-164,w,h:164};}
+function kitchenPanelR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-212,w,h:212};}
 function kitchenToggleR(){const r=kitchenPanelR();return {x:r.x+12,y:r.y+115,w:r.w-24,h:37};}
 function kitchenPanelTap(x,y){
   const b=kitchenPanelBuilding();if(!b)return false;
   const r=kitchenPanelR();if(!inR(x,y,r))return false;
   if(x>r.x+r.w-42&&y<r.y+40){S.pick=null;A.blip();return true;}
+  if(inR(x,y,kitchenUpgradeR())){kitchenUpgrade(b);return true;}
   if(inR(x,y,kitchenToggleR())){b.kpaused=!b.kpaused;saveGame();A.blip();}
   return true;
 }
@@ -2377,14 +2386,17 @@ function drawKitchenPanel(){
   const b=kitchenPanelBuilding();if(!b)return;
   const r=kitchenPanelR();ctx.save();ctx.fillStyle='rgba(20,26,28,0.96)';rrp(r.x,r.y,r.w,r.h,13);ctx.fill();
   ctx.strokeStyle='#94ac80';ctx.lineWidth=1.5;ctx.stroke();
-  txt3('SOUP KITCHEN',r.x+14,r.y+23,15,'#e2ebbc','left',900,false);
+  txt3(b.level>=2?'SOUP KITCHEN II':'SOUP KITCHEN',r.x+14,r.y+23,15,'#e2ebbc','left',900,false);
   txt3('X',r.x+r.w-22,r.y+23,15,'#ddd','center',800,false);
-  txt3('1 wood -> 4 food / 20 seconds',r.x+14,r.y+47,12,'#fff','left',700,false);
+  txt3('1 wood -> '+kitchenYield(b)+' food / 20 seconds',r.x+14,r.y+47,12,'#fff','left',700,false);
   txt3(kitchenStatus(b),r.x+14,r.y+70,11,'#d9e3c9','left',700,false);
   ctx.fillStyle='#414b42';rrp(r.x+14,r.y+84,r.w-28,9,4);ctx.fill();
   const n=clamp((b.kt||0)/20,0,1);if(n>0){ctx.fillStyle=b.kpaused?'#c7ac75':'#b7d485';rrp(r.x+14,r.y+84,(r.w-28)*n,9,4);ctx.fill();}
   const t=kitchenToggleR();ctx.fillStyle=b.kpaused?'#446a42':'#695637';rrp(t.x,t.y,t.w,t.h,8);ctx.fill();
-  txt3(b.kpaused?'RESUME COOKING':'PAUSE COOKING',t.x+t.w/2,t.y+23,12,'#fff','center',800,false);ctx.restore();
+  txt3(b.kpaused?'RESUME COOKING':'PAUSE COOKING',t.x+t.w/2,t.y+23,12,'#fff','center',800,false);
+  const u=kitchenUpgradeR();ctx.fillStyle=b.level>=2?'#374439':canPay({stone:40,gold:20})?'#4d536a':'#424047';rrp(u.x,u.y,u.w,u.h,8);ctx.fill();
+  txt3(b.level>=2?'BIG POT INSTALLED':'BIG POT: 40 stone + 20 gold',u.x+u.w/2,u.y+16,11,b.level>=2?'#c7d4a9':'#fff','center',800,false);
+  txt3(b.level>=2?'6 food per wood - fully upgraded':'Upgrade to 6 food per wood',u.x+u.w/2,u.y+32,10,'#d1d5c9','center',700,false);ctx.restore();
 }
 function kitchenOpenFP(){
   if(FP.battle||FP.interior||S.sail)return false;
@@ -2396,10 +2408,11 @@ function kitchenOpenFP(){
 function kitchenTick(dt){
   for(const b of S.buildings){
     if(b.key!=='kitchen'||b.pop<1||b.kpaused) continue;
-    if(S.res.wood<1||capOf('food')-S.res.food<4){ b.kt=0; continue; }
+    const yieldFood=kitchenYield(b);
+    if(S.res.wood<1||capOf('food')-S.res.food<yieldFood){ b.kt=0; continue; }
     b.kt=(b.kt||0)+dt;
-    if(b.kt>=20){ b.kt-=20; S.res.wood-=1; addRes('food',4);
-      floatW(b.tx+1,b.gy+1.1,b.ty+1,'soup +4 food', '#d6e9a0'); }
+    if(b.kt>=20){ b.kt-=20; S.res.wood-=1; addRes('food',yieldFood);
+      floatW(b.tx+1,b.gy+1.1,b.ty+1,'soup +'+yieldFood+' food', '#d6e9a0'); }
     if(Math.random()<dt*1.4) S.parts.push({x:b.tx+1,y:b.gy+.85,z:b.ty+1,vx:0,vy:.35,vz:0,g:-.05,life:1.4,c:'#d6e1d2',r:3});
   }
 }
