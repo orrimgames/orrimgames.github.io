@@ -5815,6 +5815,7 @@ function drawGhostHint(){
   if(!S.sel) return;
   const T=BT[S.sel];
   const fr=S.tut<QUESTS.length;
+  if(S.sel==='road')txt3('PAVING - 2 stone each - stays selected until Cancel',W/2,H-BARH-61,fitSize2('PAVING - 2 stone each - stays selected until Cancel',W-24,12,800),'#e3edc8','center',800);
   txt3(S.ghost.show?(S.ghost.ok?(fr?'same spot again - '+TAPW()+' to build':TAPW()+' again to build '+T.name):(fr?'blocked - wiggle to a clear patch':'blocked')):(fr?TAPW()+' the land to aim the '+T.name:TAPW()+' where to build the '+T.name), W/2, H-BARH-34, 15, '#fff','center',800);
   const c=cancelR();
   ctx.fillStyle='rgba(190,60,60,0.92)'; rrp(c.x,c.y,c.w,c.h,14); ctx.fill();
@@ -8418,7 +8419,7 @@ function handleTap3(x,y){
     const before={tx:S.ghost.tx,ty:S.ghost.ty};
     updateGhost3(x,y);
     if(before.tx===S.ghost.tx && before.ty===S.ghost.ty){
-      if(placeBuilding(S.sel,S.ghost.tx,S.ghost.ty)){ S.sel=null; S.ghost.show=false; ghostArmed=false; }
+      if(placeBuilding(S.sel,S.ghost.tx,S.ghost.ty)){ const wasRoad=S.sel==='road',repeat=wasRoad&&canPay(BT.road.cost); S.sel=repeat?'road':null; S.ghost.show=false; ghostArmed=false; saveGame(); if(wasRoad&&!repeat)toast2('Paving done - need 2 stone for another tile'); }
     } else { A.blip(); ghostArmed=false; }
     return;
   }
