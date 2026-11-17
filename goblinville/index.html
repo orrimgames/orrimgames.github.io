@@ -4500,6 +4500,7 @@ function fpTap(x,y){
           return true; }
         enterInterior(k); return true; } } } }
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
+  if(fishTap()) return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
 }
@@ -4557,7 +4558,7 @@ function drawFPUI(){
       ctx.fillStyle='rgba(20,52,80,0.88)'; rrp(r.x,r.y,r.w,r.h,13); ctx.fill();
       txt3(S.boat&&Math.hypot(S.boat.x-FP.x,S.boat.y-FP.y)<6?'SET SAIL':'MAKE A RAFT',r.x+r.w/2,r.y+26,13,'#cdeaff','center',900); }
   }
-  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(fireLive()&&S.secrets.bf_d!==glDay()?'  -  a bonfire is lit':'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
+  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(FISH.st===0&&fishWater()?'  -  tap the water to fish':FISH.st===1?'  -  line out...':FISH.st===2?'  -  BOB! tap!':'')+(fireLive()&&S.secrets.bf_d!==glDay()?'  -  a bonfire is lit':'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
   if(FP.hurt>0){ ctx.fillStyle='rgba(190,30,30,'+(FP.hurt*0.5)+')'; ctx.fillRect(0,0,W,H); }
 }
 
@@ -6891,6 +6892,29 @@ function fireTick(dt){
       chron('A fire was lit near the green on the night of the minutes, and someone came and stood by it without being asked. Nobody said much. It was good.', true); saveGame(); }
   } else S.secrets.bf_t=0;
 }
+var FISH={st:0,t:0,w:0};   // v215: fishing. st 0 idle, 1 line out, 2 bite
+function fishWater(){ const fx=Math.sin(FP.a), fy=Math.cos(FP.a);
+  for(let d=0.9;d<=2.6;d+=0.4){ const x=FP.x+fx*d, y=FP.y+fy*d, tx=Math.floor(x), ty=Math.floor(y);
+    if(tx>=0&&ty>=0&&tx<MAP&&ty<MAP&&tiles[ty][tx].t===2) return [x,y]; }
+  return null; }
+function fishTap(){
+  if(FP.battle||FP.interior||S.sail) return false;
+  if(FISH.st===2){ FISH.st=0; const n=(S.secrets.fish_n=(S.secrets.fish_n||0)+1);
+    const rare=Math.random()<0.1; if(rare){ addRes('gold',8); addRes('food',4); toast2('a silver one! +4 food, +8 gold  ('+n+' fish)'); A.cheer(); }
+    else { addRes('food',2); toast2('caught a fish: +2 food  ('+n+' fish)'); A.say(8); }
+    const w=fishWater(); if(w) sparkW(w[0],sitY(w[0],w[1])+0.2,w[1],12,'#bfe4ff');
+    if(n===1) banner2('FISHING','tap the water to cast. when it bobs, tap again.');
+    if(n===25){ addRes('wood',25); banner2('25 FISH','the goblins have started bringing you the ones that got away. +25 wood from somewhere.'); }
+    saveGame(); return true; }
+  if(FISH.st===1){ toast2('line is out. wait for the bob.'); return true; }
+  const w=fishWater(); if(!w) return false;
+  FISH.st=1; FISH.t=rnd(5,2); FISH.w=0; sparkW(w[0],sitY(w[0],w[1])+0.2,w[1],8,'#e8f6ff'); toast2('cast.'); return true;
+}
+function fishTick(dt){
+  if(!FP.on||FP.interior||FP.battle||S.sail){ FISH.st=0; return; }
+  if(FISH.st===1){ if(!fishWater()){ FISH.st=0; return; } FISH.t-=dt; if(FISH.t<=0){ FISH.st=2; FISH.w=1.6; const w=fishWater(); if(w) sparkW(w[0],sitY(w[0],w[1])+0.3,w[1],10,'#ffffff'); toast2('a bob! tap now'); A.say(5); } }
+  else if(FISH.st===2){ FISH.w-=dt; if(FISH.w<=0){ FISH.st=0; toast2('it got away.'); } }
+}
 function rareLive(){ return restDay() && S.secrets.gl_rw!==Math.floor(glDay()/7); }
 function buildRareGlimmer(){
   const m=MB(),T=M4.id();
@@ -6959,7 +6983,7 @@ function glTick(dt){
   for(const p of PROPS) if(p.errandItem!=null&&p.cond()){ p.r+=dt*0.5; if(Math.random()<dt*1.6) sparkW(p.x,p.gy+0.25,p.y,1,'#ffb090'); }
   if((S.secrets.gl_days||0)>=7&&nightNow()&&Math.random()<dt*3){ const L=PROPS.filter(p=>p.gllantern!=null); const p=L[Math.floor(Math.random()*L.length)]; if(p) S.parts.push({x:p.x+rnd(0.5,-0.5),y:p.gy+1.0+rnd(0.4),z:p.y+rnd(0.5,-0.5),vx:rnd(0.3,-0.3),vy:rnd(0.35,0.1),vz:rnd(0.3,-0.3),g:-0.02,life:rnd(2.4,1.4),c:'#ffe98a',r:rnd(3,1.6),star:1}); }   // the ring at night: slow lights
   wispTick(dt);
-  fireTick(dt);
+  fireTick(dt); fishTick(dt);
   for(const p of PROPS) if(p.cairn!=null&&!((S.secrets.cn_m||0)&(1<<p.cairn))&&Math.random()<dt*0.9&&p.cond()) sparkW(p.x+rnd(0.2,-0.2),p.gy+1.0,p.y+rnd(0.2,-0.2),1,'#e8f2ff');
   for(const p of PROPS) if(p.rareGl){ p.r+=dt*0.7; p.gy=p.gy0+0.14+0.08*Math.sin(G.t*1.6); if(Math.random()<dt*2&&p.cond()) sparkW(p.x,p.gy+0.55,p.y,1,'#d8eeff'); }
   for(const p of PROPS) if(p.glimmer!=null){ p.r+=dt*1.1; p.gy=p.gy0+0.10+0.07*Math.sin(G.t*2.2+p.glimmer); if(Math.random()<dt*1.4&&p.cond()) sparkW(p.x,p.gy+0.45,p.y,1,'#ffe98a'); }
