@@ -4555,7 +4555,7 @@ function drawFPUI(){
       ctx.fillStyle='rgba(20,52,80,0.88)'; rrp(r.x,r.y,r.w,r.h,13); ctx.fill();
       txt3(S.boat&&Math.hypot(S.boat.x-FP.x,S.boat.y-FP.y)<6?'SET SAIL':'MAKE A RAFT',r.x+r.w/2,r.y+26,13,'#cdeaff','center',900); }
   }
-  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
+  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(fireLive()&&S.secrets.bf_d!==glDay()?'  -  a bonfire is lit':'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
   if(FP.hurt>0){ ctx.fillStyle='rgba(190,30,30,'+(FP.hurt*0.5)+')'; ctx.fillRect(0,0,W,H); }
 }
 
@@ -5517,21 +5517,21 @@ function drawBuildMenu(){
 }
 // v26: inhabited nights - campfire light pool + warm window glow
 function drawRareBeacon(){   // v201: the Moon Glimmer shows itself: a pulsing pale ring, and an edge arrow when it is off the map view
-  const p=PROPS.find(p=>(p.rareGl||p.wisp||p.errandItem!=null)&&p.cond()); if(!p) return; const wc=p.wisp?['170,255,215','120,255,190']:['210,235,255','150,200,255'];
+  const p=PROPS.find(p=>p.bonfire&&p.cond())||PROPS.find(p=>(p.rareGl||p.wisp||p.errandItem!=null)&&p.cond()); if(!p) return; const wc=p.bonfire?['255,170,60','255,110,20']:p.wisp?['170,255,215','120,255,190']:['210,235,255','150,200,255'];
   const sp=projPt(p.x,p.gy+0.5,p.y); if(!sp) return;
   const pul=0.5+0.5*Math.sin(G.t*2.4), zs=clamp(14/CAM.dist,0.6,1.5);
   const inView=sp[0]>20&&sp[0]<W-20&&sp[1]>110&&sp[1]<H-110;
   ctx.save();
   if(inView){
     ctx.globalCompositeOperation='lighter';
-    const r=(34+22*pul)*zs*(p.wisp?1.5:1), g=ctx.createRadialGradient(sp[0],sp[1],3,sp[0],sp[1],r);
-    g.addColorStop(0,'rgba('+wc[0]+','+((p.wisp?0.5:0.30)+0.25*pul).toFixed(3)+')'); g.addColorStop(1,'rgba('+wc[1]+',0)');
+    const r=(34+22*pul)*zs*(p.wisp||p.bonfire?1.5:1), g=ctx.createRadialGradient(sp[0],sp[1],3,sp[0],sp[1],r);
+    g.addColorStop(0,'rgba('+wc[0]+','+((p.wisp||p.bonfire?0.5:0.30)+0.25*pul).toFixed(3)+')'); g.addColorStop(1,'rgba('+wc[1]+',0)');
     ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sp[0],sp[1],r,0,TAU); ctx.fill();
   } else if(!FP.on){
     const cx=W/2, cy=H/2, dx=sp[0]-cx, dy=sp[1]-cy, k=Math.min((W/2-40)/Math.abs(dx||1),(H/2-130)/Math.abs(dy||1));
     const ax=cx+dx*k, ay=cy+dy*k, ang=Math.atan2(dy,dx);
     ctx.translate(ax,ay); ctx.rotate(ang);
-    ctx.globalAlpha=0.55+0.4*pul; ctx.fillStyle=p.wisp?'#b8ffe0':'#cfe8ff'; ctx.strokeStyle='rgba(20,40,70,0.7)'; ctx.lineWidth=2;
+    ctx.globalAlpha=0.55+0.4*pul; ctx.fillStyle=p.bonfire?'#ffc070':p.wisp?'#b8ffe0':'#cfe8ff'; ctx.strokeStyle='rgba(20,40,70,0.7)'; ctx.lineWidth=2;
     ctx.beginPath(); ctx.moveTo(16,0); ctx.lineTo(-10,-11); ctx.lineTo(-4,0); ctx.lineTo(-10,11); ctx.closePath(); ctx.fill(); ctx.stroke();
   }
   ctx.restore();
@@ -6856,6 +6856,39 @@ function cairnTake(p){
   else if(n===1) banner2('CAIRNS','a small stack of stones, left on purpose. there are six out there.');
   saveGame(); return true;
 }
+function fireLive(){ const d=glDay(); return d%7===3 && nightNow(); }   // v213: Bonfire Night, minutes day
+function buildBonfire(){
+  const m=MB(),T=M4.id(); const log=hex('#5a3d22'), ash=hex('#3a3430'), fl=hex('#ff9a2a'), fl2=hex('#ffd34d');
+  for(let i=0;i<5;i++){ M4.trs(T,0,0.09,0,0,i*1.256,0,1,1,1); box(m,0.7,0.12,0.12,log,T,0,0.9); }
+  M4.trs(T,0,0.03,0,0,0,0,1,1,1); box(m,0.9,0.05,0.9,ash,T,0,0.9);
+  M4.trs(T,0,0.32,0,0,0.4,0,1,1,1); box(m,0.28,0.45,0.28,fl,T,0,1.0);
+  M4.trs(T,0,0.48,0,0,1.0,0,1,1,1); box(m,0.15,0.35,0.15,fl2,T,0,1.0);
+  return upload(m);
+}
+function seedBonfire(){
+  if(PROPS.some(p=>p.bonfire)) return;
+  let seed=4417, tries=0; const rn=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
+  while(tries<6000){ tries++;
+    const a=rn()*TAU, rr=5+rn()*4, x=30+Math.cos(a)*rr, y=32+Math.sin(a)*rr;
+    let ok=true; for(let dx=-2;dx<=2&&ok;dx++) for(let dy=-2;dy<=2;dy++){ const t=tiles[Math.floor(y)+dy]&&tiles[Math.floor(y)+dy][Math.floor(x)+dx]; if(!t||t.t===2){ ok=false; break; } }
+    if(!ok) continue;
+    if(S.buildings.some(b=>x>b.tx-2.5&&x<b.tx+b.w+2.5&&y>b.ty-2.5&&y<b.ty+b.h+2.5)) continue;
+    if(PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x,p.y-y)<2.5)) continue;
+    PROPS.push({mesh:buildBonfire(), x, y, r:0, gy:sitY(x,y)-0.02, bonfire:1, vprop:'bonfire', cond:()=>fireLive()&&fpWalkable(x,y)});
+    return;
+  }
+}
+function fireTick(dt){
+  const p=PROPS.find(q=>q.bonfire); if(!p||!p.cond()) return;
+  if(Math.random()<dt*14) sparkW(p.x+rnd(0.2,-0.2),p.gy+0.4+Math.random()*0.5,p.y+rnd(0.2,-0.2),1,Math.random()<0.5?'#ff9a2a':'#ffd34d');
+  if(!FP.on||FP.interior||FP.battle||S.sail) return;
+  if(S.secrets.bf_d===glDay()) return;
+  if(Math.hypot(p.x-FP.x,p.y-FP.y)<2.6){ S.secrets.bf_t=(S.secrets.bf_t||0)+dt;
+    if(S.secrets.bf_t>6){ S.secrets.bf_t=0; S.secrets.bf_d=glDay(); S.secrets.bf_n=(S.secrets.bf_n||0)+1; addRes('food',10); addRes('gold',5); A.cheer();
+      banner2('BONFIRE NIGHT','you stood in the warm for a while. goblins drift over. +10 food, +5 gold. every third night.');
+      chron('A fire was lit near the green on the night of the minutes, and someone came and stood by it without being asked. Nobody said much. It was good.', true); saveGame(); }
+  } else S.secrets.bf_t=0;
+}
 function rareLive(){ return restDay() && S.secrets.gl_rw!==Math.floor(glDay()/7); }
 function buildRareGlimmer(){
   const m=MB(),T=M4.id();
@@ -6924,6 +6957,7 @@ function glTick(dt){
   for(const p of PROPS) if(p.errandItem!=null&&p.cond()){ p.r+=dt*0.5; if(Math.random()<dt*1.6) sparkW(p.x,p.gy+0.25,p.y,1,'#ffb090'); }
   if((S.secrets.gl_days||0)>=7&&nightNow()&&Math.random()<dt*3){ const L=PROPS.filter(p=>p.gllantern!=null); const p=L[Math.floor(Math.random()*L.length)]; if(p) S.parts.push({x:p.x+rnd(0.5,-0.5),y:p.gy+1.0+rnd(0.4),z:p.y+rnd(0.5,-0.5),vx:rnd(0.3,-0.3),vy:rnd(0.35,0.1),vz:rnd(0.3,-0.3),g:-0.02,life:rnd(2.4,1.4),c:'#ffe98a',r:rnd(3,1.6),star:1}); }   // the ring at night: slow lights
   wispTick(dt);
+  fireTick(dt);
   for(const p of PROPS) if(p.cairn!=null&&!((S.secrets.cn_m||0)&(1<<p.cairn))&&Math.random()<dt*0.9&&p.cond()) sparkW(p.x+rnd(0.2,-0.2),p.gy+1.0,p.y+rnd(0.2,-0.2),1,'#e8f2ff');
   for(const p of PROPS) if(p.rareGl){ p.r+=dt*0.7; p.gy=p.gy0+0.14+0.08*Math.sin(G.t*1.6); if(Math.random()<dt*2&&p.cond()) sparkW(p.x,p.gy+0.55,p.y,1,'#d8eeff'); }
   for(const p of PROPS) if(p.glimmer!=null){ p.r+=dt*1.1; p.gy=p.gy0+0.10+0.07*Math.sin(G.t*2.2+p.glimmer); if(Math.random()<dt*1.4&&p.cond()) sparkW(p.x,p.gy+0.45,p.y,1,'#ffe98a'); }
@@ -7605,6 +7639,7 @@ function seedLandmarks(){
   seedRareGlimmer();   // v200
   seedWisp();   // v207
   seedCairns();   // v210
+  seedBonfire();   // v213
   seedErrandItems();   // v204
   if(!PROPS.some(p=>p.vprop==='daystone')) PROPS.push({mesh:buildDayStone(), x:DAYSTONE_AT[0], y:DAYSTONE_AT[1], r:-0.5, gy:sitY(DAYSTONE_AT[0],DAYSTONE_AT[1])-0.04, vprop:'daystone'});   // v186: what day is it
   if(!PROPS.some(p=>p.vprop==='nightdoor')) PROPS.push({mesh:buildNightDoor(), x:24, y:38, r:-2.57, gy:sitY(24,38)-0.04, vprop:'nightdoor'});   // v155: borrowed, hourly
