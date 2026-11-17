@@ -4672,8 +4672,35 @@ function fpDowned(){
   chron('The chief went down at the '+(S.war.foe?S.war.foe.name:'raid')+'. The goblins carried him back and told it louder than it happened.');
   fpExit();
 }
+function fpGatherTarget(){
+  if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
+  let best=null,dist=2.6;
+  for(let y=Math.max(0,Math.floor(FP.y)-3);y<=Math.min(MAP-1,Math.floor(FP.y)+3);y++)for(let x=Math.max(0,Math.floor(FP.x)-3);x<=Math.min(MAP-1,Math.floor(FP.x)+3);x++){
+    const c=tiles[y][x];if(occ(x,y)||(c.deco!=='tree'&&c.deco!=='shroom'))continue;
+    const dx=x+.5-FP.x,dy=y+.5-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
+    if(d>=dist||a>.42)continue;
+    let blocked=false;for(let i=1;i<=8;i++)if(occ(Math.floor(FP.x+dx*i/9),Math.floor(FP.y+dy*i/9))){blocked=true;break;}
+    if(!blocked){best={x,y,c,kind:c.deco==='tree'?'wood':'food',amount:c.deco==='tree'?4:3};dist=d;}
+  }return best;
+}
+function fpGather(){
+  const t=fpGatherTarget();if(!t)return false;
+  if(FP.gatherCd>0)return true;
+  if(capOf(t.kind)-S.res[t.kind]<t.amount){toast2(t.kind+' storage full');A.deny();FP.gatherCd=.8;return true;}
+  addRes(t.kind,t.amount);t.c.deco=t.kind==='wood'?'stump':null;t.c.regrow=t.kind==='wood'?40:22;FP.gatherCd=.8;
+  if(t.kind==='wood')A.chop();else A.pick();
+  floatW(t.x+.5,groundH(t.x+.5,t.y+.5)+.8,t.y+.5,'+'+t.amount+' '+t.kind,t.kind==='wood'?'#e6c79c':'#ffd4a8');
+  puffW(t.x+.5,groundH(t.x+.5,t.y+.5)+.4,t.y+.5,9,t.kind==='wood'?'#9bb85e':'#e8a2b8');
+  rebuildWorld();recount();saveGame();return true;
+}
+function drawGatherHint(){
+  const t=fpGatherTarget();if(!t||marketBuilding()||kitchenPanelBuilding())return;
+  const w=Math.min(300,W-24);ctx.fillStyle='rgba(31,46,26,.91)';rrp((W-w)/2,H-202,w,34,9);ctx.fill();
+  txt3((t.kind==='wood'?'CHOP TREE':'PICK SHROOMS')+' - '+TAPW()+' for +'+t.amount+' '+t.kind,W/2,H-180,12,'#e7f4c3','center',800,false);
+}
 function fpPathBoost(){return !FP.interior&&!FP.battle&&!S.sail&&onStonePath(FP.x,FP.y);}
 function fpUpdate(dt){
+  FP.gatherCd=Math.max(0,(FP.gatherCd||0)-dt);
   FP.swing=Math.max(0,FP.swing-dt);
   if(FP.hurt>0) FP.hurt-=dt;
   if(S.sail){
@@ -4791,6 +4818,7 @@ function fpTap(x,y){
   if(starTap(x,y)) return true;
   if(fishTap()) return true;
   if(marketOpenFP()||kitchenOpenFP())return true;
+  if(fpGather())return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
 }
@@ -4803,6 +4831,7 @@ function drawWalkBtn(){
   txt3('first person', r.x+r.w/2, r.y+32, 10,'#bfe8b0','center',600);
 }
 function drawFPUI(){
+  drawGatherHint();
   if(fpPathBoost()){
     const bw=Math.min(250,W-24),bx=(W-bw)/2,by=H-82;
     ctx.fillStyle='rgba(25,42,27,.86)';rrp(bx,by,bw,28,10);ctx.fill();
