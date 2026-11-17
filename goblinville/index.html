@@ -6900,7 +6900,7 @@ function fishWater(){ const fx=Math.sin(FP.a), fy=Math.cos(FP.a);
 function fishTap(){
   if(FP.battle||FP.interior||S.sail) return false;
   if(FISH.st===2){ FISH.st=0; const n=(S.secrets.fish_n=(S.secrets.fish_n||0)+1);
-    const rare=Math.random()<0.1; if(rare){ addRes('gold',8); addRes('food',4); toast2('a silver one! +4 food, +8 gold  ('+n+' fish)'); A.cheer(); }
+    const wet=S.wx&&S.wx.rain>0.3, rare=Math.random()<(wet?0.3:0.1); /* v218: the fish bite in the rain */ if(rare){ addRes('gold',8); addRes('food',4); toast2('a silver one! +4 food, +8 gold  ('+n+' fish)'); A.cheer(); }
     else { addRes('food',2); toast2('caught a fish: +2 food  ('+n+' fish)'); A.say(8); }
     const w=fishWater(); if(w) sparkW(w[0],sitY(w[0],w[1])+0.2,w[1],12,'#bfe4ff');
     if(n===1) banner2('FISHING','tap the water to cast. when it bobs, tap again.');
@@ -6908,7 +6908,7 @@ function fishTap(){
     saveGame(); return true; }
   if(FISH.st===1){ toast2('line is out. wait for the bob.'); return true; }
   const w=fishWater(); if(!w) return false;
-  FISH.st=1; FISH.t=rnd(5,2); FISH.w=0; sparkW(w[0],sitY(w[0],w[1])+0.2,w[1],8,'#e8f6ff'); toast2('cast.'); return true;
+  FISH.st=1; FISH.t=rnd(5,2); FISH.w=0; sparkW(w[0],sitY(w[0],w[1])+0.2,w[1],8,'#e8f6ff'); toast2((S.wx&&S.wx.rain>0.3)?'cast. the rain is on your side.':'cast.'); return true;
 }
 function fishTick(dt){
   if(!FP.on||FP.interior||FP.battle||S.sail){ FISH.st=0; return; }
