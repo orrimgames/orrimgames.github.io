@@ -6912,6 +6912,7 @@ function fishTap(){
 }
 function fishTick(dt){
   if(!FP.on||FP.interior||FP.battle||S.sail){ FISH.st=0; return; }
+  if(FISH.st>0){ const bw=fishWater(); if(bw&&Math.random()<dt*(FISH.st===2?30:6)) sparkW(bw[0]+rnd(0.12,-0.12),sitY(bw[0],bw[1])+0.12,bw[1]+rnd(0.12,-0.12),1,FISH.st===2?'#ffffff':'#e8f6ff'); }
   if(FISH.st===1){ if(!fishWater()){ FISH.st=0; return; } FISH.t-=dt; if(FISH.t<=0){ FISH.st=2; FISH.w=1.6; const w=fishWater(); if(w) sparkW(w[0],sitY(w[0],w[1])+0.3,w[1],10,'#ffffff'); toast2('a bob! tap now'); A.say(5); } }
   else if(FISH.st===2){ FISH.w-=dt; if(FISH.w<=0){ FISH.st=0; toast2('it got away.'); } }
 }
