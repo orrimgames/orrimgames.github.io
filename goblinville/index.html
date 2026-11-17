@@ -4558,7 +4558,7 @@ function drawFPUI(){
       ctx.fillStyle='rgba(20,52,80,0.88)'; rrp(r.x,r.y,r.w,r.h,13); ctx.fill();
       txt3(S.boat&&Math.hypot(S.boat.x-FP.x,S.boat.y-FP.y)<6?'SET SAIL':'MAKE A RAFT',r.x+r.w/2,r.y+26,13,'#cdeaff','center',900); }
   }
-  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(FISH.st===0&&fishWater()?'  -  tap the water to fish':FISH.st===1?'  -  line out...':FISH.st===2?'  -  BOB! tap!':'')+(fireLive()&&S.secrets.bf_d!==glDay()?'  -  a bonfire is lit':'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
+  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(FISH.st===0&&fishWater()?'  -  tap the water to fish':FISH.st===1?'  -  line out...':FISH.st===2?'  -  BOB! tap!':'')+(fireLive()&&S.secrets.bf_d!==glDay()?(feastLive()?'  -  FEAST DAY: the fire is lit':'  -  a bonfire is lit'):'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
   if(FP.hurt>0){ ctx.fillStyle='rgba(190,30,30,'+(FP.hurt*0.5)+')'; ctx.fillRect(0,0,W,H); }
 }
 
@@ -6859,7 +6859,8 @@ function cairnTake(p){
   else if(n===1) banner2('CAIRNS','a small stack of stones, left on purpose. there are six out there.');
   saveGame(); return true;
 }
-function fireLive(){ const d=glDay(); return d%7===3 && nightNow(); }   // v213: Bonfire Night, minutes day
+function feastLive(){ return glDay()%14===13 && S.dayT>0.38 && S.dayT<0.72; }
+function fireLive(){ const d=glDay(); return (d%7===3 && nightNow()) || feastLive(); }   // v213: Bonfire Night, minutes day
 function buildBonfire(){
   const m=MB(),T=M4.id(); const log=hex('#5a3d22'), ash=hex('#3a3430'), fl=hex('#ff9a2a'), fl2=hex('#ffd34d');
   for(let i=0;i<5;i++){ M4.trs(T,0,0.09,0,0,i*1.256,0,1,1,1); box(m,0.7,0.12,0.12,log,T,0,0.9); }
@@ -6887,8 +6888,8 @@ function fireTick(dt){
   if(!FP.on||FP.interior||FP.battle||S.sail) return;
   if(S.secrets.bf_d===glDay()) return;
   if(Math.hypot(p.x-FP.x,p.y-FP.y)<2.6){ S.secrets.bf_t=(S.secrets.bf_t||0)+dt;
-    if(S.secrets.bf_t>6){ S.secrets.bf_t=0; S.secrets.bf_d=glDay(); S.secrets.bf_n=(S.secrets.bf_n||0)+1; addRes('food',10); addRes('gold',5); A.cheer();
-      banner2('BONFIRE NIGHT','you stood in the warm for a while. goblins drift over. +10 food, +5 gold. every third night.');
+    if(S.secrets.bf_t>6){ S.secrets.bf_t=0; S.secrets.bf_d=glDay(); S.secrets.bf_n=(S.secrets.bf_n||0)+1; const fe=feastLive(); addRes('food',fe?25:10); addRes('gold',fe?12:5); A.cheer();
+      if(fe) banner2('FEAST DAY','the whole village is out by the fire with something to eat. you were handed a plate. +25 food, +12 gold. every two weeks.'); else banner2('BONFIRE NIGHT','you stood in the warm for a while. goblins drift over. +10 food, +5 gold. every third night.');
       chron('A fire was lit near the green on the night of the minutes, and someone came and stood by it without being asked. Nobody said much. It was good.', true); saveGame(); }
   } else S.secrets.bf_t=0;
 }
