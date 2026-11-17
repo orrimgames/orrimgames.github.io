@@ -5815,8 +5815,9 @@ function drawGhostHint(){
   if(!S.sel) return;
   const T=BT[S.sel];
   const fr=S.tut<QUESTS.length;
-  if(S.sel==='road')txt3('PAVING - 2 stone each - stays selected until Cancel',W/2,H-BARH-61,fitSize2('PAVING - 2 stone each - stays selected until Cancel',W-24,12,800),'#e3edc8','center',800);
-  txt3(S.ghost.show?(S.ghost.ok?(fr?'same spot again - '+TAPW()+' to build':TAPW()+' again to build '+T.name):(fr?'blocked - wiggle to a clear patch':'blocked')):(fr?TAPW()+' the land to aim the '+T.name:TAPW()+' where to build the '+T.name), W/2, H-BARH-34, 15, '#fff','center',800);
+  const compact=W<600;
+  if(S.sel==='road')txt3('PAVING - 2 stone each - Cancel to finish',W/2,H-BARH-(compact?104:61),fitSize2('PAVING - 2 stone each - Cancel to finish',W-24,12,800),'#e3edc8','center',800);
+  txt3(S.ghost.show?(S.ghost.ok?(fr?'same spot again - '+TAPW()+' to build':TAPW()+' again to build '+T.name):(fr?'blocked - wiggle to a clear patch':'blocked')):(fr?TAPW()+' the land to aim the '+T.name:TAPW()+' where to build the '+T.name), W/2, H-BARH-(compact?82:34), compact?12:15, '#fff','center',800);
   const c=cancelR();
   ctx.fillStyle='rgba(190,60,60,0.92)'; rrp(c.x,c.y,c.w,c.h,14); ctx.fill();
   txt3('CANCEL',c.x+c.w/2,c.y+c.h/2,12,'#fff','center',800);
