@@ -7075,6 +7075,13 @@ function chatCtx(g){   // v203: some answers are about the day, not the goblin
   if(readingNight()) L.push('the archive is read aloud tonight. i have the good spot. the good spot is the back, by the door.');
   if(companyMorning()) L.push('two fish arrived last night. nobody asked for fish. we are being brave about it.');
   const n=glCount(); if(n>=8) L.push('all eight lights today? the ground is out of lights. so am i, of ideas.'); else if(n>0) L.push('i saw you pick up a light. i did not see you. the light saw you.');
+  { const fn=S.secrets.fish_n||0, cn=cairnCount(), wn=S.secrets.gl_wisps||0;   // v217: the village notices what you do
+    if(fn>=1) L.push('you smell like the river. i mean it kindly. fish has opinions and so do i.');
+    if(fn>=10) L.push('ten fish and counting. somebody should tell the fish. the fish would not care, but somebody should.');
+    if(cn>=1&&cn<6) L.push('they say there are little stacks of stones out in the far grass. i have never found one. i do not go far.');
+    if(cn>=6) L.push('you found all six stone stacks. i have been looking at the horizon differently since.');
+    if(wn>=1) L.push('there is a green light that goes about after dark. you have been following it. i have noticed. i am not saying anything.');
+    if(fireLive()) L.push('there is a fire by the green tonight. come stand in it. not in it. by it.'); }
   if(rareLive()) L.push('there is a pale light way out past the green today. i have not gone. you look like someone who goes.');
   if(g.mood<0.5) L.push('i am a little low. a chat is cheap and it works. that is the whole secret.');
   return L.length?L[(g.talk+glDay())%L.length]:null;
