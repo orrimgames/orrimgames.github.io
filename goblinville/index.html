@@ -1553,7 +1553,7 @@ function flattenArea(tx,ty,w,h){ ICO_DIRTY=true;
   for(let y=ty;y<=ty+h;y++) for(let x=tx;x<=tx+w;x++) hv=Math.max(hv,SAMP(x,y));
   for(let y=ty;y<=ty+h;y++) for(let x=tx;x<=tx+w;x++) FLATS[x+','+y]=hv;
   for(let y=ty;y<ty+h;y++) for(let x=tx;x<tx+w;x++){
-    const c=(tiles[y]&&tiles[y][x]); if(c){ c.deco=null; c.flat=true; }
+    const c=(tiles[y]&&tiles[y][x]); if(c){ c.deco=null; c.regrow=null; c.flat=true; }
   }
 }
 
@@ -2232,6 +2232,7 @@ function updateWorld(dt){
   for(const b of S.buildings){ if(b.pop<1){ b.t+=dt; b.pop=Math.min(1,b.t*1.7); if(b.pop>=1){ recount(); if(b.key==='hut'&&S.mode==='village') syncLaundry(); } } }
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
+    if(c.regrow!=null&&occ(x,y)){ c.regrow=null; c.deco=null; }
     if(c.regrow!=null){ c.regrow-=dt; if(c.regrow<=0){ c.deco = c.t===0?(c.deco==='stump'?'tree':(c.v>0.5?'tree':'shroom')):null;
       if(c.deco){ c.regrow=null; rebuildWorld(); } else c.regrow=null; } }
   }
