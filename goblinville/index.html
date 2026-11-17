@@ -1678,7 +1678,7 @@ const S={
   secrets:{}
 };
 const BT={
-  road:{name:'Stone Path',w:1,h:1,cost:{stone:2},hp:120,desc:'Goblins walk 35% faster on paths; connect work sites to the hall'},
+  road:{name:'Stone Path',w:1,h:1,cost:{stone:2},hp:120,desc:'Everyone walks 35% faster on finished paths, including you in first person'},
   hall:   {name:'Great Hall', w:3,h:3, cost:{}, hp:900, desc:'The heart of Goblinville', max:1},
   hut:    {name:'Hut',        w:2,h:2, cost:{wood:20}, hp:220, pop:3, desc:'+3 goblins'},
   farm:   {name:'Farm Field', w:2,h:2, cost:{wood:25,food:5}, hp:150, jobs:2, desc:'Grows shrooms to eat'},
@@ -4564,6 +4564,7 @@ function fpDowned(){
   chron('The chief went down at the '+(S.war.foe?S.war.foe.name:'raid')+'. The goblins carried him back and told it louder than it happened.');
   fpExit();
 }
+function fpPathBoost(){return !FP.interior&&!FP.battle&&!S.sail&&onStonePath(FP.x,FP.y);}
 function fpUpdate(dt){
   FP.swing=Math.max(0,FP.swing-dt);
   if(FP.hurt>0) FP.hurt-=dt;
@@ -4591,7 +4592,7 @@ function fpUpdate(dt){
   if(FP.mv){
     const dx=clamp((FP.mv.x-FP.mv.x0)/54,-1,1), dy=clamp((FP.mv.y-FP.mv.y0)/54,-1,1);
     const fx=Math.sin(FP.a), fz=Math.cos(FP.a);
-    const sp=2.5*dt;
+    const sp=2.5*dt*(fpPathBoost()?1.35:1);
     const mx=(fx*-dy + -fz*dx)*sp, mz=(fz*-dy + fx*dx)*sp;
     const nx=FP.x+mx, nz=FP.y+mz;
     if(fpWalkableAny(nx,FP.y)) FP.x=nx;
@@ -4694,6 +4695,11 @@ function drawWalkBtn(){
   txt3('first person', r.x+r.w/2, r.y+32, 10,'#bfe8b0','center',600);
 }
 function drawFPUI(){
+  if(fpPathBoost()){
+    const bw=Math.min(250,W-24),bx=(W-bw)/2,by=H-82;
+    ctx.fillStyle='rgba(25,42,27,.86)';rrp(bx,by,bw,28,10);ctx.fill();
+    txt3('STONE PATH - walking +35%',W/2,by+19,12,'#e1f5c4','center',800,false);
+  }
   const st=fpStickR();
   if(!DESK.mouse){
   ctx.globalAlpha=FP.mv?0.5:0.28;
