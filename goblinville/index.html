@@ -4500,6 +4500,7 @@ function fpTap(x,y){
           return true; }
         enterInterior(k); return true; } } } }
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
+  if(starTap(x,y)) return true;
   if(fishTap()) return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
@@ -5719,7 +5720,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawNightGlow(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -5736,7 +5737,7 @@ function drawUI(){
   drawVets();
   drawWeather();
   drawBirds();
-  drawRareBeacon(); drawNightGlow();
+  drawRareBeacon(); drawStar(); drawNightGlow();
   drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
@@ -6922,6 +6923,33 @@ function fishTick(dt){
   if(FISH.st===1){ if(!fishWater()){ FISH.st=0; return; } FISH.t-=dt; if(FISH.t<=0){ FISH.st=2; FISH.w=1.6; const w=fishWater(); if(w) sparkW(w[0],sitY(w[0],w[1])+0.3,w[1],10,'#ffffff'); toast2('a bob! tap now'); A.say(5); } }
   else if(FISH.st===2){ FISH.w-=dt; if(FISH.w<=0){ FISH.st=0; toast2('it got away.'); } }
 }
+var STAR={on:0,t:0,x0:0,y0:0,dx:0,dy:0,got:0,next:12};   /* v221: shooting stars at night, tap one for a wish */
+function starPos(){ const k=STAR.t/1.7; return [STAR.x0+STAR.dx*k, STAR.y0+STAR.dy*k]; }
+function starTick(dt){
+  if(!nightNow()||S.sail||!FP.on||FP.interior||FP.battle){ STAR.on=0; return; }
+  if(STAR.on){ STAR.t+=dt; if(STAR.t>1.7) STAR.on=0; return; }
+  STAR.next-=dt;
+  if(STAR.next<=0){ STAR.next=rnd(40,18); if(S.secrets.st_d!==glDay()){ S.secrets.st_d=glDay(); S.secrets.st_c=0; }
+    if((S.secrets.st_c||0)>=5) return;
+    STAR.on=1; STAR.t=0; STAR.got=0; STAR.x0=W*rnd(0.7,0.15); STAR.y0=H*rnd(0.26,0.08); STAR.dx=W*0.28*(Math.random()<0.5?1:-1); STAR.dy=H*0.17; }
+}
+function drawStar(){
+  if(!STAR.on||STAR.got) return; const p=starPos(), a=1-Math.abs(STAR.t/1.7-0.5)*1.4;
+  ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.lineCap='round';
+  const tx=p[0]-STAR.dx*0.18, ty=p[1]-STAR.dy*0.18, g=ctx.createLinearGradient(tx,ty,p[0],p[1]);
+  g.addColorStop(0,'rgba(255,255,255,0)'); g.addColorStop(1,'rgba(255,250,220,'+clamp(a,0,1).toFixed(2)+')');
+  ctx.strokeStyle=g; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(p[0],p[1]); ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,'+clamp(a,0,1).toFixed(2)+')'; ctx.beginPath(); ctx.arc(p[0],p[1],3.2,0,TAU); ctx.fill(); ctx.restore();
+}
+function starTap(x,y){
+  if(!STAR.on||STAR.got) return false; const p=starPos();
+  if(Math.hypot(x-p[0],y-p[1])>90) return false;
+  STAR.got=1; STAR.on=0; S.secrets.st_c=(S.secrets.st_c||0)+1; S.secrets.st_n=(S.secrets.st_n||0)+1;
+  const r=S.secrets.st_n%10===0; addRes('gold',r?15:3); A.cheer();
+  toast2(r?'a wish, answered twice over: +15 gold':'you made a wish: +3 gold  ('+S.secrets.st_c+'/5 tonight)');
+  if(S.secrets.st_n===1){ banner2('SHOOTING STARS','when one crosses the sky at night, tap it. five a night. the goblins do not look up. they say it is rude to the sky.'); chron('A star fell sideways over the green and somebody pointed at it before it was gone. That is all a wish is, the goblins say.', true); }
+  saveGame(); return true;
+}
 function rareLive(){ return restDay() && S.secrets.gl_rw!==Math.floor(glDay()/7); }
 function buildRareGlimmer(){
   const m=MB(),T=M4.id();
@@ -6990,7 +7018,7 @@ function glTick(dt){
   for(const p of PROPS) if(p.errandItem!=null&&p.cond()){ p.r+=dt*0.5; if(Math.random()<dt*1.6) sparkW(p.x,p.gy+0.25,p.y,1,'#ffb090'); }
   if((S.secrets.gl_days||0)>=7&&nightNow()&&Math.random()<dt*3){ const L=PROPS.filter(p=>p.gllantern!=null); const p=L[Math.floor(Math.random()*L.length)]; if(p) S.parts.push({x:p.x+rnd(0.5,-0.5),y:p.gy+1.0+rnd(0.4),z:p.y+rnd(0.5,-0.5),vx:rnd(0.3,-0.3),vy:rnd(0.35,0.1),vz:rnd(0.3,-0.3),g:-0.02,life:rnd(2.4,1.4),c:'#ffe98a',r:rnd(3,1.6),star:1}); }   // the ring at night: slow lights
   wispTick(dt);
-  fireTick(dt); fishTick(dt);
+  fireTick(dt); fishTick(dt); starTick(dt);
   for(const p of PROPS) if(p.cairn!=null&&!((S.secrets.cn_m||0)&(1<<p.cairn))&&Math.random()<dt*0.9&&p.cond()) sparkW(p.x+rnd(0.2,-0.2),p.gy+1.0,p.y+rnd(0.2,-0.2),1,'#e8f2ff');
   for(const p of PROPS) if(p.rareGl){ p.r+=dt*0.7; p.gy=p.gy0+0.14+0.08*Math.sin(G.t*1.6); if(Math.random()<dt*2&&p.cond()) sparkW(p.x,p.gy+0.55,p.y,1,'#d8eeff'); }
   for(const p of PROPS) if(p.glimmer!=null){ p.r+=dt*1.1; p.gy=p.gy0+0.10+0.07*Math.sin(G.t*2.2+p.glimmer); if(Math.random()<dt*1.4&&p.cond()) sparkW(p.x,p.gy+0.45,p.y,1,'#ffe98a'); }
