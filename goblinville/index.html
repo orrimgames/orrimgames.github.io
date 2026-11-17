@@ -2354,6 +2354,29 @@ function foresterLand(b,x,y){
   if(x<1||y<1||x>=MAP-1||y>=MAP-1||occ(x,y)||tiles[y][x].t!==0||tiles[y][x].deco||!tileOK(x,y))return false;
   return !PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x-.5,p.y-y-.5)<1.2);
 }
+function foresterRangeInfo(b){
+  let trees=0,space=0;
+  for(let y=Math.max(1,b.ty-5);y<=Math.min(MAP-2,b.ty+7);y++)for(let x=Math.max(1,b.tx-5);x<=Math.min(MAP-2,b.tx+7);x++){
+    if(Math.hypot(x+.5-b.tx-1,y+.5-b.ty-1)>6)continue;
+    if(tiles[y][x].deco==='tree')trees++;else if(foresterLand(b,x,y))space++;
+  }
+  return {trees,space};
+}
+function drawForesterRange(){
+  if(FP.on||S.mode!=='village'||S.story||S.chronOpen||CAM.dist/CAM.zoom>90)return;
+  const ghost=S.sel==='forester'&&S.ghost.show;
+  const b=ghost?S.ghost:!S.sel&&S.pick&&S.pick.key==='forester'&&S.buildings.includes(S.pick)?S.pick:null;
+  if(!b)return;const pts=[];
+  for(let i=0;i<=64;i++){const a=i*TAU/64,x=b.tx+1+Math.cos(a)*6,y=b.ty+1+Math.sin(a)*6,p=projPt(x,sitY(x,y)+.08,y);if(p)pts.push(p);}
+  ctx.save();ctx.beginPath();ctx.rect(0,108,W,H-BARH-108);ctx.clip();ctx.strokeStyle=ghost&&!S.ghost.ok?'#e5a08f':'#d4f5a3';ctx.fillStyle='rgba(110,190,75,.10)';ctx.lineWidth=2;
+  ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.stroke();
+  const info=foresterRangeInfo(b),p=projPt(b.tx+1,sitY(b.tx+1,b.ty+1)+1.5,b.ty+1);
+  if(p){const w=Math.min(280,W-24),x=clamp(p[0]-w/2,12,W-w-12),y=clamp(p[1]-48,120,H-BARH-90);
+    ctx.fillStyle='rgba(22,40,27,.95)';rrp(x,y,w,48,9);ctx.fill();
+    txt3('GROVE RANGE - '+info.trees+'/12 trees',x+w/2,y+18,12,'#e3f5c3','center',800,false);
+    txt3(info.trees>=12?'Enough trees - planting waits':info.space?info.space+' planting spots - 1 tree / 30s':'No planting room - try another plot',x+w/2,y+36,11,'#fff','center',700,false);}
+  ctx.restore();
+}
 function foresterTick(dt){
   for(const b of S.buildings){if(b.key!=='forester'||b.pop<1)continue;
     b.ft=(b.ft||0)+dt;if(b.ft<30)continue;b.ft=0;
@@ -5885,7 +5908,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
