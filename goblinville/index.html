@@ -6948,6 +6948,8 @@ function starTap(x,y){
   const r=S.secrets.st_n%10===0; addRes('gold',r?15:3); A.cheer();
   toast2(r?'a wish, answered twice over: +15 gold':'you made a wish: +3 gold  ('+S.secrets.st_c+'/5 tonight)');
   if(S.secrets.st_n===1){ banner2('SHOOTING STARS','when one crosses the sky at night, tap it. five a night. the goblins do not look up. they say it is rude to the sky.'); chron('A star fell sideways over the green and somebody pointed at it before it was gone. That is all a wish is, the goblins say.', true); }
+  { const wn=S.secrets.st_n, ms={25:['stone',30,'TWENTY-FIVE WISHES'],50:['gold',60,'FIFTY WISHES'],100:['wood',100,'ONE HUNDRED WISHES']}[wn];
+    if(ms){ addRes(ms[0],ms[1]); setTimeout(()=>{ banner2(ms[2],'the sky keeps a count, it turns out. +'+ms[1]+' '+ms[0]+'.'); chron('Somebody has now wished on '+wn+' stars. The sky does not grant them. It just seems to notice, and the goblins say that is most of what a wish is for.', true); },2600); } }
   saveGame(); return true;
 }
 function rareLive(){ return restDay() && S.secrets.gl_rw!==Math.floor(glDay()/7); }
@@ -7113,6 +7115,7 @@ function chatCtx(g){   // v203: some answers are about the day, not the goblin
     if(fn>=1) L.push('you smell like the river. i mean it kindly. fish has opinions and so do i.');
     if(fn>=10) L.push('ten fish and counting. somebody should tell the fish. the fish would not care, but somebody should.');
     if(cn>=1&&cn<6) L.push('they say there are little stacks of stones out in the far grass. i have never found one. i do not go far.');
+    if((S.secrets.st_n||0)>=1) L.push('i saw you point at the sky last night. nobody else looked up. i did not either. i looked at you looking.');
     if(cn>=6) L.push('you found all six stone stacks. i have been looking at the horizon differently since.');
     if(wn>=1) L.push('there is a green light that goes about after dark. you have been following it. i have noticed. i am not saying anything.');
     if(fireLive()) L.push('there is a fire by the green tonight. come stand in it. not in it. by it.'); }
