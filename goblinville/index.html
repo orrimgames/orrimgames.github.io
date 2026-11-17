@@ -6974,25 +6974,36 @@ function seedErrandItems(){
     if(S.buildings.some(b=>x>b.tx-2.2&&x<b.tx+b.w+2.2&&y>b.ty-2.2&&y<b.ty+b.h+2.2)) continue;
     if(PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x,p.y-y)<2.4)) continue;
     pts.push([x,y]); const i=got++, gy=sitY(x,y)-0.02;
-    PROPS.push({mesh, x, y, r:i*1.1, gy, gy0:gy, errandItem:i, vprop:'errand'+i, cond:()=>erStage()===1&&(glDay()+0)%6===i&&fpWalkable(x,y)});
+    PROPS.push({mesh, x, y, r:i*1.1, gy, gy0:gy, errandItem:i, vprop:'errand'+i, cond:()=>erStage()===1&&S.secrets.er_m!=='msg'&&Math.floor(glDay()/2)%6===i&&fpWalkable(x,y)});
   }
 }
 function errandGob(){ const n=S.secrets.er_d===glDay()?S.secrets.er_n:null;
   if(n) return S.gobs.find(g=>g.name===n&&!g.side&&g.hp>0)||null;
   const L=S.gobs.filter(g=>!g.side&&g.name&&g.hp>0).sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0); return L.length?L[glDay()%L.length]:null; }
+const ERMSG=['the soup is NOT ready. it is a different soup.','i was right about the shoe.','i forgive you for the thing with the rope. all of it.','the ferry is on a stall day. the ferry says hello.','please stop humming the one song. thank you. hum another.'];
 function errandTap(g){   // returns true if the errand spoke
-  if(errandGob()!==g) return false;
-  const st=erStage();
-  if(S.secrets.er_d!==glDay()){ S.secrets.er_d=glDay(); S.secrets.er_s=0; S.secrets.er_n=g.name; }
-  if(st===0){ S.secrets.er_s=1; S.secrets.er_n=g.name; const it=PROPS.find(p=>p.errandItem===glDay()%6);
-    toast2(g.name+': i lost my bundle. somewhere out there. it is red. it knows what it did. (look for a small glow)');
-    g.emote='!'; g.emoteT=1.4; A.say(9); saveGame(); return true; }
-  if(st===1){ toast2(g.name+': the bundle. red. you have not found it. i believe in you, a little.'); A.say(8); return true; }
+  const giver=errandGob(), st=erStage();
+  // v206: odd days are deliveries - the giver sends you to a second goblin
+  if(S.secrets.er_d===glDay()&&S.secrets.er_m==='msg'&&g.name===S.secrets.er_t&&st===1&&g.name!==S.secrets.er_n){
+    S.secrets.er_s=2; g.emote='!'; g.emoteT=1.2; g.squash=0.5; A.say(8);
+    toast2(g.name+' listens, nods, and says: "tell '+S.secrets.er_n+' '+ERMSG[(S.secrets.er_k||0)%ERMSG.length]+'" (go back and report)'); saveGame(); return true; }
+  if(!giver||giver.name!==g.name) return false;
+  if(S.secrets.er_d!==glDay()){ S.secrets.er_d=glDay(); S.secrets.er_s=0; S.secrets.er_n=g.name; S.secrets.er_m=null; }
+  if(st===0){
+    const L=S.gobs.filter(h=>!h.side&&h.name&&h.hp>0&&h.name!==g.name);
+    S.secrets.er_s=1; S.secrets.er_n=g.name; g.emote='!'; g.emoteT=1.4; A.say(9);
+    if(glDay()%2===1&&L.length){ const t=L[(glDay()*7)%L.length]; S.secrets.er_m='msg'; S.secrets.er_t=t.name; S.secrets.er_k=glDay()%ERMSG.length;
+      toast2(g.name+': take a message to '+t.name+'. i will not say what it is. it is about soup. (find '+t.name+' and tap them)'); }
+    else { S.secrets.er_m='bundle';
+      toast2(g.name+': i lost my bundle. somewhere out there. it is red. it knows what it did. (look for a flag and a glow)'); }
+    saveGame(); return true; }
+  if(st===1){ toast2(S.secrets.er_m==='msg'?g.name+': have you told '+S.secrets.er_t+'? go. the soup is waiting.':g.name+': the bundle. red. you have not found it. i believe in you, a little.'); A.say(8); return true; }
   if(st===2){ S.secrets.er_s=3; addRes('gold',8); addRes('food',6); addRes('wood',6); g.mood=Math.min(1,(g.mood||0.7)+0.3); g.emote='*'; g.emoteT=2; g.squash=0.7;
     sparkW(g.x,(g.z||0)+1.0,g.y,24,'#ffe98a'); A.cheer();
-    banner2('THE BUNDLE, RETURNED',g.name+' hugged it. +8 gold, +6 food, +6 wood.');
+    const msg=S.secrets.er_m==='msg';
+    banner2(msg?'THE MESSAGE, DELIVERED':'THE BUNDLE, RETURNED',g.name+(msg?' nodded slowly. +8 gold, +6 food, +6 wood.':' hugged it. +8 gold, +6 food, +6 wood.'));
     S.secrets.er_total=(S.secrets.er_total||0)+1;
-    chron(g.name+' lost a red bundle and got it back. The village has agreed not to ask what was in it. It was a hat. It was always a hat.');
+    chron(msg?g.name+' sent word to '+S.secrets.er_t+' and got word back. Both agree it was about soup. Neither will say which soup.':g.name+' lost a red bundle and got it back. The village has agreed not to ask what was in it. It was a hat. It was always a hat.');
     saveGame(); return true; }
   return false;
 }
