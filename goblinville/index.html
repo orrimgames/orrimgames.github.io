@@ -2353,9 +2353,49 @@ function buildKitchenMesh(){
   for(let i=0;i<3;i++)at(-.73+i*.20,.56,-.65,.12,.12,.12,hex('#ddbb8a'));
   return upload(m);
 }
+function kitchenPanelBuilding(){
+  const b=S.pick;
+  return b&&b.key==='kitchen'&&S.buildings.includes(b)&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.sel?b:null;
+}
+function kitchenStatus(b){
+  if(b.pop<1) return 'Under construction';
+  if(b.kpaused) return 'Paused - wood saved for other work';
+  if(S.res.wood<1) return 'Waiting for wood';
+  if(capOf('food')-S.res.food<4) return 'Pantry full - no wood used';
+  return 'Cooking - '+Math.ceil(20-(b.kt||0))+'s to next bowl';
+}
+function kitchenPanelR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-164,w,h:164};}
+function kitchenToggleR(){const r=kitchenPanelR();return {x:r.x+12,y:r.y+115,w:r.w-24,h:37};}
+function kitchenPanelTap(x,y){
+  const b=kitchenPanelBuilding();if(!b)return false;
+  const r=kitchenPanelR();if(!inR(x,y,r))return false;
+  if(x>r.x+r.w-42&&y<r.y+40){S.pick=null;A.blip();return true;}
+  if(inR(x,y,kitchenToggleR())){b.kpaused=!b.kpaused;saveGame();A.blip();}
+  return true;
+}
+function drawKitchenPanel(){
+  const b=kitchenPanelBuilding();if(!b)return;
+  const r=kitchenPanelR();ctx.save();ctx.fillStyle='rgba(20,26,28,0.96)';rrp(r.x,r.y,r.w,r.h,13);ctx.fill();
+  ctx.strokeStyle='#94ac80';ctx.lineWidth=1.5;ctx.stroke();
+  txt3('SOUP KITCHEN',r.x+14,r.y+23,15,'#e2ebbc','left',900,false);
+  txt3('X',r.x+r.w-22,r.y+23,15,'#ddd','center',800,false);
+  txt3('1 wood -> 4 food / 20 seconds',r.x+14,r.y+47,12,'#fff','left',700,false);
+  txt3(kitchenStatus(b),r.x+14,r.y+70,11,'#d9e3c9','left',700,false);
+  ctx.fillStyle='#414b42';rrp(r.x+14,r.y+84,r.w-28,9,4);ctx.fill();
+  const n=clamp((b.kt||0)/20,0,1);if(n>0){ctx.fillStyle=b.kpaused?'#c7ac75':'#b7d485';rrp(r.x+14,r.y+84,(r.w-28)*n,9,4);ctx.fill();}
+  const t=kitchenToggleR();ctx.fillStyle=b.kpaused?'#446a42':'#695637';rrp(t.x,t.y,t.w,t.h,8);ctx.fill();
+  txt3(b.kpaused?'RESUME COOKING':'PAUSE COOKING',t.x+t.w/2,t.y+23,12,'#fff','center',800,false);ctx.restore();
+}
+function kitchenOpenFP(){
+  if(FP.battle||FP.interior||S.sail)return false;
+  for(const b of S.buildings){if(b.key!=='kitchen')continue;const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y;
+    const a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
+    if(Math.hypot(dx,dy)<4.2&&a<.55){S.pick=b;A.blip();return true;}}
+  return false;
+}
 function kitchenTick(dt){
   for(const b of S.buildings){
-    if(b.key!=='kitchen'||b.pop<1) continue;
+    if(b.key!=='kitchen'||b.pop<1||b.kpaused) continue;
     if(S.res.wood<1||capOf('food')-S.res.food<4){ b.kt=0; continue; }
     b.kt=(b.kt||0)+dt;
     if(b.kt>=20){ b.kt-=20; S.res.wood-=1; addRes('food',4);
@@ -4472,6 +4512,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
+  if(kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -4529,6 +4570,7 @@ function fpTap(x,y){
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
   if(starTap(x,y)) return true;
   if(fishTap()) return true;
+  if(kitchenOpenFP())return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
 }
@@ -5748,7 +5790,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenPanel(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -5766,7 +5808,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -5800,7 +5842,7 @@ function packSave(){
     ach:S.ach||{}, seen:S.seen||{}, secrets:S.secrets||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
-    builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0})),
+    builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0,kpaused:!!b.kpaused})),
     gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0,scholar:g.scholar?1:0})),
     chron:chronTrim(S.chronicle,60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
@@ -5824,7 +5866,7 @@ function restoreSave(sv){
     flattenArea(bb.tx,bb.ty,T.w,T.h);
     const b=makeBuilding(bb.key,bb.tx,bb.ty);
     b.t=bb.t||0; b.pop=bb.pop||0; b.hp=(bb.hp==null?b.hp:bb.hp); b.maxhp=bb.maxhp||b.maxhp;
-    b.kt=Math.min(20,Math.max(0,Number(bb.kt)||0));
+    b.kt=Math.min(20,Math.max(0,Number(bb.kt)||0)); b.kpaused=!!bb.kpaused;
     b.crops=(bb.key==='farm'&&bb.crops)?bb.crops:b.crops; b.level=bb.level||1;
     b.gy=groundH(bb.tx+T.w/2,bb.ty+T.h/2); }
   { const fx=Math.round(SITE.x)+0.5, fz=Math.round(SITE.y)+2.6;
@@ -8225,6 +8267,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
+  if(kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
