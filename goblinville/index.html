@@ -2432,16 +2432,28 @@ function marketReason(b,d){
   if(capOf(d.to)-S.res[d.to]<d.gain)return 'Need room for '+d.gain+' '+d.to;
   return '';
 }
+function marketOrder(){return {from:['food','wood','stone'][((S.day%3)+3)%3],pay:40,to:'gold',gain:12};}
+function marketOrderReason(b){
+  if(S.secrets.marketOrderDay===S.day)return 'Filled today - next order at dawn';
+  return marketReason(b,marketOrder());
+}
+function marketFillOrder(b){
+  if(!b||b.key!=='market'||!S.buildings.includes(b))return false;
+  const why=marketOrderReason(b);if(why){A.deny();toast2(why);return false;}
+  const d=marketOrder();S.res[d.from]-=d.pay;addRes('gold',d.gain);S.secrets.marketOrderDay=S.day;
+  saveGame();A.cheer();toast2('Caravan order filled: +12 gold. New order at dawn.');return true;
+}
 function marketTrade(b,i){
   const d=MARKET_DEALS[i];if(!d||!b||b.key!=='market'||!S.buildings.includes(b))return false;
   const why=marketReason(b,d);if(why){A.deny();toast2(why);return false;}
   S.res[d.from]-=d.pay;addRes(d.to,d.gain);saveGame();A.pop(2);toast2('Traded '+d.pay+' '+d.from+' for '+d.gain+' '+d.to);return true;
 }
-function marketR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-290,w,h:290};}
+function marketR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-343,w,h:343};}
 function marketDealR(i){const r=marketR();return {x:r.x+12,y:r.y+64+i*53,w:r.w-24,h:46};}
 function marketPanelTap(x,y){
   const b=marketBuilding();if(!b)return false;const r=marketR();if(!inR(x,y,r))return false;
   if(x>r.x+r.w-42&&y<r.y+40){S.pick=null;A.blip();return true;}
+  if(inR(x,y,marketDealR(4))){marketFillOrder(b);return true;}
   for(let i=0;i<MARKET_DEALS.length;i++)if(inR(x,y,marketDealR(i))){marketTrade(b,i);return true;}
   return true;
 }
@@ -2469,7 +2481,12 @@ function drawMarketUI(){
     ctx.fillStyle=why?'#45413a':'#65613b';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3(d.pay+' '+d.from+'  ->  '+d.gain+' '+d.to,q.x+q.w/2,q.y+18,13,why?'#bdb7aa':'#fff0c9','center',800,false);
     txt3(why||('Have '+Math.floor(S.res[d.from])+' '+d.from+' / '+Math.floor(S.res[d.to])+' '+d.to),q.x+q.w/2,q.y+35,10,why?'#c6b7a5':'#d2e3b7','center',700,false);
-  });ctx.restore();
+  });
+  const d=marketOrder(),q=marketDealR(4),why=marketOrderReason(b);
+  ctx.fillStyle=why?'#494239':'#775339';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
+  txt3('CARAVAN: 40 '+d.from+' -> 12 gold',q.x+q.w/2,q.y+18,12,why?'#c7bba6':'#ffe4ac','center',800,false);
+  txt3(why||'Once per village day - all trading posts',q.x+q.w/2,q.y+35,10,'#e1d2b7','center',700,false);
+  ctx.restore();
 }
 function buildMarketMesh(){
   const m=MB(),T=M4.id(),wood=hex('#956739');
