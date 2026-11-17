@@ -6868,6 +6868,8 @@ function wispTake(p){
   S.secrets.gl_wn=glDay(); S.secrets.gl_wisps=(S.secrets.gl_wisps||0)+1;
   addRes('gold',6); addRes('food',6); sparkW(p.x,p.gy+0.5,p.y,30,'#9fffd8'); sparkW(p.x,p.gy+0.9,p.y,14,'#ffffff'); A.cheer();
   banner2('THE NIGHT WISP','+6 gold, +6 food. it drifts out in the dark, one a night. ('+S.secrets.gl_wisps+' caught)');
+  const wn=S.secrets.gl_wisps, ms={5:['gold',25,'FIVE WISPS'],10:['stone',40,'TEN WISPS'],20:['wood',60,'TWENTY WISPS']}[wn];
+  if(ms){ addRes(ms[0],ms[1]); setTimeout(()=>{ banner2(ms[2],'the wisp lingers a moment, then leaves +'+ms[1]+' '+ms[0]+' behind. it seems to know you now.'); chron('The green light stays near whoever has followed it '+wn+' times. It does not explain itself. It leaves a little behind.', true); },2600); }
   if(S.secrets.gl_wisps===1) chron('Something green and quiet was drifting past the edge of the green after dark. Somebody followed it, and it let them. Nobody has asked what it is.', true);
   saveGame();
 }
