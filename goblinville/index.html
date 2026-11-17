@@ -6823,7 +6823,7 @@ function seedGlimmers(){
 /* ---- v200: the Moon Glimmer - one rare light, on the day of rest, far from the green ---- */
 function cairnCount(){ let n=0; const m=S.secrets.cn_m||0; for(let i=0;i<6;i++) if(m&(1<<i)) n++; return n; }
 function buildCairn(){   // v210
-  const m=MB(),T=M4.id(); const st=[hex('#8a8a86'),hex('#76766f'),hex('#9a968c')];
+  const m=MB(),T=M4.id(); const st=[hex('#d4d0c4'),hex('#bdb9ad'),hex('#e2ded2')];
   const rows=[[0.46,0.16],[0.34,0.14],[0.24,0.12],[0.15,0.10],[0.08,0.08]].map(r=>[r[0]*1.7,r[1]*1.7]); let y=0;
   rows.forEach((r,i)=>{ M4.trs(T,0,y,0,0,i*0.7,0,1,1,1); box(m,r[0],r[1],r[0]*0.9,st[i%3],T,0,y+r[1]/2); y+=r[1]*0.95; });
   M4.trs(T,0,y,0,0,0,0,1,1,1); box(m,0.05,0.05,0.05,hex('#d8e8ff'),T,0,y+0.03);
