@@ -2398,13 +2398,46 @@ function drawKitchenPanel(){
   txt3(b.level>=2?'BIG POT INSTALLED':'BIG POT: 40 stone + 20 gold',u.x+u.w/2,u.y+16,11,b.level>=2?'#c7d4a9':'#fff','center',800,false);
   txt3(b.level>=2?'6 food per wood - fully upgraded':'Upgrade to 6 food per wood',u.x+u.w/2,u.y+32,10,'#d1d5c9','center',700,false);ctx.restore();
 }
-function kitchenOpenFP(){
-  if(FP.battle||FP.interior||S.sail)return false;
-  for(const b of S.buildings){if(b.key!=='kitchen')continue;const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y;
+function kitchenTargetFP(){
+  if(FP.battle||FP.interior||S.sail)return null;
+  let best=null,dist=4.2;
+  for(const b of S.buildings){if(b.key!=='kitchen')continue;const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y,d=Math.hypot(dx,dy);
     const a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
-    if(Math.hypot(dx,dy)<4.2&&a<.55){S.pick=b;A.blip();return true;}}
+    if(d<dist&&a<.55){best=b;dist=d;}}
+  return best;
+}
+function kitchenBadge(b){
+  if(b.pop<1)return 'SOUP: building';
+  if(b.kpaused)return 'SOUP: paused';
+  if(S.res.wood<1)return 'SOUP: no wood';
+  if(capOf('food')-S.res.food<kitchenYield(b))return 'SOUP: pantry full';
+  return 'SOUP +'+kitchenYield(b)+' in '+Math.ceil(20-(b.kt||0))+'s';
+}
+function kitchenBadgeR(b){
+  if(FP.on||CAM.dist/CAM.zoom>65)return null;
+  const p=projPt(b.tx+1,b.gy+1.8,b.ty+1);if(!p||p[0]<65||p[0]>W-65||p[1]<140||p[1]>H-BARH-30)return null;
+  return {x:p[0]-65,y:p[1]-14,w:130,h:28};
+}
+function kitchenBadgeTap(x,y){
+  if(S.sel||FP.on||S.mode!=='village')return false;
+  for(const b of S.buildings){if(b.key!=='kitchen')continue;const r=kitchenBadgeR(b);if(r&&inR(x,y,r)){S.pick=b;A.blip();return true;}}
   return false;
 }
+function drawKitchenHints(){
+  if(S.mode!=='village'||S.story||S.chronOpen)return;
+  if(FP.on){
+    const b=kitchenTargetFP();if(!b||kitchenPanelBuilding())return;
+    const w=Math.min(300,W-24),x=(W-w)/2,y=H-110;
+    ctx.save();ctx.fillStyle='rgba(20,26,28,.9)';rrp(x,y,w,36,9);ctx.fill();
+    txt3('SOUP KITCHEN - '+TAPW()+' to manage',W/2,y+23,12,'#e2ebbc','center',800,false);ctx.restore();return;
+  }
+  if(S.sel)return;
+  for(const b of S.buildings){if(b.key!=='kitchen')continue;const r=kitchenBadgeR(b);if(!r)continue;
+    ctx.save();ctx.fillStyle=b.kpaused?'rgba(79,65,41,.94)':'rgba(31,48,37,.94)';rrp(r.x,r.y,r.w,r.h,8);ctx.fill();
+    ctx.strokeStyle='#a8bd8f';ctx.lineWidth=1;ctx.stroke();txt3(kitchenBadge(b),r.x+r.w/2,r.y+18,11,'#eef2d8','center',800,false);ctx.restore();
+  }
+}
+function kitchenOpenFP(){const b=kitchenTargetFP();if(!b)return false;S.pick=b;A.blip();return true;}
 function kitchenTick(dt){
   for(const b of S.buildings){
     if(b.key!=='kitchen'||b.pop<1||b.kpaused) continue;
@@ -5803,7 +5836,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenPanel(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -5821,7 +5854,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawGhostHint(); drawInspect2(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -8322,6 +8355,7 @@ function handleTap3(x,y){
     } else { A.blip(); ghostArmed=false; }
     return;
   }
+  if(kitchenBadgeTap(x,y))return;
   if(!FP.on&&glTapIso(x,y)) return;
   const g=hitGob3(x,y);
   if(g){ S.inspect={g,t:3.4}; S.metGob=1; A.blip(); g.emote='!'; g.emoteT=1.2; g.squash=0.6; return; }
