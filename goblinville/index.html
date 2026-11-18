@@ -1821,7 +1821,7 @@ function workTap(x,y){
 function drawWorkUI(){
   if(!workVisible())return;
   const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
-  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(workFocus()[1],b.x+b.w/2,b.y+33,11,'#d8dbb5','center',700,false);
+  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingCargo()?waitingCargo()+' storage wait':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
   if(!workOpen){ctx.restore();return;}
   const r=workPanelR(),slots=workSlots(),counts={};for(const g of S.gobs)counts[g.job]=(counts[g.job]||0)+1;
   ctx.fillStyle='rgba(20,36,41,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#83b8ad';ctx.lineWidth=1;ctx.stroke();
@@ -1831,7 +1831,7 @@ function drawWorkUI(){
   WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
     const detail=f[0]==='balanced'?S.gobs.length+' goblins':(counts[f[2]]||0)+' / '+slots[f[2]]+' jobs';txt3(detail,q.x+q.w-12,q.y+25,11,'#d1e6dc','right',700,false);});
-  txt3('Carried goods are delivered. Sleeping goblins rest.',r.x+r.w/2,r.y+338,10,'#c3d9d0','center',600,false);ctx.restore();
+  txt3(waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);ctx.restore();
 }
 
 function spawnGob(tx,ty,silent){
@@ -2071,6 +2071,19 @@ function hallPos(){ const h=hallB(); return h? [h.tx+1.5,h.ty+1.5] : [SITE.x,SIT
 function hallDoor(){ const h=hallB(); return h? [h.tx+1.5,h.ty+2.9] : [SITE.x,SITE.y+1.5]; }
 function resColor2(k){ return {food:'#ffe9a8',wood:'#e0a35e',stone:'#dbe4ee',gold:'#ffd34d',faith:'#ff8a4d'}[k]; }
 
+// v243: the store accepts only what fits. The goblin keeps the rest.
+function unloadCargo(g){
+  if(!g.carry||!(g.amt>0)){g.carry=null;g.amt=0;g.cargoReady=false;g.waitStore=false;g.state='idle';g.st=.3;return 0;}
+  if(!g.cargoReady){g.amt=S.vanto.main?Math.round(g.amt*1.5):g.amt;g.cargoReady=true;}
+  const k=g.carry,amt=Math.min(g.amt,Math.max(0,capOf(k)-S.res[k]));
+  if(amt>0){addRes(k,amt);g.amt=Math.max(0,g.amt-amt);const h=hallDoor(),gh=groundH(h[0],h[1]);
+    floatW(h[0],gh+.7,h[1],'+'+Math.round(amt*10)/10+' '+k,resColor2(k));A.coin();sparkW(h[0],gh+.4,h[1],4,resColor2(k));}
+  if(g.amt>0){g.waitStore=true;g.state='haul';g.work=0;}
+  else {g.carry=null;g.amt=0;g.cargoReady=false;g.waitStore=false;g.squash=.6;g.state='idle';g.st=rnd(.6,.1);}
+  return amt;
+}
+function waitingCargo(){return S.gobs.filter(g=>g.waitStore&&g.carry&&g.amt>0).length;}
+
 /* --------------------------------- sim --------------------------------- */
 function updateGob(g,dt){
   g.ph+=dt*7;
@@ -2197,12 +2210,7 @@ function updateGob(g,dt){
       break; }
     case 'haul': { const h=hallDoor();
       step(h[0],h[1],()=>{
-        if(g.carry){ const amt=S.vanto.main?Math.round((g.amt||1)*1.5):(g.amt||1); addRes(g.carry,amt);
-          const gh=groundH(h[0],h[1]);
-          floatW(h[0],gh+0.7,h[1],'+'+amt+' '+g.carry, resColor2(g.carry));
-          A.coin(); sparkW(h[0],gh+0.4,h[1],4,resColor2(g.carry));
-        }
-        g.carry=null; g.amt=0; g.squash=0.6; g.state='idle'; g.st=rnd(.6,.1);
+        unloadCargo(g);
       });
       break; }
   }
@@ -6207,7 +6215,7 @@ function packSave(){
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
     builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0,kpaused:!!b.kpaused,ft:b.ft||0})),
-    gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0,scholar:g.scholar?1:0})),
+    gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0,scholar:g.scholar?1:0,carry:g.carry,amt:g.amt||0,cargoReady:!!g.cargoReady})),
     chron:chronTrim(S.chronicle,60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
     d:d, r:r};
@@ -6242,7 +6250,9 @@ function restoreSave(sv){
   for(const go of sv.gobs){ const g=spawnGob(go.x,go.y,true); if(!g) continue;
     for(const k in go) if(k!=='x'&&k!=='y') g[k]=go[k];
     g.fem=!!g.fem; g.soldier=!!g.soldier; g.scholar=!!g.scholar;
-    g.state='idle'; g.st=rnd(1.5,0.2); g.target=null; g.carry=null; g.amt=0; g.emote=null; g.emoteT=0; g.ph=rnd(TAU);
+    g.state='idle'; g.st=rnd(1.5,0.2); g.target=null;
+    g.carry=['food','wood','stone','gold'].includes(go.carry)&&Number.isFinite(go.amt)&&go.amt>0?go.carry:null;g.amt=g.carry?go.amt:0;g.cargoReady=!!(g.carry&&go.cargoReady);g.waitStore=false;if(g.carry)g.state='haul';
+    g.emote=null; g.emoteT=0; g.ph=rnd(TAU);
     if(g.vet) g.tint=[1.10,0.96,0.96]; if(g.scholar) g.tint=[0.85,0.72,1.3]; }
   Object.assign(S.res,sv.res); Object.assign(S.cap,sv.cap||{});
   S.faith=sv.faith||0; S.muted=!!sv.muted; A.setMute(S.muted); S.day=sv.day||0; S.dayT=(sv.dayT==null?0.28:sv.dayT); S.omen=sv.omen||0;
