@@ -1318,6 +1318,20 @@ function buildHut(){
   M4.trs(T,-0.62,0.28,-0.3,0,0.4,0.06,1,1,1); tube(m,0.045,0.035,0.72,6,hex('#7a5730'),T,0,false,true); // lean post
   return upload(m);
 }
+// v261: a two-storey home within the original two-tile plot.
+function buildBunkhouse(){
+  const m=MB(),T=M4.id(),mud=hex('#cfa670'),wood=hex('#745035'),roof=hex('#3f826e');
+  const at=(x,y,z,w,h,d,c)=>{M4.trs(T,x,y,z,0,0,0,1,1,1);box(m,w,h,d,c,T,0,.9);};
+  at(0,-.18,0,1.6,.5,1.6,hex('#9b8767'));at(0,.72,0,1.5,1.6,1.5,mud);
+  for(const y of [.08,.8,1.5])at(0,y,0,1.6,.09,1.6,wood);
+  for(const x of [-.7,.7])for(const z of [-.7,.7])at(x,.8,z,.1,1.6,.1,wood);
+  at(0,.29,.77,.38,.58,.06,hex('#402d20'));at(0,.03,.88,.58,.1,.36,wood);
+  for(const x of [-.43,.43])for(const y of [.44,1.13]){at(x,y,.77,.26,.3,.04,wood);at(x,y,.8,.18,.21,.03,hex('#ffe4a3'));at(x,y,.825,.025,.23,.02,wood);}
+  for(const x of [-.77,.77])for(const y of [.44,1.13]){at(x,y,0,.04,.3,.32,wood);at(x*1.025,y,0,.03,.21,.24,hex('#ffe4a3'));}
+  M4.trs(T,0,1.54,0,0,0,0,1,1,1);pyramid(m,1.95,.85,1.95,roof,T,0);
+  at(.5,1.72,-.35,.22,.66,.23,hex('#9ca3a2'));at(.5,2.06,-.35,.28,.08,.29,hex('#687476'));
+  at(0,.87,.86,.4,.14,.05,hex('#cbb88b'));return upload(m);
+}
 function buildFire(){
   const m=MB(), T=M4.id();
   for(let i=0;i<5;i++){
@@ -1762,6 +1776,13 @@ function placeBuilding(key,tx,ty){
   return true;
 }
 function bCenterW(b){ return [b.tx+b.w/2, (b.gy!==undefined?b.gy:groundH(b.tx+b.w/2,b.ty+b.h/2)), b.ty+b.h/2]; }
+function housingBeds(b){return b.pop>=1?(b.key==='hut'&&b.level>=2?6:(BT[b.key].pop||0)):0;}
+function hutUpgradeR(){const r=planPanelR();return {x:r.x+12,y:r.y+312,w:r.w-24,h:42};}
+function upgradeHut(b){
+  if(!scoutAllowed()||!b||b.key!=='hut'||!S.buildings.includes(b)||b.pop<1||b.level>=2)return false;
+  const cost={wood:80,stone:40,gold:20};if(!canPay(cost)){A.deny();toast2('Bunkhouse needs 80 wood, 40 stone and 20 gold');return false;}
+  pay(cost);b.level=2;recount();shadowDirty=true;saveGame();A.build();toast2('Bunkhouse ready: 6 beds in the same plot.');return true;
+}
 function workSlots(){
   const slots={farmer:0,woodcutter:0,miner:0,digger:0};
   for(const b of S.buildings){
@@ -1791,7 +1812,7 @@ function releaseWork(g){
   else if(g.state!=='sleep'&&g.state!=='toBed'){if(g.pal&&g.pal.pal===g)g.pal.pal=null;g.pal=null;g.state='idle';g.st=0;g.work=0;g.target=null;}
 }
 function recount(){
-  S.popCap=6; for(const b of S.buildings) if(BT[b.key].pop&&b.pop>=1) S.popCap+=BT[b.key].pop;
+  S.popCap=6; for(const b of S.buildings) S.popCap+=housingBeds(b);
   const slots=workQuotas(workSlots(),S.gobs.length);
   const used={farmer:0,woodcutter:0,miner:0,digger:0};
   for(const g of S.gobs){ if(g.job!=='idler'&&used[g.job]<slots[g.job]) used[g.job]++; else releaseWork(g); }
@@ -1892,7 +1913,7 @@ function planBuildings(){return S.buildings.filter(b=>b.key!=='hall'&&!b.foe);}
 function planRefund(b){const out={};for(const k in BT[b.key].cost){const n=Math.floor(BT[b.key].cost[k]/2);if(n)out[k]=n;}return out;}
 function planReason(b){
   if(!b||!S.buildings.includes(b)||b.key==='hall'||b.foe)return 'The Hall stays. Choose another building.';
-  const pop=6+S.buildings.reduce((n,a)=>n+(a!==b&&a.pop>=1?(BT[a.key].pop||0):0),0);
+  const pop=6+S.buildings.reduce((n,a)=>n+(a!==b?housingBeds(a):0),0);
   if(b.pop>=1&&BT[b.key].pop&&S.gobs.length>pop)return 'Build housing first: '+S.gobs.length+' goblins, '+pop+' beds left.';
   const refund=planRefund(b),lost=b.key==='store'?storeCapacity(b):0;
   for(const k of ['food','wood','stone','gold'])if(S.res[k]+(refund[k]||0)>capOf(k)-lost)return 'Make room for '+k+' before salvaging.';
@@ -1908,9 +1929,9 @@ function salvageBuilding(b){
   toast2(BT[b.key].name+' salvaged: '+scoutList(refund));planPick=null;return true;
 }
 function planLinkR(){const r=scoutLinkR();return {x:r.x+r.w+8,y:r.y,w:r.w,h:r.h};}
-function planPanelR(){const w=Math.min(344,W-24),h=438;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
+function planPanelR(){const w=Math.min(344,W-24),h=488;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function planRowR(i){const r=planPanelR();return {x:r.x+12,y:r.y+88+i*58,w:r.w-24,h:50};}
-function planNavR(next){const r=planPanelR();return {x:r.x+12+(next?(r.w-24)/2+4:0),y:r.y+366,w:(r.w-32)/2,h:44};}
+function planNavR(next){const r=planPanelR();return {x:r.x+12+(next?(r.w-24)/2+4:0),y:r.y+416,w:(r.w-32)/2,h:44};}
 function planLocateR(){const r=planPanelR();return {x:r.x+44,y:r.y+238,w:r.w-88,h:32};}
 function locatePlan(b){
   if(!b||!S.buildings.includes(b)||!scoutAllowed())return false;if(FP.on)fpExit();
@@ -1925,7 +1946,7 @@ function drawPlanMarker(){
 }
 function planTap(x,y){
   const r=planPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){if(planPick)planPick=null;else planOpen=false;A.blip();return true;}
-  if(planPick){if(inR(x,y,moveR())){beginMove(planPick);return true;}if(inR(x,y,planLocateR())){locatePlan(planPick);return true;}if(inR(x,y,planNavR(false))){planPick=null;A.blip();}else if(inR(x,y,planNavR(true)))salvageBuilding(planPick);return true;}
+  if(planPick){if(planPick.key==='hut'&&inR(x,y,hutUpgradeR())){upgradeHut(planPick);return true;}if(inR(x,y,moveR())){beginMove(planPick);return true;}if(inR(x,y,planLocateR())){locatePlan(planPick);return true;}if(inR(x,y,planNavR(false))){planPick=null;A.blip();}else if(inR(x,y,planNavR(true)))salvageBuilding(planPick);return true;}
   const list=planBuildings(),last=Math.max(0,Math.ceil(list.length/4)-1);planPage=clamp(planPage,0,last);
   if(inR(x,y,planNavR(false))){planPage=Math.max(0,planPage-1);A.blip();return true;}
   if(inR(x,y,planNavR(true))){planPage=Math.min(last,planPage+1);A.blip();return true;}
@@ -1938,17 +1959,20 @@ function drawPlanUI(){
   txt3(planPick?'Move it, or review and confirm salvage.':'Choose a building to move or salvage.',r.x+14,r.y+49,11,'#ded9c4','left',600,false);
   txt3('Half base materials back. The Hall stays.',r.x+14,r.y+68,11,'#bfbda4','left',600,false);
   if(!planPick){list.slice(planPage*4,planPage*4+4).forEach((b,i)=>{const q=planRowR(i);ctx.fillStyle='#4b5141';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
-    txt3(BT[b.key].name+(b.level>=2?' II':''),q.x+10,q.y+21,12,'#f0e8cc','left',800,false);txt3('Plot '+b.tx+', '+b.ty+' - tap to manage',q.x+10,q.y+39,10,'#d4d7bd','left',600,false);});
+    txt3((b.key==='hut'&&b.level>=2?'Bunkhouse - 6 beds':BT[b.key].name+(b.level>=2?' II':'')),q.x+10,q.y+21,12,'#f0e8cc','left',800,false);txt3('Plot '+b.tx+', '+b.ty+' - tap to manage',q.x+10,q.y+39,10,'#d4d7bd','left',600,false);});
     if(!list.length)txt3('Only the Hall stands. Build something first.',r.x+r.w/2,r.y+156,11,'#e3dcc6','center',600,false);
-  }else{const b=planPick,why=planReason(b);txt3(BT[b.key].name.toUpperCase(),r.x+r.w/2,r.y+116,14,'#f8e3b8','center',800,false);
+  }else{const b=planPick,why=planReason(b);txt3((b.key==='hut'&&b.level>=2?'BUNKHOUSE':BT[b.key].name.toUpperCase()),r.x+r.w/2,r.y+116,14,'#f8e3b8','center',800,false);
     txt3('Plot '+b.tx+', '+b.ty+' - '+b.w+' x '+b.h+' tiles freed',r.x+r.w/2,r.y+140,11,'#dadcc7','center',600,false);
     txt3('Salvage: '+scoutList(planRefund(b)),r.x+r.w/2,r.y+174,12,'#d9e9b4','center',800,false);
     txt3('Upgrades and any crops are not refunded.',r.x+r.w/2,r.y+201,11,'#e1be9a','center',600,false);
     txt3('Workers keep carried supplies and find new jobs.',r.x+r.w/2,r.y+223,10,'#cccdb4','center',600,false);
     const loc=planLocateR();ctx.fillStyle='#4c675b';rrp(loc.x,loc.y,loc.w,loc.h,7);ctx.fill();txt3('LOCATE ON MAP',loc.x+loc.w/2,loc.y+21,11,'#e6edce','center',800,false);
     const mv=moveR();ctx.fillStyle='#536d48';rrp(mv.x,mv.y,mv.w,mv.h,7);ctx.fill();txt3('MOVE BUILDING - free, keeps upgrades',mv.x+mv.w/2,mv.y+22,11,'#eef0d1','center',800,false);
-    if(why){const words=why.split(' ');let lines=[''];for(const word of words){const i=lines.length-1;if((lines[i]+word).length>36)lines.push(word+' ');else lines[i]+=word+' ';}lines.forEach((line,i)=>txt3(line.trim(),r.x+r.w/2,r.y+326+i*16,11,'#ffd09f','center',700,false));}
-    else txt3('The footprint will be empty. This cannot be undone.',r.x+r.w/2,r.y+345,10,'#e3c8ad','center',600,false);
+    if(b.key==='hut'){const up=hutUpgradeR();ctx.fillStyle=b.level>=2?'#455e4d':b.pop<1?'#4a4940':'#6b6b40';rrp(up.x,up.y,up.w,up.h,8);ctx.fill();
+      txt3(b.level>=2?'BUNKHOUSE - 6 BEDS':b.pop<1?'FINISH CONSTRUCTION FIRST':'BUNKHOUSE: 80 wood + 40 stone + 20 gold',up.x+up.w/2,up.y+16,10,'#f1e8c6','center',800,false);
+      txt3(b.level>=2?'3 extra beds, no extra land needed':'Upgrade from 3 beds to 6, same footprint',up.x+up.w/2,up.y+33,10,'#d2ddbe','center',600,false);}
+    if(why){const words=why.split(' ');let lines=[''];for(const word of words){const i=lines.length-1;if((lines[i]+word).length>36)lines.push(word+' ');else lines[i]+=word+' ';}lines.forEach((line,i)=>txt3(line.trim(),r.x+r.w/2,r.y+376+i*16,11,'#ffd09f','center',700,false));}
+    else txt3('The footprint will be empty. This cannot be undone.',r.x+r.w/2,r.y+395,10,'#e3c8ad','center',600,false);
   }
   for(const next of [false,true]){const q=planNavR(next),blocked=planPick&&next&&planReason(planPick);ctx.fillStyle=blocked?'#4b4841':planPick&&next?'#895342':'#565c46';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();txt3(planPick?(next?'CONFIRM SALVAGE':'KEEP BUILDING'):(next?'NEXT >':'< PREVIOUS'),q.x+q.w/2,q.y+27,11,'#f5e7cc','center',800,false);}
   txt3(planPick?'No goblins or stored supplies will be lost.':'Page '+(planPage+1)+' / '+(last+1)+' - '+list.length+' buildings',r.x+r.w/2,r.y+r.h-10,10,'#bcbea4','center',600,false);ctx.restore();
@@ -3265,7 +3289,7 @@ function drawBuildings(prog, noCrops){
     const growing=b.pop<1;
     const s=growing?Math.max(0.06,easeOutBack(clamp(b.pop,0,1))):1;
     M4.trs(MODEL, wx, b.gy+(1-s)*0.12, wz, 0, b.key==='road'?0:b.seed*0.06-0.03, 0, s, s*(growing?0.6+0.4*b.pop:1), s);
-    drawStatic(prog, BM(b.key), MODEL);
+    if(b.key==='hut'&&b.level>=2){if(!BMESHS.bunkhouse)BMESHS.bunkhouse=buildBunkhouse();drawStatic(prog,BMESHS.bunkhouse,MODEL);}else drawStatic(prog, BM(b.key), MODEL);
     if(b.crops && !noCrops){
       if(!CROPM) CROPM=buildCropMesh();
       const offs=[[-0.55,-0.55],[0.55,-0.55],[-0.55,0.55],[0.55,0.55]];
