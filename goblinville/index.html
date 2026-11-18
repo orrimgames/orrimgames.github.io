@@ -1820,7 +1820,7 @@ function serveSupper(){
 }
 function tickSupper(dt){if(S.mode!=='village')return;const left=supperLeft();if(left<=0)return;S.secrets.supperLeft=Math.max(0,left-Math.max(0,dt));if(!S.secrets.supperLeft){toast2('Supper rush ends. The brood catches its breath.');}}
 function supperR(){const r=workPanelR();return {x:r.x+12,y:r.y+352,w:r.w-24,h:48};}
-function workVisible(){return S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
+function workVisible(){return !marketBuilding()&&!storeSelected()&&!foresterSelected()&&!kitchenPanelBuilding()&&S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
 function workBtnR(){return {x:14,y:FP.on?154:508,w:FP.on?112:sideBtnW(),h:42};}
 function workPanelR(){const w=Math.min(344,W-24),h=414;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function workRowR(i){const r=workPanelR();return {x:r.x+12,y:r.y+84+i*47,w:r.w-24,h:40};}
@@ -2259,7 +2259,7 @@ function tickClock(dt){
   if(S.dayT<t0) S._dawnPulse=1;
 }
 function updateWorld(dt){
-  tickSupper(dt);
+  tickSupper(dt);tickExports(dt);
   checkQuest(); checkGoals(); checkBadges(); tickHints(dt); tickShare(dt);   // v100: all three milestone rails sample every tick - a badge true for under 2s used to be missed
   glTick(dt);   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
@@ -2597,11 +2597,23 @@ function marketTrade(b,i){
   const why=marketReason(b,d);if(why){A.deny();toast2(why);return false;}
   S.res[d.from]-=d.pay;addRes(d.to,d.gain);saveGame();A.pop(2);toast2('Traded '+d.pay+' '+d.from+' for '+d.gain+' '+d.to);return true;
 }
-function marketR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-343,w,h:343};}
+// v247: opt-in timber exports use the normal sell rate and keep a building reserve.
+function exportPost(){return S.buildings.find(b=>b.key==='market'&&b.pop>=1&&b.mexport)||null;}
+function exportClock(){return Math.max(0,Math.min(20,Number(S.secrets.exportClock)||0));}
+function toggleExport(b){if(!b||b.key!=='market'||b.pop<1||!S.buildings.includes(b))return false;b.mexport=!b.mexport;saveGame();A.blip();return true;}
+function exportStatus(b){if(b.pop<1)return 'Under construction';if(!b.mexport)return 'Off - keep all timber';if(S.res.wood<80)return 'Waiting: need 80 wood; keeps 60';if(capOf('gold')-S.res.gold<3)return 'Gold storage full - no wood used';return 'Next shipment in '+Math.ceil(20-exportClock())+'s - keeps 60 wood';}
+function tickExports(dt){
+  if(S.mode!=='village')return;const b=exportPost();
+  if(!b||S.res.wood<80||capOf('gold')-S.res.gold<3){S.secrets.exportClock=0;return;}
+  S.secrets.exportClock=exportClock()+Math.max(0,dt);if(S.secrets.exportClock<20)return;S.secrets.exportClock=0;
+  S.res.wood-=20;addRes('gold',3);const x=b.tx+1,y=b.ty+1;floatW(x,b.gy+1.8,y,'export +3 gold','#ffd28a');A.coin();saveGame();
+}
+function marketR(){const w=Math.min(310,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-396,w,h:396};}
 function marketDealR(i){const r=marketR();return {x:r.x+12,y:r.y+64+i*53,w:r.w-24,h:46};}
 function marketPanelTap(x,y){
   const b=marketBuilding();if(!b)return false;const r=marketR();if(!inR(x,y,r))return false;
   if(x>r.x+r.w-42&&y<r.y+40){S.pick=null;A.blip();return true;}
+  if(inR(x,y,marketDealR(5))){toggleExport(b);return true;}
   if(inR(x,y,marketDealR(4))){marketFillOrder(b);return true;}
   for(let i=0;i<MARKET_DEALS.length;i++)if(inR(x,y,marketDealR(i))){marketTrade(b,i);return true;}
   return true;
@@ -2661,6 +2673,9 @@ function drawMarketUI(){
   ctx.fillStyle=why?'#494239':'#775339';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
   txt3('CARAVAN: 40 '+d.from+' -> 12 gold',q.x+q.w/2,q.y+18,12,why?'#c7bba6':'#ffe4ac','center',800,false);
   txt3(why||'Once per village day - all trading posts',q.x+q.w/2,q.y+35,10,'#e1d2b7','center',700,false);
+  const e=marketDealR(5);ctx.fillStyle=b.mexport?'#46634c':'#4b4740';rrp(e.x,e.y,e.w,e.h,8);ctx.fill();
+  txt3('AUTO TIMBER: '+(b.mexport?'ON':'OFF')+' - 20 wood -> 3 gold',e.x+e.w/2,e.y+18,11,'#f1e4c6','center',800,false);
+  txt3(exportStatus(b),e.x+e.w/2,e.y+35,10,'#d4e1c3','center',700,false);
   ctx.restore();
 }
 function buildMarketMesh(){
@@ -6274,7 +6289,7 @@ function packSave(){
     ach:S.ach||{}, seen:S.seen||{}, secrets:S.secrets||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
-    builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0,kpaused:!!b.kpaused,ft:b.ft||0})),
+    builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0,kpaused:!!b.kpaused,ft:b.ft||0,mexport:!!b.mexport})),
     gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0,scholar:g.scholar?1:0,carry:g.carry,amt:g.amt||0,cargoReady:!!g.cargoReady})),
     chron:chronTrim(S.chronicle,60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
@@ -6298,7 +6313,7 @@ function restoreSave(sv){
     flattenArea(bb.tx,bb.ty,T.w,T.h);
     const b=makeBuilding(bb.key,bb.tx,bb.ty);
     b.t=bb.t||0; b.pop=bb.pop||0; b.hp=(bb.hp==null?b.hp:bb.hp); b.maxhp=bb.maxhp||b.maxhp;
-    b.kt=Math.min(20,Math.max(0,Number(bb.kt)||0)); b.kpaused=!!bb.kpaused; b.ft=Math.min(30,Math.max(0,Number(bb.ft)||0));
+    b.kt=Math.min(20,Math.max(0,Number(bb.kt)||0)); b.kpaused=!!bb.kpaused;b.mexport=!!bb.mexport; b.ft=Math.min(30,Math.max(0,Number(bb.ft)||0));
     b.crops=(bb.key==='farm'&&bb.crops)?bb.crops:b.crops; b.level=bb.level||1;
     b.gy=groundH(bb.tx+T.w/2,bb.ty+T.h/2); }
   { const fx=Math.round(SITE.x)+0.5, fz=Math.round(SITE.y)+2.6;
