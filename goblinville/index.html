@@ -1730,7 +1730,7 @@ function makeBuilding(key,tx,ty){
   const b={key,tx,ty,w:T.w,h:T.h,t:0,pop:0,hp:T.hp,maxhp:T.hp,seed:Math.random()*99,
     crops:key==='farm'?[0,0,0,0].map(()=>rnd(0.4)):null, work:0, fire:0, level:1,
     gy:sitY(tx+T.w/2, ty+T.h/2)-0.02};
-  S.buildings.push(b);
+  S.buildings.push(b);HAUL_REV++;
   return b;
 }
 function placeBuilding(key,tx,ty){
@@ -1900,7 +1900,7 @@ function planReason(b){
 }
 function salvageBuilding(b){
   if(!scoutAllowed())return false;const why=planReason(b);if(why){A.deny();toast2(why);return false;}
-  const refund=planRefund(b);S.buildings.splice(S.buildings.indexOf(b),1);if(S.pick===b)S.pick=null;
+  const refund=planRefund(b);S.buildings.splice(S.buildings.indexOf(b),1);HAUL_REV++;if(S.pick===b)S.pick=null;
   for(const g of S.gobs){if(g.bed===b){g.bed=null;if(g.state==='sleep'||g.state==='toBed'){g.state='idle';g.st=0;}}
     if(g.target===b){g.target=null;g.work=0;g.state=g.carry&&g.amt>0?'haul':'idle';g.st=0;}}
   S._farms=S.buildings.filter(a=>a.key==='farm'&&a.pop>=1);S._mines=S.buildings.filter(a=>a.key==='mine'&&a.pop>=1);
@@ -1976,7 +1976,7 @@ function moveReason(b,tx,ty){
 }
 function commitMove(b,tx,ty){
   if(!scoutAllowed())return false;const why=moveReason(b,tx,ty);if(why){A.deny();toast2(why);return false;}
-  flattenArea(tx,ty,b.w,b.h);b.tx=tx;b.ty=ty;b.gy=groundH(tx+b.w/2,ty+b.h/2);
+  flattenArea(tx,ty,b.w,b.h);b.tx=tx;b.ty=ty;HAUL_REV++;b.gy=groundH(tx+b.w/2,ty+b.h/2);
   for(const g of S.gobs){if(g.bed===b){g.bed=null;if(g.state==='sleep'||g.state==='toBed'){g.state='idle';g.st=0;}}
     if(g.target===b){g.target=null;g.work=0;g.state=g.carry&&g.amt>0?'haul':'idle';g.st=0;}}
   syncLaundry();rebuildWorld();recount();MOVE=null;planMarker={b,until:G.t+6};saveGame();A.build();toast2(BT[b.key].name+' moved. Upgrades and supplies kept.');return true;
@@ -2017,7 +2017,7 @@ function drawHome(){
 function drawWorkUI(){
   if(!workVisible())return;
   const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
-  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingCargo()?waitingCargo()+' storage wait':scoutRun()&&scoutRun().left<=0?'Scouts back!':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
+  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(blockedHaulers()?blockedHaulers()+' route blocked':waitingCargo()?waitingCargo()+' storage wait':scoutRun()&&scoutRun().left<=0?'Scouts back!':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
   if(!workOpen){ctx.restore();return;}
   if(planOpen){drawPlanUI();ctx.restore();return;}
   if(scoutOpen){drawScoutUI();ctx.restore();return;}
@@ -2029,7 +2029,7 @@ function drawWorkUI(){
   WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
     const detail=f[0]==='balanced'?S.gobs.length+' goblins':(counts[f[2]]||0)+' / '+slots[f[2]]+' jobs';txt3(detail,q.x+q.w-12,q.y+25,11,'#d1e6dc','right',700,false);});
-  txt3(waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
+  txt3(blockedHaulers()?'Route blocked: open a dry route to the Hall or a Store.':waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
   const q=supperR(),left=supperLeft();ctx.fillStyle=left?'#66582e':S.res.food>=30?'#735131':'#434547';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
   txt3(left?'SUPPER RUSH: '+Math.ceil(left)+'s left':'BROOD SUPPER - 30 food',q.x+q.w/2,q.y+19,12,'#ffedc2','center',800,false);
   txt3('Workers: +30% walking and harvest speed for 90s',q.x+q.w/2,q.y+37,10,'#d9e4c7','center',700,false);const sc=scoutLinkR();ctx.fillStyle=scoutRun()&&scoutRun().left<=0?'#686c39':'#3e6158';rrp(sc.x,sc.y,sc.w,sc.h,8);ctx.fill();txt3('SCOUTING PARTY',sc.x+sc.w/2,sc.y+18,10,'#e5efcd','center',800,false);txt3(scoutRun()?(scoutRun().left<=0?'Supplies ready':Math.ceil(scoutRun().left)+'s to return'):'Provision a run',sc.x+sc.w/2,sc.y+34,10,'#cbdcc4','center',600,false);const pl=planLinkR();ctx.fillStyle='#615d46';rrp(pl.x,pl.y,pl.w,pl.h,8);ctx.fill();txt3('VILLAGE PLANNER',pl.x+pl.w/2,pl.y+18,10,'#f0e8cc','center',800,false);txt3('Reclaim building space',pl.x+pl.w/2,pl.y+34,9,'#ded9c4','center',600,false);
@@ -2281,6 +2281,35 @@ function haulDropoff(g){
     const d=Math.hypot(x-g.x,y-g.y);if(d<bd){bd=d;best=[x,y];building=b;}}
   return {x:best[0],y:best[1],building};
 }
+// v257: haulers follow dry four-way routes, choosing useful completed roads.
+let HAUL_REV=0;
+function haulRoute(g,h){
+  const sx=clamp(Math.floor(g.x),0,MAP-1),sy=clamp(Math.floor(g.y),0,MAP-1),ex=clamp(Math.floor(h.x),0,MAP-1),ey=clamp(Math.floor(h.y),0,MAP-1);
+  const start=sy*MAP+sx,end=ey*MAP+ex,origin=occ(sx,sy),dest=occ(ex,ey),cover=new Map();
+  for(const b of S.buildings)for(let y=b.ty;y<b.ty+b.h;y++)for(let x=b.tx;x<b.tx+b.w;x++)cover.set(y*MAP+x,b);
+  const valid=(x,y)=>{if(x<0||y<0||x>=MAP||y>=MAP||tiles[y][x].t===2)return false;const b=cover.get(y*MAP+x);return !b||b.key==='road'||b===origin||b===dest;};
+  if(!valid(ex,ey))return null;
+  const cost=new Float64Array(MAP*MAP).fill(Infinity),prev=new Int32Array(MAP*MAP).fill(-1),done=new Uint8Array(MAP*MAP),open=[start];cost[start]=0;
+  const heur=i=>(Math.abs(i%MAP-ex)+Math.abs(Math.floor(i/MAP)-ey))*.74;
+  while(open.length){let at=0;for(let i=1;i<open.length;i++)if(cost[open[i]]+heur(open[i])<cost[open[at]]+heur(open[at]))at=i;
+    const id=open.splice(at,1)[0];if(done[id])continue;if(id===end){const path=[];let q=end;while(q!==start){path.push([q%MAP+.5,Math.floor(q/MAP)+.5]);q=prev[q];}path.reverse();return path;}done[id]=1;
+    const x=id%MAP,y=Math.floor(id/MAP);for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(!valid(nx,ny))continue;const ni=ny*MAP+nx;if(done[ni])continue;
+      const b=cover.get(ni),nc=cost[id]+(b&&b.key==='road'&&b.pop>=1?.74:1);if(nc<cost[ni]){cost[ni]=nc;prev[ni]=id;open.push(ni);}}
+  }return null;
+}
+function haulWaypoint(g,h,dt){
+  if(Math.hypot(g.x-h.x,g.y-h.y)<.14)return {x:h.x,y:h.y,final:true};
+  const key=Math.floor(h.x)+','+Math.floor(h.y)+','+HAUL_REV;
+  if(!g.nav||g.nav.key!==key||!g.nav.path&&((g.nav.retry-=dt)<=0))g.nav={key,path:haulRoute(g,h),i:0,retry:3};
+  const n=g.nav;if(!n.path){g.routeBlocked=true;return null;}g.routeBlocked=false;
+  while(n.i<n.path.length&&Math.hypot(g.x-n.path[n.i][0],g.y-n.path[n.i][1])<.14)n.i++;
+  if(n.i<n.path.length){const p=n.path[n.i];return {x:p[0],y:p[1],final:false};}return {x:h.x,y:h.y,final:true};
+}
+function drawHaulRoutes(){
+  if(FP.on||S.mode!=='village'||S.sel||workOpen||MOVE||CAM.dist/CAM.zoom>45)return;
+  ctx.save();ctx.strokeStyle='rgba(239,215,134,.62)';ctx.lineWidth=2;ctx.setLineDash([4,5]);
+  for(const g of S.gobs.slice(0,16)){if(g.state!=='haul'||!g.carry||!g.nav?.path)continue;const path=[[g.x,g.y],...g.nav.path.slice(g.nav.i)],h=haulDropoff(g);path.push([h.x,h.y]);let begun=false;ctx.beginPath();for(const p of path){const q=projPt(p[0],groundH(p[0],p[1])+.12,p[1]);if(!q)continue;if(!begun){ctx.moveTo(q[0],q[1]);begun=true;}else ctx.lineTo(q[0],q[1]);}ctx.stroke();}ctx.restore();
+}
 function storeInbound(b){return S.gobs.filter(g=>g.state==='haul'&&g.carry&&g.amt>0&&haulDropoff(g).building===b).length;}
 function resColor2(k){ return {food:'#ffe9a8',wood:'#e0a35e',stone:'#dbe4ee',gold:'#ffd34d',faith:'#ff8a4d'}[k]; }
 
@@ -2295,10 +2324,12 @@ function unloadCargo(g){
   else {g.carry=null;g.amt=0;g.cargoReady=false;g.waitStore=false;g.squash=.6;g.state='idle';g.st=rnd(.6,.1);}
   return amt;
 }
+function blockedHaulers(){return S.gobs.filter(g=>g.state==='haul'&&g.carry&&g.routeBlocked).length;}
 function waitingCargo(){return S.gobs.filter(g=>g.waitStore&&g.carry&&g.amt>0).length;}
 
 /* --------------------------------- sim --------------------------------- */
 function updateGob(g,dt){
+  if(g.state!=='haul'){g.nav=null;g.routeBlocked=false;}
   g.ph+=dt*7;
   if(g.emoteT>0){ g.emoteT-=dt; if(g.emoteT<=0) g.emote=null; }
   if(g.squash>0) g.squash=Math.max(0,g.squash-dt*3.2);
@@ -2313,7 +2344,7 @@ function updateGob(g,dt){
     const nx=g.x+dx*k, ny=g.y+dy*k;
     if((S.wx?S.wx.rain:0)>0.3&&g.splT<=0&&S.parts.length<250){ g.splT=0.34+rnd(0.2);
       S.parts.push({x:nx, y:groundH(nx,ny)+0.05, z:ny, vx:rnd(0.5,-0.5), vy:rnd(1.3,0.7), vz:rnd(0.5,-0.5), g:4.0, life:rnd(.34,.2), c:'rgba(190,206,228,0.9)', r:rnd(2.6,1.4)}); }
-    const cx=Math.round(nx), cy=Math.round(ny);
+    const cx=Math.floor(nx), cy=Math.floor(ny);
     if(cx>=0&&cy>=0&&cx<MAP&&cy<MAP&&tiles[cy][cx].t===2){ g.x+= -dy*k*0.9; g.y+= dx*k*0.9; }
     else { g.x=nx; g.y=ny; }
     g.x=clamp(g.x,0.5,MAP-0.5); g.y=clamp(g.y,0.5,MAP-0.5);
@@ -2421,10 +2452,8 @@ function updateGob(g,dt){
     case 'dig': { g.st+=dt*supperBoost(); g.work=1;
       if(g.st>3.4){ g.st=0; g.carry='gold'; g.amt=2+(g.trait.carry||0); A.coin(); g.state='haul'; g.work=0; }
       break; }
-    case 'haul': { const h=haulDropoff(g);
-      step(h.x,h.y,()=>{
-        unloadCargo(g);
-      });
+    case 'haul': { const h=haulDropoff(g),p=haulWaypoint(g,h,dt);if(!p){g.waitStore=false;break;}
+      step(p.x,p.y,()=>{if(p.final){g.nav=null;unloadCargo(g);}else if(g.nav)g.nav.i++;});
       break; }
   }
   g.anim = g.state==='sleep' ? 'sleep' : (g.moving? (g.carry?'carry':'walk') : (g.work? ((g.state==='chop'||g.state==='mine'||g.state==='dig')?'chop':'idle') : 'idle'));
@@ -2501,7 +2530,7 @@ function updateWorld(dt){
   if(S._ember<=0){ S._ember=(S.victory?rnd(0.3,0.12):rnd(0.5,0.18));
     for(const p of PROPS) if(p.fire) S.parts.push({x:p.x+rnd(0.14,-0.14), y:p.gy+0.30+rnd(0.2), z:p.y+rnd(0.14,-0.14),
       vx:rnd(0.10,-0.10), vy:rnd(0.85,0.45), vz:rnd(0.10,-0.10), g:-0.25, life:rnd(1.3,0.7), c:pick(['#ffd36b','#ff9a4d','#fff2c4']), r:rnd(4,2)}); }
-  for(const b of S.buildings){ if(b.pop<1){ b.t+=dt; b.pop=Math.min(1,b.t*1.7); if(b.pop>=1){ recount(); if(b.key==='hut'&&S.mode==='village') syncLaundry(); } } }
+  for(const b of S.buildings){ if(b.pop<1){ b.t+=dt; b.pop=Math.min(1,b.t*1.7); if(b.pop>=1){ HAUL_REV++;recount(); if(b.key==='hut'&&S.mode==='village') syncLaundry(); } } }
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){
     const c=tiles[y][x];
     if(c.regrow!=null&&occ(x,y)){ c.regrow=null; c.deco=null; }
@@ -6552,7 +6581,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawHome(); drawPlanMarker(); drawMoveUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawHaulRoutes(); drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawHome(); drawPlanMarker(); drawMoveUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
