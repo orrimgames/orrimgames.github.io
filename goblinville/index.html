@@ -4673,6 +4673,7 @@ function fpDowned(){
   fpExit();
 }
 function gatherRank(){const n=S.secrets.gatherXP||0;return n>=60?3:n>=20?2:1;}
+function gatherBlocked(x,y){const b=occ(x,y);return !!b&&b.key!=='road';}
 function fpGatherTarget(){
   if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
   let best=null,dist=2.6;
@@ -4680,7 +4681,7 @@ function fpGatherTarget(){
     const c=tiles[y][x];if(occ(x,y)||(c.deco!=='tree'&&c.deco!=='shroom'&&c.deco!=='rock'&&c.t!==3))continue;
     const dx=x+.5-FP.x,dy=y+.5-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
     if(d>=dist||a>.42)continue;
-    let blocked=false;for(let i=1;i<=8;i++)if(occ(Math.floor(FP.x+dx*i/9),Math.floor(FP.y+dy*i/9))){blocked=true;break;}
+    let blocked=false;for(let i=1;i<=8;i++)if(gatherBlocked(Math.floor(FP.x+dx*i/9),Math.floor(FP.y+dy*i/9))){blocked=true;break;}
     if(!blocked){best={x,y,c,kind:c.deco==='tree'?'wood':c.deco==='shroom'?'food':'stone',amount:(c.deco==='tree'?4:c.deco==='shroom'?3:2)+gatherRank()-1};dist=d;}
   }return best;
 }
@@ -4698,6 +4699,11 @@ function fpGather(){
 }
 function drawGatherHint(){
   const t=fpGatherTarget();if(!t||marketBuilding()||kitchenPanelBuilding())return;
+  ctx.save();ctx.beginPath();ctx.rect(0,145,W,Math.max(0,H-360));ctx.clip();
+  const pts=[];for(let i=0;i<=32;i++){const a=i*TAU/32,x=t.x+.5+Math.cos(a)*.45,y=t.y+.5+Math.sin(a)*.45,p=projPt(x,groundH(x,y)+.08,y);if(p)pts.push(p);}
+  if(pts.length>24){ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();
+    ctx.fillStyle='rgba(246,223,121,.16)';ctx.fill();ctx.strokeStyle='#ffe69b';ctx.lineWidth=2.5;ctx.stroke();}
+  ctx.restore();
   const w=Math.min(300,W-24);ctx.fillStyle='rgba(31,46,26,.91)';rrp((W-w)/2,H-202,w,34,9);ctx.fill();
   const full=capOf(t.kind)-S.res[t.kind]<t.amount,cool=FP.gatherCd||0;
   const label=full?t.kind.toUpperCase()+' STORAGE FULL':cool>0?'GATHERING - ready in '+cool.toFixed(1)+'s':(t.kind==='wood'?'CHOP TREE':t.kind==='stone'?'MINE STONE':'PICK SHROOMS')+' - '+TAPW()+' for +'+t.amount+' '+t.kind;
