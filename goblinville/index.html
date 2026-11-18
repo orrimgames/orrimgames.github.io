@@ -1820,7 +1820,7 @@ function serveSupper(){
 }
 function tickSupper(dt){if(S.mode!=='village')return;const left=supperLeft();if(left<=0)return;S.secrets.supperLeft=Math.max(0,left-Math.max(0,dt));if(!S.secrets.supperLeft){toast2('Supper rush ends. The brood catches its breath.');}}
 function supperR(){const r=workPanelR();return {x:r.x+12,y:r.y+352,w:r.w-24,h:48};}
-function workVisible(){return !marketBuilding()&&!storeSelected()&&!foresterSelected()&&!kitchenPanelBuilding()&&S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
+function workVisible(){return !farmSelected()&&!marketBuilding()&&!storeSelected()&&!foresterSelected()&&!kitchenPanelBuilding()&&S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
 function workBtnR(){return {x:14,y:FP.on?154:508,w:FP.on?112:sideBtnW(),h:42};}
 function workPanelR(){const w=Math.min(344,W-24),h=414;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function workRowR(i){const r=workPanelR();return {x:r.x+12,y:r.y+84+i*47,w:r.w-24,h:40};}
@@ -2259,7 +2259,7 @@ function tickClock(dt){
   if(S.dayT<t0) S._dawnPulse=1;
 }
 function updateWorld(dt){
-  tickSupper(dt);tickExports(dt);
+  tickSupper(dt);tickExports(dt);tickFarmCare(dt);
   checkQuest(); checkGoals(); checkBadges(); tickHints(dt); tickShare(dt);   // v100: all three milestone rails sample every tick - a badge true for under 2s used to be missed
   glTick(dt);   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
@@ -2467,6 +2467,43 @@ function drawStorePanel(){
   ctx.fillStyle=b.level>=2?'#4b4d38':'#695137';rrp(u.x,u.y,u.w,u.h,8);ctx.fill();
   txt3(b.level>=2?'DEEP STORES INSTALLED':'EXPAND: 80 wood + 40 stone + 20 gold',u.x+u.w/2,u.y+19,10,'#fff1d2','center',800,false);
   txt3('+500 capacity per resource from this store',u.x+u.w/2,u.y+37,10,'#dfebca','center',700,false);ctx.restore();
+}
+// v248: help the farmers yourself. No crop or storage loss on blocked harvests.
+function farmSelected(){const b=S.pick;return b&&b.key==='farm'&&S.buildings.includes(b)&&S.mode==='village'&&!S.sel&&!FP.battle&&!FP.interior&&!S.sail?b:null;}
+function farmTend(b){
+  if(!b||b.key!=='farm'||!S.buildings.includes(b)||b.pop<1||(b.tendCd||0)>0||!b.crops)return false;
+  if(b.crops.every(c=>c>=1)){toast2('All crops ripe - harvest first');return false;}
+  b.crops=b.crops.map(c=>Math.min(1,c+.2));b.tendCd=15;saveGame();A.pick();toast2('Field tended: +20% growth to every crop');return true;
+}
+function farmHarvest(b){
+  if(!b||b.key!=='farm'||!S.buildings.includes(b)||b.pop<1||!b.crops)return false;
+  const ripe=b.crops.filter(c=>c>=1).length,n=Math.min(ripe,Math.floor(Math.max(0,capOf('food')-S.res.food)/3));
+  if(!n){A.deny();toast2(ripe?'Need room for 3 food - crops stay ripe':'No ripe crops yet');return false;}
+  let left=n;for(let i=0;i<b.crops.length&&left;i++)if(b.crops[i]>=1){b.crops[i]=0;left--;}
+  addRes('food',n*3);saveGame();A.pick();floatW(b.tx+1,b.gy+1,b.ty+1,'+'+n*3+' food','#ffe9a8');return true;
+}
+function tickFarmCare(dt){if(S.mode!=='village')return;for(const b of S.buildings)if(b.key==='farm')b.tendCd=Math.max(0,(b.tendCd||0)-Math.max(0,dt));}
+function farmPanelR(){const w=Math.min(324,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-206,w,h:206};}
+function farmActionR(i){const r=farmPanelR();return {x:r.x+12,y:r.y+100+i*47,w:r.w-24,h:40};}
+function farmPanelTap(x,y){const b=farmSelected();if(!b)return false;const r=farmPanelR();if(!inR(x,y,r))return false;
+  if(x>r.x+r.w-42&&y<r.y+36){S.pick=null;A.blip();return true;}
+  if(inR(x,y,farmActionR(0)))farmHarvest(b);if(inR(x,y,farmActionR(1)))farmTend(b);return true;
+}
+function farmTargetFP(){
+  if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
+  let best=null,dist=4.2;for(const b of S.buildings){if(b.key!=='farm')continue;const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);if(d<dist&&a<.55){best=b;dist=d;}}return best;
+}
+function farmOpenFP(){const b=farmTargetFP();if(!b)return false;S.pick=b;A.blip();return true;}
+function drawFarmPanel(){
+  if(S.story||S.chronOpen)return;const b=farmSelected();
+  if(!b){if(farmTargetFP()){const w=Math.min(300,W-24);ctx.fillStyle='rgba(30,48,29,.94)';rrp((W-w)/2,H-154,w,34,9);ctx.fill();txt3('FARM FIELD - '+TAPW()+' to tend',W/2,H-132,12,'#e2efbe','center',800,false);}return;}
+  const r=farmPanelR();ctx.save();ctx.fillStyle='rgba(28,44,27,.97)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();
+  txt3('FARM FIELD',r.x+12,r.y+23,14,'#e2efbe','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
+  txt3(b.pop<1?'Under construction':'Help the farmers - 3 food per ripe crop',r.x+12,r.y+45,11,'#e3e7cf','left',700,false);
+  (b.crops||[]).forEach((c,i)=>{const x=r.x+12+i*(r.w-24)/4,w=(r.w-36)/4-4;ctx.fillStyle='#394e32';rrp(x,r.y+57,w,28,5);ctx.fill();ctx.fillStyle=c>=1?'#c3a452':'#6f984c';rrp(x,r.y+57,w*clamp(c,0,1),28,5);ctx.fill();txt3(c>=1?'RIPE':Math.floor(c*100)+'%',x+w/2,r.y+75,10,'#fff4d5','center',800,false);});
+  const ripe=(b.crops||[]).filter(c=>c>=1).length,h=farmActionR(0),t=farmActionR(1);ctx.fillStyle=ripe&&capOf('food')-S.res.food>=3?'#6b6834':'#3d4f36';rrp(h.x,h.y,h.w,h.h,8);ctx.fill();
+  txt3('HARVEST RIPE - '+ripe+' ready',h.x+h.w/2,h.y+25,12,'#fff0bd','center',800,false);
+  ctx.fillStyle=(b.tendCd||0)>0?'#414d38':'#506a42';rrp(t.x,t.y,t.w,t.h,8);ctx.fill();txt3((b.tendCd||0)>0?'TEND AGAIN IN '+Math.ceil(b.tendCd)+'s':'TEND FIELD - +20% growth',t.x+t.w/2,t.y+25,12,'#e0edc4','center',800,false);ctx.restore();
 }
 function buildForesterMesh(){
   const m=MB(),T=M4.id(),wood=hex('#a57743'),green=hex('#4d9863');
@@ -4862,7 +4899,7 @@ function fpGather(){
   if(t.kind!=='stone'){rebuildWorld();recount();}saveGame();return true;
 }
 function drawGatherHint(){
-  const t=fpGatherTarget();if(!t||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
+  const t=fpGatherTarget();if(!t||farmSelected()||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
   ctx.save();ctx.beginPath();ctx.rect(0,145,W,Math.max(0,H-360));ctx.clip();
   const pts=[];for(let i=0;i<=32;i++){const a=i*TAU/32,x=t.x+.5+Math.cos(a)*.45,y=t.y+.5+Math.sin(a)*.45,p=projPt(x,groundH(x,y)+.08,y);if(p)pts.push(p);}
   if(pts.length>24){ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();
@@ -4936,7 +4973,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
-  if(workTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -4994,7 +5031,7 @@ function fpTap(x,y){
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
   if(starTap(x,y)) return true;
   if(fishTap()) return true;
-  if(storeOpenFP()||foresterOpenFP()||marketOpenFP()||kitchenOpenFP())return true;
+  if(farmOpenFP()||storeOpenFP()||foresterOpenFP()||marketOpenFP()||kitchenOpenFP())return true;
   if(fpGather())return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
@@ -6237,7 +6274,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawWorkUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -6255,7 +6292,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawWorkUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -6289,7 +6326,7 @@ function packSave(){
     ach:S.ach||{}, seen:S.seen||{}, secrets:S.secrets||{},
     tut:S.tut, metGob:S.metGob?1:0, sawMap:S.sawMap?1:0, tapCombo:S.tapCombo||0, dawnSeen:S.dawnSeen?1:0, elderHush:S.elderHush?1:0, hints:S.hints||{},
     victory:S.victory?1:0, ceremonyDone:S.ceremonyDone?1:0, goalDone:S.goalDone||0, boat:(S.boat?{x:S.boat.x,y:S.boat.y,yaw:S.boat.yaw}:null),
-    builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0,kpaused:!!b.kpaused,ft:b.ft||0,mexport:!!b.mexport})),
+    builds:S.buildings.map(b=>({key:b.key,tx:b.tx,ty:b.ty,t:b.t,pop:b.pop,hp:b.hp,maxhp:b.maxhp,crops:b.crops,level:b.level,kt:b.kt||0,kpaused:!!b.kpaused,ft:b.ft||0,mexport:!!b.mexport,tendCd:b.tendCd||0})),
     gobs:S.gobs.filter(g=>!g.side).map(g=>({x:g.x,y:g.y,face:g.face,name:g.name,trait:g.trait,job:g.job,spd:g.spd,speed:g.speed,size:g.size,mood:g.mood,soldier:g.soldier?1:0,hp:g.hp,fem:g.fem?1:0,vet:g.vet?1:0,scholar:g.scholar?1:0,carry:g.carry,amt:g.amt||0,cargoReady:!!g.cargoReady})),
     chron:chronTrim(S.chronicle,60),
     cam:{tx:CAM.tx,ty:CAM.ty,zoom:CAM.zoom,yaw:CAM.yaw,pitch:CAM.pitch},
@@ -6313,7 +6350,7 @@ function restoreSave(sv){
     flattenArea(bb.tx,bb.ty,T.w,T.h);
     const b=makeBuilding(bb.key,bb.tx,bb.ty);
     b.t=bb.t||0; b.pop=bb.pop||0; b.hp=(bb.hp==null?b.hp:bb.hp); b.maxhp=bb.maxhp||b.maxhp;
-    b.kt=Math.min(20,Math.max(0,Number(bb.kt)||0)); b.kpaused=!!bb.kpaused;b.mexport=!!bb.mexport; b.ft=Math.min(30,Math.max(0,Number(bb.ft)||0));
+    b.kt=Math.min(20,Math.max(0,Number(bb.kt)||0)); b.kpaused=!!bb.kpaused;b.mexport=!!bb.mexport;b.tendCd=Math.max(0,Math.min(15,Number(bb.tendCd)||0)); b.ft=Math.min(30,Math.max(0,Number(bb.ft)||0));
     b.crops=(bb.key==='farm'&&bb.crops)?bb.crops:b.crops; b.level=bb.level||1;
     b.gy=groundH(bb.tx+T.w/2,bb.ty+T.h/2); }
   { const fx=Math.round(SITE.x)+0.5, fz=Math.round(SITE.y)+2.6;
@@ -8716,7 +8753,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
-  if(workTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
