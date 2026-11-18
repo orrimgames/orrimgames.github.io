@@ -1779,12 +1779,22 @@ function workSlots(){
   if(!rocks) slots.miner=0;
   return slots;
 }
+// v251: Balanced shares a small brood across the available resources.
+function workQuotas(slots,n,focus=workFocus()[0]){
+  const jobs=workOrder(),q={farmer:0,woodcutter:0,miner:0,digger:0};
+  if(focus!=='balanced'){for(const j of jobs){q[j]=Math.min(n,slots[j]);n-=q[j];}return q;}
+  while(n>0){let added=0;for(const j of jobs)if(n>0&&q[j]<slots[j]){q[j]++;n--;added++;}if(!added)break;}return q;
+}
+function releaseWork(g){
+  g.job='idler';
+  if(g.carry&&g.amt>0){g.state='haul';g.work=0;g.target=null;}
+  else if(g.state!=='sleep'&&g.state!=='toBed'){if(g.pal&&g.pal.pal===g)g.pal.pal=null;g.pal=null;g.state='idle';g.st=0;g.work=0;g.target=null;}
+}
 function recount(){
   S.popCap=6; for(const b of S.buildings) if(BT[b.key].pop&&b.pop>=1) S.popCap+=BT[b.key].pop;
-  const slots=workSlots();
-  if(workFocus()[0]!=='balanced'){let left=S.gobs.length;for(const j of workOrder()){slots[j]=Math.min(left,slots[j]);left-=slots[j];}}
+  const slots=workQuotas(workSlots(),S.gobs.length);
   const used={farmer:0,woodcutter:0,miner:0,digger:0};
-  for(const g of S.gobs){ if(g.job!=='idler'&&used[g.job]<slots[g.job]) used[g.job]++; else g.job='idler'; }
+  for(const g of S.gobs){ if(g.job!=='idler'&&used[g.job]<slots[g.job]) used[g.job]++; else releaseWork(g); }
   for(const g of S.gobs){
     if(g.job!=='idler') continue;
     for(const j of workOrder()){
@@ -1801,12 +1811,7 @@ function setWorkFocus(key){
   if(!WORK_FOCUS.some(f=>f[0]===key)||S.mode!=='village'||FP.battle||FP.interior||S.sail)return false;
   if(workFocus()[0]===key)return false;
   S.secrets.workFocus=key;
-  for(const g of S.gobs){
-    g.job='idler';
-    // A half-filled harvest is cargo too. Deliver it instead of discarding it.
-    if(g.carry&&g.amt>0){g.state='haul';g.work=0;g.target=null;}
-    else if(g.state!=='sleep'&&g.state!=='toBed'){if(g.pal&&g.pal.pal===g)g.pal.pal=null;g.pal=null;g.state='idle';g.st=0;g.work=0;g.target=null;}
-  }
+  for(const g of S.gobs)releaseWork(g);
   recount();saveGame();A.blip();toast2('Work focus: '+workFocus()[1]+'. Built workplaces set the job limits.');return true;
 }
 // v245: invest food in a short village work rush. Simulation time only.
@@ -1839,7 +1844,7 @@ function drawWorkUI(){
   const r=workPanelR(),slots=workSlots(),counts={};for(const g of S.gobs)counts[g.job]=(counts[g.job]||0)+1;
   ctx.fillStyle='rgba(20,36,41,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#83b8ad';ctx.lineWidth=1;ctx.stroke();
   txt3('PUT THE BROOD TO WORK',r.x+14,r.y+24,14,'#e1f4d5','left',800,false);txt3('X',r.x+r.w-22,r.y+24,14,'#fff','center',800,false);
-  txt3('Fill this resource first, then the other jobs.',r.x+14,r.y+47,11,'#d0e1df','left',700,false);
+  txt3(workFocus()[0]==='balanced'?'Balanced shares workers across resources.':'Fill this resource first, then the other jobs.',r.x+14,r.y+47,11,'#d0e1df','left',700,false);
   txt3('More completed workplaces = more job slots.',r.x+14,r.y+64,11,'#b6cbc6','left',600,false);
   WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
