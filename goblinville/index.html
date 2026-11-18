@@ -1786,7 +1786,7 @@ function workQuotas(slots,n,focus=workFocus()[0]){
   while(n>0){let added=0;for(const j of jobs)if(n>0&&q[j]<slots[j]){q[j]++;n--;added++;}if(!added)break;}return q;
 }
 function releaseWork(g){
-  g.job='idler';
+  g.noWork=false;g.workRetry=0;g.workNav=null;g.workBlocked=false;g.job='idler';
   if(g.carry&&g.amt>0){g.state='haul';g.work=0;g.target=null;}
   else if(g.state!=='sleep'&&g.state!=='toBed'){if(g.pal&&g.pal.pal===g)g.pal.pal=null;g.pal=null;g.state='idle';g.st=0;g.work=0;g.target=null;}
 }
@@ -2017,7 +2017,7 @@ function drawHome(){
 function drawWorkUI(){
   if(!workVisible())return;
   const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
-  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(blockedWorkers()?blockedWorkers()+' work route blocked':blockedHaulers()?blockedHaulers()+' route blocked':waitingCargo()?waitingCargo()+' storage wait':scoutRun()&&scoutRun().left<=0?'Scouts back!':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
+  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingWork()?'No work: '+waitingWork():blockedWorkers()?blockedWorkers()+' work route blocked':blockedHaulers()?blockedHaulers()+' route blocked':waitingCargo()?waitingCargo()+' storage wait':scoutRun()&&scoutRun().left<=0?'Scouts back!':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
   if(!workOpen){ctx.restore();return;}
   if(planOpen){drawPlanUI();ctx.restore();return;}
   if(scoutOpen){drawScoutUI();ctx.restore();return;}
@@ -2029,7 +2029,7 @@ function drawWorkUI(){
   WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
     const detail=f[0]==='balanced'?S.gobs.length+' goblins':(counts[f[2]]||0)+' / '+slots[f[2]]+' jobs';txt3(detail,q.x+q.w-12,q.y+25,11,'#d1e6dc','right',700,false);});
-  txt3(blockedWorkers()?'Work route blocked: open a dry way to the job.':blockedHaulers()?'Route blocked: open a dry route to the Hall or a Store.':detouringHaulers()?'Detour: '+detouringHaulers()+' hauling to a reachable drop-off.':waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
+  txt3(waitingWork()?'No reachable work: open a route or build a workplace.':blockedWorkers()?'Work route blocked: open a dry way to the job.':blockedHaulers()?'Route blocked: open a dry route to the Hall or a Store.':detouringHaulers()?'Detour: '+detouringHaulers()+' hauling to a reachable drop-off.':waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
   const q=supperR(),left=supperLeft();ctx.fillStyle=left?'#66582e':S.res.food>=30?'#735131':'#434547';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
   txt3(left?'SUPPER RUSH: '+Math.ceil(left)+'s left':'BROOD SUPPER - 30 food',q.x+q.w/2,q.y+19,12,'#ffedc2','center',800,false);
   txt3('Workers: +30% walking and harvest speed for 90s',q.x+q.w/2,q.y+37,10,'#d9e4c7','center',700,false);const sc=scoutLinkR();ctx.fillStyle=scoutRun()&&scoutRun().left<=0?'#686c39':'#3e6158';rrp(sc.x,sc.y,sc.w,sc.h,8);ctx.fill();txt3('SCOUTING PARTY',sc.x+sc.w/2,sc.y+18,10,'#e5efcd','center',800,false);txt3(scoutRun()?(scoutRun().left<=0?'Supplies ready':Math.ceil(scoutRun().left)+'s to return'):'Provision a run',sc.x+sc.w/2,sc.y+34,10,'#cbdcc4','center',600,false);const pl=planLinkR();ctx.fillStyle='#615d46';rrp(pl.x,pl.y,pl.w,pl.h,8);ctx.fill();txt3('VILLAGE PLANNER',pl.x+pl.w/2,pl.y+18,10,'#f0e8cc','center',800,false);txt3('Reclaim building space',pl.x+pl.w/2,pl.y+34,9,'#ded9c4','center',600,false);
@@ -2302,6 +2302,27 @@ function haulRoute(g,h){
       const b=cover.get(ni),nc=cost[id]+(b&&b.key==='road'&&b.pop>=1?.74:1);if(nc<cost[ni]){cost[ni]=nc;prev[ni]=id;open.push(ni);}}
   }return null;
 }
+// v260: choose work that can be reached, not the nearest stranded resource.
+function reachableResource(g,pred){
+  const sx=clamp(Math.floor(g.x),0,MAP-1),sy=clamp(Math.floor(g.y),0,MAP-1),origin=occ(sx,sy),cover=new Map();
+  for(const b of S.buildings)if(b.key!=='road'&&b!==origin)for(let y=b.ty;y<b.ty+b.h;y++)for(let x=b.tx;x<b.tx+b.w;x++)cover.set(y*MAP+x,b);
+  const seen=new Uint8Array(MAP*MAP),queue=[sy*MAP+sx];seen[queue[0]]=1;
+  for(let i=0;i<queue.length;i++){const id=queue[i],x=id%MAP,y=Math.floor(id/MAP),c=tiles[y][x];if(c.t!==2&&!cover.has(id)&&pred(c))return [x,y];
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,ni=ny*MAP+nx;if(nx<0||ny<0||nx>=MAP||ny>=MAP||seen[ni]||tiles[ny][nx].t===2||cover.has(ni))continue;seen[ni]=1;queue.push(ni);}}
+  return null;
+}
+function chooseReachableWork(g){
+  let target=null,state='';
+  if(g.job==='woodcutter'){target=reachableResource(g,c=>c.deco==='tree');state='toTree';}
+  else if(g.job==='miner'){target=reachableResource(g,c=>c.t===3||c.deco==='rock');state='toRock';}
+  else if(g.job==='farmer'||g.job==='digger'){
+    const key=g.job==='farmer'?'farm':'mine',list=S.buildings.filter(b=>b.key===key&&b.pop>=1).sort((a,b)=>Math.hypot(a.tx-g.x,a.ty-g.y)-Math.hypot(b.tx-g.x,b.ty-g.y));
+    for(const b of list){const h={x:b.tx+b.w/2,y:key==='farm'?b.ty+b.h/2:b.ty+b.h+.6};if(haulRoute(g,h)!==null){target=b;break;}}state=key==='farm'?'toFarm':'toMine';
+  }else return false;
+  if(!target){g.noWork=true;g.st=3;g.workNav=null;return false;}
+  g.noWork=false;g.workRetry=0;g.workBlocked=false;g.workNav=null;g.target=target;g.state=state;return true;
+}
+function waitingWork(){return S.gobs.filter(g=>g.noWork&&g.state==='idle'&&g.job!=='idler').length;}
 function routeWaypoint(g,h,dt,slot,blocked){
   if(Math.hypot(g.x-h.x,g.y-h.y)<.14){g[blocked]=false;return {x:h.x,y:h.y,final:true};}
   const key=Math.floor(h.x)+','+Math.floor(h.y)+','+HAUL_REV;
@@ -2349,7 +2370,7 @@ function updateGob(g,dt){
   function step(txp,typ,arrive){
     // v259: workers use the same dry, road-aware routes on the way out and home.
     if(onWorkTrip(g)&&S.mode==='village'){
-      const p=routeWaypoint(g,{x:txp,y:typ},dt,'workNav','workBlocked');if(!p)return;
+      const p=routeWaypoint(g,{x:txp,y:typ},dt,'workNav','workBlocked');if(!p){if(g.state!=='toBed'){g.workRetry=(g.workRetry||0)+dt;if(g.workRetry>=3){g.state='idle';g.st=0;g.noWork=false;g.workRetry=0;g.workNav=null;}}return;}g.workRetry=0;
       if(!p.final){txp=p.x;typ=p.y;arrive=()=>{if(g.workNav)g.workNav.i++;};}
     }
     const dx=txp-g.x, dy=typ-g.y, d=Math.hypot(dx,dy);
@@ -2399,13 +2420,10 @@ function updateGob(g,dt){
           const d=Math.hypot(o.x-g.x,o.y-g.y); if(d<bd){bd=d;pal=o;} }
         if(pal){ g.pal=pal; pal.pal=g; g.state='toChat'; pal.state='toChat'; break; }
       }
-      if(g.job==='farmer'){
-        const f=S._farms||S.buildings;
-        if(f.length){ g.target=pick(f); g.state='toFarm'; break; }
+      if(['farmer','woodcutter','miner','digger'].includes(g.job)){
+        if(g.noWork&&g.st>0)break;
+        chooseReachableWork(g);break;
       }
-      if(g.job==='woodcutter'){ const t=findTile(c=>c.deco==='tree',Math.round(g.x),Math.round(g.y)); if(t){ g.target=t; g.state='toTree'; break; } g.job='idler'; g._seek=1; }
-      if(g.job==='miner'){ const t=findTile((c)=>c.t===3||c.deco==='rock',Math.round(g.x),Math.round(g.y)); if(t){ g.target=t; g.state='toRock'; break; } g.job='idler'; g._seek=1; }
-      if(g.job==='digger'){ const m=S._mines||[]; if(m.length){ g.target=pick(m); g.state='toMine'; break; } g.job='idler'; g._seek=1; }
       if(g._seek){ g._seek=0; recount(); g.st=rnd(0.8,0.2); break; }   // v39: colonists seek work - unworkable jobs re-slot instead of standing idle
       if(g.st<=0){
         g.state='wander'; g.st=rnd(3,1.2);
