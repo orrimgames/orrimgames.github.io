@@ -2507,9 +2507,33 @@ function farmTargetFP(){
   let best=null,dist=4.2;for(const b of S.buildings){if(b.key!=='farm')continue;const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);if(d<dist&&a<.55){best=b;dist=d;}}return best;
 }
 function farmOpenFP(){const b=farmTargetFP();if(!b)return false;S.pick=b;A.blip();return true;}
+// v250: see which fields need a visit without opening every panel.
+function farmBadge(b){
+  if(b.pop<1)return 'FIELD: building';
+  const n=(b.crops||[]).filter(c=>c>=1).length;
+  if(n)return capOf('food')-S.res.food<3?'RIPE: food storage full':'HARVEST: '+n+' ripe - +'+Math.min(n,Math.floor((capOf('food')-S.res.food)/3))*3+' food';
+  if(!(b.tendCd>0))return 'FIELD: ready to tend';
+  return 'GROWING: tend in '+Math.ceil(b.tendCd)+'s';
+}
+function farmBadgeR(b){
+  if(FP.on||CAM.dist/CAM.zoom>65)return null;const p=projPt(b.tx+1,b.gy+1.7,b.ty+1);
+  if(!p||p[0]<88||p[0]>W-88||p[1]<140||p[1]>H-BARH-32)return null;
+  return {x:p[0]-88,y:p[1]-16,w:176,h:32};
+}
+function farmBadgeTap(x,y){
+  if(S.sel||FP.on||S.mode!=='village'||S.story||S.chronOpen||workOpen)return false;
+  for(const b of S.buildings){if(b.key!=='farm')continue;const r=farmBadgeR(b);if(r&&inR(x,y,r)){S.pick=b;A.blip();return true;}}return false;
+}
+function drawFarmBadges(){
+  if(FP.on||S.sel||S.mode!=='village'||S.story||S.chronOpen||workOpen)return;
+  for(const b of S.buildings){if(b.key!=='farm'||b===farmSelected())continue;const r=farmBadgeR(b);if(!r)continue;
+    ctx.save();const ripe=(b.crops||[]).some(c=>c>=1);ctx.fillStyle=ripe?'rgba(98,77,30,.96)':'rgba(37,59,33,.96)';rrp(r.x,r.y,r.w,r.h,8);ctx.fill();ctx.strokeStyle=ripe?'#e2c66f':'#97bc83';ctx.lineWidth=1;ctx.stroke();txt3(farmBadge(b),r.x+r.w/2,r.y+21,11,'#fff0c8','center',800,false);ctx.restore();
+  }
+}
 function drawFarmPanel(){
+  drawFarmBadges();
   if(S.story||S.chronOpen)return;const b=farmSelected();
-  if(!b){if(farmTargetFP()){const w=Math.min(300,W-24);ctx.fillStyle='rgba(30,48,29,.94)';rrp((W-w)/2,H-154,w,34,9);ctx.fill();txt3('FARM FIELD - '+TAPW()+' to tend',W/2,H-132,12,'#e2efbe','center',800,false);}return;}
+  if(!b){if(farmTargetFP()){const w=Math.min(300,W-24);ctx.fillStyle='rgba(30,48,29,.94)';rrp((W-w)/2,H-164,w,48,9);ctx.fill();txt3('FARM FIELD - '+TAPW()+' to manage',W/2,H-145,12,'#e2efbe','center',800,false);txt3(farmBadge(farmTargetFP()),W/2,H-128,11,'#fff0c8','center',700,false);}return;}
   const r=farmPanelR();ctx.save();ctx.fillStyle='rgba(28,44,27,.97)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();
   txt3(b.level>=2?'FARM II - IRRIGATED':'FARM FIELD',r.x+12,r.y+23,14,'#e2efbe','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
   txt3(b.pop<1?'Under construction':'Help the farmers - 3 food per ripe crop',r.x+12,r.y+45,11,'#e3e7cf','left',700,false);
@@ -4916,7 +4940,7 @@ function fpGather(){
   if(t.kind!=='stone'){rebuildWorld();recount();}saveGame();return true;
 }
 function drawGatherHint(){
-  const t=fpGatherTarget();if(!t||farmSelected()||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
+  const t=fpGatherTarget();if(!t||farmTargetFP()||farmSelected()||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
   ctx.save();ctx.beginPath();ctx.rect(0,145,W,Math.max(0,H-360));ctx.clip();
   const pts=[];for(let i=0;i<=32;i++){const a=i*TAU/32,x=t.x+.5+Math.cos(a)*.45,y=t.y+.5+Math.sin(a)*.45,p=projPt(x,groundH(x,y)+.08,y);if(p)pts.push(p);}
   if(pts.length>24){ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();
@@ -8812,7 +8836,7 @@ function handleTap3(x,y){
     } else { A.blip(); ghostArmed=false; }
     return;
   }
-  if(marketBadgeTap(x,y)||kitchenBadgeTap(x,y))return;
+  if(farmBadgeTap(x,y)||marketBadgeTap(x,y)||kitchenBadgeTap(x,y))return;
   if(!FP.on&&glTapIso(x,y)) return;
   const g=hitGob3(x,y);
   if(g){ S.inspect={g,t:3.4}; S.metGob=1; A.blip(); g.emote='!'; g.emoteT=1.2; g.squash=0.6; return; }
