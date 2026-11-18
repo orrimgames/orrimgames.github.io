@@ -1827,14 +1827,63 @@ function tickSupper(dt){if(S.mode!=='village')return;const left=supperLeft();if(
 function supperR(){const r=workPanelR();return {x:r.x+12,y:r.y+352,w:r.w-24,h:48};}
 function workVisible(){return !farmSelected()&&!marketBuilding()&&!storeSelected()&&!foresterSelected()&&!kitchenPanelBuilding()&&S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
 function workBtnR(){return {x:14,y:FP.on?154:508,w:FP.on?112:sideBtnW(),h:42};}
-function workPanelR(){const w=Math.min(344,W-24),h=414;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
+function workPanelR(){const w=Math.min(344,W-24),h=468;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function workRowR(i){const r=workPanelR();return {x:r.x+12,y:r.y+84+i*47,w:r.w-24,h:40};}
 function workTap(x,y){
   if(!workVisible())return false;
-  if(workOpen){const r=workPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){workOpen=false;A.blip();return true;}
+  if(workOpen&&scoutOpen)return scoutTap(x,y);
+  if(workOpen){if(inR(x,y,scoutLinkR())){scoutOpen=true;A.blip();return true;}const r=workPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){workOpen=false;A.blip();return true;}
     if(inR(x,y,supperR())){serveSupper();return true;}
     for(let i=0;i<WORK_FOCUS.length;i++)if(inR(x,y,workRowR(i))){setWorkFocus(WORK_FOCUS[i][0]);return true;}return true;}
-  if(inR(x,y,workBtnR())){workOpen=true;S.pick=null;S.sel=null;S.ghost.show=false;A.blip();return true;}return false;
+  if(inR(x,y,workBtnR())){workOpen=true;scoutOpen=false;S.pick=null;S.sel=null;S.ghost.show=false;A.blip();return true;}return false;
+}
+// v254: provision one scouting party, then bring its supplies home.
+const SCOUT_ROUTES=[
+  {key:'woods',name:'BRAMBLE WOODS',time:90,cost:{food:20,wood:10},gain:{wood:50,food:8}},
+  {key:'quarry',name:'OLD QUARRY',time:120,cost:{food:25,wood:10},gain:{stone:40,gold:6}},
+  {key:'marsh',name:'REED MARSH',time:75,cost:{food:15,wood:10},gain:{food:35,gold:8}}
+];
+let scoutOpen=false;
+function scoutRun(){const q=S.secrets.scoutRun;return q&&SCOUT_ROUTES.some(r=>r.key===q.route)?q:null;}
+function scoutAllowed(){return S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
+function scoutList(obj){return Object.keys(obj).map(k=>obj[k]+' '+k).join(' + ');}
+function dispatchScout(i){
+  if(!scoutAllowed()||scoutRun())return false;const r=SCOUT_ROUTES[i];if(!r)return false;
+  if(!canPay(r.cost)){A.deny();toast2('Scouts need '+scoutList(r.cost));return false;}
+  pay(r.cost);S.secrets.scoutRun={route:r.key,left:r.time};saveGame();A.pop(2);toast2('Scouts set out for '+r.name.toLowerCase()+'.');return true;
+}
+function tickScouts(dt){
+  if(!S.started||S.mode!=='village'||S.story)return;const q=scoutRun();if(!q||q.left<=0)return;
+  q.left=Math.max(0,q.left-Math.max(0,dt));if(q.left===0){A.cheer();toast2('Scouts are back! Collect supplies in Work Focus.');saveGame();}
+}
+function claimScouts(){
+  if(!scoutAllowed())return false;const q=scoutRun();if(!q||q.left>0)return false;const r=SCOUT_ROUTES.find(r=>r.key===q.route);
+  for(const k in r.gain)if(capOf(k)-S.res[k]<r.gain[k]){A.deny();toast2('Need room for '+scoutList(r.gain)+'. Scouts keep everything safe.');return false;}
+  for(const k in r.gain)addRes(k,r.gain[k]);S.secrets.scoutRun=null;S.secrets.scoutTrips=(S.secrets.scoutTrips||0)+1;
+  saveGame();A.cheer();toast2('Scouts delivered '+scoutList(r.gain));return true;
+}
+function scoutStatus(){const q=scoutRun();return !q?'SCOUTS - provision a supply run':q.left>0?'SCOUTS - returning in '+Math.ceil(q.left)+'s':'SCOUTS BACK - collect supplies';}
+function scoutLinkR(){const r=workPanelR();return {x:r.x+12,y:r.y+410,w:r.w-24,h:44};}
+function scoutPanelR(){const w=Math.min(344,W-24),h=350;return {x:(W-w)/2,y:Math.max(146,(H-h)/2-10),w,h};}
+function scoutRowR(i){const r=scoutPanelR();return {x:r.x+12,y:r.y+104+i*65,w:r.w-24,h:58};}
+function scoutTap(x,y){
+  const r=scoutPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){scoutOpen=false;A.blip();return true;}
+  const q=scoutRun();if(q){if(q.left<=0&&inR(x,y,scoutRowR(2)))claimScouts();return true;}
+  for(let i=0;i<SCOUT_ROUTES.length;i++)if(inR(x,y,scoutRowR(i))){dispatchScout(i);return true;}return true;
+}
+function drawScoutUI(){
+  const r=scoutPanelR(),q=scoutRun();ctx.save();ctx.fillStyle='rgba(24,41,44,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#91bfa4';ctx.lineWidth=1;ctx.stroke();
+  txt3('SCOUTING PARTY',r.x+14,r.y+25,15,'#e8edc7','left',800,false);txt3('X',r.x+r.w-22,r.y+25,14,'#fff','center',800,false);
+  txt3('Local guides take supplies. Workers stay here.',r.x+14,r.y+49,11,'#d3e2d7','left',600,false);
+  txt3('One party at a time. Time passes while playing.',r.x+14,r.y+68,11,'#b7cfc4','left',600,false);
+  if(!q){SCOUT_ROUTES.forEach((a,i)=>{const b=scoutRowR(i);ctx.fillStyle=canPay(a.cost)?'#3b5c4a':'#394744';rrp(b.x,b.y,b.w,b.h,8);ctx.fill();
+    txt3(a.name+' - '+a.time+'s',b.x+10,b.y+17,11,'#f5e8bd','left',800,false);txt3('Pack '+scoutList(a.cost),b.x+10,b.y+34,11,'#dce7d7','left',600,false);txt3('Bring home '+scoutList(a.gain),b.x+10,b.y+49,11,'#b8dec1','left',700,false);});}
+  else {const a=SCOUT_ROUTES.find(a=>a.key===q.route),left=Math.max(0,q.left);txt3(a.name,r.x+r.w/2,r.y+123,14,'#f5e8bd','center',800,false);
+    txt3(left>0?'Returning in '+Math.ceil(left)+' seconds':'HOME WITH SUPPLIES',r.x+r.w/2,r.y+150,14,'#e3efce','center',800,false);
+    ctx.fillStyle='#384c44';rrp(r.x+20,r.y+169,r.w-40,10,5);ctx.fill();ctx.fillStyle='#b5c774';rrp(r.x+20,r.y+169,(r.w-40)*clamp(1-left/a.time,0,1),10,5);ctx.fill();
+    txt3(scoutList(a.gain),r.x+r.w/2,r.y+208,12,'#e7e9c7','center',700,false);
+    const b=scoutRowR(2);ctx.fillStyle=left>0?'#3c4d49':'#627646';rrp(b.x,b.y,b.w,b.h,8);ctx.fill();txt3(left>0?'OUT ON THE TRAIL':'COLLECT SUPPLIES',b.x+b.w/2,b.y+24,13,'#f1edcd','center',800,false);txt3('No supplies lost if storage is full.',b.x+b.w/2,b.y+44,10,'#d2e2cd','center',600,false);}
+  txt3((S.secrets.scoutTrips||0)+' runs delivered',r.x+r.w/2,r.y+r.h-17,10,'#a9c5b9','center',600,false);ctx.restore();
 }
 // v253: find the Hall again without moving the chief or changing the save.
 function homeVisible(){return workVisible()&&!workOpen;}
@@ -1856,8 +1905,9 @@ function drawHome(){
 function drawWorkUI(){
   if(!workVisible())return;
   const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
-  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingCargo()?waitingCargo()+' storage wait':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
+  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingCargo()?waitingCargo()+' storage wait':scoutRun()&&scoutRun().left<=0?'Scouts back!':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
   if(!workOpen){ctx.restore();return;}
+  if(scoutOpen){drawScoutUI();ctx.restore();return;}
   const r=workPanelR(),slots=workSlots(),counts={};for(const g of S.gobs)counts[g.job]=(counts[g.job]||0)+1;
   ctx.fillStyle='rgba(20,36,41,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#83b8ad';ctx.lineWidth=1;ctx.stroke();
   txt3('PUT THE BROOD TO WORK',r.x+14,r.y+24,14,'#e1f4d5','left',800,false);txt3('X',r.x+r.w-22,r.y+24,14,'#fff','center',800,false);
@@ -1869,7 +1919,8 @@ function drawWorkUI(){
   txt3(waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
   const q=supperR(),left=supperLeft();ctx.fillStyle=left?'#66582e':S.res.food>=30?'#735131':'#434547';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
   txt3(left?'SUPPER RUSH: '+Math.ceil(left)+'s left':'BROOD SUPPER - 30 food',q.x+q.w/2,q.y+19,12,'#ffedc2','center',800,false);
-  txt3('Workers: +30% walking and harvest speed for 90s',q.x+q.w/2,q.y+37,10,'#d9e4c7','center',700,false);ctx.restore();
+  txt3('Workers: +30% walking and harvest speed for 90s',q.x+q.w/2,q.y+37,10,'#d9e4c7','center',700,false);const sc=scoutLinkR();ctx.fillStyle=scoutRun()&&scoutRun().left<=0?'#686c39':'#3e6158';rrp(sc.x,sc.y,sc.w,sc.h,8);ctx.fill();txt3(scoutStatus(),sc.x+sc.w/2,sc.y+27,11,'#e5efcd','center',800,false);
+  ctx.restore();
 }
 
 function spawnGob(tx,ty,silent){
@@ -2281,7 +2332,7 @@ function tickClock(dt){
   if(S.dayT<t0) S._dawnPulse=1;
 }
 function updateWorld(dt){
-  tickSupper(dt);tickExports(dt);tickFarmCare(dt);
+  tickSupper(dt);tickExports(dt);tickFarmCare(dt);tickScouts(dt);
   checkQuest(); checkGoals(); checkBadges(); tickHints(dt); tickShare(dt);   // v100: all three milestone rails sample every tick - a badge true for under 2s used to be missed
   glTick(dt);   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
@@ -9064,6 +9115,7 @@ function deskShortcut(k,e){
   if(!S.started){ if(k===' '||k==='Enter'){ e.preventDefault(); handleTap3(W/2,H/2); } return; }
   if(k==='Escape'){
     if(S.chronOpen){ S.chronOpen=false; A.blip(); return; }
+    if(workOpen){if(scoutOpen)scoutOpen=false;else workOpen=false;A.blip();return;}
     if(FP.on) fpExit();
     else if(S.sel){ S.sel=null; S.ghost.show=false; ghostArmed=false; A.blip(); }
     else if(S.mode==='war') deskTap(backR());
