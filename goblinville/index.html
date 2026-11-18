@@ -2367,6 +2367,39 @@ function foresterLand(b,x,y){
   if(x<1||y<1||x>=MAP-1||y>=MAP-1||occ(x,y)||tiles[y][x].t!==0||tiles[y][x].deco||!tileOK(x,y))return false;
   return !PROPS.some(p=>p.x!=null&&Math.hypot(p.x-x-.5,p.y-y-.5)<1.2);
 }
+function foresterCap(b){return b.level>=2?18:12;}
+function foresterPeriod(b){return b.level>=2?15:30;}
+function foresterSelected(){const b=S.pick;return b&&b.key==='forester'&&S.buildings.includes(b)&&S.mode==='village'&&!S.sel&&!FP.battle&&!FP.interior&&!S.sail?b:null;}
+function foresterUpgrade(b){
+  if(!b||b.key!=='forester'||!S.buildings.includes(b)||b.pop<1||b.level>=2)return false;
+  if(!canPay({stone:60,gold:30})){A.deny();toast2('Need 60 stone and 30 gold');return false;}
+  pay({stone:60,gold:30});b.level=2;saveGame();A.build();toast2('Deep Roots: 18 trees, planting every 15 seconds');return true;
+}
+function foresterPanelR(){const w=Math.min(300,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-142,w,h:142};}
+function foresterUpgradeR(){const r=foresterPanelR();return {x:r.x+12,y:r.y+80,w:r.w-24,h:48};}
+function foresterPanelTap(x,y){const b=foresterSelected();if(!b)return false;const r=foresterPanelR();if(!inR(x,y,r))return false;
+  if(x>r.x+r.w-42&&y<r.y+36){S.pick=null;A.blip();return true;}
+  if(inR(x,y,foresterUpgradeR()))foresterUpgrade(b);return true;
+}
+function foresterTargetFP(){
+  if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
+  let best=null,dist=4.2;for(const b of S.buildings){if(b.key!=='forester')continue;
+    const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
+    if(d<dist&&a<.55){best=b;dist=d;}}
+  return best;
+}
+function foresterOpenFP(){const b=foresterTargetFP();if(!b)return false;S.pick=b;A.blip();return true;}
+function drawForesterPanel(){
+  if(S.story||S.chronOpen)return;const b=foresterSelected();
+  if(!b){if(foresterTargetFP()){const w=Math.min(300,W-24);ctx.fillStyle='rgba(25,48,30,.94)';rrp((W-w)/2,H-154,w,34,9);ctx.fill();txt3('FORESTER GROVE - '+TAPW()+' to manage',W/2,H-132,12,'#e1efc1','center',800,false);}return;}
+  const r=foresterPanelR(),u=foresterUpgradeR(),info=foresterRangeInfo(b);ctx.save();ctx.fillStyle='rgba(22,40,27,.97)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();
+  txt3(b.level>=2?'FORESTER II - DEEP ROOTS':'FORESTER GROVE',r.x+12,r.y+23,14,'#e1efc1','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
+  txt3(info.trees+'/'+foresterCap(b)+' trees - plants every '+foresterPeriod(b)+'s',r.x+12,r.y+47,12,'#fff','left',700,false);
+  txt3(b.pop<1?'Under construction':info.trees>=foresterCap(b)?'Enough trees - planting waits':info.space?'Next planting in '+Math.ceil(Math.max(0,foresterPeriod(b)-(b.ft||0)))+'s':'No planting room nearby',r.x+12,r.y+66,11,'#cfdfbf','left',700,false);
+  ctx.fillStyle=b.level>=2?'#344b37':'#596743';rrp(u.x,u.y,u.w,u.h,8);ctx.fill();
+  txt3(b.level>=2?'DEEP ROOTS INSTALLED':'DEEP ROOTS: 60 stone + 30 gold',u.x+u.w/2,u.y+19,11,'#f4efd7','center',800,false);
+  txt3('18 trees nearby - 1 tree / 15 seconds',u.x+u.w/2,u.y+37,10,'#dfebca','center',700,false);ctx.restore();
+}
 function foresterRangeInfo(b){
   let trees=0,space=0;
   for(let y=Math.max(1,b.ty-5);y<=Math.min(MAP-2,b.ty+7);y++)for(let x=Math.max(1,b.tx-5);x<=Math.min(MAP-2,b.tx+7);x++){
@@ -2384,22 +2417,22 @@ function drawForesterRange(){
   ctx.save();ctx.beginPath();ctx.rect(0,108,W,H-BARH-108);ctx.clip();ctx.strokeStyle=ghost&&!S.ghost.ok?'#e5a08f':'#d4f5a3';ctx.fillStyle='rgba(110,190,75,.10)';ctx.lineWidth=2;
   ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.stroke();
   const info=foresterRangeInfo(b),p=projPt(b.tx+1,sitY(b.tx+1,b.ty+1)+1.5,b.ty+1);
-  if(p){const w=Math.min(280,W-24),x=clamp(p[0]-w/2,12,W-w-12),y=clamp(p[1]-48,120,H-BARH-90);
+  if(p&&ghost){const w=Math.min(280,W-24),x=clamp(p[0]-w/2,12,W-w-12),y=clamp(p[1]-48,120,H-BARH-90);
     ctx.fillStyle='rgba(22,40,27,.95)';rrp(x,y,w,48,9);ctx.fill();
-    txt3('GROVE RANGE - '+info.trees+'/12 trees',x+w/2,y+18,12,'#e3f5c3','center',800,false);
-    txt3(info.trees>=12?'Enough trees - planting waits':info.space?info.space+' planting spots - 1 tree / 30s':'No planting room - try another plot',x+w/2,y+36,11,'#fff','center',700,false);}
+    txt3('GROVE RANGE - '+info.trees+'/'+foresterCap(b)+' trees',x+w/2,y+18,12,'#e3f5c3','center',800,false);
+    txt3(info.trees>=foresterCap(b)?'Enough trees - planting waits':info.space?info.space+' planting spots - 1 tree / '+foresterPeriod(b)+'s':'No planting room - try another plot',x+w/2,y+36,11,'#fff','center',700,false);}
   ctx.restore();
 }
 function foresterTick(dt){
   for(const b of S.buildings){if(b.key!=='forester'||b.pop<1)continue;
-    b.ft=(b.ft||0)+dt;if(b.ft<30)continue;b.ft=0;
+    b.ft=(b.ft||0)+dt;if(b.ft<foresterPeriod(b))continue;b.ft=0;
     let trees=0;const candidates=[];
     for(let y=Math.max(1,b.ty-5);y<=Math.min(MAP-2,b.ty+7);y++)for(let x=Math.max(1,b.tx-5);x<=Math.min(MAP-2,b.tx+7);x++){
       if(Math.hypot(x+.5-b.tx-1,y+.5-b.ty-1)>6)continue;
       if(tiles[y][x].deco==='tree')trees++;
       else if(foresterLand(b,x,y))candidates.push([x,y]);
     }
-    if(trees>=12||!candidates.length)continue;
+    if(trees>=foresterCap(b)||!candidates.length)continue;
     const q=candidates[Math.floor(Math.random()*candidates.length)],c=tiles[q[1]][q[0]];c.deco='tree';c.regrow=null;
     rebuildWorld();recount();floatW(q[0]+.5,sitY(q[0]+.5,q[1]+.5)+1,q[1]+.5,'new tree','#c2efa7');
   }
@@ -4698,7 +4731,7 @@ function fpGather(){
   if(t.kind!=='stone'){rebuildWorld();recount();}saveGame();return true;
 }
 function drawGatherHint(){
-  const t=fpGatherTarget();if(!t||marketBuilding()||kitchenPanelBuilding())return;
+  const t=fpGatherTarget();if(!t||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
   ctx.save();ctx.beginPath();ctx.rect(0,145,W,Math.max(0,H-360));ctx.clip();
   const pts=[];for(let i=0;i<=32;i++){const a=i*TAU/32,x=t.x+.5+Math.cos(a)*.45,y=t.y+.5+Math.sin(a)*.45,p=projPt(x,groundH(x,y)+.08,y);if(p)pts.push(p);}
   if(pts.length>24){ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();
@@ -4772,7 +4805,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
-  if(marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -4830,7 +4863,7 @@ function fpTap(x,y){
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
   if(starTap(x,y)) return true;
   if(fishTap()) return true;
-  if(marketOpenFP()||kitchenOpenFP())return true;
+  if(foresterOpenFP()||marketOpenFP()||kitchenOpenFP())return true;
   if(fpGather())return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
@@ -6073,7 +6106,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -6091,7 +6124,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -8550,7 +8583,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
-  if(marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
