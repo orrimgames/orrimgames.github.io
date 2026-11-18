@@ -1836,6 +1836,23 @@ function workTap(x,y){
     for(let i=0;i<WORK_FOCUS.length;i++)if(inR(x,y,workRowR(i))){setWorkFocus(WORK_FOCUS[i][0]);return true;}return true;}
   if(inR(x,y,workBtnR())){workOpen=true;S.pick=null;S.sel=null;S.ghost.show=false;A.blip();return true;}return false;
 }
+// v253: find the Hall again without moving the chief or changing the save.
+function homeVisible(){return workVisible()&&!workOpen;}
+function homeR(){return {x:14,y:FP.on?258:560,w:112,h:44};}
+function homeBearing(){const h=hallDoor(),dx=h[0]-FP.x,dy=h[1]-FP.y;return {distance:Math.hypot(dx,dy),angle:((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI};}
+function centerHome(){
+  if(!S.started||S.mode!=='village'||FP.on||S.story||S.chronOpen)return false;
+  const h=hallPos();S.sel=null;S.ghost.show=false;S.pick=null;workOpen=false;CAM.tx=h[0];CAM.ty=h[1];CAM.dist=16;CAM.zoom=1;CAM.pitch=.78;CAM.gzh=groundH(h[0],h[1]);clampCam3();A.blip();return true;
+}
+function homeTap(x,y){if(FP.on||!homeVisible()||H-BARH<620||!inR(x,y,homeR()))return false;return centerHome();}
+function drawHome(){
+  if(!homeVisible()||!FP.on&&H-BARH<620)return;const r=homeR();ctx.save();ctx.fillStyle='rgba(42,41,39,.94)';rrp(r.x,r.y,r.w,r.h,9);ctx.fill();
+  if(!FP.on){txt3('FIND HOME',r.x+r.w/2,r.y+18,11,'#f4e2bf','center',800,false);txt3(DESK.mouse?'click or Home key':'return map to Hall',r.x+r.w/2,r.y+33,10,'#d8d7bd','center',700,false);}
+  else {const b=homeBearing();txt3(b.distance<2?'AT THE HALL':'HOME '+Math.ceil(b.distance)+'m',r.x+r.w/2+8,r.y+17,11,'#f4e2bf','center',800,false);
+    txt3(b.distance<2?'the brood is near':'arrow points to Hall',r.x+r.w/2,r.y+34,9,'#d8d7bd','center',700,false);
+    if(b.distance>=2){ctx.translate(r.x+14,r.y+15);ctx.rotate(b.angle);ctx.fillStyle='#f4d98b';ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(5,5);ctx.lineTo(0,2);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();}}
+  ctx.restore();
+}
 function drawWorkUI(){
   if(!workVisible())return;
   const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
@@ -6348,7 +6365,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawHome(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -6366,7 +6383,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawHome(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -8827,7 +8844,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
-  if(workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(homeTap(x,y)||workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
@@ -9064,6 +9081,7 @@ function deskShortcut(k,e){
   if(S.chronOpen){ if(k==='ArrowUp') chronScroll(-40); if(k==='ArrowDown') chronScroll(40); return; }
   if(k==='m'&&!FP.on){ deskTap(warBtnR()); return; }
   if(k==='v'){ if(FP.on) fpExit(); else deskTap(walkBtnR()); return; }
+  if(k==='Home'&&!FP.on){e.preventDefault();centerHome();return;}
   if(k==='h'){ toast2('WASD or arrows move  -  Q/E turn  -  Z/X zoom  -  1-9 build  -  M map  -  V walk  -  C chronicle  -  Esc back  -  H keys'); return; }
   if(!FP.on && k>='1' && k<='9'){ deskCard(+k-1); return; }
 }
