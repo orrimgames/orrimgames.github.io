@@ -1825,7 +1825,7 @@ function serveSupper(){
 }
 function tickSupper(dt){if(S.mode!=='village')return;const left=supperLeft();if(left<=0)return;S.secrets.supperLeft=Math.max(0,left-Math.max(0,dt));if(!S.secrets.supperLeft){toast2('Supper rush ends. The brood catches its breath.');}}
 function supperR(){const r=workPanelR();return {x:r.x+12,y:r.y+352,w:r.w-24,h:48};}
-function workVisible(){return !farmSelected()&&!marketBuilding()&&!storeSelected()&&!foresterSelected()&&!kitchenPanelBuilding()&&S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
+function workVisible(){return !MOVE&&!farmSelected()&&!marketBuilding()&&!storeSelected()&&!foresterSelected()&&!kitchenPanelBuilding()&&S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
 function workBtnR(){return {x:14,y:FP.on?154:508,w:FP.on?112:sideBtnW(),h:42};}
 function workPanelR(){const w=Math.min(344,W-24),h=468;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function workRowR(i){const r=workPanelR();return {x:r.x+12,y:r.y+84+i*47,w:r.w-24,h:40};}
@@ -1908,9 +1908,9 @@ function salvageBuilding(b){
   toast2(BT[b.key].name+' salvaged: '+scoutList(refund));planPick=null;return true;
 }
 function planLinkR(){const r=scoutLinkR();return {x:r.x+r.w+8,y:r.y,w:r.w,h:r.h};}
-function planPanelR(){const w=Math.min(344,W-24),h=398;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
+function planPanelR(){const w=Math.min(344,W-24),h=438;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function planRowR(i){const r=planPanelR();return {x:r.x+12,y:r.y+88+i*58,w:r.w-24,h:50};}
-function planNavR(next){const r=planPanelR();return {x:r.x+12+(next?(r.w-24)/2+4:0),y:r.y+326,w:(r.w-32)/2,h:44};}
+function planNavR(next){const r=planPanelR();return {x:r.x+12+(next?(r.w-24)/2+4:0),y:r.y+366,w:(r.w-32)/2,h:44};}
 function planLocateR(){const r=planPanelR();return {x:r.x+44,y:r.y+238,w:r.w-88,h:32};}
 function locatePlan(b){
   if(!b||!S.buildings.includes(b)||!scoutAllowed())return false;if(FP.on)fpExit();
@@ -1925,7 +1925,7 @@ function drawPlanMarker(){
 }
 function planTap(x,y){
   const r=planPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){if(planPick)planPick=null;else planOpen=false;A.blip();return true;}
-  if(planPick){if(inR(x,y,planLocateR())){locatePlan(planPick);return true;}if(inR(x,y,planNavR(false))){planPick=null;A.blip();}else if(inR(x,y,planNavR(true)))salvageBuilding(planPick);return true;}
+  if(planPick){if(inR(x,y,moveR())){beginMove(planPick);return true;}if(inR(x,y,planLocateR())){locatePlan(planPick);return true;}if(inR(x,y,planNavR(false))){planPick=null;A.blip();}else if(inR(x,y,planNavR(true)))salvageBuilding(planPick);return true;}
   const list=planBuildings(),last=Math.max(0,Math.ceil(list.length/4)-1);planPage=clamp(planPage,0,last);
   if(inR(x,y,planNavR(false))){planPage=Math.max(0,planPage-1);A.blip();return true;}
   if(inR(x,y,planNavR(true))){planPage=Math.min(last,planPage+1);A.blip();return true;}
@@ -1935,10 +1935,10 @@ function drawPlanUI(){
   const r=planPanelR(),list=planBuildings(),last=Math.max(0,Math.ceil(list.length/4)-1);planPage=clamp(planPage,0,last);if(planPick&&!S.buildings.includes(planPick))planPick=null;
   ctx.save();ctx.fillStyle='rgba(39,38,32,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#c4b28a';ctx.lineWidth=1;ctx.stroke();
   txt3('VILLAGE PLANNER',r.x+14,r.y+25,15,'#f1e6c8','left',800,false);txt3('X',r.x+r.w-22,r.y+25,14,'#fff','center',800,false);
-  txt3(planPick?'Check the salvage, then confirm below.':'Choose a building to reclaim its space.',r.x+14,r.y+49,11,'#ded9c4','left',600,false);
+  txt3(planPick?'Move it, or review and confirm salvage.':'Choose a building to move or salvage.',r.x+14,r.y+49,11,'#ded9c4','left',600,false);
   txt3('Half base materials back. The Hall stays.',r.x+14,r.y+68,11,'#bfbda4','left',600,false);
   if(!planPick){list.slice(planPage*4,planPage*4+4).forEach((b,i)=>{const q=planRowR(i);ctx.fillStyle='#4b5141';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
-    txt3(BT[b.key].name+(b.level>=2?' II':''),q.x+10,q.y+21,12,'#f0e8cc','left',800,false);txt3('Plot '+b.tx+', '+b.ty+' - tap to review salvage',q.x+10,q.y+39,10,'#d4d7bd','left',600,false);});
+    txt3(BT[b.key].name+(b.level>=2?' II':''),q.x+10,q.y+21,12,'#f0e8cc','left',800,false);txt3('Plot '+b.tx+', '+b.ty+' - tap to manage',q.x+10,q.y+39,10,'#d4d7bd','left',600,false);});
     if(!list.length)txt3('Only the Hall stands. Build something first.',r.x+r.w/2,r.y+156,11,'#e3dcc6','center',600,false);
   }else{const b=planPick,why=planReason(b);txt3(BT[b.key].name.toUpperCase(),r.x+r.w/2,r.y+116,14,'#f8e3b8','center',800,false);
     txt3('Plot '+b.tx+', '+b.ty+' - '+b.w+' x '+b.h+' tiles freed',r.x+r.w/2,r.y+140,11,'#dadcc7','center',600,false);
@@ -1946,11 +1946,56 @@ function drawPlanUI(){
     txt3('Upgrades and any crops are not refunded.',r.x+r.w/2,r.y+201,11,'#e1be9a','center',600,false);
     txt3('Workers keep carried supplies and find new jobs.',r.x+r.w/2,r.y+223,10,'#cccdb4','center',600,false);
     const loc=planLocateR();ctx.fillStyle='#4c675b';rrp(loc.x,loc.y,loc.w,loc.h,7);ctx.fill();txt3('LOCATE ON MAP',loc.x+loc.w/2,loc.y+21,11,'#e6edce','center',800,false);
-    if(why){const words=why.split(' ');let lines=[''];for(const word of words){const i=lines.length-1;if((lines[i]+word).length>36)lines.push(word+' ');else lines[i]+=word+' ';}lines.forEach((line,i)=>txt3(line.trim(),r.x+r.w/2,r.y+288+i*16,11,'#ffd09f','center',700,false));}
-    else txt3('The footprint will be empty. This cannot be undone.',r.x+r.w/2,r.y+305,10,'#e3c8ad','center',600,false);
+    const mv=moveR();ctx.fillStyle='#536d48';rrp(mv.x,mv.y,mv.w,mv.h,7);ctx.fill();txt3('MOVE BUILDING - free, keeps upgrades',mv.x+mv.w/2,mv.y+22,11,'#eef0d1','center',800,false);
+    if(why){const words=why.split(' ');let lines=[''];for(const word of words){const i=lines.length-1;if((lines[i]+word).length>36)lines.push(word+' ');else lines[i]+=word+' ';}lines.forEach((line,i)=>txt3(line.trim(),r.x+r.w/2,r.y+326+i*16,11,'#ffd09f','center',700,false));}
+    else txt3('The footprint will be empty. This cannot be undone.',r.x+r.w/2,r.y+345,10,'#e3c8ad','center',600,false);
   }
   for(const next of [false,true]){const q=planNavR(next),blocked=planPick&&next&&planReason(planPick);ctx.fillStyle=blocked?'#4b4841':planPick&&next?'#895342':'#565c46';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();txt3(planPick?(next?'CONFIRM SALVAGE':'KEEP BUILDING'):(next?'NEXT >':'< PREVIOUS'),q.x+q.w/2,q.y+27,11,'#f5e7cc','center',800,false);}
   txt3(planPick?'No goblins or stored supplies will be lost.':'Page '+(planPage+1)+' / '+(last+1)+' - '+list.length+' buildings',r.x+r.w/2,r.y+r.h-10,10,'#bcbea4','center',600,false);ctx.restore();
+}
+// v256: move the existing building, never sell and recreate its state.
+let MOVE=null;
+function moveR(){const r=planPanelR();return {x:r.x+12,y:r.y+270,w:r.w-24,h:34};}
+function beginMove(b){
+  if(!scoutAllowed()||!b||!S.buildings.includes(b)||b.key==='hall'||b.foe)return false;
+  locatePlan(b);planMarker=null;MOVE={b,tx:b.tx,ty:b.ty,aimed:false};S.sel=null;S.ghost.show=false;A.blip();return true;
+}
+function moveReason(b,tx,ty){
+  if(!b||!S.buildings.includes(b)||b.key==='hall'||b.foe)return 'That building cannot move.';
+  if(!Number.isInteger(tx)||!Number.isInteger(ty)||tx<0||ty<0||tx+b.w>MAP||ty+b.h>MAP)return 'Stay on the village map.';
+  if(tx===b.tx&&ty===b.ty)return 'Choose a new plot.';
+  const hs=[];
+  for(let y=ty;y<ty+b.h;y++)for(let x=tx;x<tx+b.w;x++){
+    const c=tiles[y][x],o=occ(x,y);if(o&&o!==b)return 'Another building is in the way.';
+    if(!tileOK(x,y))return 'Choose dry, level ground.';
+    if(c.deco&&c.deco!=='tuft'&&c.deco!=='stump')return 'Clear trees, rocks or shrooms first.';
+    if(PROPS.some(p=>p.x!=null&&!p.laundry&&Math.hypot(p.x-x-.5,p.y-y-.5)<1.1))return 'Leave room around village landmarks.';
+  }
+  for(let y=ty;y<=ty+b.h;y++)for(let x=tx;x<=tx+b.w;x++)hs.push(SAMP(x,y));
+  return Math.max(...hs)-Math.min(...hs)>=.9?'Choose a more level plot.':'';
+}
+function commitMove(b,tx,ty){
+  if(!scoutAllowed())return false;const why=moveReason(b,tx,ty);if(why){A.deny();toast2(why);return false;}
+  flattenArea(tx,ty,b.w,b.h);b.tx=tx;b.ty=ty;b.gy=groundH(tx+b.w/2,ty+b.h/2);
+  for(const g of S.gobs){if(g.bed===b){g.bed=null;if(g.state==='sleep'||g.state==='toBed'){g.state='idle';g.st=0;}}
+    if(g.target===b){g.target=null;g.work=0;g.state=g.carry&&g.amt>0?'haul':'idle';g.st=0;}}
+  syncLaundry();rebuildWorld();recount();MOVE=null;planMarker={b,until:G.t+6};saveGame();A.build();toast2(BT[b.key].name+' moved. Upgrades and supplies kept.');return true;
+}
+function moveTap(x,y){
+  if(!MOVE)return false;if(inR(x,y,cancelR())){MOVE=null;A.blip();return true;}
+  if(y>H-BARH||y<145)return true;const p=rayGround(x,y);if(!p)return true;const m=MOVE,b=m.b;
+  const tx=clamp(Math.round(Math.floor(p[0])-(b.w-1)/2),0,MAP-b.w),ty=clamp(Math.round(Math.floor(p[1])-(b.h-1)/2),0,MAP-b.h);
+  if(m.aimed&&m.tx===tx&&m.ty===ty){commitMove(b,tx,ty);return true;}m.tx=tx;m.ty=ty;m.aimed=true;A.blip();return true;
+}
+function drawMoveUI(){
+  if(!MOVE||FP.on||S.mode!=='village')return;const m=MOVE,b=m.b,why=m.aimed?moveReason(b,m.tx,m.ty):'';
+  if(m.aimed){const pts=[[m.tx,m.ty],[m.tx+b.w,m.ty],[m.tx+b.w,m.ty+b.h],[m.tx,m.ty+b.h]].map(p=>projPt(p[0],groundH(p[0],p[1])+.14,p[1]));
+    if(pts.every(p=>p)){ctx.save();ctx.fillStyle=why?'rgba(225,95,73,.3)':'rgba(129,219,134,.35)';ctx.strokeStyle=why?'#ffae8b':'#d0ff9c';ctx.lineWidth=3;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}}
+  const w=Math.min(360,W-20),x=(W-w)/2;ctx.save();ctx.fillStyle='rgba(28,44,39,.97)';rrp(x,146,w,81,10);ctx.fill();
+  txt3('MOVE '+BT[b.key].name.toUpperCase(),W/2,166,13,'#e5f1c5','center',800,false);
+  txt3('Free move. Building stays until confirmed.',W/2,185,11,'#d0ddc4','center',600,false);
+  txt3(!m.aimed?'Tap clear ground to aim. Tap same plot to move.':why||'Plot '+m.tx+', '+m.ty+' - tap same spot to confirm',W/2,209,11,why?'#ffbc9e':'#e9efc8','center',700,false);
+  const c=cancelR();ctx.fillStyle='#945444';rrp(c.x,c.y,c.w,c.h,10);ctx.fill();txt3('CANCEL',c.x+c.w/2,c.y+21,11,'#fff1d7','center',800,false);ctx.restore();
 }
 // v253: find the Hall again without moving the chief or changing the save.
 function homeVisible(){return workVisible()&&!workOpen;}
@@ -2666,6 +2711,7 @@ function farmBadgeTap(x,y){
   for(const b of S.buildings){if(b.key!=='farm')continue;const r=farmBadgeR(b);if(r&&inR(x,y,r)){S.pick=b;A.blip();return true;}}return false;
 }
 function drawFarmBadges(){
+  if(MOVE)return;
   if(FP.on||S.sel||S.mode!=='village'||S.story||S.chronOpen||workOpen)return;
   for(const b of S.buildings){if(b.key!=='farm'||b===farmSelected())continue;const r=farmBadgeR(b);if(!r)continue;
     ctx.save();const ripe=(b.crops||[]).some(c=>c>=1);ctx.fillStyle=ripe?'rgba(98,77,30,.96)':'rgba(37,59,33,.96)';rrp(r.x,r.y,r.w,r.h,8);ctx.fill();ctx.strokeStyle=ripe?'#e2c66f':'#97bc83';ctx.lineWidth=1;ctx.stroke();txt3(farmBadge(b),r.x+r.w/2,r.y+21,11,'#fff0c8','center',800,false);ctx.restore();
@@ -3392,6 +3438,7 @@ function offersOpen(){   // same authority the map uses, counted for the village
   return n;
 }
 function drawWarBtn(){
+  if(MOVE)return;
   const r=warBtnR(), n=offersOpen(), pu=0.5+0.5*Math.sin(G.t*3.1);
   ctx.fillStyle='rgba(120,26,34,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
   ctx.strokeStyle=n?('rgba(255,208,120,'+(0.45+0.45*pu).toFixed(3)+')'):'rgba(255,190,140,0.55)';
@@ -3429,6 +3476,7 @@ function chronPanel(){
 function chronCloseR(){ const P=chronPanel(); return {x:P.x+P.w-46, y:P.y+8, w:38, h:38}; }
 function chronH(entries){ let h=8; for(const e of entries) h+=16+e.rows.length*17+8; return h; }
 function drawMuteBtn(){
+  if(MOVE)return;
   if(S.mode!=='village'||FP.on||!S.started) return;
   const r=muteR();
   ctx.fillStyle='rgba(44,38,60,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
@@ -3443,6 +3491,7 @@ function drawMuteBtn(){
     ctx.beginPath(); ctx.arc(cx+3,cy,12,-1.0,1.0); ctx.stroke(); }
 }
 function drawChronBtn(){
+  if(MOVE)return;
   if(S.mode!=='village'||FP.on||!S.started) return;
   const r=chronBtnR(), n=S.chronicle.length;
   ctx.fillStyle='rgba(44,38,60,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
@@ -5247,6 +5296,7 @@ function fpTap(x,y){
   return true;
 }
 function drawWalkBtn(){
+  if(MOVE)return;
   if(S.mode!=='village'||FP.on) return;
   const r=walkBtnR();
   ctx.fillStyle='rgba(34,86,44,0.92)'; rrp(r.x,r.y,r.w,r.h,12); ctx.fill();
@@ -6502,7 +6552,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawHome(); drawPlanMarker(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawFarmPanel(); drawWorkUI(); drawHome(); drawPlanMarker(); drawMoveUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -6644,6 +6694,7 @@ function doShare(){
 }
 function tickShare(dt){ if(S._shareT>0){ S._shareT-=dt; if(S._shareT<=0){ S._shareT=0; S._shareWhy=null; } } }
 function drawShare(){
+  if(MOVE)return;
   if(!(S._shareT>0)||!S.started||FP.on||S.mode!=='village') return;
   const r=shareR(), p=1+Math.sin(G.t*5)*0.05;
   ctx.save(); ctx.translate(r.x+r.w/2,r.y+r.h/2); ctx.scale(p,p);
@@ -8966,6 +9017,7 @@ function handleTap3(x,y){
   if(homeTap(x,y)||workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
+  if(MOVE&&!FP.on&&scoutAllowed()){moveTap(x,y);return true;}
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
   if(!S.started){
     if(!saveExists&&!S.story){ startStory(); return true; }
@@ -9180,6 +9232,7 @@ function deskCard(i){
   deskTap(cardRect2(i));
 }
 function deskShortcut(k,e){
+  if(MOVE){if(k==='Escape'){MOVE=null;A.blip();}return;}
   if(!S.started){ if(k===' '||k==='Enter'){ e.preventDefault(); handleTap3(W/2,H/2); } return; }
   if(k==='Escape'){
     if(S.chronOpen){ S.chronOpen=false; A.blip(); return; }
