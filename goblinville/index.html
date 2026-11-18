@@ -1761,8 +1761,7 @@ function placeBuilding(key,tx,ty){
   return true;
 }
 function bCenterW(b){ return [b.tx+b.w/2, (b.gy!==undefined?b.gy:groundH(b.tx+b.w/2,b.ty+b.h/2)), b.ty+b.h/2]; }
-function recount(){
-  S.popCap=6; for(const b of S.buildings) if(BT[b.key].pop&&b.pop>=1) S.popCap+=BT[b.key].pop;
+function workSlots(){
   const slots={farmer:0,woodcutter:0,miner:0,digger:0};
   for(const b of S.buildings){
     if(b.pop<1) continue;
@@ -1777,15 +1776,64 @@ function recount(){
   for(let y=0;y<MAP;y++) for(let x=0;x<MAP;x++){ const d=tiles[y][x]; if(d.deco==='tree') trees++; else if(d.t===3||d.deco==='rock') rocks++; }
   if(!trees) slots.woodcutter=0;
   if(!rocks) slots.miner=0;
+  return slots;
+}
+function recount(){
+  S.popCap=6; for(const b of S.buildings) if(BT[b.key].pop&&b.pop>=1) S.popCap+=BT[b.key].pop;
+  const slots=workSlots();
+  if(workFocus()[0]!=='balanced'){let left=S.gobs.length;for(const j of workOrder()){slots[j]=Math.min(left,slots[j]);left-=slots[j];}}
   const used={farmer:0,woodcutter:0,miner:0,digger:0};
   for(const g of S.gobs){ if(g.job!=='idler'&&used[g.job]<slots[g.job]) used[g.job]++; else g.job='idler'; }
   for(const g of S.gobs){
     if(g.job!=='idler') continue;
-    for(const j of ['farmer','woodcutter','miner','digger']){
-      if(used[j]<slots[j]){ g.job=j; used[j]++; g.state='idle'; g.target=null; break; }
+    for(const j of workOrder()){
+      if(used[j]<slots[j]){ g.job=j; used[j]++; if(g.state!=='haul'&&g.state!=='sleep'&&g.state!=='toBed'){g.state='idle';g.target=null;} break; }
     }
   }
 }
+// v242: the brood can choose what to work on, within completed workplace capacity.
+const WORK_FOCUS=[['balanced','Balanced','farmer'],['food','Food','farmer'],['wood','Wood','woodcutter'],['stone','Stone','miner'],['gold','Gold','digger']];
+let workOpen=false;
+function workFocus(){return WORK_FOCUS.find(f=>f[0]===S.secrets.workFocus)||WORK_FOCUS[0];}
+function workOrder(){const jobs=['farmer','woodcutter','miner','digger'],f=workFocus();return f[0]==='balanced'?jobs:[f[2],...jobs.filter(j=>j!==f[2])];}
+function setWorkFocus(key){
+  if(!WORK_FOCUS.some(f=>f[0]===key)||S.mode!=='village'||FP.battle||FP.interior||S.sail)return false;
+  if(workFocus()[0]===key)return false;
+  S.secrets.workFocus=key;
+  for(const g of S.gobs){
+    g.job='idler';
+    // A half-filled harvest is cargo too. Deliver it instead of discarding it.
+    if(g.carry&&g.amt>0){g.state='haul';g.work=0;g.target=null;}
+    else if(g.state!=='sleep'&&g.state!=='toBed'){if(g.pal&&g.pal.pal===g)g.pal.pal=null;g.pal=null;g.state='idle';g.st=0;g.work=0;g.target=null;}
+  }
+  recount();saveGame();A.blip();toast2('Work focus: '+workFocus()[1]+'. Built workplaces set the job limits.');return true;
+}
+function workVisible(){return S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
+function workBtnR(){return {x:14,y:FP.on?154:508,w:FP.on?112:sideBtnW(),h:42};}
+function workPanelR(){const w=Math.min(344,W-24),h=354;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
+function workRowR(i){const r=workPanelR();return {x:r.x+12,y:r.y+84+i*47,w:r.w-24,h:40};}
+function workTap(x,y){
+  if(!workVisible())return false;
+  if(workOpen){const r=workPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){workOpen=false;A.blip();return true;}
+    for(let i=0;i<WORK_FOCUS.length;i++)if(inR(x,y,workRowR(i))){setWorkFocus(WORK_FOCUS[i][0]);return true;}return true;}
+  if(inR(x,y,workBtnR())){workOpen=true;S.pick=null;S.sel=null;S.ghost.show=false;A.blip();return true;}return false;
+}
+function drawWorkUI(){
+  if(!workVisible())return;
+  const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
+  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(workFocus()[1],b.x+b.w/2,b.y+33,11,'#d8dbb5','center',700,false);
+  if(!workOpen){ctx.restore();return;}
+  const r=workPanelR(),slots=workSlots(),counts={};for(const g of S.gobs)counts[g.job]=(counts[g.job]||0)+1;
+  ctx.fillStyle='rgba(20,36,41,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#83b8ad';ctx.lineWidth=1;ctx.stroke();
+  txt3('PUT THE BROOD TO WORK',r.x+14,r.y+24,14,'#e1f4d5','left',800,false);txt3('X',r.x+r.w-22,r.y+24,14,'#fff','center',800,false);
+  txt3('Fill this resource first, then the other jobs.',r.x+14,r.y+47,11,'#d0e1df','left',700,false);
+  txt3('More completed workplaces = more job slots.',r.x+14,r.y+64,11,'#b6cbc6','left',600,false);
+  WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
+    txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
+    const detail=f[0]==='balanced'?S.gobs.length+' goblins':(counts[f[2]]||0)+' / '+slots[f[2]]+' jobs';txt3(detail,q.x+q.w-12,q.y+25,11,'#d1e6dc','right',700,false);});
+  txt3('Carried goods are delivered. Sleeping goblins rest.',r.x+r.w/2,r.y+338,10,'#c3d9d0','center',600,false);ctx.restore();
+}
+
 function spawnGob(tx,ty,silent){
   if(S.gobs.length>=S.popCap) return null;
   const tr=pick(TRAITS);
@@ -4805,7 +4853,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
-  if(foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(workTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -6106,7 +6154,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawWorkUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -6124,7 +6172,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawWorkUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -8583,7 +8631,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
-  if(foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(workTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
