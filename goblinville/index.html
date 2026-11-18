@@ -1809,20 +1809,32 @@ function setWorkFocus(key){
   }
   recount();saveGame();A.blip();toast2('Work focus: '+workFocus()[1]+'. Built workplaces set the job limits.');return true;
 }
+// v245: invest food in a short village work rush. Simulation time only.
+function supperLeft(){return Math.max(0,Math.min(90,Number(S.secrets.supperLeft)||0));}
+function supperBoost(){return S.mode==='village'&&supperLeft()>0?1.3:1;}
+function serveSupper(){
+  if(S.mode!=='village'||FP.battle||FP.interior||S.sail||supperLeft()>0)return false;
+  if(S.res.food<30){A.deny();toast2('Brood Supper needs 30 food');return false;}
+  S.res.food-=30;S.secrets.supperLeft=90;saveGame();A.cheer();toast2('Brood Supper! Workers move and harvest 30% faster for 90s.');
+  for(const g of S.gobs){g.emote='!';g.emoteT=2;}return true;
+}
+function tickSupper(dt){if(S.mode!=='village')return;const left=supperLeft();if(left<=0)return;S.secrets.supperLeft=Math.max(0,left-Math.max(0,dt));if(!S.secrets.supperLeft){toast2('Supper rush ends. The brood catches its breath.');}}
+function supperR(){const r=workPanelR();return {x:r.x+12,y:r.y+352,w:r.w-24,h:48};}
 function workVisible(){return S.started&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail&&!S.story&&!S.chronOpen&&S.victPhase<0;}
 function workBtnR(){return {x:14,y:FP.on?154:508,w:FP.on?112:sideBtnW(),h:42};}
-function workPanelR(){const w=Math.min(344,W-24),h=354;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
+function workPanelR(){const w=Math.min(344,W-24),h=414;return {x:(W-w)/2,y:Math.max(142,(H-h)/2-10),w,h};}
 function workRowR(i){const r=workPanelR();return {x:r.x+12,y:r.y+84+i*47,w:r.w-24,h:40};}
 function workTap(x,y){
   if(!workVisible())return false;
   if(workOpen){const r=workPanelR();if(x>r.x+r.w-42&&y<r.y+38||!inR(x,y,r)){workOpen=false;A.blip();return true;}
+    if(inR(x,y,supperR())){serveSupper();return true;}
     for(let i=0;i<WORK_FOCUS.length;i++)if(inR(x,y,workRowR(i))){setWorkFocus(WORK_FOCUS[i][0]);return true;}return true;}
   if(inR(x,y,workBtnR())){workOpen=true;S.pick=null;S.sel=null;S.ghost.show=false;A.blip();return true;}return false;
 }
 function drawWorkUI(){
   if(!workVisible())return;
   const b=workBtnR();ctx.save();ctx.fillStyle='rgba(37,58,66,.96)';rrp(b.x,b.y,b.w,b.h,10);ctx.fill();
-  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingCargo()?waitingCargo()+' storage wait':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
+  txt3('WORK FOCUS',b.x+b.w/2,b.y+17,11,'#e0f3ee','center',800,false);txt3(waitingCargo()?waitingCargo()+' storage wait':supperLeft()>0?'Supper '+Math.ceil(supperLeft())+'s':workFocus()[1],b.x+b.w/2,b.y+33,11,waitingCargo()?'#ffd28a':'#d8dbb5','center',700,false);
   if(!workOpen){ctx.restore();return;}
   const r=workPanelR(),slots=workSlots(),counts={};for(const g of S.gobs)counts[g.job]=(counts[g.job]||0)+1;
   ctx.fillStyle='rgba(20,36,41,.98)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();ctx.strokeStyle='#83b8ad';ctx.lineWidth=1;ctx.stroke();
@@ -1832,7 +1844,10 @@ function drawWorkUI(){
   WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
     const detail=f[0]==='balanced'?S.gobs.length+' goblins':(counts[f[2]]||0)+' / '+slots[f[2]]+' jobs';txt3(detail,q.x+q.w-12,q.y+25,11,'#d1e6dc','right',700,false);});
-  txt3(waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);ctx.restore();
+  txt3(waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
+  const q=supperR(),left=supperLeft();ctx.fillStyle=left?'#66582e':S.res.food>=30?'#735131':'#434547';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
+  txt3(left?'SUPPER RUSH: '+Math.ceil(left)+'s left':'BROOD SUPPER - 30 food',q.x+q.w/2,q.y+19,12,'#ffedc2','center',800,false);
+  txt3('Workers: +30% walking and harvest speed for 90s',q.x+q.w/2,q.y+37,10,'#d9e4c7','center',700,false);ctx.restore();
 }
 
 function spawnGob(tx,ty,silent){
@@ -2091,7 +2106,7 @@ function updateGob(g,dt){
   if(g.emoteT>0){ g.emoteT-=dt; if(g.emoteT<=0) g.emote=null; }
   if(g.squash>0) g.squash=Math.max(0,g.squash-dt*3.2);
   g.moving=false; g.work=0;
-  const spd=g.speed*(onStonePath(g.x,g.y)?1.35:1)*(1+(g.mood-0.5)*0.2)*(1+0.15*(S.wx?S.wx.rain:0));
+  const spd=g.speed*supperBoost()*(onStonePath(g.x,g.y)?1.35:1)*(1+(g.mood-0.5)*0.2)*(1+0.15*(S.wx?S.wx.rain:0));
   if((S.wx?S.wx.rain:0)>0.3){ g.splT=(g.splT||0)-dt; }
   function step(txp,typ,arrive){
     const dx=txp-g.x, dy=typ-g.y, d=Math.hypot(dx,dy);
@@ -2179,8 +2194,8 @@ function updateGob(g,dt){
     case 'toFarm': { const b=g.target; if(!b||S.buildings.indexOf(b)<0){g.state='idle';break;}
       step(b.tx+rnd(b.w-0.2,0.2), b.ty+rnd(b.h-0.2,0.2), ()=>{ g.state='farm'; g.st=0; }); break; }
     case 'farm': { const b=g.target; if(!b||!b.crops||S.buildings.indexOf(b)<0){g.state='idle';break;}
-      g.work=1; g.st+=dt;
-      for(let i=0;i<b.crops.length;i++) b.crops[i]=Math.min(1,b.crops[i]+dt*0.055);
+      g.work=1; g.st+=dt*supperBoost();
+      for(let i=0;i<b.crops.length;i++) b.crops[i]=Math.min(1,b.crops[i]+dt*0.055*supperBoost());
       const ripe=b.crops.findIndex(c=>c>=1);
       if(ripe>=0){
         b.crops[ripe]=0; g.carry='food'; g.amt=(g.amt||0)+3+(g.trait.carry||0);
@@ -2193,20 +2208,20 @@ function updateGob(g,dt){
       step(t[0]+0.5,t[1]+0.5,()=>{ g.state='chop'; g.st=0; }); break; }
     case 'chop': { const t=g.target; const c=tiles[t[1]][t[0]];
       if(c.deco!=='tree'){ g.state='idle'; break; }
-      g.work=1; g.st+=dt;
+      g.work=1; g.st+=dt*supperBoost();
       if(g.st>2.2){ g.st=0; c.deco='stump'; c.regrow=rnd(50,26); g.carry='wood'; g.amt=4+(g.trait.carry||0);
         A.chop(); puffW(t[0]+0.5,groundH(t[0]+0.5,t[1]+0.5)+0.5,t[1]+0.5,8,'#7ec74a');
         rebuildWorld(); g.state='haul'; g.work=0; }
       break; }
     case 'toRock': { const t=g.target; if(!t){g.state='idle';break;}
       step(t[0]+0.5,t[1]+0.5,()=>{ g.state='mine'; g.st=0; }); break; }
-    case 'mine': { g.st+=dt; g.work=1;
+    case 'mine': { g.st+=dt*supperBoost(); g.work=1;
       if(g.st>2.6){ g.st=0; g.carry='stone'; g.amt=3+(g.trait.carry||0); A.dig();
         const t=g.target; puffW(t[0]+0.5,groundH(t[0]+0.5,t[1]+0.5)+0.4,t[1]+0.5,7,'#d7dee6'); g.state='haul'; g.work=0; }
       break; }
     case 'toMine': { const b=g.target; if(!b||S.buildings.indexOf(b)<0){g.state='idle';break;}
       step(b.tx+b.w/2,b.ty+b.h+0.6,()=>{ g.state='dig'; g.st=0; }); break; }
-    case 'dig': { g.st+=dt; g.work=1;
+    case 'dig': { g.st+=dt*supperBoost(); g.work=1;
       if(g.st>3.4){ g.st=0; g.carry='gold'; g.amt=2+(g.trait.carry||0); A.coin(); g.state='haul'; g.work=0; }
       break; }
     case 'haul': { const h=hallDoor();
@@ -2233,6 +2248,7 @@ function tickClock(dt){
   if(S.dayT<t0) S._dawnPulse=1;
 }
 function updateWorld(dt){
+  tickSupper(dt);
   checkQuest(); checkGoals(); checkBadges(); tickHints(dt); tickShare(dt);   // v100: all three milestone rails sample every tick - a badge true for under 2s used to be missed
   glTick(dt);   tickAmbience(dt); tickWeather(dt); tickLands(dt); wildTick(dt); folkTick(dt); savageTick(dt); courierTick(dt);   // v43 + v57 couriers
   if(S._dawnPulse) { S._dawnPulse=0; S.day++;   /* v67: clock lives in tickClock so time also passes in battle */
