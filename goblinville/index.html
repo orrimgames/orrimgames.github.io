@@ -1688,7 +1688,7 @@ const BT={
   forester:{name:'Forester Grove',w:2,h:2,cost:{wood:55,stone:20},hp:240,desc:'Plants a tree nearby every 30s; keeps 12 trees within 6 tiles'},
   quarry: {name:'Quarry',     w:2,h:2, cost:{wood:40,stone:15}, hp:280, jobs:2, desc:'+2 stone miners'},
   mine:   {name:'Gold Mine',  w:2,h:2, cost:{wood:60,stone:40}, hp:280, jobs:2, desc:'+2 gold diggers'},
-  store:  {name:'Storehouse', w:2,h:2, cost:{wood:50,stone:25}, hp:320, cap:250, desc:'Holds more of everything'},
+  store:  {name:'Storehouse', w:2,h:2, cost:{wood:50,stone:25}, hp:320, cap:250, desc:'+250 capacity per resource when complete. Select to expand to +500'},
   barracks:{name:'Barracks',  w:3,h:2, cost:{wood:80,stone:50}, hp:420, desc:'Trains warriors'},
   tower:  {name:'Watchtower', w:1,h:1, cost:{wood:30,stone:45}, hp:340, dps:14, range:5.2, desc:'Shoots raiders'},
   wall:   {name:'Wall',       w:1,h:1, cost:{stone:12}, hp:400, desc:'Slows the enemy down'},
@@ -1721,7 +1721,8 @@ function areaOK(tx,ty,w,h){
 function canPay(c){ for(const k in c) if((S.res[k]||0)<c[k]) return false; return true; }
 function pay(c){ for(const k in c) S.res[k]-=c[k]; }
 function costStr(c){ return Object.keys(c).map(k=>c[k]+' '+k).join('  '); }
-function capOf(k){ return S.cap[k] + S.buildings.filter(b=>b.key==='store').length*(BT.store.cap); }
+function storeCapacity(b){return b.pop>=1?(b.level>=2?500:250):0;}
+function capOf(k){return S.cap[k]+S.buildings.reduce((n,b)=>n+(b.key==='store'?storeCapacity(b):0),0);}
 function addRes(k,v){ S.res[k]=Math.min(capOf(k), S.res[k]+v); }
 
 function makeBuilding(key,tx,ty){
@@ -2408,6 +2409,37 @@ function buildRoadMesh(){
   return upload(m);
 }
 function onStonePath(x,y){const b=occ(Math.floor(x),Math.floor(y));return !!b&&b.key==='road'&&b.pop>=1;}
+// v244: expand a completed store instead of finding another building plot.
+function storeSelected(){const b=S.pick;return b&&b.key==='store'&&S.buildings.includes(b)&&S.mode==='village'&&!S.sel&&!FP.battle&&!FP.interior&&!S.sail?b:null;}
+function storeUpgrade(b){
+  if(!b||b.key!=='store'||!S.buildings.includes(b)||b.pop<1||b.level>=2)return false;
+  if(!canPay({wood:80,stone:40,gold:20})){A.deny();toast2('Need 80 wood, 40 stone and 20 gold');return false;}
+  pay({wood:80,stone:40,gold:20});b.level=2;saveGame();A.build();toast2('Deep Stores: +500 capacity for each resource');return true;
+}
+function storePanelR(){const w=Math.min(324,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-166,w,h:166};}
+function storeUpgradeR(){const r=storePanelR();return {x:r.x+12,y:r.y+104,w:r.w-24,h:48};}
+function storePanelTap(x,y){const b=storeSelected();if(!b)return false;const r=storePanelR();if(!inR(x,y,r))return false;
+  if(x>r.x+r.w-42&&y<r.y+36){S.pick=null;A.blip();return true;}
+  if(inR(x,y,storeUpgradeR()))storeUpgrade(b);return true;
+}
+function storeTargetFP(){
+  if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
+  let best=null,dist=4.2;for(const b of S.buildings){if(b.key!=='store')continue;
+    const dx=b.tx+1-FP.x,dy=b.ty+1-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
+    if(d<dist&&a<.55){best=b;dist=d;}}return best;
+}
+function storeOpenFP(){const b=storeTargetFP();if(!b)return false;S.pick=b;A.blip();return true;}
+function drawStorePanel(){
+  if(S.story||S.chronOpen)return;const b=storeSelected();
+  if(!b){if(storeTargetFP()){const w=Math.min(300,W-24);ctx.fillStyle='rgba(39,34,28,.94)';rrp((W-w)/2,H-154,w,34,9);ctx.fill();txt3('STOREHOUSE - '+TAPW()+' to manage',W/2,H-132,12,'#f4dfb7','center',800,false);}return;}
+  const r=storePanelR(),u=storeUpgradeR();ctx.save();ctx.fillStyle='rgba(39,34,28,.97)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();
+  txt3(b.level>=2?'STOREHOUSE II - DEEP STORES':'STOREHOUSE',r.x+12,r.y+23,14,'#f4dfb7','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
+  txt3(b.pop<1?'Under construction - no storage yet':'This store: +'+storeCapacity(b)+' capacity per resource',r.x+12,r.y+46,11,'#fff','left',700,false);
+  const ks=['food','wood','stone','gold'];ks.forEach((k,i)=>{const x=r.x+12+(i%2)*(r.w/2),y=r.y+66+Math.floor(i/2)*18;txt3(k+': '+Math.floor(S.res[k])+'/'+capOf(k),x,y,11,S.res[k]>=capOf(k)?'#ffd28a':'#d4ddc7','left',700,false);});
+  ctx.fillStyle=b.level>=2?'#4b4d38':'#695137';rrp(u.x,u.y,u.w,u.h,8);ctx.fill();
+  txt3(b.level>=2?'DEEP STORES INSTALLED':'EXPAND: 80 wood + 40 stone + 20 gold',u.x+u.w/2,u.y+19,10,'#fff1d2','center',800,false);
+  txt3('+500 capacity per resource from this store',u.x+u.w/2,u.y+37,10,'#dfebca','center',700,false);ctx.restore();
+}
 function buildForesterMesh(){
   const m=MB(),T=M4.id(),wood=hex('#a57743'),green=hex('#4d9863');
   const at=(x,y,z,w,h,d,c)=>{M4.trs(T,x,y,z,0,0,0,1,1,1);box(m,w,h,d,c,T,0,.9);};
@@ -4787,7 +4819,7 @@ function fpGather(){
   if(t.kind!=='stone'){rebuildWorld();recount();}saveGame();return true;
 }
 function drawGatherHint(){
-  const t=fpGatherTarget();if(!t||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
+  const t=fpGatherTarget();if(!t||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
   ctx.save();ctx.beginPath();ctx.rect(0,145,W,Math.max(0,H-360));ctx.clip();
   const pts=[];for(let i=0;i<=32;i++){const a=i*TAU/32,x=t.x+.5+Math.cos(a)*.45,y=t.y+.5+Math.sin(a)*.45,p=projPt(x,groundH(x,y)+.08,y);if(p)pts.push(p);}
   if(pts.length>24){ctx.beginPath();pts.forEach((p,i)=>{if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1]);});ctx.closePath();
@@ -4861,7 +4893,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
-  if(workTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(workTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -4919,7 +4951,7 @@ function fpTap(x,y){
   if(!FP.battle&&!FP.interior&&!S.sail&&chatTap()) return true;
   if(starTap(x,y)) return true;
   if(fishTap()) return true;
-  if(foresterOpenFP()||marketOpenFP()||kitchenOpenFP())return true;
+  if(storeOpenFP()||foresterOpenFP()||marketOpenFP()||kitchenOpenFP())return true;
   if(fpGather())return true;
   if(x>W*0.45){ FP.swing=0.35; fpSwingHit(); }
   return true;
@@ -6162,7 +6194,7 @@ function drawUI(){
   if(S.mode==='war'){ drawWarMap(); drawToasts2(); drawBanner2(); return; }
 
   if(FP.on && !(FP.battle&&S.war.result)){
-    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawWorkUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
+    drawParts(); drawFloats2(); drawLaundry(); drawPennants(); drawVets(); drawWeather(); drawBirds(); drawRareBeacon(); drawStar(); drawNightGlow(); drawKitchenHints(); drawKitchenPanel(); drawFPUI(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawWorkUI(); drawToasts2(); drawBanner2();  // the village keeps its weather in person too
     if((G.diag||0)>=1){ ctx.font='700 11px system-ui'; ctx.textAlign='right';
       ctx.fillStyle='rgba(141,255,106,0.8)'; ctx.fillText(Math.round(G.fps)+' fps', W-8, 16); }
     return; }
@@ -6180,7 +6212,7 @@ function drawUI(){
   drawWeather();
   drawBirds();
   drawRareBeacon(); drawStar(); drawNightGlow();
-  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawWorkUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
+  drawForesterRange(); drawGhostHint(); drawInspect2(); drawKitchenHints(); drawKitchenPanel(); drawWarBtn(); drawWalkBtn(); drawChronBtn(); drawMuteBtn(); drawQuest(); drawGoal(); drawQuestRing(); drawObjCard(); drawShare(); drawMarketUI(); drawForesterPanel(); drawStorePanel(); drawWorkUI(); drawToasts2(); drawBanner2(); drawChron(); drawCeremony();
   const fv=Math.round(G.fps);
   if((G.diag||0)<=1){
     if((G.diag||0)===1){
@@ -8641,7 +8673,7 @@ function hitGob3(sxp,syp){
 }
 function handleTap3(x,y){
   A.init(); A.resume();
-  if(workTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(workTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(S.story){ if(inR(x,y,storySkipR())){ finishStory(); } else { S.story.t=999; tickStory(0.001); } return true; }
   if(S.chronOpen){ if(inR(x,y,chronCloseR())||!inR(x,y,chronPanel())){ S.chronOpen=false; A.blip(); } return true; }
   if(S.victPhase>=0&&S.started&&S.mode==='village'&&!FP.on){ ceremonyTap(); return; }
