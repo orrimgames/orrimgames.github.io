@@ -4696,7 +4696,11 @@ function fpGather(){
 function drawGatherHint(){
   const t=fpGatherTarget();if(!t||marketBuilding()||kitchenPanelBuilding())return;
   const w=Math.min(300,W-24);ctx.fillStyle='rgba(31,46,26,.91)';rrp((W-w)/2,H-202,w,34,9);ctx.fill();
-  txt3((t.kind==='wood'?'CHOP TREE':t.kind==='stone'?'MINE STONE':'PICK SHROOMS')+' - '+TAPW()+' for +'+t.amount+' '+t.kind,W/2,H-180,12,'#e7f4c3','center',800,false);
+  const full=capOf(t.kind)-S.res[t.kind]<t.amount,cool=FP.gatherCd||0;
+  const label=full?t.kind.toUpperCase()+' STORAGE FULL':cool>0?'GATHERING - ready in '+cool.toFixed(1)+'s':(t.kind==='wood'?'CHOP TREE':t.kind==='stone'?'MINE STONE':'PICK SHROOMS')+' - '+TAPW()+' for +'+t.amount+' '+t.kind;
+  txt3(label,W/2,H-180,12,full?'#f0c4a8':'#e7f4c3','center',800,false);
+  if(cool>0&&!full){const n=1-clamp(cool/(t.kind==='stone'?1.6:.8),0,1);ctx.fillStyle='#9fbf6d';ctx.fillRect((W-w)/2+8,H-172,(w-16)*n,3);}
+
 }
 function fpPathBoost(){return !FP.interior&&!FP.battle&&!S.sail&&onStonePath(FP.x,FP.y);}
 function fpUpdate(dt){
@@ -4830,7 +4834,17 @@ function drawWalkBtn(){
   txt3('WALK IN', r.x+r.w/2, r.y+18, 12.5,'#d8ffc0','center',800);
   txt3('first person', r.x+r.w/2, r.y+32, 10,'#bfe8b0','center',600);
 }
+function drawFPResources(){
+  if(FP.battle||FP.interior||S.sail||S.mode!=='village')return;
+  const keys=['food','wood','stone','gold'],total=Math.min(W-24,440),cw=(total-12)/4,x=(W-total)/2,y=74;
+  keys.forEach((k,i)=>{const bx=x+i*(cw+4),full=S.res[k]>=capOf(k);
+    ctx.fillStyle='rgba(24,28,23,.83)';rrp(bx,y,cw,38,8);ctx.fill();
+    txt3(k.toUpperCase(),bx+cw/2,y+13,9,resColor2(k),'center',800,false);
+    txt3(Math.floor(S.res[k])+'/'+capOf(k),bx+cw/2,y+29,11,full?'#f4d88a':'#f4f0e4','center',800,false);
+  });
+}
 function drawFPUI(){
+  drawFPResources();
   drawGatherHint();
   if(fpPathBoost()){
     const bw=Math.min(250,W-24),bx=(W-bw)/2,by=H-82;
@@ -4882,7 +4896,7 @@ function drawFPUI(){
       ctx.fillStyle='rgba(20,52,80,0.88)'; rrp(r.x,r.y,r.w,r.h,13); ctx.fill();
       txt3(S.boat&&Math.hypot(S.boat.x-FP.x,S.boat.y-FP.y)<6?'SET SAIL':'MAKE A RAFT',r.x+r.w/2,r.y+26,13,'#cdeaff','center',900); }
   }
-  if(!FP.battle&&!FP.interior&&!S.sail) txt3('glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(FISH.st===0&&fishWater()?'  -  tap the water to fish':FISH.st===1?'  -  line out...':FISH.st===2?'  -  BOB! tap!':'')+(fireLive()&&S.secrets.bf_d!==glDay()?(feastLive()?'  -  FEAST DAY: the fire is lit':'  -  a bonfire is lit'):'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, 30, 13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
+  if(!FP.battle&&!FP.interior&&!S.sail) txt3(W<600?('glimmers '+glCount()+'/8'+(FISH.st===1?' - line out...':FISH.st===2?' - BOB! tap!':FISH.st===0&&fishWater()?' - tap water to fish':' - cairns '+cairnCount()+'/6')):'glimmers '+glCount()+'/8'+(rareLive()?'  -  a pale light is out there today':'')+(wispLive()?'  -  a green wisp drifts in the dark':'')+(FISH.st===0&&fishWater()?'  -  tap the water to fish':FISH.st===1?'  -  line out...':FISH.st===2?'  -  BOB! tap!':'')+(fireLive()&&S.secrets.bf_d!==glDay()?(feastLive()?'  -  FEAST DAY: the fire is lit':'  -  a bonfire is lit'):'')+(cairnCount()<6?'  -  cairns '+cairnCount()+'/6':''), W/2, W<600?59:30, W<600?11:13,'rgba(255,224,130,0.9)','center',800,'rgba(0,0,0,0.55)');
   if(FP.hurt>0){ ctx.fillStyle='rgba(190,30,30,'+(FP.hurt*0.5)+')'; ctx.fillRect(0,0,W,H); }
 }
 
