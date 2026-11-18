@@ -2482,12 +2482,25 @@ function farmHarvest(b){
   let left=n;for(let i=0;i<b.crops.length&&left;i++)if(b.crops[i]>=1){b.crops[i]=0;left--;}
   addRes('food',n*3);saveGame();A.pick();floatW(b.tx+1,b.gy+1,b.ty+1,'+'+n*3+' food','#ffe9a8');return true;
 }
-function tickFarmCare(dt){if(S.mode!=='village')return;for(const b of S.buildings)if(b.key==='farm')b.tendCd=Math.max(0,(b.tendCd||0)-Math.max(0,dt));}
-function farmPanelR(){const w=Math.min(324,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-206,w,h:206};}
+// v249: irrigation lets a remote field grow without a farmer standing in it.
+function irrigationRate(b){return b.level>=2?.005*(1+clamp(S.wx?S.wx.rain:0,0,1)):0;}
+function farmUpgrade(b){
+  if(!b||b.key!=='farm'||!S.buildings.includes(b)||b.pop<1||b.level>=2)return false;
+  if(!canPay({stone:80,gold:30})){A.deny();toast2('Irrigation needs 80 stone and 30 gold');return false;}
+  pay({stone:80,gold:30});b.level=2;saveGame();A.build();toast2('Irrigation installed: crops grow on their own, faster in rain');return true;
+}
+function tickFarmCare(dt){
+  if(S.mode!=='village')return;dt=Math.max(0,dt);
+  for(const b of S.buildings)if(b.key==='farm'){
+    b.tendCd=Math.max(0,(b.tendCd||0)-dt);
+    if(b.pop>=1&&b.crops&&b.level>=2)b.crops=b.crops.map(c=>Math.min(1,c+dt*irrigationRate(b)));
+  }
+}
+function farmPanelR(){const w=Math.min(324,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-272,w,h:272};}
 function farmActionR(i){const r=farmPanelR();return {x:r.x+12,y:r.y+100+i*47,w:r.w-24,h:40};}
 function farmPanelTap(x,y){const b=farmSelected();if(!b)return false;const r=farmPanelR();if(!inR(x,y,r))return false;
   if(x>r.x+r.w-42&&y<r.y+36){S.pick=null;A.blip();return true;}
-  if(inR(x,y,farmActionR(0)))farmHarvest(b);if(inR(x,y,farmActionR(1)))farmTend(b);return true;
+  if(inR(x,y,farmActionR(2)))farmUpgrade(b);if(inR(x,y,farmActionR(0)))farmHarvest(b);if(inR(x,y,farmActionR(1)))farmTend(b);return true;
 }
 function farmTargetFP(){
   if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
@@ -2498,12 +2511,16 @@ function drawFarmPanel(){
   if(S.story||S.chronOpen)return;const b=farmSelected();
   if(!b){if(farmTargetFP()){const w=Math.min(300,W-24);ctx.fillStyle='rgba(30,48,29,.94)';rrp((W-w)/2,H-154,w,34,9);ctx.fill();txt3('FARM FIELD - '+TAPW()+' to tend',W/2,H-132,12,'#e2efbe','center',800,false);}return;}
   const r=farmPanelR();ctx.save();ctx.fillStyle='rgba(28,44,27,.97)';rrp(r.x,r.y,r.w,r.h,12);ctx.fill();
-  txt3('FARM FIELD',r.x+12,r.y+23,14,'#e2efbe','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
+  txt3(b.level>=2?'FARM II - IRRIGATED':'FARM FIELD',r.x+12,r.y+23,14,'#e2efbe','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
   txt3(b.pop<1?'Under construction':'Help the farmers - 3 food per ripe crop',r.x+12,r.y+45,11,'#e3e7cf','left',700,false);
   (b.crops||[]).forEach((c,i)=>{const x=r.x+12+i*(r.w-24)/4,w=(r.w-36)/4-4;ctx.fillStyle='#394e32';rrp(x,r.y+57,w,28,5);ctx.fill();ctx.fillStyle=c>=1?'#c3a452':'#6f984c';rrp(x,r.y+57,w*clamp(c,0,1),28,5);ctx.fill();txt3(c>=1?'RIPE':Math.floor(c*100)+'%',x+w/2,r.y+75,10,'#fff4d5','center',800,false);});
   const ripe=(b.crops||[]).filter(c=>c>=1).length,h=farmActionR(0),t=farmActionR(1);ctx.fillStyle=ripe&&capOf('food')-S.res.food>=3?'#6b6834':'#3d4f36';rrp(h.x,h.y,h.w,h.h,8);ctx.fill();
   txt3('HARVEST RIPE - '+ripe+' ready',h.x+h.w/2,h.y+25,12,'#fff0bd','center',800,false);
-  ctx.fillStyle=(b.tendCd||0)>0?'#414d38':'#506a42';rrp(t.x,t.y,t.w,t.h,8);ctx.fill();txt3((b.tendCd||0)>0?'TEND AGAIN IN '+Math.ceil(b.tendCd)+'s':'TEND FIELD - +20% growth',t.x+t.w/2,t.y+25,12,'#e0edc4','center',800,false);ctx.restore();
+  ctx.fillStyle=(b.tendCd||0)>0?'#414d38':'#506a42';rrp(t.x,t.y,t.w,t.h,8);ctx.fill();txt3((b.tendCd||0)>0?'TEND AGAIN IN '+Math.ceil(b.tendCd)+'s':'TEND FIELD - +20% growth',t.x+t.w/2,t.y+25,12,'#e0edc4','center',800,false);
+  const u=farmActionR(2);ctx.fillStyle=b.level>=2?'#3a5d55':'#3d525b';rrp(u.x,u.y,u.w,u.h,8);ctx.fill();
+  txt3(b.level>=2?'IRRIGATION INSTALLED':'IRRIGATE: 80 stone + 30 gold',u.x+u.w/2,u.y+16,11,'#d7eff0','center',800,false);
+  txt3(b.level>=2?'Passive growth: '+(irrigationRate(b)*100).toFixed(1)+'%/s - rain helps':'Crops grow without workers; rain speeds growth',u.x+u.w/2,u.y+32,10,'#bcd7d4','center',700,false);
+  ctx.restore();
 }
 function buildForesterMesh(){
   const m=MB(),T=M4.id(),wood=hex('#a57743'),green=hex('#4d9863');
