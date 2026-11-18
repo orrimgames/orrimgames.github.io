@@ -1688,7 +1688,7 @@ const BT={
   forester:{name:'Forester Grove',w:2,h:2,cost:{wood:55,stone:20},hp:240,desc:'Plants a tree nearby every 30s; keeps 12 trees within 6 tiles'},
   quarry: {name:'Quarry',     w:2,h:2, cost:{wood:40,stone:15}, hp:280, jobs:2, desc:'+2 stone miners'},
   mine:   {name:'Gold Mine',  w:2,h:2, cost:{wood:60,stone:40}, hp:280, jobs:2, desc:'+2 gold diggers'},
-  store:  {name:'Storehouse', w:2,h:2, cost:{wood:50,stone:25}, hp:320, cap:250, desc:'+250 capacity per resource when complete. Select to expand to +500'},
+  store:  {name:'Storehouse', w:2,h:2, cost:{wood:50,stone:25}, hp:320, cap:250, desc:'Local drop-off for workers; +250 capacity when complete. Select to expand'},
   barracks:{name:'Barracks',  w:3,h:2, cost:{wood:80,stone:50}, hp:420, desc:'Trains warriors'},
   tower:  {name:'Watchtower', w:1,h:1, cost:{wood:30,stone:45}, hp:340, dps:14, range:5.2, desc:'Shoots raiders'},
   wall:   {name:'Wall',       w:1,h:1, cost:{stone:12}, hp:400, desc:'Slows the enemy down'},
@@ -2085,6 +2085,17 @@ function findTile(pred, fromX, fromY){
 function hallB(){ return S.buildings.find(b=>b.key==='hall')||null; }
 function hallPos(){ const h=hallB(); return h? [h.tx+1.5,h.ty+1.5] : [SITE.x,SITE.y]; }
 function hallDoor(){ const h=hallB(); return h? [h.tx+1.5,h.ty+2.9] : [SITE.x,SITE.y+1.5]; }
+// v246: nearby stores shorten a worker's return trip. Completed stores only.
+function haulDropoff(g){
+  let best=hallDoor(),bd=Math.hypot(best[0]-g.x,best[1]-g.y),building=hallB();
+  for(const b of S.buildings){if(b.key!=='store'||b.pop<1)continue;
+    const x=b.tx+b.w/2,y=b.ty+b.h+.35;
+    if(x<.5||y<.5||x>MAP-.5||y>MAP-.5||tiles[Math.floor(y)]?.[Math.floor(x)]?.t===2)continue;
+    const cover=occ(Math.floor(x),Math.floor(y));if(cover&&cover.key!=='road')continue;
+    const d=Math.hypot(x-g.x,y-g.y);if(d<bd){bd=d;best=[x,y];building=b;}}
+  return {x:best[0],y:best[1],building};
+}
+function storeInbound(b){return S.gobs.filter(g=>g.state==='haul'&&g.carry&&g.amt>0&&haulDropoff(g).building===b).length;}
 function resColor2(k){ return {food:'#ffe9a8',wood:'#e0a35e',stone:'#dbe4ee',gold:'#ffd34d',faith:'#ff8a4d'}[k]; }
 
 // v243: the store accepts only what fits. The goblin keeps the rest.
@@ -2092,7 +2103,7 @@ function unloadCargo(g){
   if(!g.carry||!(g.amt>0)){g.carry=null;g.amt=0;g.cargoReady=false;g.waitStore=false;g.state='idle';g.st=.3;return 0;}
   if(!g.cargoReady){g.amt=S.vanto.main?Math.round(g.amt*1.5):g.amt;g.cargoReady=true;}
   const k=g.carry,amt=Math.min(g.amt,Math.max(0,capOf(k)-S.res[k]));
-  if(amt>0){addRes(k,amt);g.amt=Math.max(0,g.amt-amt);const h=hallDoor(),gh=groundH(h[0],h[1]);
+  if(amt>0){addRes(k,amt);g.amt=Math.max(0,g.amt-amt);const h=[g.x,g.y],gh=groundH(h[0],h[1]);
     floatW(h[0],gh+.7,h[1],'+'+Math.round(amt*10)/10+' '+k,resColor2(k));A.coin();sparkW(h[0],gh+.4,h[1],4,resColor2(k));}
   if(g.amt>0){g.waitStore=true;g.state='haul';g.work=0;}
   else {g.carry=null;g.amt=0;g.cargoReady=false;g.waitStore=false;g.squash=.6;g.state='idle';g.st=rnd(.6,.1);}
@@ -2224,8 +2235,8 @@ function updateGob(g,dt){
     case 'dig': { g.st+=dt*supperBoost(); g.work=1;
       if(g.st>3.4){ g.st=0; g.carry='gold'; g.amt=2+(g.trait.carry||0); A.coin(); g.state='haul'; g.work=0; }
       break; }
-    case 'haul': { const h=hallDoor();
-      step(h[0],h[1],()=>{
+    case 'haul': { const h=haulDropoff(g);
+      step(h.x,h.y,()=>{
         unloadCargo(g);
       });
       break; }
@@ -2432,8 +2443,8 @@ function storeUpgrade(b){
   if(!canPay({wood:80,stone:40,gold:20})){A.deny();toast2('Need 80 wood, 40 stone and 20 gold');return false;}
   pay({wood:80,stone:40,gold:20});b.level=2;saveGame();A.build();toast2('Deep Stores: +500 capacity for each resource');return true;
 }
-function storePanelR(){const w=Math.min(324,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-166,w,h:166};}
-function storeUpgradeR(){const r=storePanelR();return {x:r.x+12,y:r.y+104,w:r.w-24,h:48};}
+function storePanelR(){const w=Math.min(324,W-24);return {x:W-w-12,y:H-(FP.on?52:BARH+12)-190,w,h:190};}
+function storeUpgradeR(){const r=storePanelR();return {x:r.x+12,y:r.y+128,w:r.w-24,h:48};}
 function storePanelTap(x,y){const b=storeSelected();if(!b)return false;const r=storePanelR();if(!inR(x,y,r))return false;
   if(x>r.x+r.w-42&&y<r.y+36){S.pick=null;A.blip();return true;}
   if(inR(x,y,storeUpgradeR()))storeUpgrade(b);return true;
@@ -2452,6 +2463,7 @@ function drawStorePanel(){
   txt3(b.level>=2?'STOREHOUSE II - DEEP STORES':'STOREHOUSE',r.x+12,r.y+23,14,'#f4dfb7','left',800,false);txt3('X',r.x+r.w-22,r.y+23,14,'#fff','center',800,false);
   txt3(b.pop<1?'Under construction - no storage yet':'This store: +'+storeCapacity(b)+' capacity per resource',r.x+12,r.y+46,11,'#fff','left',700,false);
   const ks=['food','wood','stone','gold'];ks.forEach((k,i)=>{const x=r.x+12+(i%2)*(r.w/2),y=r.y+66+Math.floor(i/2)*18;txt3(k+': '+Math.floor(S.res[k])+'/'+capOf(k),x,y,11,S.res[k]>=capOf(k)?'#ffd28a':'#d4ddc7','left',700,false);});
+  txt3(b.pop<1?'Workers deliver here once construction ends':'Local drop-off: '+storeInbound(b)+' incoming hauler'+(storeInbound(b)===1?'':'s'),r.x+12,r.y+109,11,'#e4c68e','left',700,false);
   ctx.fillStyle=b.level>=2?'#4b4d38':'#695137';rrp(u.x,u.y,u.w,u.h,8);ctx.fill();
   txt3(b.level>=2?'DEEP STORES INSTALLED':'EXPAND: 80 wood + 40 stone + 20 gold',u.x+u.w/2,u.y+19,10,'#fff1d2','center',800,false);
   txt3('+500 capacity per resource from this store',u.x+u.w/2,u.y+37,10,'#dfebca','center',700,false);ctx.restore();
