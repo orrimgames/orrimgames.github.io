@@ -4672,6 +4672,7 @@ function fpDowned(){
   chron('The chief went down at the '+(S.war.foe?S.war.foe.name:'raid')+'. The goblins carried him back and told it louder than it happened.');
   fpExit();
 }
+function gatherRank(){const n=S.secrets.gatherXP||0;return n>=60?3:n>=20?2:1;}
 function fpGatherTarget(){
   if(!FP.on||FP.battle||FP.interior||S.sail||S.mode!=='village')return null;
   let best=null,dist=2.6;
@@ -4680,13 +4681,15 @@ function fpGatherTarget(){
     const dx=x+.5-FP.x,dy=y+.5-FP.y,d=Math.hypot(dx,dy),a=Math.abs(((Math.atan2(dx,dy)-FP.a+Math.PI*3)%TAU)-Math.PI);
     if(d>=dist||a>.42)continue;
     let blocked=false;for(let i=1;i<=8;i++)if(occ(Math.floor(FP.x+dx*i/9),Math.floor(FP.y+dy*i/9))){blocked=true;break;}
-    if(!blocked){best={x,y,c,kind:c.deco==='tree'?'wood':c.deco==='shroom'?'food':'stone',amount:c.deco==='tree'?4:c.deco==='shroom'?3:2};dist=d;}
+    if(!blocked){best={x,y,c,kind:c.deco==='tree'?'wood':c.deco==='shroom'?'food':'stone',amount:(c.deco==='tree'?4:c.deco==='shroom'?3:2)+gatherRank()-1};dist=d;}
   }return best;
 }
 function fpGather(){
   const t=fpGatherTarget();if(!t)return false;
   if(FP.gatherCd>0)return true;
   if(capOf(t.kind)-S.res[t.kind]<t.amount){toast2(t.kind+' storage full');A.deny();FP.gatherCd=.8;return true;}
+  const oldRank=gatherRank();S.secrets.gatherXP=(S.secrets.gatherXP||0)+1;
+  if(gatherRank()>oldRank){banner2('GATHERER RANK '+gatherRank(),'Each harvest now brings +'+(gatherRank()-1)+' extra supplies');A.cheer();chron('The chief learned the grain of the land. Gatherer rank '+gatherRank()+'.',true);}
   addRes(t.kind,t.amount);if(t.kind!=='stone'){t.c.deco=t.kind==='wood'?'stump':null;t.c.regrow=t.kind==='wood'?40:22;}FP.gatherCd=t.kind==='stone'?1.6:.8;
   if(t.kind==='wood')A.chop();else if(t.kind==='stone')A.dig();else A.pick();
   floatW(t.x+.5,groundH(t.x+.5,t.y+.5)+.8,t.y+.5,'+'+t.amount+' '+t.kind,t.kind==='wood'?'#e6c79c':t.kind==='stone'?'#e0e5ed':'#ffd4a8');
@@ -4842,6 +4845,8 @@ function drawFPResources(){
     txt3(k.toUpperCase(),bx+cw/2,y+13,9,resColor2(k),'center',800,false);
     txt3(Math.floor(S.res[k])+'/'+capOf(k),bx+cw/2,y+29,11,full?'#f4d88a':'#f4f0e4','center',800,false);
   });
+  const rank=gatherRank(),xp=S.secrets.gatherXP||0,next=rank===1?20:60;
+  txt3('GATHERER '+rank+(rank===3?' - mastered: +2 per harvest':' - '+xp+'/'+next+' harvests - next: +'+rank+' yield'),W/2,y+55,10,'#e5eac7','center',800,'rgba(0,0,0,.8)');
 }
 function drawFPUI(){
   drawFPResources();
