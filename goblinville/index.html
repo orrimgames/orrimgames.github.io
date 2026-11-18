@@ -2029,7 +2029,7 @@ function drawWorkUI(){
   WORK_FOCUS.forEach((f,i)=>{const q=workRowR(i),active=workFocus()[0]===f[0];ctx.fillStyle=active?'#4a7162':'#30474c';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
     txt3((active?'> ':'')+f[1]+(f[0]==='balanced'?'':' first'),q.x+12,q.y+25,12,'#f1f2d8','left',800,false);
     const detail=f[0]==='balanced'?S.gobs.length+' goblins':(counts[f[2]]||0)+' / '+slots[f[2]]+' jobs';txt3(detail,q.x+q.w-12,q.y+25,11,'#d1e6dc','right',700,false);});
-  txt3(blockedHaulers()?'Route blocked: open a dry route to the Hall or a Store.':waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
+  txt3(blockedHaulers()?'Route blocked: open a dry route to the Hall or a Store.':detouringHaulers()?'Detour: '+detouringHaulers()+' hauling to a reachable drop-off.':waitingCargo()?waitingCargo()+' waiting: storage full. Spend or build a Store.':'Carried goods are kept safe, even when storage is full.',r.x+r.w/2,r.y+338,10,waitingCargo()?'#ffd28a':'#c3d9d0','center',600,false);
   const q=supperR(),left=supperLeft();ctx.fillStyle=left?'#66582e':S.res.food>=30?'#735131':'#434547';rrp(q.x,q.y,q.w,q.h,8);ctx.fill();
   txt3(left?'SUPPER RUSH: '+Math.ceil(left)+'s left':'BROOD SUPPER - 30 food',q.x+q.w/2,q.y+19,12,'#ffedc2','center',800,false);
   txt3('Workers: +30% walking and harvest speed for 90s',q.x+q.w/2,q.y+37,10,'#d9e4c7','center',700,false);const sc=scoutLinkR();ctx.fillStyle=scoutRun()&&scoutRun().left<=0?'#686c39':'#3e6158';rrp(sc.x,sc.y,sc.w,sc.h,8);ctx.fill();txt3('SCOUTING PARTY',sc.x+sc.w/2,sc.y+18,10,'#e5efcd','center',800,false);txt3(scoutRun()?(scoutRun().left<=0?'Supplies ready':Math.ceil(scoutRun().left)+'s to return'):'Provision a run',sc.x+sc.w/2,sc.y+34,10,'#cbdcc4','center',600,false);const pl=planLinkR();ctx.fillStyle='#615d46';rrp(pl.x,pl.y,pl.w,pl.h,8);ctx.fill();txt3('VILLAGE PLANNER',pl.x+pl.w/2,pl.y+18,10,'#f0e8cc','center',800,false);txt3('Reclaim building space',pl.x+pl.w/2,pl.y+34,9,'#ded9c4','center',600,false);
@@ -2271,16 +2271,21 @@ function findTile(pred, fromX, fromY){
 function hallB(){ return S.buildings.find(b=>b.key==='hall')||null; }
 function hallPos(){ const h=hallB(); return h? [h.tx+1.5,h.ty+1.5] : [SITE.x,SITE.y]; }
 function hallDoor(){ const h=hallB(); return h? [h.tx+1.5,h.ty+2.9] : [SITE.x,SITE.y+1.5]; }
-// v246: nearby stores shorten a worker's return trip. Completed stores only.
+// v258: skip a cut-off store and try the next closest reachable drop-off.
 function haulDropoff(g){
-  let best=hallDoor(),bd=Math.hypot(best[0]-g.x,best[1]-g.y),building=hallB();
+  const d=hallDoor(),candidates=[{x:d[0],y:d[1],building:hallB()}];
   for(const b of S.buildings){if(b.key!=='store'||b.pop<1)continue;
     const x=b.tx+b.w/2,y=b.ty+b.h+.35;
     if(x<.5||y<.5||x>MAP-.5||y>MAP-.5||tiles[Math.floor(y)]?.[Math.floor(x)]?.t===2)continue;
-    const cover=occ(Math.floor(x),Math.floor(y));if(cover&&cover.key!=='road')continue;
-    const d=Math.hypot(x-g.x,y-g.y);if(d<bd){bd=d;best=[x,y];building=b;}}
-  return {x:best[0],y:best[1],building};
+    const cover=occ(Math.floor(x),Math.floor(y));if(cover&&cover.key!=='road')continue;candidates.push({x,y,building:b});}
+  candidates.sort((a,b)=>Math.hypot(a.x-g.x,a.y-g.y)-Math.hypot(b.x-g.x,b.y-g.y));
+  const key=Math.floor(g.x)+','+Math.floor(g.y)+','+HAUL_REV+'|'+candidates.map(c=>c.x+','+c.y).join('|');
+  if(g.dropNav&&g.dropNav.key===key&&G.t<g.dropNav.until&&(!g.dropNav.h.building||S.buildings.includes(g.dropNav.h.building)))return g.dropNav.h;
+  let h=candidates[0],fallback=false;
+  for(let i=0;i<candidates.length;i++){const c=candidates[i];if(Math.hypot(c.x-g.x,c.y-g.y)<.14||haulRoute(g,c)!==null){h=c;fallback=i>0;break;}}
+  g.dropFallback=fallback;g.dropNav={key,h,until:G.t+3};return h;
 }
+function detouringHaulers(){return S.gobs.filter(g=>g.state==='haul'&&g.carry&&g.dropFallback).length;}
 // v257: haulers follow dry four-way routes, choosing useful completed roads.
 let HAUL_REV=0;
 function haulRoute(g,h){
@@ -2329,7 +2334,7 @@ function waitingCargo(){return S.gobs.filter(g=>g.waitStore&&g.carry&&g.amt>0).l
 
 /* --------------------------------- sim --------------------------------- */
 function updateGob(g,dt){
-  if(g.state!=='haul'){g.nav=null;g.routeBlocked=false;}
+  if(g.state!=='haul'){g.nav=null;g.dropNav=null;g.dropFallback=false;g.routeBlocked=false;}
   g.ph+=dt*7;
   if(g.emoteT>0){ g.emoteT-=dt; if(g.emoteT<=0) g.emote=null; }
   if(g.squash>0) g.squash=Math.max(0,g.squash-dt*3.2);
