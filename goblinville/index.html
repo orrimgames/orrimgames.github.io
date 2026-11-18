@@ -4907,7 +4907,7 @@ function fpEnterBattle(){
 }
 function fpExit(){
   if(FP.interior){ for(let i=PROPS.length-1;i>=0;i--) if(PROPS[i].interior===FP.interior) PROPS.splice(i,1); FP.interior=null; }
-  FP.on=false; FP.battle=false; FP.mv=null; FP.lk=null;
+  FP.on=false; FP.battle=false; FP.mv=null; FP.lk=null;FP.runToggle=false;FP.running=false;
   CAM.mode='iso';
   if(S.mode==='battle'){ CAM.tx=MAP/2; CAM.ty=MAP/2+2; CAM.yaw=0.9; CAM.pitch=0.78; CAM.dist=15; CAM.zoom=1; }
   else if(FP.iso){ Object.assign(CAM,FP.iso); FP.iso=null; }
@@ -4958,8 +4958,35 @@ function drawGatherHint(){
   if(cool>0&&!full){const n=1-clamp(cool/(t.kind==='stone'?1.6:.8),0,1);ctx.fillStyle='#9fbf6d';ctx.fillRect((W-w)/2+8,H-172,(w-16)*n,3);}
 
 }
+// v252: a short, recoverable sprint for exploring the village on foot.
+function sprintAvailable(){return FP.on&&S.mode==='village'&&!FP.battle&&!FP.interior&&!S.sail;}
+function sprintR(){return {x:14,y:206,w:112,h:44};}
+function sprintStep(moving,dt){
+  FP.stamina=FP.stamina==null?100:clamp(FP.stamina,0,100);dt=Math.max(0,dt);
+  if(!sprintAvailable()){FP.runToggle=false;FP.running=false;return 1;}
+  if(FP.runLocked&&FP.stamina>=35)FP.runLocked=false;
+  const want=FP.runToggle||DESK.keys.has('Shift');
+  FP.running=!!(want&&moving&&!FP.runLocked&&FP.stamina>0);
+  let mult=1;
+  if(FP.running){const used=Math.min(dt,FP.stamina/20);mult=dt?1+.65*used/dt:1.65;FP.stamina=Math.max(0,FP.stamina-20*dt);
+    if(!FP.stamina){FP.runLocked=true;FP.runToggle=false;}}
+  else FP.stamina=Math.min(100,FP.stamina+15*dt);
+  return mult;
+}
+function sprintTap(x,y){if(!sprintAvailable()||workOpen||farmSelected()||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding()||!inR(x,y,sprintR()))return false;
+  if(FP.runLocked){toast2('Catch your breath - ready at 35 stamina');A.deny();return true;}
+  FP.runToggle=!FP.runToggle;A.blip();return true;
+}
+function drawSprint(){
+  if(!sprintAvailable()||workOpen||farmSelected()||storeSelected()||foresterSelected()||marketBuilding()||kitchenPanelBuilding())return;
+  const r=sprintR(),n=FP.stamina==null?100:FP.stamina;ctx.save();ctx.fillStyle='rgba(31,48,49,.94)';rrp(r.x,r.y,r.w,r.h,9);ctx.fill();
+  txt3(FP.runLocked?'CATCH BREATH':FP.runToggle||FP.running?'SPRINT ON':'SPRINT',r.x+r.w/2,r.y+16,11,'#ebedc7','center',800,false);
+  txt3(DESK.mouse?'Shift or click':'tap to toggle',r.x+r.w/2,r.y+30,10,'#c5dcd0','center',700,false);
+  ctx.fillStyle='#3e544c';ctx.fillRect(r.x+8,r.y+36,r.w-16,3);ctx.fillStyle=FP.runLocked?'#d4a96c':'#b0db8c';ctx.fillRect(r.x+8,r.y+36,(r.w-16)*n/100,3);ctx.restore();
+}
 function fpPathBoost(){return !FP.interior&&!FP.battle&&!S.sail&&onStonePath(FP.x,FP.y);}
 function fpUpdate(dt){
+  if(S.sail)sprintStep(false,dt);
   FP.gatherCd=Math.max(0,(FP.gatherCd||0)-dt);
   FP.swing=Math.max(0,FP.swing-dt);
   if(FP.hurt>0) FP.hurt-=dt;
@@ -4984,10 +5011,11 @@ function fpUpdate(dt){
     fpSyncCam();
     return;
   }
+  const run=sprintStep(!!FP.mv&&Math.hypot(FP.mv.x-FP.mv.x0,FP.mv.y-FP.mv.y0)>4,dt);
   if(FP.mv){
     const dx=clamp((FP.mv.x-FP.mv.x0)/54,-1,1), dy=clamp((FP.mv.y-FP.mv.y0)/54,-1,1);
     const fx=Math.sin(FP.a), fz=Math.cos(FP.a);
-    const sp=2.5*dt*(fpPathBoost()?1.35:1);
+    const sp=2.5*dt*run*(fpPathBoost()?1.35:1);
     const mx=(fx*-dy + -fz*dx)*sp, mz=(fz*-dy + fx*dx)*sp;
     const nx=FP.x+mx, nz=FP.y+mz;
     if(fpWalkableAny(nx,FP.y)) FP.x=nx;
@@ -5019,7 +5047,7 @@ function fpSwingHit(){
   if(hit){ S.shake=Math.max(S.shake,4); A.chop(); } else A.toss();
 }
 function fpTap(x,y){
-  if(workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
+  if(sprintTap(x,y)||workTap(x,y)||farmPanelTap(x,y)||storePanelTap(x,y)||foresterPanelTap(x,y)||marketPanelTap(x,y)||kitchenPanelTap(x,y))return true;
   if(inR(x,y,sailBtnR())&&!FP.battle){
     if(S.sail){ if(sailStop()) return true; A.deny(); return true; }
     if(sailBoardable(FP.x,FP.y)){ sailStart(); return true; } }
@@ -5102,7 +5130,7 @@ function drawFPResources(){
   txt3('GATHERER '+rank+(rank===3?' - mastered: +2 per harvest':' - '+xp+'/'+next+' harvests - next: +'+rank+' yield'),W/2,y+55,10,'#e5eac7','center',800,'rgba(0,0,0,.8)');
 }
 function drawFPUI(){
-  drawFPResources();
+  drawFPResources();drawSprint();
   drawGatherHint();
   if(fpPathBoost()){
     const bw=Math.min(250,W-24),bx=(W-bw)/2,by=H-82;
@@ -9039,7 +9067,7 @@ function deskShortcut(k,e){
   if(k==='h'){ toast2('WASD or arrows move  -  Q/E turn  -  Z/X zoom  -  1-9 build  -  M map  -  V walk  -  C chronicle  -  Esc back  -  H keys'); return; }
   if(!FP.on && k>='1' && k<='9'){ deskCard(+k-1); return; }
 }
-const DESKHOLD=['w','a','s','d','q','e','z','x','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+const DESKHOLD=['Shift','w','a','s','d','q','e','z','x','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
 window.addEventListener('keydown',e=>{
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   const k=e.key.length===1?e.key.toLowerCase():e.key;
