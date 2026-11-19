@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-19T22:15:42Z",
-  "ts": 1795126542.9890692,
-  "scan_seconds": 14.5,
+  "generated_at": "2026-11-19T22:20:33Z",
+  "ts": 1795126833.854189,
+  "scan_seconds": 9.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 274 binary + 1702 multi | kalshi: 5000 events -> 71 binary + 4761 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 276 binary + 1700 multi | kalshi: 5000 events -> 71 binary + 4761 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1130,11 +1130,11 @@
    "venue": "polymarket",
    "event": "Merriam-Webster Word of the Year 2026 contains...?",
    "n_legs": 9,
-   "gross": 0.5329999999999999,
-   "fees": 0.02152685,
-   "net": 0.5114731499999999,
-   "capital": 0.48852685,
-   "roi": 1.0469703968164696,
+   "gross": 0.53,
+   "fees": 0.021664100000000002,
+   "net": 0.5083359000000001,
+   "capital": 0.49166410000000005,
+   "roi": 1.0339089227787834,
    "url": "https://polymarket.com/event/merriam-webster-word-of-the-year-2026-contains",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1190,7 +1190,7 @@
     },
     {
      "label": "bait",
-     "ask": 0.041,
+     "ask": 0.044,
      "fee": 0.05,
      "token": "84720151826640435537420814413933880066551225856380000182206198862730068068653"
     }
@@ -2472,13 +2472,109 @@
   },
   {
    "venue": "polymarket",
+   "event": "Bank of England Decision in February?",
+   "n_legs": 5,
+   "gross": 0.01100000000000001,
+   "fees": 0.02500895,
+   "net": -0.014008949999999989,
+   "capital": 1.01400895,
+   "roi": -0.013815410603624345,
+   "url": "https://polymarket.com/event/bank-of-england-decision-in-february-2027",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "50+ bps decrease",
+     "ask": 0.006,
+     "fee": 0.05,
+     "token": "37845861187557870389699986922946897159800810181572064495776965243435727893014"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.042,
+     "fee": 0.05,
+     "token": "106544318354138851140530224310981770553547070340740020265111043813977590516781"
+    },
+    {
+     "label": "No Change",
+     "ask": 0.3,
+     "fee": 0.05,
+     "token": "30594246012662275402061690422048346375687962950190976637863103347385647899349"
+    },
+    {
+     "label": "25 bps increase",
+     "ask": 0.63,
+     "fee": 0.05,
+     "token": "70355136727949459559447715913672262250624607813771213943299346492599247903970"
+    },
+    {
+     "label": "50+ bps increase",
+     "ask": 0.011,
+     "fee": 0.05,
+     "token": "6403151036263930069644404328021959566897827127357362311621963638210136622909"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "bank-of-england-decision-in-february-2027"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Swiss National Bank Decision in March?",
+   "n_legs": 5,
+   "gross": 0.008000000000000007,
+   "fees": 0.0236437,
+   "net": -0.015643699999999993,
+   "capital": 1.0156437,
+   "roi": -0.015402744092244153,
+   "url": "https://polymarket.com/event/swiss-national-bank-decision-in-march-2027",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "50+ bps decrease",
+     "ask": 0.021,
+     "fee": 0.05,
+     "token": "104045214333685947605392747100625918133023905430070369784931273169854585027152"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.009,
+     "fee": 0.05,
+     "token": "46308574869928766015679744805739500554399253201128769773978955433257786794948"
+    },
+    {
+     "label": "No Change",
+     "ask": 0.31,
+     "fee": 0.05,
+     "token": "30757282906981078935668865929134836305749881914636087999284061720590737652239"
+    },
+    {
+     "label": "25 bps increase",
+     "ask": 0.65,
+     "fee": 0.05,
+     "token": "13218359871664300656814382308796927537953424743960708734013359746955881613225"
+    },
+    {
+     "label": "50+ bps increase",
+     "ask": 0.002,
+     "fee": 0.05,
+     "token": "57934457660965573444310525187852717670464409745701180269502081063042514516024"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "swiss-national-bank-decision-in-march-2027"
+  },
+  {
+   "venue": "polymarket",
    "event": "What will OpenAI's IPO valuation be?",
    "n_legs": 8,
-   "gross": 0.015999999999999903,
-   "fees": 0.03206792,
-   "net": -0.016067920000000097,
-   "capital": 1.01606792,
-   "roi": -0.015813824729354803,
+   "gross": 0.014999999999999902,
+   "fees": 0.03208556,
+   "net": -0.017085560000000097,
+   "capital": 1.0170855600000002,
+   "roi": -0.016798547410308423,
    "url": "https://polymarket.com/event/what-will-openais-ipo-valuation-be",
    "neg_risk": true,
    "coverage": "8/8",
@@ -2486,7 +2582,7 @@
    "legs": [
     {
      "label": "<$1T",
-     "ask": 0.279,
+     "ask": 0.28,
      "fee": 0.04,
      "token": "34364770132628089445663861616190474086377373921155601806483803672069358703472"
     },
@@ -2535,102 +2631,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "what-will-openais-ipo-valuation-be"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Bank of England Decision in February?",
-   "n_legs": 5,
-   "gross": 0.0050000000000000044,
-   "fees": 0.02528195,
-   "net": -0.020281949999999997,
-   "capital": 1.02028195,
-   "roi": -0.01987876978515595,
-   "url": "https://polymarket.com/event/bank-of-england-decision-in-february-2027",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "50+ bps decrease",
-     "ask": 0.006,
-     "fee": 0.05,
-     "token": "37845861187557870389699986922946897159800810181572064495776965243435727893014"
-    },
-    {
-     "label": "25 bps decrease",
-     "ask": 0.048,
-     "fee": 0.05,
-     "token": "106544318354138851140530224310981770553547070340740020265111043813977590516781"
-    },
-    {
-     "label": "No Change",
-     "ask": 0.3,
-     "fee": 0.05,
-     "token": "30594246012662275402061690422048346375687962950190976637863103347385647899349"
-    },
-    {
-     "label": "25 bps increase",
-     "ask": 0.63,
-     "fee": 0.05,
-     "token": "70355136727949459559447715913672262250624607813771213943299346492599247903970"
-    },
-    {
-     "label": "50+ bps increase",
-     "ask": 0.011,
-     "fee": 0.05,
-     "token": "6403151036263930069644404328021959566897827127357362311621963638210136622909"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "bank-of-england-decision-in-february-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Swiss National Bank Decision in March?",
-   "n_legs": 5,
-   "gross": 0.0020000000000000018,
-   "fees": 0.0239293,
-   "net": -0.0219293,
-   "capital": 1.0219293,
-   "roi": -0.02145872517795507,
-   "url": "https://polymarket.com/event/swiss-national-bank-decision-in-march-2027",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "50+ bps decrease",
-     "ask": 0.027,
-     "fee": 0.05,
-     "token": "104045214333685947605392747100625918133023905430070369784931273169854585027152"
-    },
-    {
-     "label": "25 bps decrease",
-     "ask": 0.009,
-     "fee": 0.05,
-     "token": "46308574869928766015679744805739500554399253201128769773978955433257786794948"
-    },
-    {
-     "label": "No Change",
-     "ask": 0.31,
-     "fee": 0.05,
-     "token": "30757282906981078935668865929134836305749881914636087999284061720590737652239"
-    },
-    {
-     "label": "25 bps increase",
-     "ask": 0.65,
-     "fee": 0.05,
-     "token": "13218359871664300656814382308796927537953424743960708734013359746955881613225"
-    },
-    {
-     "label": "50+ bps increase",
-     "ask": 0.002,
-     "fee": 0.05,
-     "token": "57934457660965573444310525187852717670464409745701180269502081063042514516024"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "swiss-national-bank-decision-in-march-2027"
   },
   {
    "venue": "polymarket",
