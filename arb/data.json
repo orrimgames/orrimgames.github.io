@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-20T23:21:11Z",
-  "ts": 1795216871.7975266,
-  "scan_seconds": 20.5,
+  "generated_at": "2026-11-20T23:25:47Z",
+  "ts": 1795217147.235987,
+  "scan_seconds": 13.5,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 258 binary + 1705 multi | kalshi: 5000 events -> 75 binary + 4760 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 255 binary + 1708 multi | kalshi: 5000 events -> 74 binary + 4760 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -374,11 +374,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.715,
-   "fees": 0.018862550000000002,
-   "net": 0.6961374499999999,
-   "capital": 0.30386255,
-   "roi": 2.2909616535502644,
+   "gross": 0.716,
+   "fees": 0.018799060000000003,
+   "net": 0.69720094,
+   "capital": 0.30279906,
+   "roi": 2.302520159738937,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -404,7 +404,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.047,
+     "ask": 0.046,
      "fee": 0.07,
      "token": "44218778953311166567287576054706650870870860822782747210216967205350297025914"
     },
@@ -600,6 +600,60 @@
   },
   {
    "venue": "polymarket",
+   "event": "Ink FDV above ___ one day after launch?",
+   "n_legs": 6,
+   "gross": 0.647,
+   "fees": 0.023049810000000004,
+   "net": 0.62395019,
+   "capital": 0.37604981,
+   "roi": 1.6592221918686783,
+   "url": "https://polymarket.com/event/ink-fdv-above-one-day-after-launch",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "$100M",
+     "ask": 0.08,
+     "fee": 0.07,
+     "token": "76031544377055892909634427325494065810670102278524674929544175839523888572965"
+    },
+    {
+     "label": "$500M ",
+     "ask": 0.07,
+     "fee": 0.07,
+     "token": "111038777903810500955184501816954346973829614534020117303301259782775956752807"
+    },
+    {
+     "label": "$1B",
+     "ask": 0.044,
+     "fee": 0.07,
+     "token": "1669403929476904842828383184875082532297077185996813535692439685266884704967"
+    },
+    {
+     "label": "$2B",
+     "ask": 0.035,
+     "fee": 0.07,
+     "token": "28866225543465128139768756566484608339364822624537993610950548450652388284923"
+    },
+    {
+     "label": "$3B",
+     "ask": 0.034,
+     "fee": 0.07,
+     "token": "62836153256928133814009769001621857001861776619852327874384799258416226066078"
+    },
+    {
+     "label": "$250M",
+     "ask": 0.09,
+     "fee": 0.07,
+     "token": "49751776725733588244395184486412039518296526355814856771895286561834282437757"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "ink-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
    "event": "Opensea FDV above ___ one day after launch?",
    "n_legs": 8,
    "gross": 0.647,
@@ -663,60 +717,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "opensea-fdv-above-one-day-after-launch"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Ink FDV above ___ one day after launch?",
-   "n_legs": 6,
-   "gross": 0.646,
-   "fees": 0.023114980000000004,
-   "net": 0.62288502,
-   "capital": 0.37711498,
-   "roi": 1.651711157164852,
-   "url": "https://polymarket.com/event/ink-fdv-above-one-day-after-launch",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "$100M",
-     "ask": 0.08,
-     "fee": 0.07,
-     "token": "76031544377055892909634427325494065810670102278524674929544175839523888572965"
-    },
-    {
-     "label": "$500M ",
-     "ask": 0.07,
-     "fee": 0.07,
-     "token": "111038777903810500955184501816954346973829614534020117303301259782775956752807"
-    },
-    {
-     "label": "$1B",
-     "ask": 0.044,
-     "fee": 0.07,
-     "token": "1669403929476904842828383184875082532297077185996813535692439685266884704967"
-    },
-    {
-     "label": "$2B",
-     "ask": 0.035,
-     "fee": 0.07,
-     "token": "28866225543465128139768756566484608339364822624537993610950548450652388284923"
-    },
-    {
-     "label": "$3B",
-     "ask": 0.035,
-     "fee": 0.07,
-     "token": "62836153256928133814009769001621857001861776619852327874384799258416226066078"
-    },
-    {
-     "label": "$250M",
-     "ask": 0.09,
-     "fee": 0.07,
-     "token": "49751776725733588244395184486412039518296526355814856771895286561834282437757"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "ink-fdv-above-one-day-after-launch"
   },
   {
    "venue": "kalshi",
@@ -2442,6 +2442,54 @@
   },
   {
    "venue": "polymarket",
+   "event": "How many Jensen Huang affairs will be reported by December 31?",
+   "n_legs": 5,
+   "gross": 0.014000000000000012,
+   "fees": 0.01781448,
+   "net": -0.003814479999999988,
+   "capital": 1.00381448,
+   "roi": -0.0037999850330909636,
+   "url": "https://polymarket.com/event/how-many-jensen-huang-affairs-will-be-reported-by-december-31",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "3",
+     "ask": 0.72,
+     "fee": 0.04,
+     "token": "92723387666573921437159452613474392617447699007597179858375168996499029429437"
+    },
+    {
+     "label": "4",
+     "ask": 0.12,
+     "fee": 0.04,
+     "token": "17145772970155534292361119294361327854815463253910054833411588868182255113499"
+    },
+    {
+     "label": "5",
+     "ask": 0.07,
+     "fee": 0.04,
+     "token": "5244037376561737344282181306933586714256698330895301972127436366717212833951"
+    },
+    {
+     "label": "6",
+     "ask": 0.043,
+     "fee": 0.04,
+     "token": "2257582451962680954042726489858912425041645481588192385301748215975170303352"
+    },
+    {
+     "label": "7+",
+     "ask": 0.033,
+     "fee": 0.04,
+     "token": "85772606124291460148374642815466628031089029546354389330423741049017451131309"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-jensen-huang-affairs-will-be-reported-by-december-31"
+  },
+  {
+   "venue": "polymarket",
    "event": "Bank of Japan Decision in December?",
    "n_legs": 5,
    "gross": 0.0050000000000000044,
@@ -2541,54 +2589,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "highest-7-day-average-ship-traffic-through-the-bab-el-mandeb-strait-by-december-31"
-  },
-  {
-   "venue": "polymarket",
-   "event": "How many Jensen Huang affairs will be reported by December 31?",
-   "n_legs": 5,
-   "gross": 0.008000000000000007,
-   "fees": 0.0180372,
-   "net": -0.010037199999999993,
-   "capital": 1.0100372,
-   "roi": -0.009937455768955829,
-   "url": "https://polymarket.com/event/how-many-jensen-huang-affairs-will-be-reported-by-december-31",
-   "neg_risk": true,
-   "coverage": "5/5",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "3",
-     "ask": 0.72,
-     "fee": 0.04,
-     "token": "92723387666573921437159452613474392617447699007597179858375168996499029429437"
-    },
-    {
-     "label": "4",
-     "ask": 0.12,
-     "fee": 0.04,
-     "token": "17145772970155534292361119294361327854815463253910054833411588868182255113499"
-    },
-    {
-     "label": "5",
-     "ask": 0.07,
-     "fee": 0.04,
-     "token": "5244037376561737344282181306933586714256698330895301972127436366717212833951"
-    },
-    {
-     "label": "6",
-     "ask": 0.043,
-     "fee": 0.04,
-     "token": "2257582451962680954042726489858912425041645481588192385301748215975170303352"
-    },
-    {
-     "label": "7+",
-     "ask": 0.039,
-     "fee": 0.04,
-     "token": "85772606124291460148374642815466628031089029546354389330423741049017451131309"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-jensen-huang-affairs-will-be-reported-by-december-31"
   },
   {
    "venue": "polymarket",
