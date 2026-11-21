@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-21T08:41:03Z",
-  "ts": 1795250463.5773869,
-  "scan_seconds": 20.5,
+  "generated_at": "2026-11-21T08:45:43Z",
+  "ts": 1795250743.2485528,
+  "scan_seconds": 11.6,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 268 binary + 1737 multi | kalshi: 5000 events -> 75 binary + 4760 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 266 binary + 1736 multi | kalshi: 5000 events -> 75 binary + 4760 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1796,11 +1796,11 @@
    "venue": "kalshi",
    "event": "Who will be named as Xi Jinping's successor?",
    "n_legs": 14,
-   "gross": 0.18999999999999995,
+   "gross": 0.19899999999999995,
    "fees": 0.14,
-   "net": 0.04999999999999993,
-   "capital": 0.9500000000000001,
-   "roi": 0.05263157894736835,
+   "net": 0.05899999999999994,
+   "capital": 0.9410000000000001,
+   "roi": 0.06269925611052066,
    "url": "https://kalshi.com/events/KXXISUCCESSOR-45JAN01",
    "neg_risk": null,
    "coverage": "14/14",
@@ -1832,7 +1832,7 @@
     },
     {
      "label": "Li Xi",
-     "ask": 0.099,
+     "ask": 0.09,
      "fee": 0.07,
      "ticker": "KXXISUCCESSOR-45JAN01-LXI"
     },
@@ -2049,6 +2049,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "what-price-will-dogecoin-hit-in-november-2026"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Reserve Bank of Australia Decision in February?",
+   "n_legs": 5,
+   "gross": 0.013999999999999901,
+   "fees": 0.0049403,
+   "net": 0.009059699999999902,
+   "capital": 0.9909403000000001,
+   "roi": 0.00914252856604974,
+   "url": "https://polymarket.com/event/reserve-bank-of-australia-decision-in-february-2027",
+   "neg_risk": true,
+   "coverage": "5/5",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "50+ bps decrease",
+     "ask": 0.02,
+     "fee": 0.01,
+     "token": "11112458368357575032544468448431845015972681559120296441923855441233370397700"
+    },
+    {
+     "label": "25 bps decrease",
+     "ask": 0.109,
+     "fee": 0.01,
+     "token": "114858867622589999894446030836736322032125529303676751246073247211283258064846"
+    },
+    {
+     "label": "No Change",
+     "ask": 0.68,
+     "fee": 0.01,
+     "token": "33460797574234936340578153261673756120096377537720464101382931993856193298120"
+    },
+    {
+     "label": "25 bps increase",
+     "ask": 0.117,
+     "fee": 0.01,
+     "token": "49218245304343432174541776570277541521893850802944094823556865903295977045807"
+    },
+    {
+     "label": "50+ bps increase",
+     "ask": 0.06,
+     "fee": 0.01,
+     "token": "50309650798029263124761379157370009322390891077928672271224233949086630543522"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "reserve-bank-of-australia-decision-in-february-2027"
   },
   {
    "venue": "polymarket",
@@ -2477,5 +2525,35 @@
    "event_slug": "KXAFRICALEADEROUT-35"
   }
  ],
- "cross": []
+ "cross": [
+  {
+   "kind": "cross-venue",
+   "direction": "YES@kalshi+NO@poly",
+   "sim": 0.583,
+   "gross": 0.02200000000000002,
+   "fees": 0.02183436,
+   "net": 0.00016564000000001897,
+   "capital": 0.99983436,
+   "roi": 0.00016566744115497186,
+   "yes_leg": {
+    "venue": "kalshi",
+    "ask": 0.22,
+    "fee": 0.07,
+    "ticker": "KXGTA6SONGS-30-MOB"
+   },
+   "no_leg": {
+    "venue": "polymarket",
+    "ask": 0.758,
+    "fee": 0.01,
+    "token_yes": "75107289821896210342729097143003880672927050488521666591744062354095917915415",
+    "token_no": "92024515914598612918235658187097550473526396007852615262417956479861718585053"
+   },
+   "poly": "Will \"Mo Bamba\" by Sheck Wes be on the radio in GTA VI at launch?",
+   "kalshi": "What songs will be on the GTA 6 radio at launch?",
+   "poly_url": "https://polymarket.com/event/songs-on-gta-vi-radio-at-launch",
+   "kalshi_url": "https://kalshi.com/markets/KXGTA6SONGS-30-MOB",
+   "poly_end": "2026-12-04T04:59:00Z",
+   "kalshi_end": "2030-01-01T15:00:00Z"
+  }
+ ]
 }
