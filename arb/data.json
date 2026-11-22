@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-22T04:50:45Z",
-  "ts": 1795323045.2335048,
-  "scan_seconds": 15.1,
+  "generated_at": "2026-11-22T04:55:29Z",
+  "ts": 1795323329.3744307,
+  "scan_seconds": 8.2,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 321 binary + 1686 multi | kalshi: 5000 events -> 74 binary + 4755 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 326 binary + 1685 multi | kalshi: 5000 events -> 74 binary + 4755 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -530,13 +530,13 @@
     },
     {
      "label": "$2B",
-     "ask": 0.035,
+     "ask": 0.034,
      "fee": 0.01,
      "token": "28866225543465128139768756566484608339364822624537993610950548450652388284923"
     },
     {
      "label": "$3B",
-     "ask": 0.034,
+     "ask": 0.035,
      "fee": 0.01,
      "token": "62836153256928133814009769001621857001861776619852327874384799258416226066078"
     },
@@ -1646,11 +1646,11 @@
    "venue": "polymarket",
    "event": "How low will 10-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.21599999999999997,
-   "fees": 0.0068823999999999995,
-   "net": 0.20911759999999996,
-   "capital": 0.7908824,
-   "roi": 0.2644104863125036,
+   "gross": 0.238,
+   "fees": 0.0067420200000000005,
+   "net": 0.23125798,
+   "capital": 0.76874202,
+   "roi": 0.30082651134381855,
    "url": "https://polymarket.com/event/how-low-will-10-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1658,19 +1658,19 @@
    "legs": [
     {
      "label": "Below 4.82%",
-     "ask": 0.237,
+     "ask": 0.223,
      "fee": 0.01,
      "token": "13377721987098980051749607039131658402729491779351639608813085146833269355484"
     },
     {
      "label": "Below 4.79%",
-     "ask": 0.103,
+     "ask": 0.099,
      "fee": 0.01,
      "token": "90999116052433179326295346506194469643187572373856736791170226159277710153227"
     },
     {
      "label": "Below 4.76%",
-     "ask": 0.088,
+     "ask": 0.083,
      "fee": 0.01,
      "token": "42579316561871604284156190889284585288977750608923922690198544984439829177179"
     },
@@ -1688,13 +1688,13 @@
     },
     {
      "label": "Below 4.67%",
-     "ask": 0.05,
+     "ask": 0.049,
      "fee": 0.01,
      "token": "95784900426154966460263365604868194673653705014301467307693967215275125806681"
     },
     {
      "label": "Below 4.64%",
-     "ask": 0.059,
+     "ask": 0.061,
      "fee": 0.01,
      "token": "99458966200690317890531973869054242666541855627029686601218473990720015615370"
     },
@@ -2615,5 +2615,35 @@
    "event_slug": "KXBRAZILPRESPARTY-30OCT27"
   }
  ],
- "cross": []
+ "cross": [
+  {
+   "kind": "cross-venue",
+   "direction": "YES@poly+NO@kalshi",
+   "sim": 0.583,
+   "gross": 0.02100000000000002,
+   "fees": 0.01128199,
+   "net": 0.009718010000000018,
+   "capital": 0.99028199,
+   "roi": 0.009813376490872078,
+   "yes_leg": {
+    "venue": "polymarket",
+    "ask": 0.849,
+    "fee": 0.01,
+    "token_yes": "75107289821896210342729097143003880672927050488521666591744062354095917915415",
+    "token_no": "92024515914598612918235658187097550473526396007852615262417956479861718585053"
+   },
+   "no_leg": {
+    "venue": "kalshi",
+    "ask": 0.13,
+    "fee": 0.07,
+    "ticker": "KXGTA6SONGS-30-MOB"
+   },
+   "poly": "Will \"Mo Bamba\" by Sheck Wes be on the radio in GTA VI at launch?",
+   "kalshi": "What songs will be on the GTA 6 radio at launch?",
+   "poly_url": "https://polymarket.com/event/songs-on-gta-vi-radio-at-launch",
+   "kalshi_url": "https://kalshi.com/markets/KXGTA6SONGS-30-MOB",
+   "poly_end": "2026-12-04T04:59:00Z",
+   "kalshi_end": "2030-01-01T15:00:00Z"
+  }
+ ]
 }
