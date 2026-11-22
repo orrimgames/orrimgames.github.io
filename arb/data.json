@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-22T08:05:43Z",
-  "ts": 1795334743.0942693,
-  "scan_seconds": 12.4,
+  "generated_at": "2026-11-22T08:10:35Z",
+  "ts": 1795335035.8386836,
+  "scan_seconds": 10.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 332 binary + 1671 multi | kalshi: 5000 events -> 74 binary + 4755 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 332 binary + 1674 multi | kalshi: 5000 events -> 74 binary + 4755 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -1926,45 +1926,69 @@
   },
   {
    "venue": "polymarket",
-   "event": "Kamala Harris 2028 election exact outcome?",
-   "n_legs": 4,
-   "gross": 0.05300000000000005,
-   "fees": 0.02817875,
-   "net": 0.024821250000000048,
-   "capital": 0.97517875,
-   "roi": 0.025453025919607096,
-   "url": "https://polymarket.com/event/kamala-harris-2028-election-exact-outcome",
+   "event": "What will OpenAI's IPO valuation be?",
+   "n_legs": 8,
+   "gross": 0.04600000000000004,
+   "fees": 0.038480400000000005,
+   "net": 0.007519600000000036,
+   "capital": 0.9924803999999999,
+   "roi": 0.007576572796802876,
+   "url": "https://polymarket.com/event/what-will-openais-ipo-valuation-be",
    "neg_risk": true,
-   "coverage": "4/4",
+   "coverage": "8/8",
    "tier": 1,
    "legs": [
     {
-     "label": "Doesn't announce Dem run before 2028",
-     "ask": 0.5,
+     "label": "<$1T",
+     "ask": 0.296,
      "fee": 0.05,
-     "token": "18161137183869131611514710607514891832281070415505798341483617578426339179559"
+     "token": "34364770132628089445663861616190474086377373921155601806483803672069358703472"
     },
     {
-     "label": "Runs and loses Dem nomination",
-     "ask": 0.36,
+     "label": "$1.0T\u2013$1.25T",
+     "ask": 0.221,
      "fee": 0.05,
-     "token": "36604002275211844509080659510840667764908448154426498303882597138898170203308"
+     "token": "114487067577642371601428611604681794638789803278847876315680192458265598009713"
     },
     {
-     "label": "Wins Dem nomination and loses general",
-     "ask": 0.039,
+     "label": "$1.25T\u2013$1.5T",
+     "ask": 0.183,
      "fee": 0.05,
-     "token": "39347007763389279841230473370992829923898848523624074985627689204957417433229"
+     "token": "52540429872218211610913704779925694751511190737693260642338453325177504847893"
     },
     {
-     "label": "Wins presidency",
-     "ask": 0.048,
+     "label": "$1.5T\u2013$1.75T",
+     "ask": 0.076,
      "fee": 0.05,
-     "token": "56047151663616712339057371882047356731640300721638091450436466269514314508240"
+     "token": "108608046186389916588310792096178633814905721316446771031388214199119594568887"
+    },
+    {
+     "label": "$1.75T\u2013$2.0T",
+     "ask": 0.06,
+     "fee": 0.05,
+     "token": "20528705226080175194613421874381364675165566442600364131554921862701273855456"
+    },
+    {
+     "label": "$2.0T\u2013$2.25T",
+     "ask": 0.055,
+     "fee": 0.05,
+     "token": "18988064035400045381851606224734135492442938573764421352194183729249368763649"
+    },
+    {
+     "label": "$2.25T\u2013$2.5T",
+     "ask": 0.026,
+     "fee": 0.05,
+     "token": "1864093973955192781274337662717324783471056371971076761805445913596227268574"
+    },
+    {
+     "label": "$2.5T+",
+     "ask": 0.037,
+     "fee": 0.05,
+     "token": "103237098062510886690443421829712169490186159801502289336394100213621790984195"
     }
    ],
    "kind": "intra-event",
-   "event_slug": "kamala-harris-2028-election-exact-outcome"
+   "event_slug": "what-will-openais-ipo-valuation-be"
   },
   {
    "venue": "polymarket",
@@ -2016,72 +2040,6 @@
   },
   {
    "venue": "polymarket",
-   "event": "What will OpenAI's IPO valuation be?",
-   "n_legs": 8,
-   "gross": 0.03700000000000003,
-   "fees": 0.03876165,
-   "net": -0.0017616499999999688,
-   "capital": 1.00176165,
-   "roi": -0.001758552046786747,
-   "url": "https://polymarket.com/event/what-will-openais-ipo-valuation-be",
-   "neg_risk": true,
-   "coverage": "8/8",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "<$1T",
-     "ask": 0.296,
-     "fee": 0.05,
-     "token": "34364770132628089445663861616190474086377373921155601806483803672069358703472"
-    },
-    {
-     "label": "$1.0T\u2013$1.25T",
-     "ask": 0.221,
-     "fee": 0.05,
-     "token": "114487067577642371601428611604681794638789803278847876315680192458265598009713"
-    },
-    {
-     "label": "$1.25T\u2013$1.5T",
-     "ask": 0.192,
-     "fee": 0.05,
-     "token": "52540429872218211610913704779925694751511190737693260642338453325177504847893"
-    },
-    {
-     "label": "$1.5T\u2013$1.75T",
-     "ask": 0.076,
-     "fee": 0.05,
-     "token": "108608046186389916588310792096178633814905721316446771031388214199119594568887"
-    },
-    {
-     "label": "$1.75T\u2013$2.0T",
-     "ask": 0.06,
-     "fee": 0.05,
-     "token": "20528705226080175194613421874381364675165566442600364131554921862701273855456"
-    },
-    {
-     "label": "$2.0T\u2013$2.25T",
-     "ask": 0.055,
-     "fee": 0.05,
-     "token": "18988064035400045381851606224734135492442938573764421352194183729249368763649"
-    },
-    {
-     "label": "$2.25T\u2013$2.5T",
-     "ask": 0.026,
-     "fee": 0.05,
-     "token": "1864093973955192781274337662717324783471056371971076761805445913596227268574"
-    },
-    {
-     "label": "$2.5T+",
-     "ask": 0.037,
-     "fee": 0.05,
-     "token": "103237098062510886690443421829712169490186159801502289336394100213621790984195"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-will-openais-ipo-valuation-be"
-  },
-  {
-   "venue": "polymarket",
    "event": "Reserve Bank of New Zealand Decision in March?",
    "n_legs": 5,
    "gross": 0.0020000000000000018,
@@ -2127,6 +2085,48 @@
    ],
    "kind": "intra-event",
    "event_slug": "reserve-bank-of-new-zealand-decision-in-march-2027"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Kamala Harris 2028 election exact outcome?",
+   "n_legs": 4,
+   "gross": 0.013000000000000012,
+   "fees": 0.028658750000000004,
+   "net": -0.015658749999999992,
+   "capital": 1.01565875,
+   "roi": -0.015417333823983687,
+   "url": "https://polymarket.com/event/kamala-harris-2028-election-exact-outcome",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Doesn't announce Dem run before 2028",
+     "ask": 0.5,
+     "fee": 0.05,
+     "token": "18161137183869131611514710607514891832281070415505798341483617578426339179559"
+    },
+    {
+     "label": "Runs and loses Dem nomination",
+     "ask": 0.4,
+     "fee": 0.05,
+     "token": "36604002275211844509080659510840667764908448154426498303882597138898170203308"
+    },
+    {
+     "label": "Wins Dem nomination and loses general",
+     "ask": 0.039,
+     "fee": 0.05,
+     "token": "39347007763389279841230473370992829923898848523624074985627689204957417433229"
+    },
+    {
+     "label": "Wins presidency",
+     "ask": 0.048,
+     "fee": 0.05,
+     "token": "56047151663616712339057371882047356731640300721638091450436466269514314508240"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "kamala-harris-2028-election-exact-outcome"
   },
   {
    "venue": "polymarket",
@@ -2422,14 +2422,14 @@
    "kind": "cross-venue",
    "direction": "YES@poly+NO@kalshi",
    "sim": 0.583,
-   "gross": 0.039000000000000035,
-   "fees": 0.01055519,
-   "net": 0.028444810000000036,
-   "capital": 0.97155519,
-   "roi": 0.02927760593816604,
+   "gross": 0.019000000000000017,
+   "fees": 0.01037479,
+   "net": 0.008625210000000017,
+   "capital": 0.99137479,
+   "roi": 0.008700251496207623,
    "yes_leg": {
     "venue": "polymarket",
-    "ask": 0.941,
+    "ask": 0.961,
     "fee": 0.01,
     "token_yes": "75107289821896210342729097143003880672927050488521666591744062354095917915415",
     "token_no": "92024515914598612918235658187097550473526396007852615262417956479861718585053"
