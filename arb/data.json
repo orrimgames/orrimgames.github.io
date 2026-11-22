@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-22T13:40:43Z",
-  "ts": 1795354843.9470627,
-  "scan_seconds": 14.0,
+  "generated_at": "2026-11-22T13:45:35Z",
+  "ts": 1795355135.105337,
+  "scan_seconds": 9.1,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 312 binary + 1625 multi | kalshi: 5000 events -> 74 binary + 4755 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 313 binary + 1625 multi | kalshi: 5000 events -> 74 binary + 4755 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -446,11 +446,11 @@
    "venue": "polymarket",
    "event": "Abstract FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.721,
-   "fees": 0.00270231,
-   "net": 0.71829769,
-   "capital": 0.28170231,
-   "roi": 2.549846644850019,
+   "gross": 0.719,
+   "fees": 0.00272087,
+   "net": 0.71627913,
+   "capital": 0.28372087,
+   "roi": 2.5245909121877426,
    "url": "https://polymarket.com/event/abstract-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -464,7 +464,7 @@
     },
     {
      "label": "$400M",
-     "ask": 0.035,
+     "ask": 0.037,
      "fee": 0.01,
      "token": "14969137041406568482998226174886244413458670324702681555747452734368526655610"
     },
@@ -1112,11 +1112,11 @@
    "venue": "polymarket",
    "event": "Reya FDV above ___ one day after launch?",
    "n_legs": 8,
-   "gross": 0.402,
-   "fees": 0.00545522,
-   "net": 0.39654478000000004,
-   "capital": 0.60345522,
-   "roi": 0.6571237879092339,
+   "gross": 0.398,
+   "fees": 0.0054885,
+   "net": 0.3925115,
+   "capital": 0.6074885,
+   "roi": 0.6461216961308733,
    "url": "https://polymarket.com/event/reya-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "8/8",
@@ -1148,13 +1148,13 @@
     },
     {
      "label": "$300M",
-     "ask": 0.076,
+     "ask": 0.077,
      "fee": 0.01,
      "token": "50559798756353407844848764255928312283955977398112280029946941558311246926711"
     },
     {
      "label": "$400M",
-     "ask": 0.085,
+     "ask": 0.088,
      "fee": 0.01,
      "token": "73267706047103031036392501830346257031758527085670026582489921982591918498087"
     },
@@ -1532,11 +1532,11 @@
    "venue": "kalshi",
    "event": "Who will be named as Xi Jinping's successor?",
    "n_legs": 14,
-   "gross": 0.21799999999999997,
+   "gross": 0.21899999999999997,
    "fees": 0.14,
-   "net": 0.07799999999999996,
-   "capital": 0.922,
-   "roi": 0.08459869848156178,
+   "net": 0.07899999999999996,
+   "capital": 0.921,
+   "roi": 0.0857763300760043,
    "url": "https://kalshi.com/events/KXXISUCCESSOR-45JAN01",
    "neg_risk": null,
    "coverage": "14/14",
@@ -1550,7 +1550,7 @@
     },
     {
      "label": "Chen Jining",
-     "ask": 0.091,
+     "ask": 0.09,
      "fee": 0.07,
      "ticker": "KXXISUCCESSOR-45JAN01-CJIN"
     },
@@ -2279,35 +2279,5 @@
    "event_slug": "KXBRAZILPRESPARTY-30OCT27"
   }
  ],
- "cross": [
-  {
-   "kind": "cross-venue",
-   "direction": "YES@poly+NO@kalshi",
-   "sim": 0.583,
-   "gross": 0.017000000000000015,
-   "fees": 0.010262710000000001,
-   "net": 0.006737290000000014,
-   "capital": 0.99326271,
-   "roi": 0.006782988963715364,
-   "yes_leg": {
-    "venue": "polymarket",
-    "ask": 0.973,
-    "fee": 0.01,
-    "token_yes": "75107289821896210342729097143003880672927050488521666591744062354095917915415",
-    "token_no": "92024515914598612918235658187097550473526396007852615262417956479861718585053"
-   },
-   "no_leg": {
-    "venue": "kalshi",
-    "ask": 0.01,
-    "fee": 0.07,
-    "ticker": "KXGTA6SONGS-30-MOB"
-   },
-   "poly": "Will \"Mo Bamba\" by Sheck Wes be on the radio in GTA VI at launch?",
-   "kalshi": "What songs will be on the GTA 6 radio at launch?",
-   "poly_url": "https://polymarket.com/event/songs-on-gta-vi-radio-at-launch",
-   "kalshi_url": "https://kalshi.com/markets/KXGTA6SONGS-30-MOB",
-   "poly_end": "2026-12-04T04:59:00Z",
-   "kalshi_end": "2030-01-01T15:00:00Z"
-  }
- ]
+ "cross": []
 }
