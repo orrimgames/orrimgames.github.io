@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-24T18:45:51Z",
-  "ts": 1795545951.4519653,
-  "scan_seconds": 22.1,
+  "generated_at": "2026-11-24T18:50:40Z",
+  "ts": 1795546240.7405787,
+  "scan_seconds": 10.0,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 253 binary + 1742 multi | kalshi: 5000 events -> 72 binary + 4756 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 253 binary + 1744 multi | kalshi: 5000 events -> 72 binary + 4756 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -16,6 +16,66 @@
  },
  "intra_binary": [],
  "intra_event": [
+  {
+   "venue": "polymarket",
+   "event": "\"Focker-In-Law\" Rotten Tomatoes Score?",
+   "n_legs": 7,
+   "gross": 0.902,
+   "fees": 0.0009505599999999999,
+   "net": 0.90104944,
+   "capital": 0.09895056,
+   "roi": 9.106057004629381,
+   "url": "https://polymarket.com/event/focker-in-law-rotten-tomatoes-score-20261130",
+   "neg_risk": false,
+   "coverage": "7/7",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "55+",
+     "ask": 0.016,
+     "fee": 0.01,
+     "token": "88069084297408107725137922349439507498011692153272415201545076020574832448395"
+    },
+    {
+     "label": "60+",
+     "ask": 0.01,
+     "fee": 0.01,
+     "token": "25255775983302420877346229729514335184011401406076178545681527832911345960485"
+    },
+    {
+     "label": "65+",
+     "ask": 0.012,
+     "fee": 0.01,
+     "token": "75603674214298095694306938966282977316838719183559683930949545947704320682189"
+    },
+    {
+     "label": "70+",
+     "ask": 0.005,
+     "fee": 0.01,
+     "token": "49860356158381499282646226751563981220440957210382824072718500914943907730808"
+    },
+    {
+     "label": "75+",
+     "ask": 0.003,
+     "fee": 0.01,
+     "token": "74638090877080583482411330156439279116770442885523787848028140896491440017079"
+    },
+    {
+     "label": "50+",
+     "ask": 0.049,
+     "fee": 0.01,
+     "token": "39166536533012700299640848895410505613600498840709358253470738123394024901183"
+    },
+    {
+     "label": "80+",
+     "ask": 0.003,
+     "fee": 0.01,
+     "token": "100293244825549761364339012717763926009800154261466385473642292365690840737190"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "focker-in-law-rotten-tomatoes-score-20261130"
+  },
   {
    "venue": "polymarket",
    "event": "Cambria listed on ___ within 30 days of TGE?",
@@ -69,66 +129,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "cambria-listed-on-within-30-days-of-tge"
-  },
-  {
-   "venue": "polymarket",
-   "event": "\"Focker-In-Law\" Rotten Tomatoes Score?",
-   "n_legs": 7,
-   "gross": 0.877,
-   "fees": 0.0011863099999999999,
-   "net": 0.87581369,
-   "capital": 0.12418631,
-   "roi": 7.052417371930932,
-   "url": "https://polymarket.com/event/focker-in-law-rotten-tomatoes-score-20261130",
-   "neg_risk": false,
-   "coverage": "7/7",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "55+",
-     "ask": 0.041,
-     "fee": 0.01,
-     "token": "88069084297408107725137922349439507498011692153272415201545076020574832448395"
-    },
-    {
-     "label": "60+",
-     "ask": 0.01,
-     "fee": 0.01,
-     "token": "25255775983302420877346229729514335184011401406076178545681527832911345960485"
-    },
-    {
-     "label": "65+",
-     "ask": 0.012,
-     "fee": 0.01,
-     "token": "75603674214298095694306938966282977316838719183559683930949545947704320682189"
-    },
-    {
-     "label": "70+",
-     "ask": 0.005,
-     "fee": 0.01,
-     "token": "49860356158381499282646226751563981220440957210382824072718500914943907730808"
-    },
-    {
-     "label": "75+",
-     "ask": 0.003,
-     "fee": 0.01,
-     "token": "74638090877080583482411330156439279116770442885523787848028140896491440017079"
-    },
-    {
-     "label": "50+",
-     "ask": 0.049,
-     "fee": 0.01,
-     "token": "39166536533012700299640848895410505613600498840709358253470738123394024901183"
-    },
-    {
-     "label": "80+",
-     "ask": 0.003,
-     "fee": 0.01,
-     "token": "100293244825549761364339012717763926009800154261466385473642292365690840737190"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "focker-in-law-rotten-tomatoes-score-20261130"
   },
   {
    "venue": "polymarket",
@@ -374,11 +374,11 @@
    "venue": "polymarket",
    "event": "Hyperbeat FDV above ___ one day after launch?",
    "n_legs": 7,
-   "gross": 0.734,
-   "fees": 0.00252422,
-   "net": 0.73147578,
-   "capital": 0.26852422000000004,
-   "roi": 2.7240588577075093,
+   "gross": 0.735,
+   "fees": 0.00251503,
+   "net": 0.73248497,
+   "capital": 0.26751503,
+   "roi": 2.738107724265063,
    "url": "https://polymarket.com/event/hyperbeat-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "7/7",
@@ -404,7 +404,7 @@
     },
     {
      "label": "$100M",
-     "ask": 0.041,
+     "ask": 0.04,
      "fee": 0.01,
      "token": "44218778953311166567287576054706650870870860822782747210216967205350297025914"
     },
@@ -638,11 +638,11 @@
    "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
-   "gross": 0.6659999999999999,
-   "fees": 0.0031657599999999997,
-   "net": 0.6628342399999999,
-   "capital": 0.33716576000000004,
-   "roi": 1.9659002147786295,
+   "gross": 0.662,
+   "fees": 0.00320364,
+   "net": 0.6587963600000001,
+   "capital": 0.34120364,
+   "roi": 1.930801089929756,
    "url": "https://polymarket.com/event/pacifica-fdv-above-one-day-after-launch",
    "neg_risk": false,
    "coverage": "9/9",
@@ -674,7 +674,7 @@
     },
     {
      "label": "$800M",
-     "ask": 0.038,
+     "ask": 0.039,
      "fee": 0.01,
      "token": "65169405690445334680576441343688281319726047572591518638774037572918134867358"
     },
@@ -692,7 +692,7 @@
     },
     {
      "label": "$3B",
-     "ask": 0.021,
+     "ask": 0.024,
      "fee": 0.01,
      "token": "47408060630518902540138586789789908259894857122965376341769214000962535168498"
     },
@@ -705,6 +705,54 @@
    ],
    "kind": "intra-event",
    "event_slug": "pacifica-fdv-above-one-day-after-launch"
+  },
+  {
+   "venue": "polymarket",
+   "event": "Pro Football: Malik Willis 2026-27 Regular Season Passing Yards",
+   "n_legs": 5,
+   "gross": 0.651,
+   "fees": 0.01591665,
+   "net": 0.63508335,
+   "capital": 0.36491664999999995,
+   "roi": 1.7403518036241978,
+   "url": "https://polymarket.com/event/malik-willis-passing-yards-2026-27",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "2,449.5+ passing yards",
+     "ask": 0.099,
+     "fee": 0.05,
+     "token": "4444038844854586754712619151350057033612516117059577394197040682947512392689"
+    },
+    {
+     "label": "2,699.5+ passing yards",
+     "ask": 0.12,
+     "fee": 0.05,
+     "token": "14961350932172055258521120825969875558684711159157454638000397212160950234553"
+    },
+    {
+     "label": "2,949.5+ passing yards",
+     "ask": 0.061,
+     "fee": 0.05,
+     "token": "77928580441106956130694790490985765027634814172020359348360093457749455435908"
+    },
+    {
+     "label": "3,199.5+ passing yards",
+     "ask": 0.048,
+     "fee": 0.05,
+     "token": "19420300806281922704291946720609486017558934813678359991321032024109273784917"
+    },
+    {
+     "label": "3,449.5+ passing yards",
+     "ask": 0.021,
+     "fee": 0.05,
+     "token": "109257690405729346073213887788108792595102091596100409653799853817403461026230"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "malik-willis-passing-yards-2026-27"
   },
   {
    "venue": "polymarket",
@@ -966,61 +1014,13 @@
   },
   {
    "venue": "polymarket",
-   "event": "Pro Football: Malik Willis 2026-27 Regular Season Passing Yards",
-   "n_legs": 5,
-   "gross": 0.641,
-   "fees": 0.01629165,
-   "net": 0.62470835,
-   "capital": 0.37529165,
-   "roi": 1.664594322841982,
-   "url": "https://polymarket.com/event/malik-willis-passing-yards-2026-27",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "2,449.5+ passing yards",
-     "ask": 0.099,
-     "fee": 0.05,
-     "token": "4444038844854586754712619151350057033612516117059577394197040682947512392689"
-    },
-    {
-     "label": "2,699.5+ passing yards",
-     "ask": 0.13,
-     "fee": 0.05,
-     "token": "14961350932172055258521120825969875558684711159157454638000397212160950234553"
-    },
-    {
-     "label": "2,949.5+ passing yards",
-     "ask": 0.061,
-     "fee": 0.05,
-     "token": "77928580441106956130694790490985765027634814172020359348360093457749455435908"
-    },
-    {
-     "label": "3,199.5+ passing yards",
-     "ask": 0.048,
-     "fee": 0.05,
-     "token": "19420300806281922704291946720609486017558934813678359991321032024109273784917"
-    },
-    {
-     "label": "3,449.5+ passing yards",
-     "ask": 0.021,
-     "fee": 0.05,
-     "token": "109257690405729346073213887788108792595102091596100409653799853817403461026230"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "malik-willis-passing-yards-2026-27"
-  },
-  {
-   "venue": "polymarket",
    "event": "How low will 2-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.626,
-   "fees": 0.00356494,
-   "net": 0.62243506,
-   "capital": 0.37756494,
-   "roi": 1.6485510015839924,
+   "gross": 0.627,
+   "fees": 0.00355627,
+   "net": 0.62344373,
+   "capital": 0.37655626999999997,
+   "roi": 1.655645595809625,
    "url": "https://polymarket.com/event/how-low-will-2-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1028,7 +1028,7 @@
    "legs": [
     {
      "label": "Below 4.44%",
-     "ask": 0.067,
+     "ask": 0.066,
      "fee": 0.01,
      "token": "92463345944004170421870452258375743829619845823044610785303961019986917254277"
     },
@@ -1200,13 +1200,61 @@
   },
   {
    "venue": "polymarket",
+   "event": "How many coins launched in 2026 end the year in the top 100?",
+   "n_legs": 5,
+   "gross": 0.56,
+   "fees": 0.003968,
+   "net": 0.5560320000000001,
+   "capital": 0.44396800000000003,
+   "roi": 1.2524145884388065,
+   "url": "https://polymarket.com/event/how-many-coins-launched-in-2026-end-the-year-in-the-top-100",
+   "neg_risk": false,
+   "coverage": "5/5",
+   "tier": 2,
+   "legs": [
+    {
+     "label": ">4",
+     "ask": 0.14,
+     "fee": 0.01,
+     "token": "106459243067430730107818261433965400409552932179716531685277042055109617959703"
+    },
+    {
+     "label": ">6",
+     "ask": 0.1,
+     "fee": 0.01,
+     "token": "53043904596062816104948150364173503494245705509008027735515755235396867238346"
+    },
+    {
+     "label": ">8",
+     "ask": 0.08,
+     "fee": 0.01,
+     "token": "63271703080288866973690300405121493220226991310963851141739839680676284016989"
+    },
+    {
+     "label": ">10",
+     "ask": 0.06,
+     "fee": 0.01,
+     "token": "110486377076262087907774954988222234826795036785584470386395866418600700954798"
+    },
+    {
+     "label": ">12",
+     "ask": 0.06,
+     "fee": 0.01,
+     "token": "85498321770476963365060947363609735048337630857953945488068007956346226568888"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-coins-launched-in-2026-end-the-year-in-the-top-100"
+  },
+  {
+   "venue": "polymarket",
    "event": "Which country will join Abraham Accords before 2027?",
    "n_legs": 12,
-   "gross": 0.5569999999999999,
+   "gross": 0.5449999999999999,
    "fees": 0.0,
-   "net": 0.5569999999999999,
-   "capital": 0.443,
-   "roi": 1.257336343115124,
+   "net": 0.5449999999999999,
+   "capital": 0.455,
+   "roi": 1.1978021978021975,
    "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
    "neg_risk": false,
    "coverage": "12/12",
@@ -1262,7 +1310,7 @@
     },
     {
      "label": "Lebanon",
-     "ask": 0.049,
+     "ask": 0.061,
      "fee": 0.0,
      "token": "70421158385447271171150472556160386914125065346643301118369322982631623772398"
     },
@@ -1287,54 +1335,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "which-country-will-join-abraham-accords-before-2027"
-  },
-  {
-   "venue": "polymarket",
-   "event": "How many coins launched in 2026 end the year in the top 100?",
-   "n_legs": 5,
-   "gross": 0.56,
-   "fees": 0.003968,
-   "net": 0.5560320000000001,
-   "capital": 0.44396800000000003,
-   "roi": 1.2524145884388065,
-   "url": "https://polymarket.com/event/how-many-coins-launched-in-2026-end-the-year-in-the-top-100",
-   "neg_risk": false,
-   "coverage": "5/5",
-   "tier": 2,
-   "legs": [
-    {
-     "label": ">4",
-     "ask": 0.14,
-     "fee": 0.01,
-     "token": "106459243067430730107818261433965400409552932179716531685277042055109617959703"
-    },
-    {
-     "label": ">6",
-     "ask": 0.1,
-     "fee": 0.01,
-     "token": "53043904596062816104948150364173503494245705509008027735515755235396867238346"
-    },
-    {
-     "label": ">8",
-     "ask": 0.08,
-     "fee": 0.01,
-     "token": "63271703080288866973690300405121493220226991310963851141739839680676284016989"
-    },
-    {
-     "label": ">10",
-     "ask": 0.06,
-     "fee": 0.01,
-     "token": "110486377076262087907774954988222234826795036785584470386395866418600700954798"
-    },
-    {
-     "label": ">12",
-     "ask": 0.06,
-     "fee": 0.01,
-     "token": "85498321770476963365060947363609735048337630857953945488068007956346226568888"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-coins-launched-in-2026-end-the-year-in-the-top-100"
   },
   {
    "venue": "polymarket",
@@ -1430,11 +1430,11 @@
    "venue": "polymarket",
    "event": "How low will 10-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.396,
-   "fees": 0.00539412,
-   "net": 0.39060588,
-   "capital": 0.6093941199999999,
-   "roi": 0.6409741531473918,
+   "gross": 0.385,
+   "fees": 0.00542955,
+   "net": 0.37957045,
+   "capital": 0.62042955,
+   "roi": 0.6117865436938006,
    "url": "https://polymarket.com/event/how-low-will-10-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -1442,7 +1442,7 @@
    "legs": [
     {
      "label": "Below 4.82%",
-     "ask": 0.195,
+     "ask": 0.215,
      "fee": 0.01,
      "token": "13377721987098980051749607039131658402729491779351639608813085146833269355484"
     },
@@ -1460,7 +1460,7 @@
     },
     {
      "label": "Below 4.73%",
-     "ask": 0.038,
+     "ask": 0.036,
      "fee": 0.01,
      "token": "72993013703241848374730069726948161007757250920293581188188679554309296997683"
     },
@@ -1472,19 +1472,19 @@
     },
     {
      "label": "Below 4.67%",
-     "ask": 0.035,
+     "ask": 0.031,
      "fee": 0.01,
      "token": "95784900426154966460263365604868194673653705014301467307693967215275125806681"
     },
     {
      "label": "Below 4.64%",
-     "ask": 0.042,
+     "ask": 0.05,
      "fee": 0.01,
      "token": "99458966200690317890531973869054242666541855627029686601218473990720015615370"
     },
     {
      "label": "Below 4.61%",
-     "ask": 0.054,
+     "ask": 0.043,
      "fee": 0.01,
      "token": "108683739551781849289733884128553137887285925924115507393979701433030483399635"
     },
@@ -1502,11 +1502,11 @@
    "venue": "polymarket",
    "event": "What kind of product will OpenAI announce in 2026?",
    "n_legs": 10,
-   "gross": 0.392,
-   "fees": 0.0281163,
-   "net": 0.36388370000000003,
-   "capital": 0.6361163,
-   "roi": 0.5720395782972392,
+   "gross": 0.402,
+   "fees": 0.0277313,
+   "net": 0.3742687,
+   "capital": 0.6257313,
+   "roi": 0.5981300599794193,
    "url": "https://polymarket.com/event/what-kind-of-product-will-openai-announce-in-2026",
    "neg_risk": false,
    "coverage": "10/10",
@@ -1514,7 +1514,7 @@
    "legs": [
     {
      "label": "Earbuds/Headphones",
-     "ask": 0.12,
+     "ask": 0.11,
      "fee": 0.05,
      "token": "16040470176590332178266575986841073712697460370218768293287706373316090538021"
     },
@@ -2070,6 +2070,48 @@
   },
   {
    "venue": "polymarket",
+   "event": "Jon Ossoff 2028 election exact outcome?",
+   "n_legs": 4,
+   "gross": 0.030000000000000027,
+   "fees": 0.031425,
+   "net": -0.001424999999999975,
+   "capital": 1.001425,
+   "roi": -0.0014229722645230296,
+   "url": "https://polymarket.com/event/jon-ossoff-2028-election-exact-outcome",
+   "neg_risk": true,
+   "coverage": "4/4",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "Doesn't announce Dem run before 2028",
+     "ask": 0.51,
+     "fee": 0.05,
+     "token": "60306148030895482485580510981141068620773392389347363126120039578639053820402"
+    },
+    {
+     "label": "Runs and loses Dem nomination",
+     "ask": 0.21,
+     "fee": 0.05,
+     "token": "81962063037136311319825555851326114589769415227056262300097445037712371048971"
+    },
+    {
+     "label": "Wins Dem nomination and loses general",
+     "ask": 0.07,
+     "fee": 0.05,
+     "token": "102391990815054456326370859536798011923430400934265263334794557778763920248241"
+    },
+    {
+     "label": "Wins presidency",
+     "ask": 0.18,
+     "fee": 0.05,
+     "token": "110099586904016531012124815900126602104872285210704410043997800838183931201887"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "jon-ossoff-2028-election-exact-outcome"
+  },
+  {
+   "venue": "polymarket",
    "event": "Reserve Bank of India decision in December",
    "n_legs": 5,
    "gross": 0.0010000000000000009,
@@ -2205,48 +2247,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "alexandria-ocasio-cortez-2028-election-exact-outcome"
-  },
-  {
-   "venue": "polymarket",
-   "event": "Jon Ossoff 2028 election exact outcome?",
-   "n_legs": 4,
-   "gross": 0.019000000000000017,
-   "fees": 0.03145295,
-   "net": -0.012452949999999983,
-   "capital": 1.01245295,
-   "roi": -0.01229978143675712,
-   "url": "https://polymarket.com/event/jon-ossoff-2028-election-exact-outcome",
-   "neg_risk": true,
-   "coverage": "4/4",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "Doesn't announce Dem run before 2028",
-     "ask": 0.52,
-     "fee": 0.05,
-     "token": "60306148030895482485580510981141068620773392389347363126120039578639053820402"
-    },
-    {
-     "label": "Runs and loses Dem nomination",
-     "ask": 0.21,
-     "fee": 0.05,
-     "token": "81962063037136311319825555851326114589769415227056262300097445037712371048971"
-    },
-    {
-     "label": "Wins Dem nomination and loses general",
-     "ask": 0.071,
-     "fee": 0.05,
-     "token": "102391990815054456326370859536798011923430400934265263334794557778763920248241"
-    },
-    {
-     "label": "Wins presidency",
-     "ask": 0.18,
-     "fee": 0.05,
-     "token": "110099586904016531012124815900126602104872285210704410043997800838183931201887"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "jon-ossoff-2028-election-exact-outcome"
   },
   {
    "venue": "kalshi",
