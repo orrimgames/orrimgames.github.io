@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-26T06:40:43Z",
-  "ts": 1795675243.319471,
-  "scan_seconds": 14.0,
+  "generated_at": "2026-11-26T06:45:35Z",
+  "ts": 1795675535.9558046,
+  "scan_seconds": 9.4,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 339 binary + 1704 multi | kalshi: 5000 events -> 73 binary + 4752 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 336 binary + 1704 multi | kalshi: 5000 events -> 73 binary + 4752 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -354,6 +354,60 @@
   },
   {
    "venue": "polymarket",
+   "event": "What will be in a US-Iran deal in 2026?",
+   "n_legs": 6,
+   "gross": 0.718,
+   "fees": 0.0,
+   "net": 0.718,
+   "capital": 0.28200000000000003,
+   "roi": 2.5460992907801416,
+   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
+   "neg_risk": false,
+   "coverage": "6/6",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "1+ Year Enrichment Moratorium",
+     "ask": 0.05,
+     "fee": 0.0,
+     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
+    },
+    {
+     "label": "Uranium Enrichment % Cap (1+ Year)",
+     "ask": 0.039,
+     "fee": 0.0,
+     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
+    },
+    {
+     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
+     "ask": 0.04,
+     "fee": 0.0,
+     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
+    },
+    {
+     "label": "Iran Reconstruction Funding",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
+    },
+    {
+     "label": "Dilution of Iran's Uranium",
+     "ask": 0.06,
+     "fee": 0.0,
+     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
+    },
+    {
+     "label": "Enriched Uranium Surrender",
+     "ask": 0.033,
+     "fee": 0.0,
+     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
+  },
+  {
+   "venue": "polymarket",
    "event": "Pacifica FDV above ___ one day after launch?",
    "n_legs": 9,
    "gross": 0.7190000000000001,
@@ -453,60 +507,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "melania-trump-meets-with-by-december-31-2026"
-  },
-  {
-   "venue": "polymarket",
-   "event": "What will be in a US-Iran deal in 2026?",
-   "n_legs": 6,
-   "gross": 0.708,
-   "fees": 0.0,
-   "net": 0.708,
-   "capital": 0.29200000000000004,
-   "roi": 2.424657534246575,
-   "url": "https://polymarket.com/event/what-will-be-in-a-us-iran-deal-in-2026-20260624150226501",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "1+ Year Enrichment Moratorium",
-     "ask": 0.05,
-     "fee": 0.0,
-     "token": "96459096350293979949150549694293228485495944927529905541533983606476871296950"
-    },
-    {
-     "label": "Uranium Enrichment % Cap (1+ Year)",
-     "ask": 0.039,
-     "fee": 0.0,
-     "token": "34121477552603842220562776406803032728334731986482841432311709319160089219357"
-    },
-    {
-     "label": "\u22645% Uranium Enrichment Cap (1+ Year)",
-     "ask": 0.04,
-     "fee": 0.0,
-     "token": "114245191503232465363315640409504870951153657459002191006584916453493620924528"
-    },
-    {
-     "label": "Iran Reconstruction Funding",
-     "ask": 0.06,
-     "fee": 0.0,
-     "token": "17306927942046812963523554047158683729350184908440966752162806116949623483484"
-    },
-    {
-     "label": "Dilution of Iran's Uranium",
-     "ask": 0.07,
-     "fee": 0.0,
-     "token": "32959319162469428241742931252794025673861016626327139344084864031443960739513"
-    },
-    {
-     "label": "Enriched Uranium Surrender",
-     "ask": 0.033,
-     "fee": 0.0,
-     "token": "91018615335730146607757681488229678302578412531919233895751415772249975890108"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "what-will-be-in-a-us-iran-deal-in-2026-20260624150226501"
   },
   {
    "venue": "polymarket",
@@ -1454,11 +1454,11 @@
    "venue": "polymarket",
    "event": "Democratic 2028 presidential odds hit __ by December 31?",
    "n_legs": 4,
-   "gross": 0.348,
-   "fees": 0.00382474,
-   "net": 0.34417526,
-   "capital": 0.65582474,
-   "roi": 0.524797615899638,
+   "gross": 0.351,
+   "fees": 0.00379801,
+   "net": 0.34720198999999996,
+   "capital": 0.65279801,
+   "roi": 0.5318674148531793,
    "url": "https://polymarket.com/event/democratic-2028-presidential-odds-hit-by-december-31",
    "neg_risk": false,
    "coverage": "4/4",
@@ -1466,7 +1466,7 @@
    "legs": [
     {
      "label": "\u2191 75%",
-     "ask": 0.056,
+     "ask": 0.053,
      "fee": 0.01,
      "token": "105489969050032233439143399445907130754224210317733613352298571274866380120323"
     },
@@ -1982,11 +1982,11 @@
    "venue": "polymarket",
    "event": "How low will 10-year Treasury yield get in November?",
    "n_legs": 9,
-   "gross": 0.09199999999999997,
-   "fees": 0.007334139999999999,
-   "net": 0.08466585999999997,
-   "capital": 0.91533414,
-   "roi": 0.09249721637171751,
+   "gross": 0.06900000000000006,
+   "fees": 0.00748479,
+   "net": 0.06151521000000006,
+   "capital": 0.93848479,
+   "roi": 0.06554737024560629,
    "url": "https://polymarket.com/event/how-low-will-10-year-treasury-yield-get-in-november",
    "neg_risk": false,
    "coverage": "9/9",
@@ -2000,7 +2000,7 @@
     },
     {
      "label": "Below 4.79%",
-     "ask": 0.163,
+     "ask": 0.185,
      "fee": 0.01,
      "token": "90999116052433179326295346506194469643187572373856736791170226159277710153227"
     },
@@ -2012,7 +2012,7 @@
     },
     {
      "label": "Below 4.73%",
-     "ask": 0.073,
+     "ask": 0.076,
      "fee": 0.01,
      "token": "72993013703241848374730069726948161007757250920293581188188679554309296997683"
     },
@@ -2042,7 +2042,7 @@
     },
     {
      "label": "Below 4.57%",
-     "ask": 0.043,
+     "ask": 0.041,
      "fee": 0.01,
      "token": "87015592051056516728220028613108522071329028649837064578534327296733593575815"
     }
@@ -2259,60 +2259,6 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXKOREAPRESPARTY-30MAR27"
-  },
-  {
-   "venue": "polymarket",
-   "event": "SpaceX Q4 2026 rocket launches?",
-   "n_legs": 6,
-   "gross": 0.0030000000000000027,
-   "fees": 0.036520750000000005,
-   "net": -0.03352075,
-   "capital": 1.03352075,
-   "roi": -0.03243355297897986,
-   "url": "https://polymarket.com/event/spacex-q4-2026-rocket-launches-above",
-   "neg_risk": false,
-   "coverage": "6/6",
-   "tier": 2,
-   "legs": [
-    {
-     "label": "38+",
-     "ask": 0.428,
-     "fee": 0.05,
-     "token": "111167877342521185011149458360002076434905965309774727142184317442761385561034"
-    },
-    {
-     "label": "40+",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "68248390936664618163970523909660327797825065375891782353123450649509726177515"
-    },
-    {
-     "label": "42+",
-     "ask": 0.23,
-     "fee": 0.05,
-     "token": "102660075284101402062320078888872909950832630676911595333208462985417905896640"
-    },
-    {
-     "label": "44+",
-     "ask": 0.1,
-     "fee": 0.05,
-     "token": "9693685237525413962072539007447046973189496053719331296860562081203541660733"
-    },
-    {
-     "label": "46+",
-     "ask": 0.09,
-     "fee": 0.05,
-     "token": "45003789887431319601685309885466560604735258756873388400749290694297942218107"
-    },
-    {
-     "label": "48+",
-     "ask": 0.049,
-     "fee": 0.05,
-     "token": "33909672667555985119916044222155544543055681170885983378827651223802329677508"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "spacex-q4-2026-rocket-launches-above"
   },
   {
    "venue": "kalshi",
