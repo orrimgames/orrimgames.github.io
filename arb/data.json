@@ -1,10 +1,10 @@
 {
  "meta": {
-  "generated_at": "2026-11-27T10:10:47Z",
-  "ts": 1795774247.6099677,
-  "scan_seconds": 16.3,
+  "generated_at": "2026-11-27T10:15:35Z",
+  "ts": 1795774535.452157,
+  "scan_seconds": 9.3,
   "schema": 2,
-  "stats": "polymarket: 2100 events -> 298 binary + 1751 multi | kalshi: 5000 events -> 75 binary + 4749 mutual-excl multi",
+  "stats": "polymarket: 2100 events -> 299 binary + 1750 multi | kalshi: 5000 events -> 74 binary + 4749 mutual-excl multi",
   "fee_models": {
    "polymarket": "taker fee = rate*p*(1-p) per share, rate from market feeSchedule (0-0.07, geopolitics 0)",
    "kalshi": "taker fee = ceil(0.07*p*(1-p)*100)/100 per contract"
@@ -2076,6 +2076,42 @@
   },
   {
    "venue": "polymarket",
+   "event": "Iran vs. Australia",
+   "n_legs": 3,
+   "gross": 0.03600000000000003,
+   "fees": 0.017869200000000002,
+   "net": 0.01813080000000003,
+   "capital": 0.9818692,
+   "roi": 0.01846559602847307,
+   "url": "https://polymarket.com/event/bkfibaqas-ira-aus-2026-11-27",
+   "neg_risk": false,
+   "coverage": "3/3",
+   "tier": 2,
+   "legs": [
+    {
+     "label": "Iran vs. Australia",
+     "ask": 0.004,
+     "fee": 0.05,
+     "token": "14020436586328781748696332661133204841107803976887035093968572024439796553549"
+    },
+    {
+     "label": "Australia (-19.5)",
+     "ask": 0.75,
+     "fee": 0.05,
+     "token": "41609865336754626388025569234957237932253859985796071784257416843445374583158"
+    },
+    {
+     "label": "O/U 162.5",
+     "ask": 0.21,
+     "fee": 0.05,
+     "token": "12380133391261807326227887171893010061457553874873991294041484712962495146826"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "bkfibaqas-ira-aus-2026-11-27"
+  },
+  {
+   "venue": "polymarket",
    "event": "Rubio's Republican nomination odds hit __ by December 31?",
    "n_legs": 4,
    "gross": 0.010000000000000009,
@@ -2303,60 +2339,6 @@
    "event_slug": "world-cup-2030-location-of-final-20260805200159829"
   },
   {
-   "venue": "polymarket",
-   "event": "How many more Millennium Prize Problems will AI solve in 2026?",
-   "n_legs": 6,
-   "gross": 0.009000000000000008,
-   "fees": 0.03391775,
-   "net": -0.024917749999999995,
-   "capital": 1.02491775,
-   "roi": -0.02431195088581498,
-   "url": "https://polymarket.com/event/how-many-more-millennium-prize-problems-will-ai-solve-in-2026",
-   "neg_risk": true,
-   "coverage": "6/6",
-   "tier": 1,
-   "legs": [
-    {
-     "label": "0",
-     "ask": 0.32,
-     "fee": 0.05,
-     "token": "23562320982557386178443515603059705096749168834175657820475997828949413665923"
-    },
-    {
-     "label": "1",
-     "ask": 0.42,
-     "fee": 0.05,
-     "token": "23420206783821751040363387574875268983060880616967208850047573023773868801783"
-    },
-    {
-     "label": "2",
-     "ask": 0.177,
-     "fee": 0.05,
-     "token": "47153420974767136243491895650693013798791234482060794545849748912833396684499"
-    },
-    {
-     "label": "3",
-     "ask": 0.046,
-     "fee": 0.05,
-     "token": "60506914581865435313121847250516059591225769795311789780002033451341258312145"
-    },
-    {
-     "label": "4",
-     "ask": 0.016,
-     "fee": 0.05,
-     "token": "29029532060120059820984890650114012285019462853305730652023259225789400926272"
-    },
-    {
-     "label": "5",
-     "ask": 0.012,
-     "fee": 0.05,
-     "token": "111829050709658621145572587170759870205523455537315478953541134841448005823518"
-    }
-   ],
-   "kind": "intra-event",
-   "event_slug": "how-many-more-millennium-prize-problems-will-ai-solve-in-2026"
-  },
-  {
    "venue": "kalshi",
    "event": "Will Deel or Rippling IPO first?",
    "n_legs": 2,
@@ -2385,6 +2367,60 @@
    ],
    "kind": "intra-event",
    "event_slug": "KXDEELRIP-40"
+  },
+  {
+   "venue": "polymarket",
+   "event": "How many more Millennium Prize Problems will AI solve in 2026?",
+   "n_legs": 6,
+   "gross": 0.0020000000000000018,
+   "fees": 0.0338954,
+   "net": -0.0318954,
+   "capital": 1.0318954,
+   "roi": -0.030909528233191073,
+   "url": "https://polymarket.com/event/how-many-more-millennium-prize-problems-will-ai-solve-in-2026",
+   "neg_risk": true,
+   "coverage": "6/6",
+   "tier": 1,
+   "legs": [
+    {
+     "label": "0",
+     "ask": 0.32,
+     "fee": 0.05,
+     "token": "23562320982557386178443515603059705096749168834175657820475997828949413665923"
+    },
+    {
+     "label": "1",
+     "ask": 0.43,
+     "fee": 0.05,
+     "token": "23420206783821751040363387574875268983060880616967208850047573023773868801783"
+    },
+    {
+     "label": "2",
+     "ask": 0.174,
+     "fee": 0.05,
+     "token": "47153420974767136243491895650693013798791234482060794545849748912833396684499"
+    },
+    {
+     "label": "3",
+     "ask": 0.046,
+     "fee": 0.05,
+     "token": "60506914581865435313121847250516059591225769795311789780002033451341258312145"
+    },
+    {
+     "label": "4",
+     "ask": 0.016,
+     "fee": 0.05,
+     "token": "29029532060120059820984890650114012285019462853305730652023259225789400926272"
+    },
+    {
+     "label": "5",
+     "ask": 0.012,
+     "fee": 0.05,
+     "token": "111829050709658621145572587170759870205523455537315478953541134841448005823518"
+    }
+   ],
+   "kind": "intra-event",
+   "event_slug": "how-many-more-millennium-prize-problems-will-ai-solve-in-2026"
   },
   {
    "venue": "kalshi",
